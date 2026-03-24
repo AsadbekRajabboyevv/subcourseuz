@@ -1,0 +1,93 @@
+name: 'Telegram Notify'
+description: 'Send build/deploy notifications to Telegram'
+
+inputs:
+  token:
+    description: 'Telegram Bot Token'
+    required: true
+  chat_id:
+    description: 'Telegram Chat ID'
+    required: true
+  status:
+    description: 'Job status: running | success | failure | cancelled'
+    required: true
+  branch:
+    description: 'Branch name'
+    required: true
+  actor:
+    description: 'GitHub Actor'
+    required: true
+  event:
+    description: 'GitHub event name'
+    required: true
+  repo:
+    description: 'GitHub repository'
+    required: true
+  pr_url:
+    description: 'Pull Request URL (optional)'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Send Telegram Message
+      shell: bash
+      run: |
+        TOKEN="${{ inputs.token }}"
+        CHAT_ID="${{ inputs.chat_id }}"
+        STATUS="${{ inputs.status }}"
+        BRANCH="${{ inputs.branch }}"
+        ACTOR="${{ inputs.actor }}"
+        EVENT="${{ inputs.event }}"
+        REPO="${{ inputs.repo }}"
+        PR_URL="${{ inputs.pr_url }}"
+
+        case "$STATUS" in
+          running)   EMOJI="⏳"; LABEL="Started"   ;;
+          success)   EMOJI="✅"; LABEL="Success"   ;;
+          failure)   EMOJI="❌"; LABEL="Failed"    ;;
+          cancelled) EMOJI="⚠️"; LABEL="Cancelled" ;;
+          *)         EMOJI="ℹ️"; LABEL="$STATUS"   ;;
+        esac
+
+        case "$BRANCH" in
+          prod)   BRANCH_EMOJI="💫" ;;
+          stable) BRANCH_EMOJI="✴️" ;;
+          dev)    BRANCH_EMOJI="👨‍💻" ;;
+          *)      BRANCH_EMOJI="⚪" ;;
+        esac
+
+        COMMIT_SHA=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+        COMMIT_MSG=$(git log -1 --pretty=%s 2>/dev/null | head -c 80 || echo "unknown")
+
+        if [ "$EVENT" = "pull_request" ]; then
+          TITLE="🔀 Pull Request"
+          EXTRA="%0A<b>PR:</b> <a href='${PR_URL}'>View Pull Request</a>"
+        else
+          TITLE="${BRANCH_EMOJI} ${BRANCH} — ${LABEL}"
+          EXTRA=""
+        fi
+
+        if [ "$EVENT" = "pull_request" ]; then
+          MESSAGE=$(printf "<b>%s</b> %s\n\n<b>Repo:</b> <code>%s</code>\n<b>Branch:</b> <code>%s</code>\n<b>Commit:</b> <code>%s</code>\n<b>Message:</b> %s\n<b>Author:</b> @%s\n<b>PR:</b> <a href='%s'>View Pull Request</a>" \
+            "$TITLE" "$EMOJI" "$REPO" "$BRANCH" "$COMMIT_SHA" "$COMMIT_MSG" "$ACTOR" "$PR_URL")
+        else
+          MESSAGE=$(printf "<b>%s</b> %s\n\n<b>Repo:</b> <code>%s</code>\n<b>Branch:</b> <code>%s</code>\n<b>Commit:</b> <code>%s</code>\n<b>Message:</b> %s\n<b>Author:</b> @%s" \
+            "$TITLE" "$EMOJI" "$REPO" "$BRANCH" "$COMMIT_SHA" "$COMMIT_MSG" "$ACTOR")
+        fi
+
+        curl -s --max-time 10 \
+          -X POST \
+          "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+          -H "Content-Type: application/json" \
+          -d "$(jq -n \
+            --arg chat_id "$CHAT_ID" \
+            --arg text "$MESSAGE" \
+            '{
+              chat_id: $chat_id,
+              text: $text,
+              parse_mode: "HTML",
+              disable_web_page_preview: true
+            }')" \
+          > /dev/null

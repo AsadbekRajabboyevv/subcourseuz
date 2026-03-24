@@ -1,0 +1,361 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ dev, stable, prod ]
+  pull_request:
+    branches: [ dev, stable, prod ]
+
+# Cancel previous runs on same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  JAVA_VERSION: '21'
+  JAVA_DISTRIBUTION: 'temurin'
+  APP_NAME: 'subcourse'
+  JAR_PATH: 'target/*.jar'
+  DEPLOY_PATH: '/app/subcourse.jar'
+
+# ─────────────────────────────────────────────
+# JOB 1: Test & Build  (dev branch only)
+# ─────────────────────────────────────────────
+jobs:
+  test-and-build:
+    name: 🧪 Test & Build
+    if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      jar_name: ${{ steps.jar_info.outputs.jar_name }}
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📨 Telegram — Build Started
+        uses: ./.github/actions/telegram
+        with:
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          status: running
+          branch: ${{ github.ref_name }}
+          actor: ${{ github.actor }}
+          event: ${{ github.event_name }}
+          repo: ${{ github.repository }}
+
+      - name: ☕ Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - name: 📦 Cache Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-${{ runner.os }}-
+
+      - name: 🧪 Run Tests
+        run: mvn -B test --no-transfer-progress
+
+      - name: 🏗️ Build JAR
+        run: mvn -B clean package -DskipTests --no-transfer-progress
+
+      - name: 🔍 JAR Info
+        id: jar_info
+        run: |
+          JAR=$(ls target/*.jar | head -1)
+          echo "jar_name=$(basename $JAR)" >> $GITHUB_OUTPUT
+          echo "JAR built: $JAR"
+          echo "Size: $(du -sh $JAR | cut -f1)"
+
+      - name: 📤 Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar-${{ github.sha }}
+          path: ${{ env.JAR_PATH }}
+          retention-days: 7
+
+      - name: 📨 Telegram — Build Result
+        if: always()
+        uses: ./.github/actions/telegram
+        with:
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          status: ${{ job.status }}
+          branch: ${{ github.ref_name }}
+          actor: ${{ github.actor }}
+          event: ${{ github.event_name }}
+          repo: ${{ github.repository }}
+
+  # ─────────────────────────────────────────────
+  # JOB 2: Deploy to Stable
+  # ─────────────────────────────────────────────
+  deploy-stable:
+    name: 🚀 Deploy → Stable
+    if: github.ref == 'refs/heads/stable' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment:
+      name: stable
+      url: ${{ vars.APP_URL_STABLE }}
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📨 Telegram — Deploy Started
+        uses: ./.github/actions/telegram
+        with:
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          status: running
+          branch: ${{ github.ref_name }}
+          actor: ${{ github.actor }}
+          event: ${{ github.event_name }}
+          repo: ${{ github.repository }}
+
+      - name: ☕ Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - name: 📦 Cache Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-${{ runner.os }}-
+
+      - name: 🏗️ Build JAR
+        run: mvn -B clean package -DskipTests --no-transfer-progress
+
+#      - name: 🔐 Setup SSH
+#        run: |
+#          mkdir -p ~/.ssh
+#          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_ed25519
+#          chmod 600 ~/.ssh/id_ed25519
+#          ssh-keyscan -H ${{ secrets.SERVER_HOST_STABLE }} >> ~/.ssh/known_hosts
+#
+#      - name: 🔗 Test SSH Connection
+#        run: |
+#          ssh -i ~/.ssh/id_ed25519 \
+#              -o StrictHostKeyChecking=no \
+#              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST_STABLE }} \
+#              "echo '✅ SSH connection OK' && uptime"
+#
+#      - name: 🛑 Stop Service
+#        run: |
+#          ssh -i ~/.ssh/id_ed25519 \
+#              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST_STABLE }} \
+#              "sudo systemctl stop ${{ env.APP_NAME }} || true"
+#
+#      - name: 📂 Backup Old JAR
+#        run: |
+#          ssh -i ~/.ssh/id_ed25519 \
+#              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST_STABLE }} \
+#              "[ -f ${{ env.DEPLOY_PATH }} ] && sudo cp ${{ env.DEPLOY_PATH }} ${{ env.DEPLOY_PATH }}.bak || true"
+#
+#      - name: 📦 Copy New JAR
+#        run: |
+#          scp -i ~/.ssh/id_ed25519 \
+#              target/*.jar \
+#              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST_STABLE }}:${{ env.DEPLOY_PATH }}
+#
+#      - name: ▶️ Start Service
+#        run: |
+#          ssh -i ~/.ssh/id_ed25519 \
+#              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST_STABLE }} \
+#              "sudo systemctl start ${{ env.APP_NAME }}"
+#
+#      - name: 🩺 Health Check
+#        run: |
+#          ssh -i ~/.ssh/id_ed25519 \
+#              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST_STABLE }} \
+#              "
+#              echo 'Waiting for service...'
+#              sleep 10
+#              STATUS=\$(systemctl is-active ${{ env.APP_NAME }})
+#              echo \"Service status: \$STATUS\"
+#              if [ \"\$STATUS\" != 'active' ]; then
+#                echo '❌ Service failed to start! Rolling back...'
+#                sudo cp ${{ env.DEPLOY_PATH }}.bak ${{ env.DEPLOY_PATH }} || true
+#                sudo systemctl restart ${{ env.APP_NAME }} || true
+#                exit 1
+#              fi
+#              echo '✅ Service is running'
+#              "
+
+      - name: 📨 Telegram — Deploy Result
+        if: always()
+        uses: ./.github/actions/telegram
+        with:
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          status: ${{ job.status }}
+          branch: ${{ github.ref_name }}
+          actor: ${{ github.actor }}
+          event: ${{ github.event_name }}
+          repo: ${{ github.repository }}
+
+  # ─────────────────────────────────────────────
+  # JOB 3: Deploy to Production
+  # ─────────────────────────────────────────────
+  deploy-prod:
+    name: 🚀 Deploy → Production
+    if: github.ref == 'refs/heads/prod' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ vars.APP_URL_PROD }}
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📨 Telegram — Deploy Started
+        uses: ./.github/actions/telegram
+        with:
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          status: running
+          branch: ${{ github.ref_name }}
+          actor: ${{ github.actor }}
+          event: ${{ github.event_name }}
+          repo: ${{ github.repository }}
+
+      - name: ☕ Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - name: 📦 Cache Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-${{ runner.os }}-
+
+      - name: 🏗️ Build JAR
+        run: mvn -B clean package -DskipTests --no-transfer-progress
+
+      - name: 🔐 Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: 🔗 Test SSH Connection
+        run: |
+          ssh -i ~/.ssh/id_ed25519 \
+              -o StrictHostKeyChecking=no \
+              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+              "echo '✅ SSH connection OK' && uptime"
+
+      - name: 🛑 Stop Service
+        run: |
+          ssh -i ~/.ssh/id_ed25519 \
+              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+              "sudo systemctl stop ${{ env.APP_NAME }} || true"
+
+      - name: 📂 Backup Old JAR
+        run: |
+          ssh -i ~/.ssh/id_ed25519 \
+              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+              "[ -f ${{ env.DEPLOY_PATH }} ] && sudo cp ${{ env.DEPLOY_PATH }} ${{ env.DEPLOY_PATH }}.bak || true"
+
+      - name: 📦 Copy New JAR
+        run: |
+          scp -i ~/.ssh/id_ed25519 \
+              target/*.jar \
+              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ env.DEPLOY_PATH }}
+
+      - name: ▶️ Start Service
+        run: |
+          ssh -i ~/.ssh/id_ed25519 \
+              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+              "sudo systemctl start ${{ env.APP_NAME }}"
+
+      - name: 🩺 Health Check
+        run: |
+          ssh -i ~/.ssh/id_ed25519 \
+              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+              "
+              echo 'Waiting for service...'
+              sleep 10
+              STATUS=\$(systemctl is-active ${{ env.APP_NAME }})
+              echo \"Service status: \$STATUS\"
+              if [ \"\$STATUS\" != 'active' ]; then
+                echo '❌ Service failed to start! Rolling back...'
+                sudo cp ${{ env.DEPLOY_PATH }}.bak ${{ env.DEPLOY_PATH }} || true
+                sudo systemctl restart ${{ env.APP_NAME }} || true
+                exit 1
+              fi
+              echo '✅ Service is running'
+              "
+
+      - name: 📨 Telegram — Deploy Result
+        if: always()
+        uses: ./.github/actions/telegram
+        with:
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          status: ${{ job.status }}
+          branch: ${{ github.ref_name }}
+          actor: ${{ github.actor }}
+          event: ${{ github.event_name }}
+          repo: ${{ github.repository }}
+
+  # ─────────────────────────────────────────────
+  # JOB 4: PR Check (all branches)
+  # ─────────────────────────────────────────────
+  pr-check:
+    name: 🔍 PR Check
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: ☕ Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - name: 📦 Cache Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-${{ runner.os }}-
+
+      - name: 🧪 Run Tests
+        run: mvn -B test --no-transfer-progress
+
+      - name: 🏗️ Build Check
+        run: mvn -B clean package -DskipTests --no-transfer-progress
+
+      - name: 📨 Telegram — PR Notification
+        if: always()
+        uses: ./.github/actions/telegram
+        with:
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          status: ${{ job.status }}
+          branch: ${{ github.head_ref }}
+          actor: ${{ github.actor }}
+          event: pull_request
+          repo: ${{ github.repository }}
+          pr_url: ${{ github.event.pull_request.html_url }}
