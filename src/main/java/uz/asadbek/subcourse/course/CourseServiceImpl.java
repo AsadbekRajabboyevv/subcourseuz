@@ -35,7 +35,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Page<CourseResponseDto> get(Pageable pageable, CourseFilter filter) {
-
         return courseRepository.get(pageable, filter, LangUtils.currentLang());
     }
 
