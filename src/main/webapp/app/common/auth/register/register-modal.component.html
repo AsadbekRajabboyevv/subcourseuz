@@ -1,0 +1,42 @@
+<div *ngIf="isOpen"
+     class="fixed inset-0 flex justify-center items-center bg-opacity-50 backdrop-blur-sm z-50">
+
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96 relative">
+
+        <button (click)="close()" class="absolute top-4 right-4">✕</button>
+
+        <h2 class="text-xl font-bold mb-4">Ro'yxatdan o'tish</h2>
+
+        <form (ngSubmit)="register()">
+
+            <input [(ngModel)]="form.firstName" name="firstName"
+                   placeholder="Ism" class="w-full mb-2 p-2 border rounded" required>
+
+            <input [(ngModel)]="form.lastName" name="lastName"
+                   placeholder="Familiya" class="w-full mb-2 p-2 border rounded" required>
+
+            <input type="date" [(ngModel)]="form.birthDate" name="birthDate"
+                   class="w-full mb-2 p-2 border rounded" required>
+
+            <input [(ngModel)]="form.email" name="email"
+                   placeholder="Email" class="w-full mb-2 p-2 border rounded" required>
+
+            <input [(ngModel)]="form.phone" name="phone"
+                   placeholder="Telefon" class="w-full mb-2 p-2 border rounded" required>
+
+            <input type="password" [(ngModel)]="form.password" name="password"
+                   placeholder="Parol" class="w-full mb-2 p-2 border rounded" required>
+
+            <button class="w-full bg-blue-500 text-white py-2 rounded">
+                Ro'yxatdan o'tish
+            </button>
+
+            <div class="text-center mt-4">
+                <a (click)="switchToLogin()" class="text-blue-500 cursor-pointer">
+                    Kirish
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+<header class="bg-white shadow-sm sticky top-0 z-40">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+
+        <!-- LEFT -->
+        <div class="flex items-center">
+            <div class="flex items-center">
+                <div class="bg-green-500 text-white p-1 rounded mr-2">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor"/>
+                        <path d="M2 17L12 22L22 17" fill="currentColor"/>
+                        <path d="M2 12L12 17L22 12" fill="currentColor"/>
+                    </svg>
+                </div>
+                <a routerLink="/" class="font-bold text-xl">
+                    {{ appTitle }}
+                </a>
+            </div>
+
+            <!-- NAV -->
+            <nav class="hidden md:flex space-x-6 text-sm text-gray-600 ml-8">
+                <a routerLink="/courses" class="hover:text-green-500">KURSLAR</a>
+
+                <a *ngIf="isAuthenticated && role === 'ROLE_USER'"
+                   routerLink="/courses/view/me"
+                   class="hover:text-green-300">
+                    MENING KURSLARIM
+                </a>
+
+                <a href="#" class="hover:text-green-500">ONLINE TEST</a>
+                <a href="#" class="hover:text-green-500">BLOG</a>
+                <a href="#" class="hover:text-green-500">YORDAM</a>
+            </nav>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="flex items-center space-x-3">
+
+            <!-- PROFILE -->
+            <div *ngIf="isAuthenticated" class="relative">
+                <button (click)="toggleDropdown()" class="flex items-center space-x-2">
+                    <img ngSrc="/public/logo.png"
+                         class="w-10 h-10 rounded-full border-2 border-gray-300 hover:border-blue-500 transition">
+                </button>
+
+                <div *ngIf="isOpen"
+                     class="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg overflow-hidden z-50">
+
+                    <a routerLink="/profile"
+                       class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                        Profil
+                    </a>
+
+                    <a routerLink="/settings"
+                       class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                        Sozlamalar
+                    </a>
+
+                    <button (click)="logout()"
+                            class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
+                        Chiqish
+                    </button>
+                </div>
+            </div>
+
+            <!-- LOGIN -->
+            <button *ngIf="!isAuthenticated"
+                    (click)="openLoginModal()"
+                    class="md:flex hidden bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
+                KIRISH
+            </button>
+
+            <!-- MOBILE MENU -->
+            <button class="md:hidden p-2 -mr-2" (click)="toggleMobileMenu()">
+                <i class="w-6 h-6">☰</i>
+            </button>
+
+        </div>
+    </div>
+</header>
