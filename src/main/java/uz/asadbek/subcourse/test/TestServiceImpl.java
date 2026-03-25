@@ -39,7 +39,7 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public TestResponseDto getTestById(Long id) {
+    public TestResponseDto get(Long id) {
         return null;
     }
 
@@ -76,5 +76,15 @@ public class TestServiceImpl implements TestService {
     @Override
     public List<TestReviewDto> getReview(Long sessionId) {
         return List.of();
+    }
+
+    @Override
+    public Long getPrice(Long testId) {
+        return 0L;
+    }
+
+    @Override
+    public void enroll(Long userId, Long testId) {
+
     }
 }

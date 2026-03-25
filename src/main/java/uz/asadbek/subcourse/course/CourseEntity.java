@@ -1,7 +1,6 @@
 package uz.asadbek.subcourse.course;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -15,8 +14,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uz.asadbek.base.entity.BaseEntity;
 import uz.asadbek.base.repository.SoftDeletable;
 import uz.asadbek.subcourse.course.dto.DurationType;
-import uz.asadbek.subcourse.util.embedded.DescriptionEmbedded;
-import uz.asadbek.subcourse.util.embedded.NameEmbedded;
 
 @Getter
 @Setter
