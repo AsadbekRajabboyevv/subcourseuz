@@ -45,7 +45,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseResponseDto get(Long id) {
-        return courseRepository.get;
+        return null;
     }
 
     @Override
