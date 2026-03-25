@@ -85,4 +85,9 @@ public class CourseServiceImpl implements CourseService {
         return userCourseRepository.existsByIdUserIdAndIdCourseId(userId, courseId);
     }
 
+    @Override
+    public void unenroll(Long courseId) {
+
+    }
+
 }

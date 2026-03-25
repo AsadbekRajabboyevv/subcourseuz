@@ -87,4 +87,9 @@ public class TestServiceImpl implements TestService {
     public void enroll(Long userId, Long testId) {
 
     }
+
+    @Override
+    public void unenroll(Long userId, Long testId) {
+
+    }
 }
