@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface BalanceTransactionRepository extends JpaRepository<BalanceTransaction, Long> {
 
     Optional<BalanceTransaction> findByPaymentId(Long id);
+
 }

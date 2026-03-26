@@ -1,8 +1,9 @@
-package uz.asadbek.subcourse.balance.dto;
+package uz.asadbek.subcourse.balance.topuprequest.dto;
 
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
+import uz.asadbek.subcourse.balance.dto.TransactionStatus;
 
 @Getter
 @Setter

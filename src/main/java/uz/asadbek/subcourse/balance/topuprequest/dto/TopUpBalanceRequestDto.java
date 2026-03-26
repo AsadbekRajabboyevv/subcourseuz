@@ -1,4 +1,4 @@
-package uz.asadbek.subcourse.balance.dto;
+package uz.asadbek.subcourse.balance.topuprequest.dto;
 
 import lombok.Getter;
 import lombok.Setter;

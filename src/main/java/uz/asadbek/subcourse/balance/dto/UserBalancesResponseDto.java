@@ -1,4 +1,4 @@
-package uz.asadbek.subcourse.balance;
+package uz.asadbek.subcourse.balance.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -24,14 +24,12 @@ public class BalanceEntity extends BaseEntity {
 
     @Column(name = "user_id", nullable = false, unique = true, updatable = false)
     private Long userId;
+
     @Column(name = "balance", nullable = false, columnDefinition = "DEFAULT SET 0")
     private Long balance;
 
-    @Column(name = "hold_balance", nullable = false, columnDefinition = "DEFAULT SET 0")
-    private Long holdBalance;
-
     @Column(name = "pending_balance", nullable = false, columnDefinition = "DEFAULT SET 0")
-    private Long pendingBalance;
+    private Long pendingBalance; // pul tushgandagi balans
 
     @Column(name = "last_transaction_at")
     private LocalDateTime lastTransactionAt;

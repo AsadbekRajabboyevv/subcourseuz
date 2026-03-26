@@ -5,8 +5,8 @@ public enum TransactionType {
     COURSE_PURCHASE("Kurs sotib olish"),
     TEST_PURCHASE("Kurs sotib olish"),
     REFUND("To'lov qaytarish"),
-    ADMIN_ADJUSTMENT("Admin tomonidan tuzatish");
-
+    ADMIN_ADJUSTMENT("Admin tomonidan tuzatish"),
+    DEBIT("Balansdan yechib olish");
     private final String displayName;
 
     TransactionType(String displayName) {

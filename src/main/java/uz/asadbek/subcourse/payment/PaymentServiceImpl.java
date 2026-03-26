@@ -1,6 +1,8 @@
 package uz.asadbek.subcourse.payment;
 
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.asadbek.subcourse.balance.BalanceService;
 import uz.asadbek.subcourse.balance.transaction.BalanceTransactionService;
 import uz.asadbek.subcourse.course.CourseService;
@@ -8,6 +10,7 @@ import uz.asadbek.subcourse.course.dto.CourseResponseDto;
 import uz.asadbek.subcourse.payment.dto.PaymentCancelRequestDto;
 import uz.asadbek.subcourse.payment.dto.PaymentRequestDto;
 import uz.asadbek.subcourse.payment.dto.PaymentResponseDto;
+import uz.asadbek.subcourse.payment.dto.PaymentStatus;
 import uz.asadbek.subcourse.payment.dto.PaymentType;
 import uz.asadbek.subcourse.test.TestService;
 import uz.asadbek.subcourse.test.dto.TestResponseDto;
@@ -34,16 +37,17 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentResponseDto purchase(PaymentRequestDto request) {
+    @Transactional
+    public PaymentResponseDto purchase(PaymentRequestDto request, Boolean isTopUp) {
 
         var courseId = request.getCourseId();
         var testId = request.getTestId();
         var couponCode = request.getCouponCode();
         var currentUserId = JwtUtil.getCurrentUser().getId();
-        Long amount;
+        var amount = request.getAmount() != null ? request.getAmount() : 0L;
         TestResponseDto test = null;
         CourseResponseDto course = null;
-
+        String transactionId = "";
         try {
             // 1. validate (faqat bittasi bo‘lishi kerak)
             if (courseId != null && testId != null) {
@@ -68,15 +72,17 @@ public class PaymentServiceImpl implements PaymentService {
                 amount = 0L;
             }
 
-            // 🔥 4. balance check + debit (ENG MUHIM)
-            balanceService.debit(currentUserId, amount);
+            if (!isTopUp) {
+                // 🔥 4. balance check + debit (ENG MUHIM)
+                balanceService.debit(currentUserId, amount);
+            }
 
             // 5. payment yaratish
             var payment = buildPayment(course, test, amount);
             var savedPayment = paymentRepository.save(payment);
 
             // 6. transaction yozish
-            var transactionId = balanceTransactionService.createTransaction(savedPayment);
+            transactionId = balanceTransactionService.createTransaction(savedPayment);
 
             // 7. response
             return PaymentResponseDto.builder()
@@ -87,7 +93,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .build();
 
         } catch (Exception e) {
-            balanceTransactionService.cancelTransaction();
+            balanceTransactionService.cancelTransaction(transactionId);
             throw ExceptionUtil.badRequestException("payment_failed");
         }
     }
@@ -100,14 +106,44 @@ public class PaymentServiceImpl implements PaymentService {
         } else if (test != null) {
             referenceId = test.getId();
             type = PaymentType.TEST;
+        } else {
+            type = PaymentType.TOP_UP;
         }
+
         return PaymentEntity.builder()
             .type(type)
             .amount(amount)
             .userId(JwtUtil.getCurrentUser().getId())
             .referenceId(referenceId)
+            .status(PaymentStatus.PROCESSING)
             .exId(generateExId(type))
             .build();
+    }
+    @Transactional
+    public void success(String exId) {
+
+        // 1. Paymentni topamiz
+        PaymentEntity payment = paymentRepository.findByExId(exId)
+            .orElseThrow(() -> ExceptionUtil.notFoundException("payment_not_found"));
+
+        // 2. Idempotency (double success oldini olish)
+        if (payment.getStatus() == PaymentStatus.SUCCESS) {
+            return;
+        }
+
+        if (payment.getStatus() != PaymentStatus.PROCESSING &&
+            payment.getStatus() != PaymentStatus.CREATED) {
+
+            throw ExceptionUtil.badRequestException("invalid_payment_status");
+        }
+
+        // 4. Payment SUCCESS qilamiz
+        payment.setStatus(PaymentStatus.SUCCESS);
+        payment.setCompletedAt(LocalDateTime.now());
+
+        paymentRepository.save(payment);
+
+        balanceTransactionService.acceptTransaction(payment.getId());
     }
 
     private static String generateExId(PaymentType type) {

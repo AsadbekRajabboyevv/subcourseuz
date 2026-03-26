@@ -2,6 +2,7 @@ package uz.asadbek.subcourse.balance.transaction;
 
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -50,4 +51,6 @@ public class BalanceTransaction {
     @Column(name = "reference_id")
     private Long referenceId;                             // COURSE_ID yoki TEST_ID
 
+    @Column(name = "completed_at", nullable = false)
+    private LocalDateTime completedAt;
 }

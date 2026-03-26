@@ -7,7 +7,8 @@ import uz.asadbek.subcourse.payment.dto.PaymentResponseDto;
 public interface PaymentService {
 
 
-    PaymentResponseDto purchase(PaymentRequestDto request);
+    PaymentResponseDto purchase(PaymentRequestDto request, Boolean isTopUp);
     PaymentResponseDto cancelPurchase(PaymentCancelRequestDto request);
+    void success(String exId);
 
 }

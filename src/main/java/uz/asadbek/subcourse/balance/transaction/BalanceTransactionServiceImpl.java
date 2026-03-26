@@ -1,15 +1,15 @@
 package uz.asadbek.subcourse.balance.transaction;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uz.asadbek.subcourse.balance.BalanceService;
 import uz.asadbek.subcourse.balance.dto.TransactionStatus;
 import uz.asadbek.subcourse.balance.dto.TransactionType;
-import uz.asadbek.subcourse.balance.transaction.dto.BalanceTransactionRequestDto;
 import uz.asadbek.subcourse.payment.PaymentEntity;
-import uz.asadbek.subcourse.payment.dto.PaymentType;
 import uz.asadbek.subcourse.util.ExceptionUtil;
 
 @Service
@@ -25,11 +25,11 @@ public class BalanceTransactionServiceImpl implements BalanceTransactionService 
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public String createTransaction(PaymentEntity payment) {
 
         Long userId = payment.getUserId();
-        Long amount = payment.getAmount();
+        Long amount = payment.getAmount() !=null ? payment.getAmount() : 0L;
 
         Optional<BalanceTransaction> existing =
             balanceTransactionRepository.findByPaymentId(payment.getId());
@@ -37,7 +37,7 @@ public class BalanceTransactionServiceImpl implements BalanceTransactionService 
         if (existing.isPresent()) {
             return existing.get().getExternalTx();
         }
-
+        BalanceTransaction tx = new BalanceTransaction();
         Long balanceAfter = balanceService.get(userId).getBalance();
         Long balanceBefore;
 
@@ -48,29 +48,27 @@ public class BalanceTransactionServiceImpl implements BalanceTransactionService 
 
             case TOP_UP -> {
                 transactionType = TransactionType.TOP_UP;
-
-                // CREDIT: pul qo‘shildi
                 balanceBefore = balanceAfter - amount;
+                tx.setStatus(TransactionStatus.PENDING);
             }
 
             case COURSE -> {
                 transactionType = TransactionType.COURSE_PURCHASE;
                 balanceBefore = balanceAfter + amount;
+                tx.setStatus(TransactionStatus.SUCCESS);
             }
 
             case TEST -> {
                 transactionType = TransactionType.TEST_PURCHASE;
-
                 balanceBefore = balanceAfter + amount;
+                tx.setStatus(TransactionStatus.SUCCESS);
             }
 
             default -> throw ExceptionUtil.badRequestException("unknown_payment_type");
         }
 
-        BalanceTransaction tx = new BalanceTransaction();
         tx.setExternalTx(generateExternalTx());
         tx.setUserId(userId);
-        tx.setStatus(TransactionStatus.SUCCESS);
         tx.setPaymentId(payment.getId());
         tx.setTransactionType(transactionType);
         tx.setAmount(amount);
@@ -91,22 +89,30 @@ public class BalanceTransactionServiceImpl implements BalanceTransactionService 
     }
 
     @Override
-    public void cancelTransaction(Long transactionId) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void cancelTransaction(String transactionId) {
+    }
 
+    private void save(Long paymentId, TransactionStatus status) {
+        var transaction = balanceTransactionRepository.findByPaymentId(
+                paymentId)
+            .orElseThrow(() -> ExceptionUtil.notFoundException("transaction_not_found"));
+        transaction.setStatus(status);
+        transaction.setCompletedAt(LocalDateTime.now());
+        balanceTransactionRepository.save(transaction);
     }
 
     @Override
-    public void acceptTransaction(Long transactionId) {
-
+    @Transactional
+    public void acceptTransaction(Long paymentId) {
+        save(paymentId, TransactionStatus.SUCCESS);
     }
 
     @Override
-    public void rejectTransaction(Long transactionId) {
-
+    public void rejectTransaction(String transactionId) {
     }
 
     @Override
-    public void failedTransaction(Long transactionId) {
-
+    public void failedTransaction(String transactionId) {
     }
 }

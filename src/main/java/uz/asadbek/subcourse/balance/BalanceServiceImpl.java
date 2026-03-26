@@ -4,14 +4,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-import uz.asadbek.subcourse.balance.dto.AcceptBalanceResponseDto;
 import uz.asadbek.subcourse.balance.dto.BalanceResponseDto;
-import uz.asadbek.subcourse.balance.dto.CancelBalanceResponseDto;
-import uz.asadbek.subcourse.balance.dto.TopUpBalanceRequestDto;
-import uz.asadbek.subcourse.balance.dto.TopUpBalanceResponseDto;
-import uz.asadbek.subcourse.exception.InsufficientBalanceException;
 import uz.asadbek.subcourse.util.ExceptionUtil;
+import uz.asadbek.subcourse.util.JwtUtil;
 
 @Service
 public class BalanceServiceImpl implements BalanceService {
@@ -29,41 +24,63 @@ public class BalanceServiceImpl implements BalanceService {
 
     @Override
     public BalanceResponseDto get() {
-        return null;
+        Long currentUser = JwtUtil.getCurrentUser().getId();
+        return balanceRepository.get(currentUser);
     }
 
     @Override
-    public Page<UserBalancesResponseDto> get(Pageable pageable) {
-        return null;
-    }
-
-    @Override
-    public TopUpBalanceResponseDto topUpBalance(TopUpBalanceRequestDto request,
-        MultipartFile screenshot) {
-        return null;
-    }
-
-    @Override
-    public AcceptBalanceResponseDto acceptBalance(Long transactionId) {
-        return null;
-    }
-
-    @Override
-    public CancelBalanceResponseDto cancelBalance(Long transactionId) {
-        return null;
+    public Page<BalanceResponseDto> get(Pageable pageable) {
+        return balanceRepository.get(pageable);
     }
 
     @Override
     @Transactional
     public void debit(Long userId, Long amount) {
-        if (userId == null || amount == null || amount <= 0) {
-            throw ExceptionUtil.badRequestException("invalid_amount");
-        }
 
-        int updated = balanceRepository.decreaseBalance(userId, amount);
+        validate(userId, amount);
+
+        int updated = balanceRepository.decrease(userId, amount);
 
         if (updated == 0) {
-            throw  ExceptionUtil.insufficientBalanceException("insufficient_balance");
+            throw ExceptionUtil.badRequestException("hold_not_found_or_insufficient");
         }
     }
+
+
+    @Override
+    @Transactional
+    public void credit(Long userId, Long amount) {
+
+        validate(userId, amount);
+
+        int updated = balanceRepository.confirmPending(userId, amount);
+
+        if (updated == 0) {
+            throw ExceptionUtil.badRequestException("pending_not_found");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void addPending(Long userId, Long amount) {
+
+        validate(userId, amount);
+
+        balanceRepository.increasePending(userId, amount);
+    }
+
+    @Override
+    public void cancelPending(Long userId, Long amount) {
+
+        validate(userId, amount);
+
+        balanceRepository.cancelPending(userId, amount);
+    }
+
+    private void validate(Long userId, Long amount) {
+        if (userId == null || amount == null || amount <= 0) {
+            throw ExceptionUtil.insufficientBalanceException("invalid_amount");
+        }
+    }
+
 }

@@ -14,11 +14,27 @@ import lombok.Setter;
 @AllArgsConstructor
 public class BalanceResponseDto {
     private Long userId;                        // User ID
+    private String userFullName;                // User ismi
     private Long balance;                       // Asosiy balans
-    private Long holdBalance;                   // Bloklangan balans
     private Long pendingBalance;                // Kutilayotgan balans
-    private Long availableBalance;              // Mavjud balans (balance - holdBalance)
     private Long totalBalance;                  // Umumiy balans (balance + pendingBalance)
     private CurrencyEnum currency;              // Pul birligi
     private LocalDateTime lastTransactionAt;    // Oxirgi tranzaksiya vaqti
+    public BalanceResponseDto(
+        Long userId,
+        String userFullName,
+        Long balance,
+        Long pendingBalance,
+        int totalBalance,
+        CurrencyEnum currency,
+        LocalDateTime lastTransactionAt) {
+
+        this.userId = userId;
+        this.userFullName = userFullName;
+        this.balance = balance;
+        this.pendingBalance = pendingBalance;
+        this.totalBalance = (long) totalBalance;
+        this.currency = currency;
+        this.lastTransactionAt = lastTransactionAt;
+    }
 }
