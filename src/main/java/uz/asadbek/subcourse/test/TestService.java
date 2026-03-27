@@ -17,7 +17,7 @@ public interface TestService {
 
     Page<TestResponseDto> getAllTest(TestFilter filter, Pageable pageable);
 
-    TestResponseDto getTestById(Long id);
+    TestResponseDto get(Long id);
 
     void deleteTestById(Long id);
 
@@ -32,4 +32,11 @@ public interface TestService {
     TestResultDto getResult(Long sessionId);
 
     List<TestReviewDto> getReview(Long sessionId);
+
+    Long getPrice(Long testId);
+
+    void enroll(Long userId, Long testId);
+
+    void unenroll(Long userId, Long testId);
+
 }

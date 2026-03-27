@@ -46,12 +46,12 @@ public class CourseController implements CourseApi {
     @Override
     public BaseResponseDto<Page<CourseResponseDto>> get(CourseFilter filter,
         Pageable pageable) {
-        return BaseResponseDto.ok(service.get(pageable, filter));
+        return BaseResponseDto.ok(service.getInfo(pageable, filter));
     }
 
     @Override
     public BaseResponseDto<CourseInfoResponseDto> get(Long id) {
-        return BaseResponseDto.ok(service.get(id));
+        return BaseResponseDto.ok(service.getInfo(id));
     }
 
     @Override

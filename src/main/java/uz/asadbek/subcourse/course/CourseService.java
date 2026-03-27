@@ -10,8 +10,18 @@ import uz.asadbek.subcourse.course.filter.CourseFilter;
 public interface CourseService {
 
     Long count();
-    Page<CourseResponseDto> get(Pageable pageable, CourseFilter filter);
-    CourseInfoResponseDto get(Long id);
+
+    Page<CourseResponseDto> getInfo(Pageable pageable, CourseFilter filter);
+
+    CourseInfoResponseDto getInfo(Long id);
+
+    CourseResponseDto get(Long id);
+
     Boolean enroll(Long courseId);
 
+    Long getPrice(Long courseId);
+
+    boolean isCoursePurchased(Long userId, Long courseId);
+
+    void unenroll(Long courseId);
 }

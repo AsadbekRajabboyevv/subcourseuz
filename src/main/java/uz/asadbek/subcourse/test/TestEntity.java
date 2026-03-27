@@ -57,6 +57,9 @@ public class TestEntity extends BaseEntity implements SoftDeletable {
     @Column(name = "duration", nullable = false)
     private Integer duration;
 
+    @Column(name = "price", nullable = false, columnDefinition = "DEFAULT SET 0")
+    private Long price;
+
     @Column(name = "image_path")
     private String imagePath;
 

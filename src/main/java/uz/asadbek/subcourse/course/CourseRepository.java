@@ -60,6 +60,25 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
         CourseFilter filter, String lang);
 
     @Query("""
+            select new uz.asadbek.subcourse.course.dto.CourseResponseDto(
+                c.id,
+                c.name,
+                count(distinct l.id),
+                count(distinct sc.id),
+                concat(coalesce(u.firstName, ''), ' ', coalesce(u.lastName, '')),
+                c.price,
+                c.imagePath,
+                c.lang
+            )
+            from CourseEntity c
+            left join UserEntity u on c.ownerId = u.id
+            left join CourseLessonEntity l on l.courseId = c.id
+            left join UserCourse sc on sc.id.courseId = c.id
+            where c.deletedAt is null and c.id = :#{#id}
+        """)
+    CourseResponseDto get(Long id);
+
+    @Query("""
             select new uz.asadbek.subcourse.course.dto.CourseInfoResponseDto(
                 c.id,
                 c.name,

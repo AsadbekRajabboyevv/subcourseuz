@@ -17,15 +17,15 @@ import uz.asadbek.subcourse.test.filter.TestFilter;
 @Transactional
 public class TestServiceImpl implements TestService {
 
-    private final TestRepository testRepository;
+    private final TestRepository repository;
 
-    public TestServiceImpl(TestRepository testRepository) {
-        this.testRepository = testRepository;
+    public TestServiceImpl(TestRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public Long count() {
-        return testRepository.countAllByDeletedAtIsNull();
+        return repository.countAllByDeletedAtIsNull();
     }
 
     @Override
@@ -39,7 +39,7 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public TestResponseDto getTestById(Long id) {
+    public TestResponseDto get(Long id) {
         return null;
     }
 
@@ -76,5 +76,20 @@ public class TestServiceImpl implements TestService {
     @Override
     public List<TestReviewDto> getReview(Long sessionId) {
         return List.of();
+    }
+
+    @Override
+    public Long getPrice(Long testId) {
+        return 0L;
+    }
+
+    @Override
+    public void enroll(Long userId, Long testId) {
+
+    }
+
+    @Override
+    public void unenroll(Long userId, Long testId) {
+
     }
 }

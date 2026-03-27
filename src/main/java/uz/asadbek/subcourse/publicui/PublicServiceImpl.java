@@ -41,7 +41,7 @@ public class PublicServiceImpl implements PublicService {
 
     @Override
     public Page<CourseResponseDto> getCourses(CourseFilter filter, Pageable pageable) {
-        return courseService.get(pageable, filter);
+        return courseService.getInfo(pageable, filter);
     }
 
     @Override

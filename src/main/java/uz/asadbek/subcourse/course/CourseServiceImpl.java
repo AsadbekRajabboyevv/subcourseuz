@@ -34,13 +34,18 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Page<CourseResponseDto> get(Pageable pageable, CourseFilter filter) {
+    public Page<CourseResponseDto> getInfo(Pageable pageable, CourseFilter filter) {
         return courseRepository.get(pageable, filter, LangUtils.currentLang());
     }
 
     @Override
-    public CourseInfoResponseDto get(Long id) {
+    public CourseInfoResponseDto getInfo(Long id) {
         return courseRepository.get(id, LangUtils.currentLang());
+    }
+
+    @Override
+    public CourseResponseDto get(Long id) {
+        return null;
     }
 
     @Override
@@ -70,5 +75,19 @@ public class CourseServiceImpl implements CourseService {
         return true;
     }
 
+    @Override
+    public Long getPrice(Long courseId) {
+        return 0L;
+    }
+
+    @Override
+    public boolean isCoursePurchased(Long userId, Long courseId) {
+        return userCourseRepository.existsByIdUserIdAndIdCourseId(userId, courseId);
+    }
+
+    @Override
+    public void unenroll(Long courseId) {
+
+    }
 
 }
