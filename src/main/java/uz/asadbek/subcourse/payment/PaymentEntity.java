@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uz.asadbek.base.entity.BaseEntity;
+import uz.asadbek.subcourse.balance.dto.CurrencyEnum;
 import uz.asadbek.subcourse.payment.dto.PaymentStatus;
 import uz.asadbek.subcourse.payment.dto.PaymentType;
 
@@ -56,9 +57,13 @@ public class PaymentEntity extends BaseEntity {
     @Column(name = "amount", nullable = false)
     private Long amount;
 
+    @Column(name = "currency", nullable = false)
+    private CurrencyEnum currency;
+
     @Column(name = "ex_id", nullable = false)
     private String exId;
 
+    private String cancelReason;
     @Column(name = "completed_at")
     private LocalDateTime completedAt;
 }

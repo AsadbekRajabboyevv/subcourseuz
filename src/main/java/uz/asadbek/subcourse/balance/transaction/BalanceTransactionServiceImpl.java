@@ -31,13 +31,13 @@ public class BalanceTransactionServiceImpl implements BalanceTransactionService 
         Long userId = payment.getUserId();
         Long amount = payment.getAmount() !=null ? payment.getAmount() : 0L;
 
-        Optional<BalanceTransaction> existing =
+        Optional<BalanceTransactionEntity> existing =
             balanceTransactionRepository.findByPaymentId(payment.getId());
 
         if (existing.isPresent()) {
             return existing.get().getExternalTx();
         }
-        BalanceTransaction tx = new BalanceTransaction();
+        BalanceTransactionEntity tx = new BalanceTransactionEntity();
         Long balanceAfter = balanceService.get(userId).getBalance();
         Long balanceBefore;
 
@@ -90,29 +90,33 @@ public class BalanceTransactionServiceImpl implements BalanceTransactionService 
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void cancelTransaction(String transactionId) {
+    public BalanceTransactionEntity cancelTransaction(Long paymentId) {
+        return save(paymentId, TransactionStatus.CANCELLED);
     }
 
-    private void save(Long paymentId, TransactionStatus status) {
+    private BalanceTransactionEntity save(Long paymentId, TransactionStatus status) {
         var transaction = balanceTransactionRepository.findByPaymentId(
                 paymentId)
             .orElseThrow(() -> ExceptionUtil.notFoundException("transaction_not_found"));
         transaction.setStatus(status);
         transaction.setCompletedAt(LocalDateTime.now());
-        balanceTransactionRepository.save(transaction);
+       return balanceTransactionRepository.save(transaction);
     }
 
     @Override
-    @Transactional
-    public void acceptTransaction(Long paymentId) {
-        save(paymentId, TransactionStatus.SUCCESS);
+    public BalanceTransactionEntity acceptTransaction(Long paymentId) {
+        return save(paymentId, TransactionStatus.SUCCESS);
     }
 
     @Override
-    public void rejectTransaction(String transactionId) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public BalanceTransactionEntity rejectTransaction(Long paymentId) {
+        return save(paymentId, TransactionStatus.REJECTED);
     }
 
     @Override
-    public void failedTransaction(String transactionId) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public BalanceTransactionEntity failedTransaction(Long paymentId) {
+       return save(paymentId, TransactionStatus.FAILED);
     }
 }

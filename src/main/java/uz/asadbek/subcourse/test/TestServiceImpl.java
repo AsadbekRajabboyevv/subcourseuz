@@ -17,15 +17,15 @@ import uz.asadbek.subcourse.test.filter.TestFilter;
 @Transactional
 public class TestServiceImpl implements TestService {
 
-    private final TestRepository testRepository;
+    private final TestRepository repository;
 
-    public TestServiceImpl(TestRepository testRepository) {
-        this.testRepository = testRepository;
+    public TestServiceImpl(TestRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public Long count() {
-        return testRepository.countAllByDeletedAtIsNull();
+        return repository.countAllByDeletedAtIsNull();
     }
 
     @Override

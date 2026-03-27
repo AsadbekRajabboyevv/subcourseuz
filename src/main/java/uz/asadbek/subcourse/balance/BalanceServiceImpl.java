@@ -1,5 +1,6 @@
 package uz.asadbek.subcourse.balance;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -9,28 +10,25 @@ import uz.asadbek.subcourse.util.ExceptionUtil;
 import uz.asadbek.subcourse.util.JwtUtil;
 
 @Service
+@RequiredArgsConstructor
 public class BalanceServiceImpl implements BalanceService {
 
-    private final BalanceRepository balanceRepository;
-
-    public BalanceServiceImpl(BalanceRepository balanceRepository) {
-        this.balanceRepository = balanceRepository;
-    }
+    private final BalanceRepository repository;
 
     @Override
     public BalanceResponseDto get(Long userId) {
-        return null;
+        return repository.get(userId);
     }
 
     @Override
     public BalanceResponseDto get() {
         Long currentUser = JwtUtil.getCurrentUser().getId();
-        return balanceRepository.get(currentUser);
+        return repository.get(currentUser);
     }
 
     @Override
     public Page<BalanceResponseDto> get(Pageable pageable) {
-        return balanceRepository.get(pageable);
+        return repository.get(pageable);
     }
 
     @Override
@@ -39,7 +37,7 @@ public class BalanceServiceImpl implements BalanceService {
 
         validate(userId, amount);
 
-        int updated = balanceRepository.decrease(userId, amount);
+        int updated = repository.decrease(userId, amount);
 
         if (updated == 0) {
             throw ExceptionUtil.badRequestException("hold_not_found_or_insufficient");
@@ -53,7 +51,7 @@ public class BalanceServiceImpl implements BalanceService {
 
         validate(userId, amount);
 
-        int updated = balanceRepository.confirmPending(userId, amount);
+        int updated = repository.confirmPending(userId, amount);
 
         if (updated == 0) {
             throw ExceptionUtil.badRequestException("pending_not_found");
@@ -66,7 +64,7 @@ public class BalanceServiceImpl implements BalanceService {
 
         validate(userId, amount);
 
-        balanceRepository.increasePending(userId, amount);
+        repository.increasePending(userId, amount);
     }
 
     @Override
@@ -74,7 +72,7 @@ public class BalanceServiceImpl implements BalanceService {
 
         validate(userId, amount);
 
-        balanceRepository.cancelPending(userId, amount);
+        repository.cancelPending(userId, amount);
     }
 
     private void validate(Long userId, Long amount) {

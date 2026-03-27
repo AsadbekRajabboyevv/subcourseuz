@@ -3,6 +3,7 @@ package uz.asadbek.subcourse.balance.topuprequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpBalanceRequestDto;
+import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpRequestActionRequestDto;
 import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpRequestResponseDto;
 import uz.asadbek.subcourse.balance.topuprequest.filter.TopUpRequestFilter;
 
@@ -13,7 +14,7 @@ public interface TopUpRequestService {
 
     TopUpRequestResponseDto getMyById(Long id);
 
-    TopUpRequestResponseDto create(TopUpBalanceRequestDto request);
+    void create(TopUpBalanceRequestDto request);
 
     void cancel(Long id);
 
@@ -22,7 +23,7 @@ public interface TopUpRequestService {
 
     TopUpRequestResponseDto getById(Long id);
 
-    TopUpRequestResponseDto accept(Long id);
+    void accept(TopUpRequestActionRequestDto request);
 
-    TopUpRequestResponseDto reject(Long id);
+    void reject(TopUpRequestActionRequestDto request);
 }

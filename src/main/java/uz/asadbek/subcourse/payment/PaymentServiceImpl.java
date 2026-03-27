@@ -4,10 +4,12 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.asadbek.subcourse.balance.BalanceService;
+import uz.asadbek.subcourse.balance.dto.CurrencyEnum;
+import uz.asadbek.subcourse.balance.transaction.BalanceTransactionEntity;
 import uz.asadbek.subcourse.balance.transaction.BalanceTransactionService;
 import uz.asadbek.subcourse.course.CourseService;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
-import uz.asadbek.subcourse.payment.dto.PaymentCancelRequestDto;
+import uz.asadbek.subcourse.payment.dto.PaymentAction;
 import uz.asadbek.subcourse.payment.dto.PaymentRequestDto;
 import uz.asadbek.subcourse.payment.dto.PaymentResponseDto;
 import uz.asadbek.subcourse.payment.dto.PaymentStatus;
@@ -36,68 +38,8 @@ public class PaymentServiceImpl implements PaymentService {
         this.balanceService = balanceService;
     }
 
-    @Override
-    @Transactional
-    public PaymentResponseDto purchase(PaymentRequestDto request, Boolean isTopUp) {
-
-        var courseId = request.getCourseId();
-        var testId = request.getTestId();
-        var couponCode = request.getCouponCode();
-        var currentUserId = JwtUtil.getCurrentUser().getId();
-        var amount = request.getAmount() != null ? request.getAmount() : 0L;
-        TestResponseDto test = null;
-        CourseResponseDto course = null;
-        String transactionId = "";
-        try {
-            // 1. validate (faqat bittasi bo‘lishi kerak)
-            if (courseId != null && testId != null) {
-                throw ExceptionUtil.badRequestException("only_one_product_allowed");
-            }
-
-            if (courseId == null && testId == null) {
-                throw ExceptionUtil.badRequestException("product_required");
-            }
-
-            // 2. product olish
-            if (courseId != null) {
-                course = courseService.get(courseId);
-                amount = course.getPrice();
-            } else {
-                test = testService.get(testId);
-                amount = test.getPrice();
-            }
-
-            // 3. coupon
-            if ("free".equalsIgnoreCase(couponCode)) {
-                amount = 0L;
-            }
-
-            if (!isTopUp) {
-                // 🔥 4. balance check + debit (ENG MUHIM)
-                balanceService.debit(currentUserId, amount);
-            }
-
-            // 5. payment yaratish
-            var payment = buildPayment(course, test, amount);
-            var savedPayment = paymentRepository.save(payment);
-
-            // 6. transaction yozish
-            transactionId = balanceTransactionService.createTransaction(savedPayment);
-
-            // 7. response
-            return PaymentResponseDto.builder()
-                .exId(savedPayment.getExId())
-                .amount(amount)
-                .transactionId(transactionId)
-                .status(savedPayment.getStatus().name())
-                .build();
-
-        } catch (Exception e) {
-            balanceTransactionService.cancelTransaction(transactionId);
-            throw ExceptionUtil.badRequestException("payment_failed");
-        }
-    }
-    private static PaymentEntity buildPayment(CourseResponseDto course, TestResponseDto test, Long amount) {
+    private static PaymentEntity buildPayment(CourseResponseDto course, TestResponseDto test,
+        Long amount, CurrencyEnum currency) {
         Long referenceId = null;
         PaymentType type = null;
         if (course != null) {
@@ -115,20 +57,84 @@ public class PaymentServiceImpl implements PaymentService {
             .amount(amount)
             .userId(JwtUtil.getCurrentUser().getId())
             .referenceId(referenceId)
+            .currency(currency)
             .status(PaymentStatus.PROCESSING)
             .exId(generateExId(type))
             .build();
     }
-    @Transactional
-    public void success(String exId) {
 
-        // 1. Paymentni topamiz
-        PaymentEntity payment = paymentRepository.findByExId(exId)
+    private static String generateExId(PaymentType type) {
+        return STR."payment-\{type.name()}\{System.currentTimeMillis()}";
+    }
+
+    @Override
+    @Transactional
+    public PaymentResponseDto purchase(PaymentRequestDto request, Boolean isTopUp) {
+
+        var courseId = request.getCourseId();
+        var testId = request.getTestId();
+        var couponCode = request.getCouponCode();
+        var currentUserId = JwtUtil.getCurrentUser().getId();
+        var amount = request.getAmount() != null ? request.getAmount() : 0L;
+        TestResponseDto test = null;
+        CourseResponseDto course = null;
+        var transactionId = "";
+        Long savedPaymentId = null;
+        var balance = balanceService.get(currentUserId);
+        try {
+            if (courseId != null && testId != null) {
+                throw ExceptionUtil.badRequestException("only_one_product_allowed");
+            }
+
+            if (courseId == null && testId == null) {
+                throw ExceptionUtil.badRequestException("product_required");
+            }
+
+            if (courseId != null) {
+                course = courseService.get(courseId);
+                amount = course.getPrice();
+            } else {
+                test = testService.get(testId);
+                amount = test.getPrice();
+            }
+
+            if ("free".equalsIgnoreCase(couponCode)) {
+                amount = 0L;
+            }
+
+            if (!isTopUp) {
+                balanceService.debit(currentUserId, amount);
+            }
+
+            var payment = buildPayment(course, test, amount, balance.getCurrency());
+            var savedPayment = paymentRepository.save(payment);
+            savedPaymentId = savedPayment.getId();
+            transactionId = balanceTransactionService.createTransaction(savedPayment);
+
+            return PaymentResponseDto.builder()
+                .exId(savedPayment.getExId())
+                .amount(amount)
+                .transactionId(transactionId)
+                .status(savedPayment.getStatus().name())
+                .build();
+
+        } catch (Exception e) {
+            balanceTransactionService.cancelTransaction(savedPaymentId);
+            throw ExceptionUtil.badRequestException("payment_failed");
+        }
+    }
+
+    @Transactional
+    public PaymentResponseDto process(String exId, PaymentAction action, String cancelReason) {
+
+        var payment = paymentRepository.findByExId(exId)
             .orElseThrow(() -> ExceptionUtil.notFoundException("payment_not_found"));
 
-        // 2. Idempotency (double success oldini olish)
         if (payment.getStatus() == PaymentStatus.SUCCESS) {
-            return;
+            if (action == PaymentAction.CANCEL) {
+                throw ExceptionUtil.badRequestException("payment_already_success");
+            }
+            return buildResponse(payment, null);
         }
 
         if (payment.getStatus() != PaymentStatus.PROCESSING &&
@@ -137,20 +143,41 @@ public class PaymentServiceImpl implements PaymentService {
             throw ExceptionUtil.badRequestException("invalid_payment_status");
         }
 
-        // 4. Payment SUCCESS qilamiz
-        payment.setStatus(PaymentStatus.SUCCESS);
         payment.setCompletedAt(LocalDateTime.now());
+
+        BalanceTransactionEntity transaction = null;
+
+        switch (action) {
+            case SUCCESS -> {
+                payment.setStatus(PaymentStatus.SUCCESS);
+                transaction = balanceTransactionService.acceptTransaction(payment.getId());
+            }
+
+            case REJECT -> {
+                payment.setStatus(PaymentStatus.FAILED);
+                transaction = balanceTransactionService.rejectTransaction(payment.getId());
+            }
+
+            case CANCEL -> {
+                payment.setStatus(PaymentStatus.CANCELLED);
+                payment.setCancelReason(cancelReason);
+                transaction = balanceTransactionService.cancelTransaction(payment.getId());
+            }
+        }
 
         paymentRepository.save(payment);
 
-        balanceTransactionService.acceptTransaction(payment.getId());
+        return buildResponse(payment, transaction);
     }
 
-    private static String generateExId(PaymentType type) {
-        return STR."payment-\{type.name()}\{System.currentTimeMillis()}";
-    }
-    @Override
-    public PaymentResponseDto cancelPurchase(PaymentCancelRequestDto request) {
-        return null;
+    private PaymentResponseDto buildResponse(PaymentEntity payment,
+        BalanceTransactionEntity transaction) {
+        return PaymentResponseDto.builder()
+            .exId(payment.getExId())
+            .status(payment.getStatus().name())
+            .transactionId(transaction != null ? transaction.getExternalTx() : null)
+            .amount(payment.getAmount())
+            .currency(payment.getCurrency())
+            .build();
     }
 }

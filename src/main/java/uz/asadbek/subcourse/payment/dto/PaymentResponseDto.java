@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uz.asadbek.subcourse.balance.dto.CurrencyEnum;
 
 @Getter
 @Setter
@@ -17,4 +18,5 @@ public class PaymentResponseDto {
     private String status;
     private String transactionId;
     private Long amount;
+    private CurrencyEnum currency;
 }

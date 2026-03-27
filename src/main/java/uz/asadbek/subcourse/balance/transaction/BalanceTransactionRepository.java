@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BalanceTransactionRepository extends JpaRepository<BalanceTransaction, Long> {
+public interface BalanceTransactionRepository extends JpaRepository<BalanceTransactionEntity, Long> {
 
-    Optional<BalanceTransaction> findByPaymentId(Long id);
+    Optional<BalanceTransactionEntity> findByPaymentId(Long id);
 
 }

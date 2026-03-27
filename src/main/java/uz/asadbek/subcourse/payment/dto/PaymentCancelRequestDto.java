@@ -1,7 +1,9 @@
 package uz.asadbek.subcourse.payment.dto;
 
-public class PaymentCancelRequestDto {
+import lombok.Getter;
 
-    private String cancelReason;
+@Getter
+public class PaymentCancelRequestDto {
     private String exId;
+    private String cancelReason;
 }

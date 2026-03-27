@@ -5,8 +5,8 @@ import uz.asadbek.subcourse.payment.PaymentEntity;
 public interface BalanceTransactionService {
 
     String createTransaction(PaymentEntity request);                    // system tranzaksiya yaratadi
-    void cancelTransaction(String transactionId);                       // foydalanuvchi o'zi bekor qiladi
-    void acceptTransaction(Long paymentId);                       // admin qabul qiladi
-    void rejectTransaction(String transactionId);                       // admin bekor qiladi
-    void failedTransaction(String transactionId);                       // stsytem tranzaksiya bekor qiladi
+    BalanceTransactionEntity cancelTransaction(Long paymentId);                       // foydalanuvchi o'zi bekor qiladi
+    BalanceTransactionEntity acceptTransaction(Long paymentId);                       // admin qabul qiladi
+    BalanceTransactionEntity rejectTransaction(Long paymentId);                       // admin bekor qiladi
+    BalanceTransactionEntity failedTransaction(Long paymentId);                       // stsytem tranzaksiya bekor qiladi
 }
