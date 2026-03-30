@@ -1,28 +1,24 @@
 package uz.asadbek.subcourse.test.dto;
 
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
-import uz.asadbek.subcourse.test.question.dto.TestQuestionRequestDto;
+import uz.asadbek.subcourse.test.question.dto.TestQuestionUpdateRequestDto;
 
 @Data
-public class TestRequestDto {
-    @NotNull
+public class TestUpdateRequestDto {
     private String name;
     private String description;
     private Long price;
-    @NotNull
     private String lang;
     private Long lessonId;
     private Long courseId;
-    @NotNull
     private Long scienceId;
-    @NotNull
     private Long gradeId;
-    @NotNull
     private Integer duration;
     private Boolean isPublished;
+
     private MultipartFile image;
-    private List<TestQuestionRequestDto> questions;
+
+    private List<TestQuestionUpdateRequestDto> questions;
 }

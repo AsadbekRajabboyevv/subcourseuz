@@ -125,7 +125,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Transactional
-    public PaymentResponseDto process(String exId, PaymentAction action, String cancelReason) {
+    public PaymentResponseDto process(String exId, PaymentAction action) {
 
         var payment = paymentRepository.findByExId(exId)
             .orElseThrow(() -> ExceptionUtil.notFoundException("payment_not_found"));
@@ -156,12 +156,6 @@ public class PaymentServiceImpl implements PaymentService {
             case REJECT -> {
                 payment.setStatus(PaymentStatus.FAILED);
                 transaction = balanceTransactionService.rejectTransaction(payment.getId());
-            }
-
-            case CANCEL -> {
-                payment.setStatus(PaymentStatus.CANCELLED);
-                payment.setCancelReason(cancelReason);
-                transaction = balanceTransactionService.cancelTransaction(payment.getId());
             }
         }
 

@@ -1,10 +1,10 @@
 package uz.asadbek.subcourse.filestorage.dto;
 
-import java.io.InputStream;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.core.io.Resource;
 
 @Getter
 @Builder
@@ -14,7 +14,7 @@ public class FileResource {
 
     private String fileKey;
     private String fileName;
-    private InputStream inputStream;
+    private Resource resource;
     private String contentType;
     private Long size;
 }

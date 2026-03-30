@@ -53,7 +53,7 @@ public class TopUpRequestEntity extends BaseEntity {
     private TopUpStatus status;
 
     @Column(name = "message")
-    private String message;
+    private String message; // user izohi pending uchun
 
     @Column(name = "comment")
     private String comment; // admin izohi (reject sababi)

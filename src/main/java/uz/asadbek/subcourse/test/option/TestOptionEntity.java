@@ -8,7 +8,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uz.asadbek.base.entity.BaseEntity;
@@ -18,6 +20,8 @@ import uz.asadbek.base.repository.SoftDeletable;
 @Setter
 @Entity
 @Table(name = "test_options")
+@AllArgsConstructor
+@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class TestOptionEntity extends BaseEntity implements SoftDeletable {
 

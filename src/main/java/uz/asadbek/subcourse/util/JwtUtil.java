@@ -79,6 +79,11 @@ public class JwtUtil {
             .getBody();
     }
 
+    public static Boolean isAdmin() {
+        return getCurrentUser().getAuthorities().stream()
+            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    }
+
     public static CustomUserDetails getCurrentUser() {
         Object principal = SecurityContextHolder.getContext()
             .getAuthentication()

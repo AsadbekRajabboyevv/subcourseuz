@@ -39,4 +39,6 @@ public interface CourseLessonRepository extends BaseRepository<CourseLessonEntit
 
     """)
     CourseLessonInfoResponseDto get(Long id);
+
+    boolean existsByIdAndCourseId(Long lessonId, Long courseId);
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import uz.asadbek.subcourse.balance.dto.BalanceResponseDto;
+import uz.asadbek.subcourse.balance.filter.BalanceFilter;
 
 @Repository
 public interface BalanceRepository extends JpaRepository<BalanceEntity, Long> {
@@ -52,6 +53,7 @@ public interface BalanceRepository extends JpaRepository<BalanceEntity, Long> {
           SELECT new uz.asadbek.subcourse.balance.dto.BalanceResponseDto(
           b.userId,
           CONCAT(u.firstName, ' ', u.lastName ),
+          u.email,
           b.balance,
           b.pendingBalance,
           b.balance + COALESCE(b.pendingBalance, 0),
@@ -65,17 +67,22 @@ public interface BalanceRepository extends JpaRepository<BalanceEntity, Long> {
     BalanceResponseDto get(Long userId);
 
     @Query("""
-          SELECT new uz.asadbek.subcourse.balance.dto.BalanceResponseDto(
-          b.userId,
-          CONCAT(u.firstName, ' ', u.lastName ),
-          b.balance,
-          b.pendingBalance,
-          b.balance + COALESCE(b.pendingBalance, 0),
-          b.currency,
-          b.lastTransactionAt
-          )
-          from BalanceEntity b
-          LEFT JOIN UserEntity u on b.userId = u.id
+            SELECT new uz.asadbek.subcourse.balance.dto.BalanceResponseDto(
+                b.userId,
+                CONCAT(u.firstName, ' ', u.lastName),
+                u.email,
+                b.balance,
+                b.pendingBalance,
+                (b.balance + COALESCE(b.pendingBalance, 0)),
+                b.currency,
+                b.lastTransactionAt
+            )
+            FROM BalanceEntity b
+            LEFT JOIN UserEntity u ON b.userId = u.id
+            WHERE (:#{#filter.userFullName} IS NULL OR LOWER(CONCAT(u.firstName, ' ', u.lastName)) LIKE LOWER(CONCAT('%', :#{#filter.userFullName}, '%')))
+            AND (:#{#filter.userEmail} IS NULL OR LOWER(u.email) LIKE LOWER(CONCAT('%', :#{#filter.userEmail}, '%')))
+            AND (:#{#filter.lastTransactionDateFrom} IS NULL OR  b.lastTransactionAt >= :#{#filter.lastTransactionDateFrom})
+            AND (:#{#filter.lastTransactionDateTo} IS NULL OR b.lastTransactionAt <= :#{#filter.lastTransactionDateTo})
         """)
-    Page<BalanceResponseDto> get(Pageable pageable);
+    Page<BalanceResponseDto> get( Pageable pageable, BalanceFilter filter);
 }

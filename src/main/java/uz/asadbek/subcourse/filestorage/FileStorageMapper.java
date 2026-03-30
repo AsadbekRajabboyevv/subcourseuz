@@ -10,7 +10,6 @@ public class FileStorageMapper {
         return FileUploadResponse.builder()
             .fileKey(entity.getFileKey())
             .fileName(entity.getStoredName())
-            .url(entity.getUrl())
             .size(entity.getSize())
             .contentType(entity.getContentType())
             .build();

@@ -7,14 +7,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import uz.asadbek.subcourse.balance.BalanceService;
 import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpBalanceRequestDto;
 import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpRequestActionRequestDto;
 import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpRequestResponseDto;
 import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpStatus;
 import uz.asadbek.subcourse.balance.topuprequest.filter.TopUpRequestFilter;
+import uz.asadbek.subcourse.filestorage.FileStorageService;
+import uz.asadbek.subcourse.filestorage.dto.FileUploadOptions;
 import uz.asadbek.subcourse.payment.PaymentService;
 import uz.asadbek.subcourse.payment.dto.PaymentAction;
+import uz.asadbek.subcourse.payment.dto.PaymentResponseDto;
 import uz.asadbek.subcourse.util.ExceptionUtil;
 import uz.asadbek.subcourse.util.JwtUtil;
 
@@ -26,6 +30,8 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
     private final TopUpRequestRepository repository;
     private final BalanceService balanceService;
     private final PaymentService paymentService;
+    private final FileStorageService fileStorageService;
+    private static final String TOP_UP_REQUEST_PATH = "top_up_requests";
 
     // ================= USER =================
 
@@ -44,7 +50,16 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
 
     @Override
     @Transactional
-    public void create(TopUpBalanceRequestDto request) {
+    public void create(TopUpBalanceRequestDto request, MultipartFile screenshot) {
+
+        if (screenshot.isEmpty() || screenshot == null) {
+            throw ExceptionUtil.badRequestException("screenshot_required");
+        }
+        if (!screenshot.getContentType().startsWith("image/")) {
+            throw ExceptionUtil.badRequestException("invalid_screenshot_type");
+        }
+
+        var uploaded = fileStorageService.upload(screenshot, new FileUploadOptions().setTopUpRequestImages());
 
         var userId = JwtUtil.getCurrentUser().getId();
         var amount = request.getAmount();
@@ -56,6 +71,7 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
             .userId(userId)
             .amount(amount)
             .status(TopUpStatus.PENDING)
+            .fileKey(uploaded.getFileKey())
             .message(request.getMessage())
             .build();
 
@@ -65,7 +81,7 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
 
     @Override
     @Transactional
-    public void cancel(Long id) {
+    public Long cancel(Long id) {
 
         var userId = JwtUtil.getCurrentUser().getId();
 
@@ -79,6 +95,7 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
 
         entity.setStatus(TopUpStatus.CANCELLED);
         log.info("TopUpRequest cancelled: {}", entity);
+        return entity.getId();
     }
 
     // ================= ADMIN =================
@@ -96,25 +113,34 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
 
     @Override
     @Transactional
-    public void accept(TopUpRequestActionRequestDto request) {
+    public PaymentResponseDto accept(TopUpRequestActionRequestDto request) {
+        if (!JwtUtil.isAdmin()) {
+            throw ExceptionUtil.forbiddenException("is_not_admin");
+        }
         var entity = repository.findById(request.getId())
-            .orElseThrow(() -> ExceptionUtil.notFoundException("topup_not_found"));
+            .orElseThrow(() -> ExceptionUtil.notFoundException("top_up_not_found"));
 
         if (entity.getStatus() != TopUpStatus.PENDING) {
             throw ExceptionUtil.badRequestException("already_processed");
         }
 
         balanceService.credit(entity.getUserId(), entity.getAmount());
-        paymentService.process(request.getPaymentExId(), PaymentAction.SUCCESS,
-            request.getMessage());
+        var response = paymentService.process(request.getPaymentExId(),
+            PaymentAction.SUCCESS
+        );
+        entity.setComment(request.getMessage());
         entity.setStatus(TopUpStatus.APPROVED);
         entity.setApprovedAt(LocalDateTime.now());
         log.info("TopUpRequest approved: {}", entity);
+        return response;
     }
 
     @Override
     @Transactional
-    public void reject(TopUpRequestActionRequestDto request) {
+    public PaymentResponseDto reject(TopUpRequestActionRequestDto request) {
+        if (!JwtUtil.isAdmin()) {
+            throw ExceptionUtil.forbiddenException("is_not_admin");
+        }
         var entity = findById(request.getId());
 
         if (entity.getStatus() != TopUpStatus.PENDING) {
@@ -122,11 +148,14 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
         }
 
         balanceService.cancelPending(entity.getUserId(), entity.getAmount());
-        paymentService.process(request.getPaymentExId(), PaymentAction.REJECT,
-            request.getMessage());
+        var response = paymentService.process(request.getPaymentExId(),
+            PaymentAction.REJECT);
+
+        entity.setComment(request.getMessage());
         entity.setStatus(TopUpStatus.REJECTED);
         entity.setRejectedAt(LocalDateTime.now());
         log.info("TopUpRequest rejected: {}", entity);
+        return response;
     }
 
     private TopUpRequestEntity findById(Long id) {
