@@ -11,6 +11,7 @@ import uz.asadbek.base.dto.BaseResponseDto;
 import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpRequestActionRequestDto;
 import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpRequestResponseDto;
 import uz.asadbek.subcourse.balance.topuprequest.filter.TopUpRequestFilter;
+import uz.asadbek.subcourse.payment.dto.PaymentResponseDto;
 
 @RequestMapping("/v1/api/top-up-request")
 public interface TopUpRequestApi {
@@ -33,8 +34,8 @@ public interface TopUpRequestApi {
     BaseResponseDto<Long> cancel(@PathVariable Long id);
 
     @PutMapping("/admin/accept")
-    BaseResponseDto<Long> accept(@RequestBody TopUpRequestActionRequestDto request);
+    BaseResponseDto<PaymentResponseDto> accept(@RequestBody TopUpRequestActionRequestDto request);
 
     @PutMapping("/admin/reject")
-    BaseResponseDto<Long> reject(@RequestBody TopUpRequestActionRequestDto request);
+    BaseResponseDto<PaymentResponseDto> reject(@RequestBody TopUpRequestActionRequestDto request);
 }

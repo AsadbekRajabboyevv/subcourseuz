@@ -8,6 +8,7 @@ import uz.asadbek.base.dto.BaseResponseDto;
 import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpRequestActionRequestDto;
 import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpRequestResponseDto;
 import uz.asadbek.subcourse.balance.topuprequest.filter.TopUpRequestFilter;
+import uz.asadbek.subcourse.payment.dto.PaymentResponseDto;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,12 +44,12 @@ public class TopUpRequestController implements TopUpRequestApi {
     }
 
     @Override
-    public BaseResponseDto<Long> accept(TopUpRequestActionRequestDto request) {
+    public BaseResponseDto<PaymentResponseDto> accept(TopUpRequestActionRequestDto request) {
         return BaseResponseDto.ok(service.accept(request));
     }
 
     @Override
-    public BaseResponseDto<Long> reject(TopUpRequestActionRequestDto request) {
+    public BaseResponseDto<PaymentResponseDto> reject(TopUpRequestActionRequestDto request) {
         return BaseResponseDto.ok(service.reject(request));
     }
 }
