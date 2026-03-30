@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.asadbek.subcourse.balance.dto.BalanceResponseDto;
+import uz.asadbek.subcourse.balance.filter.BalanceFilter;
 import uz.asadbek.subcourse.util.ExceptionUtil;
 import uz.asadbek.subcourse.util.JwtUtil;
 
@@ -27,8 +28,8 @@ public class BalanceServiceImpl implements BalanceService {
     }
 
     @Override
-    public Page<BalanceResponseDto> get(Pageable pageable) {
-        return repository.get(pageable);
+    public Page<BalanceResponseDto> get(Pageable pageable, BalanceFilter filter) {
+        return repository.get(pageable, filter);
     }
 
     @Override

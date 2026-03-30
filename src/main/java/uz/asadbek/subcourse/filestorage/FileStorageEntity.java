@@ -47,9 +47,6 @@ public class FileStorageEntity extends BaseEntity {
     @Column(name = "path")
     private String path;
 
-    @Column(name = "url")
-    private String url;
-
     @Column(name = "size", nullable = false)
     private Long size;
 

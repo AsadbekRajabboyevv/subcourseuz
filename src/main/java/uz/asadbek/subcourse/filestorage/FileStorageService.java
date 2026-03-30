@@ -8,8 +8,6 @@ import uz.asadbek.subcourse.filestorage.dto.FileUploadResponse;
 
 public interface FileStorageService {
 
-    FileUploadResponse upload(MultipartFile file);
-
     FileUploadResponse upload(MultipartFile file, FileUploadOptions options);
 
     void delete(String fileKey);

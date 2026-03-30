@@ -13,7 +13,6 @@ public class FileUploadResponse {
 
     private String fileKey;     // unique identifier (UUID)
     private String fileName;    // stored name
-    private String url;         // access URL
     private Long size;          // bytes
     private String contentType; // MIME
 }

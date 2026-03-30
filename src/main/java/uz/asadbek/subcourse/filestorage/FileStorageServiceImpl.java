@@ -2,20 +2,28 @@ package uz.asadbek.subcourse.filestorage;
 
 import jakarta.annotation.PostConstruct;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import uz.asadbek.subcourse.filestorage.dto.FileResource;
 import uz.asadbek.subcourse.filestorage.dto.FileUploadOptions;
 import uz.asadbek.subcourse.filestorage.dto.FileUploadResponse;
+import uz.asadbek.subcourse.util.ExceptionUtil;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -32,18 +40,13 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     @Override
-    public FileUploadResponse upload(MultipartFile file) {
-        return upload(file, FileUploadOptions.builder().build());
-    }
-
-    @Override
     public FileUploadResponse upload(MultipartFile file, FileUploadOptions options) {
 
         validate(file);
 
         String fileKey = UUID.randomUUID().toString();
-        String extension = getExtension(file.getOriginalFilename());
-        String storedName = fileKey + "." + extension;
+        String extension = getExtension(Objects.requireNonNull(file.getOriginalFilename()));
+        String storedName = STR."\{fileKey}.\{extension}";
 
         try {
             Path target = root.resolve(storedName);
@@ -54,7 +57,6 @@ public class FileStorageServiceImpl implements FileStorageService {
                 .originalName(file.getOriginalFilename())
                 .storedName(storedName)
                 .path(options.getFolder())
-                .url("/files/" + fileKey)
                 .size(file.getSize())
                 .contentType(file.getContentType())
                 .isPublic(options.isPublicAccess())
@@ -65,7 +67,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             return mapper.toResponse(entity);
 
         } catch (IOException e) {
-            throw new RuntimeException("File upload failed");
+            throw ExceptionUtil.badRequestException("file_upload_error");
         }
     }
 
@@ -73,13 +75,14 @@ public class FileStorageServiceImpl implements FileStorageService {
     public void delete(String fileKey) {
 
         FileStorageEntity entity = repository.findByFileKey(fileKey)
-            .orElseThrow(() -> new RuntimeException("File not found"));
+            .orElseThrow(() -> ExceptionUtil.notFoundException("file_not_found"));
 
         try {
             Path filePath = root.resolve(entity.getStoredName());
             Files.deleteIfExists(filePath);
         } catch (IOException e) {
-            throw new RuntimeException("File delete failed");
+            log.error("Error deleting file: {}", ExceptionUtils.getStackTrace(e));
+            throw ExceptionUtil.badRequestException("file_delete_error");
         }
 
         repository.delete(entity);
@@ -92,25 +95,32 @@ public class FileStorageServiceImpl implements FileStorageService {
         return repository.findByFileKey(fileKey)
             .map(entity -> {
                 try {
-                    Path filePath = root.resolve(entity.getStoredName());
+                    Path filePath = root.resolve(entity.getStoredName()).normalize();
+
+                    Resource resource = new UrlResource(filePath.toUri());
+
+                    if (!resource.exists()) {
+                        throw ExceptionUtil.notFoundException("file_not_found");
+                    }
 
                     return FileResource.builder()
                         .fileKey(entity.getFileKey())
                         .fileName(entity.getStoredName())
                         .contentType(entity.getContentType())
                         .size(entity.getSize())
-                        .inputStream(Files.newInputStream(filePath))
+                        .resource(resource)
                         .build();
 
-                } catch (IOException e) {
-                    throw new RuntimeException("File read error");
+                } catch (MalformedURLException e) {
+                    log.error("Error reading file", e);
+                    throw ExceptionUtil.badRequestException("file_read_error");
                 }
             });
     }
 
     private void validate(MultipartFile file) {
         if (file == null || file.isEmpty()) {
-            throw new RuntimeException("File is empty");
+            throw ExceptionUtil.badRequestException("file_required");
         }
     }
 

@@ -8,6 +8,7 @@ import uz.asadbek.subcourse.test.option.dto.TestOptionResponseDto;
 public class TestQuestionResponseDto {
     private Long id;
     private String text;
-    private String imagePath;
+    private String imageUrl;
+    private Long correctOptionId;
     private List<TestOptionResponseDto> options;
 }

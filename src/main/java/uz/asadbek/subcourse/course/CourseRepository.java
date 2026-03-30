@@ -116,4 +116,6 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
               and c.id = :id
         """)
     CourseInfoResponseDto get(Long id, String lang);
+
+    boolean existsByIdAndScienceId(Long id, Long scienceId);
 }

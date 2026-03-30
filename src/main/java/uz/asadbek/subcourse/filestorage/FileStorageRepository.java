@@ -9,7 +9,4 @@ public interface FileStorageRepository extends JpaRepository<FileStorageEntity, 
 
     Optional<FileStorageEntity> findByFileKey(String fileKey);
 
-    boolean existsByFileKey(String fileKey);
-
-    void deleteByFileKey(String fileKey);
 }

@@ -15,6 +15,7 @@ import lombok.Setter;
 public class BalanceResponseDto {
     private Long userId;                        // User ID
     private String userFullName;                // User ismi
+    private String userEmail;                   // User email
     private Long balance;                       // Asosiy balans
     private Long pendingBalance;                // Kutilayotgan balans
     private Long totalBalance;                  // Umumiy balans (balance + pendingBalance)
@@ -23,6 +24,7 @@ public class BalanceResponseDto {
     public BalanceResponseDto(
         Long userId,
         String userFullName,
+        String userEmail,
         Long balance,
         Long pendingBalance,
         int totalBalance,
@@ -31,6 +33,7 @@ public class BalanceResponseDto {
 
         this.userId = userId;
         this.userFullName = userFullName;
+        this.userEmail = userEmail;
         this.balance = balance;
         this.pendingBalance = pendingBalance;
         this.totalBalance = (long) totalBalance;
