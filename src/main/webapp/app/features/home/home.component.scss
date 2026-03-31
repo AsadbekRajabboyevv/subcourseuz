@@ -1,1 +1,53 @@
+// Course Slider Styles
+:host {
+  display: block;
+}
 
+// Slider container
+.slider-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.dark .slider-container {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+// Slider track
+.slider-track {
+  display: flex;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Individual slide - 16.666% width for 6 cards
+.slide {
+  flex: 0 0 16.666%;
+  padding: 0 0.25rem;
+}
+
+// Responsive adjustments
+@media (max-width: 1024px) {
+  .slide {
+    flex: 0 0 25%; // 4 cards
+  }
+}
+
+@media (max-width: 768px) {
+  .slide {
+    flex: 0 0 33.333%; // 3 cards
+  }
+}
+
+@media (max-width: 640px) {
+  .slide {
+    flex: 0 0 50%; // 2 cards
+  }
+}
+
+@media (max-width: 480px) {
+  .slide {
+    flex: 0 0 100%; // 1 card
+  }
+}

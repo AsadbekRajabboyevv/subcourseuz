@@ -1,6 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../shared/ui/services/auth.service';
+import { NotificationService } from '../../../shared/ui/services/notification.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-modal',
@@ -9,6 +12,9 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './login.component.html'
 })
 export class LoginModalComponent {
+  private readonly authService = inject(AuthService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly router = inject(Router);
 
   @Input() isOpen = false;
   @Output() closeModal = new EventEmitter<void>();
@@ -21,26 +27,44 @@ export class LoginModalComponent {
   loading = false;
   showPassword = false;
 
-  close() {
+  close(): void {
     this.closeModal.emit();
   }
 
-  onBackdropClick(event: MouseEvent) {
+  onBackdropClick(event: MouseEvent): void {
     if ((event.target as HTMLElement).classList.contains('fixed')) {
       this.close();
     }
   }
 
-  login() {
-    if (!this.email || !this.password) return;
+  login(): void {
+    if (!this.email || !this.password) {
+      this.errorMessage = 'Please enter email and password';
+      this.error = true;
+      return;
+    }
+
     this.loading = true;
     this.error = false;
-    // TODO: inject AuthService and call login API
-    console.log('LOGIN', this.email, this.password);
-    this.loading = false;
+
+    this.authService.login({ email: this.email, password: this.password }).subscribe({
+      next: () => {
+        this.notificationService.success('Login successful!');
+        this.close();
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        this.errorMessage = error.message || 'Login failed. Please try again.';
+        this.error = true;
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      }
+    });
   }
 
-  switchToRegister() {
+  switchToRegister(): void {
     this.close();
     this.openRegister.emit();
   }

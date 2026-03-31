@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { ThemeService } from '../services/theme.service';
 
 @Component({
@@ -10,6 +10,9 @@ import { ThemeService } from '../services/theme.service';
 })
 export class ThemeSwitchComponent {
   private readonly themeService = inject(ThemeService);
+
+  protected isDark = this.themeService.isDark;
+  protected currentTheme = this.themeService.theme;
 
   protected toggle(): void {
     this.themeService.toggle();

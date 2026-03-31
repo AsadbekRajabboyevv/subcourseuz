@@ -1,34 +1,34 @@
-<header class="bg-white shadow-sm sticky top-0 z-40">
+<header class="bg-white shadow-sm sticky top-0 z-40 dark:bg-gray-900 dark:border-b dark:border-gray-800">
     <div class="container mx-auto px-4 py-3 flex items-center justify-between">
 
         <!-- LEFT -->
         <div class="flex items-center">
             <div class="flex items-center">
-                <div class="bg-green-500 text-white p-1 rounded mr-2">
+                <div class="bg-green-500 text-white p-1 rounded mr-2 dark:bg-green-600">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor"/>
                         <path d="M2 17L12 22L22 17" fill="currentColor"/>
                         <path d="M2 12L12 17L22 12" fill="currentColor"/>
                     </svg>
                 </div>
-                <a routerLink="/" class="font-bold text-xl">
+                <a routerLink="/" class="font-bold text-xl text-gray-900 dark:text-white">
                     {{ appTitle }}
                 </a>
             </div>
 
             <!-- NAV -->
-            <nav class="hidden md:flex space-x-6 text-sm text-gray-600 ml-8">
-                <a routerLink="/courses" class="hover:text-green-500">KURSLAR</a>
+            <nav class="hidden md:flex space-x-6 text-sm text-gray-600 ml-8 dark:text-gray-300">
+                <a routerLink="/courses" class="hover:text-green-500 dark:hover:text-green-400 transition-colors">KURSLAR</a>
 
-                <a *ngIf="isAuthenticated && role === 'ROLE_USER'"
+                <a *ngIf="isLoggedIn && userRole === 'ROLE_USER'"
                    routerLink="/courses/view/me"
-                   class="hover:text-green-300">
+                   class="hover:text-green-300 dark:hover:text-green-400 transition-colors">
                     MENING KURSLARIM
                 </a>
 
-                <a href="#" class="hover:text-green-500">ONLINE TEST</a>
-                <a href="#" class="hover:text-green-500">BLOG</a>
-                <a href="#" class="hover:text-green-500">YORDAM</a>
+                <a href="#" class="hover:text-green-500 dark:hover:text-green-400 transition-colors">ONLINE TEST</a>
+                <a href="#" class="hover:text-green-500 dark:hover:text-green-400 transition-colors">BLOG</a>
+                <a href="#" class="hover:text-green-500 dark:hover:text-green-400 transition-colors">YORDAM</a>
             </nav>
         </div>
 
@@ -36,41 +36,41 @@
         <div class="flex items-center space-x-3">
 
             <!-- PROFILE -->
-            <div *ngIf="isAuthenticated" class="relative">
+            <div *ngIf="isLoggedIn" class="relative">
                 <button (click)="toggleDropdown()" class="flex items-center space-x-2">
                     <img ngSrc="/public/logo.png"
-                         class="w-10 h-10 rounded-full border-2 border-gray-300 hover:border-blue-500 transition">
+                         class="w-10 h-10 rounded-full border-2 border-gray-300 hover:border-blue-500 transition dark:border-gray-600 dark:hover:border-blue-400">
                 </button>
 
                 <div *ngIf="isOpen"
-                     class="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg overflow-hidden z-50">
+                     class="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg overflow-hidden z-50 dark:bg-gray-800 dark:border-gray-700">
 
                     <a routerLink="/profile"
-                       class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                       class="block px-4 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors">
                         Profil
                     </a>
 
                     <a routerLink="/settings"
-                       class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                       class="block px-4 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors">
                         Sozlamalar
                     </a>
 
                     <button (click)="logout()"
-                            class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors">
                         Chiqish
                     </button>
                 </div>
             </div>
 
             <!-- LOGIN -->
-            <button *ngIf="!isAuthenticated"
+            <button *ngIf="!isLoggedIn"
                     (click)="openLoginModal()"
-                    class="md:flex hidden bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
+                    class="md:flex hidden bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition dark:bg-green-600 dark:hover:bg-green-700">
                 KIRISH
             </button>
 
             <!-- MOBILE MENU -->
-            <button class="md:hidden p-2 -mr-2" (click)="toggleMobileMenu()">
+            <button class="md:hidden p-2 -mr-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors" (click)="toggleMobileMenu()">
                 <i class="w-6 h-6">☰</i>
             </button>
 

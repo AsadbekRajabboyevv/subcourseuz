@@ -1,9 +1,22 @@
 <button
   type="button"
-  class="inline-flex items-center gap-1 rounded-full border border-gray-300 bg-white px-3 py-1 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800"
+  class="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition-all duration-300 hover:scale-105 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800"
   (click)="toggle()"
+  [title]="isDark() ? 'Yorqin rejimga o\'tish' : 'Qorong\'u rejimga o\'tish'"
 >
-  <span>🌙 / ☀️</span>
-  <span>Rejim</span>
+  <span class="text-lg transition-transform duration-300" [class]="isDark() ? 'rotate-180' : ''">
+    @if (isDark()) {
+      🌙
+    } @else {
+      ☀️
+    }
+  </span>
+  <span class="font-medium">
+    @if (isDark()) {
+      Qorong'u
+    } @else {
+      Yorqin
+    }
+  </span>
 </button>
 

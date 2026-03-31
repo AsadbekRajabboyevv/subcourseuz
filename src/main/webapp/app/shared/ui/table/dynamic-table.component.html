@@ -23,7 +23,7 @@
     <table class="min-w-full divide-y divide-gray-200 text-sm">
       <thead class="bg-gray-50 dark:bg-gray-800">
         <tr>
-          @for (column of visibleColumns(); track trackByColumn) {
+          @for (column of visibleColumns(); track trackByColumn($index, column)) {
             <th
               scope="col"
               class="px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-300"
@@ -48,9 +48,9 @@
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200 bg-white dark:bg-gray-900">
-        @for (row of data; track trackByRow) {
+        @for (row of data; track trackByRow($index, row)) {
           <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
-            @for (column of visibleColumns(); track trackByColumn) {
+            @for (column of visibleColumns(); track trackByColumn($index, column)) {
               <td class="whitespace-nowrap px-4 py-2 text-sm text-gray-700 dark:text-gray-200">
                 @if (column.template) {
                   <ng-container

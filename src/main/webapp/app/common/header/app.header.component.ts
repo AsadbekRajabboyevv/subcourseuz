@@ -1,34 +1,50 @@
-import { Component, Input } from '@angular/core';
-import {NgOptimizedImage} from "@angular/common";
+import { Component, Input, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { NgOptimizedImage } from "@angular/common";
+import { AuthService } from "../../shared/ui/services/auth.service";
+import { ModalService } from "../../shared/ui/services/modal.service";
+import { LoginModalComponent } from "../auth/login/login.component";
 
 @Component({
   selector: 'app-header',
-  imports: [
-    NgOptimizedImage
-  ],
+  imports: [CommonModule, NgOptimizedImage],
   templateUrl: './app.header.component.html'
 })
 export class HeaderComponent {
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly modalService = inject(ModalService);
 
-  @Input() isAuthenticated: boolean = true;
-  @Input() role: string = '';
-  @Input() appTitle: string = 'My App';
+  @Input() appTitle: string = 'Subcourse';
 
   isOpen: boolean = false;
 
-  toggleDropdown() {
+  get currentUser() {
+    return this.authService.currentUser();
+  }
+
+  get isLoggedIn() {
+    return this.authService.isLoggedIn();
+  }
+
+  get userRole() {
+    return this.authService.currentRole();
+  }
+
+  toggleDropdown(): void {
     this.isOpen = !this.isOpen;
   }
 
-  logout() {
-    console.log('Logout clicked');
+  logout(): void {
+    this.authService.logout();
   }
 
-  openLoginModal() {
-    console.log('Open login modal');
+  openLoginModal(): void {
+    this.modalService.open(LoginModalComponent);
   }
 
-  toggleMobileMenu() {
-    console.log('Mobile menu');
+  toggleMobileMenu(): void {
+    this.isOpen = !this.isOpen;
   }
 }

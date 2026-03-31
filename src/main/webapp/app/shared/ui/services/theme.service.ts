@@ -1,4 +1,4 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, signal, EventEmitter } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
@@ -6,6 +6,9 @@ export class ThemeService {
 
   theme = signal<'light' | 'dark'>('light');
   isDark = computed(() => this.theme() === 'dark');
+  
+  // Theme change event
+  themeChange = new EventEmitter<'light' | 'dark'>();
 
   constructor() {
     const saved = localStorage.getItem(this.STORAGE_KEY) as 'light' | 'dark' | null;
@@ -15,13 +18,15 @@ export class ThemeService {
   }
 
   toggle(): void {
-    this.setTheme(this.theme() === 'light' ? 'dark' : 'light');
+    const newTheme = this.theme() === 'light' ? 'dark' : 'light';
+    this.setTheme(newTheme);
   }
 
   setTheme(theme: 'light' | 'dark'): void {
     this.theme.set(theme);
     localStorage.setItem(this.STORAGE_KEY, theme);
     this.applyTheme(theme);
+    this.themeChange.emit(theme);
   }
 
   applyTheme(theme: 'light' | 'dark'): void {
@@ -30,5 +35,12 @@ export class ThemeService {
     } else {
       document.documentElement.classList.remove('dark');
     }
+  }
+  
+  // Initialize theme on app start
+  initializeTheme(): void {
+    const saved = localStorage.getItem(this.STORAGE_KEY) as 'light' | 'dark' | null;
+    const theme = saved ?? 'light';
+    this.setTheme(theme);
   }
 }
