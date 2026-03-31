@@ -1,0 +1,40 @@
+<nav class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
+  @for (item of items(); track item.id) {
+    <div>
+      <a
+        *ngIf="!item.children || item.children.length === 0"
+        [routerLink]="item.route"
+        class="flex items-center justify-between rounded-md px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+      >
+        <span>{{ item.label }}</span>
+      </a>
+
+      <div *ngIf="item.children && item.children.length > 0">
+        <button
+          type="button"
+          class="flex w-full items-center justify-between rounded-md px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+          (click)="toggle(item)"
+        >
+          <span>{{ item.label }}</span>
+          <span class="text-xs text-gray-400">
+            {{ isExpanded(item) ? '▲' : '▼' }}
+          </span>
+        </button>
+        <div
+          *ngIf="isExpanded(item)"
+          class="mt-1 space-y-1 pl-4"
+        >
+          @for (child of item.children; track child.id) {
+            <a
+              [routerLink]="child.route"
+              class="block rounded-md px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+            >
+              {{ child.label }}
+            </a>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</nav>
+

@@ -1,0 +1,44 @@
+<div class="flex flex-col gap-3">
+  <ol class="flex flex-wrap gap-3">
+    @for (step of steps; let i = $index; track i) {
+      <li>
+        <button
+          type="button"
+          class="flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium"
+          [class.bg-green-500]="i === currentStep"
+          [class.text-white]="i === currentStep"
+          [class.border-green-500]="i === currentStep"
+          [class.border-gray-300]="i !== currentStep"
+          [class.text-gray-700]="i !== currentStep"
+          [class.bg-white]="i !== currentStep"
+          (click)="goTo(i)"
+        >
+          <span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white text-[11px] text-gray-700" *ngIf="i === currentStep">
+            {{ i + 1 }}
+          </span>
+          <span>{{ step.label }}</span>
+        </button>
+      </li>
+    }
+  </ol>
+
+  <div class="flex items-center justify-between">
+    <button
+      type="button"
+      class="rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+      [disabled]="currentStep === 0"
+      (click)="previous()"
+    >
+      <span i18n="@@stepper_previous">Oldingi</span>
+    </button>
+    <button
+      type="button"
+      class="rounded-md bg-green-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-green-600 disabled:cursor-not-allowed disabled:opacity-50"
+      [disabled]="currentStep >= steps.length - 1"
+      (click)="next()"
+    >
+      <span i18n="@@stepper_next">Keyingi</span>
+    </button>
+  </div>
+</div>
+

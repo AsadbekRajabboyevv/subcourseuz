@@ -1,0 +1,17 @@
+<div class="flex flex-col gap-1">
+  @if (label) {
+    <label class="text-sm font-medium text-gray-700">{{ label }}</label>
+  }
+  <input
+    type="date"
+    [value]="value()"
+    [min]="minDate"
+    [max]="maxDate"
+    [disabled]="isDisabled()"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm
+           focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/30
+           disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-400"
+  />
+</div>

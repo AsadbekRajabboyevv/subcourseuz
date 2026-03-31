@@ -1,0 +1,22 @@
+<div class="flex flex-col gap-1">
+  @if (label) {
+    <label class="text-sm font-medium text-gray-700">{{ label }}</label>
+  }
+  <input
+    [type]="type"
+    [placeholder]="placeholder"
+    [disabled]="isDisabled() || disabled"
+    [value]="value()"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm
+           placeholder:text-gray-400
+           focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/30
+           disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-400"
+    [class.border-red-400]="errorMessage"
+    [class.focus:ring-red-400]="errorMessage"
+  />
+  @if (errorMessage) {
+    <span class="text-xs text-red-500">{{ errorMessage }}</span>
+  }
+</div>

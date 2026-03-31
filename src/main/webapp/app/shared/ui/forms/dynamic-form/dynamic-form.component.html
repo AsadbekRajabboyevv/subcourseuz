@@ -1,0 +1,86 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+
+  @for (field of fields; track field.key) {
+    @if (isFieldVisible(field)) {
+      <div class="flex flex-col gap-1">
+
+        <!-- input -->
+        @if (field.type === 'input') {
+          <app-input
+            [formControlName]="field.key"
+            [label]="field.label"
+            [placeholder]="field.placeholder ?? ''"
+            [errorMessage]="getErrorMessage(field)"
+          />
+        }
+
+        <!-- select -->
+        @if (field.type === 'select') {
+          <label class="text-sm font-medium text-gray-700">{{ field.label }}</label>
+          <app-select
+            [formControlName]="field.key"
+            [options]="field.options ?? []"
+            [label]="field.label"
+          />
+        }
+
+        <!-- checkbox -->
+        @if (field.type === 'checkbox') {
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              [formControlName]="field.key"
+              class="w-4 h-4 rounded border-gray-300 text-green-500 focus:ring-green-500"
+            />
+            <span class="text-sm text-gray-700">{{ field.label }}</span>
+          </label>
+        }
+
+        <!-- textarea -->
+        @if (field.type === 'textarea') {
+          <label class="text-sm font-medium text-gray-700">{{ field.label }}</label>
+          <textarea
+            [formControlName]="field.key"
+            [placeholder]="field.placeholder ?? ''"
+            rows="4"
+            class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
+          ></textarea>
+        }
+
+        <!-- radio -->
+        @if (field.type === 'radio') {
+          <fieldset>
+            <legend class="text-sm font-medium text-gray-700 mb-1">{{ field.label }}</legend>
+            <div class="flex flex-col gap-2">
+              @for (option of field.options ?? []; track option.value) {
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    [formControlName]="field.key"
+                    [value]="option.value"
+                    class="w-4 h-4 border-gray-300 text-green-500 focus:ring-green-500"
+                  />
+                  <span class="text-sm text-gray-700">{{ option.label }}</span>
+                </label>
+              }
+            </div>
+          </fieldset>
+        }
+
+        <!-- Validation error -->
+        @if (getErrorMessage(field)) {
+          <span class="text-xs text-red-500 mt-0.5">{{ getErrorMessage(field) }}</span>
+        }
+
+      </div>
+    }
+  }
+
+  <button
+    type="submit"
+    class="w-full rounded-lg bg-green-500 px-4 py-2 text-sm font-semibold text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
+  >
+    {{ submitLabel }}
+  </button>
+
+</form>

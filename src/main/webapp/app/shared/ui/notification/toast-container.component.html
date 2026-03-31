@@ -1,0 +1,30 @@
+<div class="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-end px-4 py-4">
+  <div class="flex max-h-screen flex-col gap-2 overflow-y-auto">
+    @for (toast of toasts(); track toast.id) {
+      <div [ngClass]="toastClasses(toast)">
+        <div class="mt-0.5 text-xs font-medium uppercase tracking-wide text-gray-500">
+          @if (toast.type === 'success') {
+            <span i18n="@@toast_success">Muvaffaqiyat</span>
+          } @else if (toast.type === 'error') {
+            <span i18n="@@toast_error">Xato</span>
+          } @else if (toast.type === 'warning') {
+            <span i18n="@@toast_warning">Ogohlantirish</span>
+          } @else {
+            <span i18n="@@toast_info">Ma'lumot</span>
+          }
+        </div>
+        <div class="flex-1 text-sm text-gray-800 dark:text-gray-100">
+          {{ toast.message }}
+        </div>
+        <button
+          type="button"
+          class="ml-1 inline-flex h-6 w-6 items-center justify-center rounded-full text-xs text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800"
+          (click)="dismiss(toast.id)"
+        >
+          ✕
+        </button>
+      </div>
+    }
+  </div>
+</div>
+

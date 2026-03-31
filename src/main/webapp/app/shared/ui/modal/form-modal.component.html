@@ -1,0 +1,12 @@
+<app-modal
+  [title]="title"
+  size="md"
+  (closed)="onClose()"
+>
+  <app-dynamic-form
+    [fields]="fields"
+    [submitLabel]="submitLabel"
+    (formSubmit)="onFormSubmit($event)"
+  />
+</app-modal>
+

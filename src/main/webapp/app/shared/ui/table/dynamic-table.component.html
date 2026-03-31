@@ -1,0 +1,97 @@
+<div class="relative overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-gray-900 dark:border-gray-800">
+  <!-- Loading overlay -->
+  @if (loading) {
+    <div class="absolute inset-0 z-10 flex items-center justify-center bg-white/60 dark:bg-gray-900/60">
+      <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200">
+        <span class="h-4 w-4 animate-spin rounded-full border-2 border-green-500 border-t-transparent"></span>
+        <span i18n>Yuklanmoqda...</span>
+      </div>
+    </div>
+  }
+
+  <!-- Empty state -->
+  @if (!loading && (!data || data.length === 0)) {
+    <div class="flex flex-col items-center justify-center px-6 py-10 text-center">
+      <p class="text-sm font-medium text-gray-700 dark:text-gray-100" i18n="@@table_no_data_title">
+        Ma'lumotlar topilmadi
+      </p>
+      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400" i18n="@@table_no_data_description">
+        Filtrlarni o'zgartirib ko'ring yoki keyinroq qayta urinib ko'ring.
+      </p>
+    </div>
+  } @else {
+    <table class="min-w-full divide-y divide-gray-200 text-sm">
+      <thead class="bg-gray-50 dark:bg-gray-800">
+        <tr>
+          @for (column of visibleColumns(); track trackByColumn) {
+            <th
+              scope="col"
+              class="px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-300"
+            >
+              <button
+                type="button"
+                class="flex items-center gap-1"
+                [class.cursor-pointer]="column.sortable"
+                [class.text-gray-900]="column.sortable"
+                [class.dark:text-white]="column.sortable"
+                (click)="onHeaderClick(column)"
+              >
+                <span>{{ column.header }}</span>
+                @if (column.sortable) {
+                  <span class="text-[10px] text-gray-400">
+                    @if (isSortedAsc(column)) { ▲ } @else if (isSortedDesc(column)) { ▼ } @else { ⇅ }
+                  </span>
+                }
+              </button>
+            </th>
+          }
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200 bg-white dark:bg-gray-900">
+        @for (row of data; track trackByRow) {
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
+            @for (column of visibleColumns(); track trackByColumn) {
+              <td class="whitespace-nowrap px-4 py-2 text-sm text-gray-700 dark:text-gray-200">
+                @if (column.template) {
+                  <ng-container
+                    [ngTemplateOutlet]="column.template"
+                    [ngTemplateOutletContext]="{ $implicit: row, row: row }"
+                  ></ng-container>
+                } @else {
+                  <span>{{ row[column.field] }}</span>
+                }
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <!-- Pagination -->
+  <div class="flex items-center justify-between border-t border-gray-200 bg-gray-50 px-4 py-2 text-xs dark:bg-gray-800 dark:border-gray-700">
+    <div class="text-gray-600 dark:text-gray-300">
+      <span i18n="@@table_pagination_summary">
+        {{ totalCount }} ta yozuv • Sahifa {{ currentPage() + 1 }} / {{ totalPages() || 1 }}
+      </span>
+    <div class="flex items-center gap-2">
+      <button
+        type="button"
+        class="rounded-md border border-gray-300 px-2 py-1 text-xs text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
+        [disabled]="currentPage() === 0 || totalPages() <= 1"
+        (click)="goToPage(-1)"
+      >
+        <span i18n="@@table_prev_page">Oldingi</span>
+      </button>
+      <button
+        type="button"
+        class="rounded-md border border-gray-300 px-2 py-1 text-xs text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
+        [disabled]="currentPage() >= (totalPages() - 1) || totalPages() <= 1"
+        (click)="goToPage(1)"
+      >
+        <span i18n="@@table_next_page">Keyingi</span>
+      </button>
+    </div>
+  </div>
+</div>
+
