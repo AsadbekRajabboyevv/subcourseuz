@@ -1,6 +1,8 @@
 package uz.asadbek.subcourse.payment;
 
 import java.time.LocalDateTime;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.asadbek.subcourse.balance.BalanceService;
@@ -14,6 +16,7 @@ import uz.asadbek.subcourse.payment.dto.PaymentRequestDto;
 import uz.asadbek.subcourse.payment.dto.PaymentResponseDto;
 import uz.asadbek.subcourse.payment.dto.PaymentStatus;
 import uz.asadbek.subcourse.payment.dto.PaymentType;
+import uz.asadbek.subcourse.payment.filter.PaymentFilter;
 import uz.asadbek.subcourse.test.TestService;
 import uz.asadbek.subcourse.test.dto.TestResponseDto;
 import uz.asadbek.subcourse.util.ExceptionUtil;
@@ -25,16 +28,16 @@ public class PaymentServiceImpl implements PaymentService {
     private final CourseService courseService;
     private final TestService testService;
     private final BalanceTransactionService balanceTransactionService;
-    private final PaymentRepository paymentRepository;
+    private final PaymentRepository repository;
     private final BalanceService balanceService;
 
     public PaymentServiceImpl(CourseService courseService, TestService testService,
-        BalanceTransactionService balanceTransactionService, PaymentRepository paymentRepository,
+        BalanceTransactionService balanceTransactionService, PaymentRepository repository,
         BalanceService balanceService) {
         this.courseService = courseService;
         this.testService = testService;
         this.balanceTransactionService = balanceTransactionService;
-        this.paymentRepository = paymentRepository;
+        this.repository = repository;
         this.balanceService = balanceService;
     }
 
@@ -107,15 +110,19 @@ public class PaymentServiceImpl implements PaymentService {
             }
 
             var payment = buildPayment(course, test, amount, balance.getCurrency());
-            var savedPayment = paymentRepository.save(payment);
+            var savedPayment = repository.save(payment);
             savedPaymentId = savedPayment.getId();
             transactionId = balanceTransactionService.createTransaction(savedPayment);
-
+            if (testId != null) {
+                testService.enroll(testId, currentUserId);
+            }else {
+                courseService.enroll(courseId, currentUserId);
+            }
             return PaymentResponseDto.builder()
                 .exId(savedPayment.getExId())
                 .amount(amount)
                 .transactionId(transactionId)
-                .status(savedPayment.getStatus().name())
+                .status(savedPayment.getStatus())
                 .build();
 
         } catch (Exception e) {
@@ -127,7 +134,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public PaymentResponseDto process(String exId, PaymentAction action) {
 
-        var payment = paymentRepository.findByExId(exId)
+        var payment = repository.findByExId(exId)
             .orElseThrow(() -> ExceptionUtil.notFoundException("payment_not_found"));
 
         if (payment.getStatus() == PaymentStatus.SUCCESS) {
@@ -159,16 +166,26 @@ public class PaymentServiceImpl implements PaymentService {
             }
         }
 
-        paymentRepository.save(payment);
+        repository.save(payment);
 
         return buildResponse(payment, transaction);
+    }
+
+    @Override
+    public Page<PaymentResponseDto> get(Pageable pageable, PaymentFilter filter) {
+        return repository.get(filter, pageable);
+    }
+
+    @Override
+    public PaymentResponseDto get(String exId) {
+        return repository.get(exId);
     }
 
     private PaymentResponseDto buildResponse(PaymentEntity payment,
         BalanceTransactionEntity transaction) {
         return PaymentResponseDto.builder()
             .exId(payment.getExId())
-            .status(payment.getStatus().name())
+            .status(payment.getStatus())
             .transactionId(transaction != null ? transaction.getExternalTx() : null)
             .amount(payment.getAmount())
             .currency(payment.getCurrency())

@@ -10,11 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.asadbek.subcourse.course.dto.CourseInfoResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
 import uz.asadbek.subcourse.course.filter.CourseFilter;
-import uz.asadbek.subcourse.course.usercourse.UserCourse;
-import uz.asadbek.subcourse.course.usercourse.UserCourseId;
+import uz.asadbek.subcourse.course.usercourse.UserCourseEntity;
+import uz.asadbek.subcourse.util.Validator;
+import uz.asadbek.subcourse.util.embedded.UserPurchaseId;
 import uz.asadbek.subcourse.course.usercourse.UserCourseRepository;
-import uz.asadbek.subcourse.user.UserRepository;
-import uz.asadbek.subcourse.util.ExceptionUtil;
 import uz.asadbek.subcourse.util.JwtUtil;
 import uz.asadbek.subcourse.util.LangUtils;
 
@@ -24,23 +23,23 @@ import uz.asadbek.subcourse.util.LangUtils;
 @RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
 
-    private final CourseRepository courseRepository;
-    private final UserRepository userRepository;
+    private final CourseRepository repository;
     private final UserCourseRepository userCourseRepository;
+    private final Validator validator;
 
     @Override
     public Long count() {
-        return courseRepository.count();
+        return repository.count();
     }
 
     @Override
     public Page<CourseResponseDto> getInfo(Pageable pageable, CourseFilter filter) {
-        return courseRepository.get(pageable, filter, LangUtils.currentLang());
+        return repository.get(pageable, filter, LangUtils.currentLang());
     }
 
     @Override
     public CourseInfoResponseDto getInfo(Long id) {
-        return courseRepository.get(id, LangUtils.currentLang());
+        return repository.get(id, LangUtils.currentLang());
     }
 
     @Override
@@ -49,45 +48,13 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Boolean enroll(Long courseId) {
-        var userId = JwtUtil.getCurrentUser().getId();
-
-        if (!userRepository.existsById(userId)) {
-            log.error("User not found: {}", userId);
-            throw ExceptionUtil.notFoundException("user_not_found");
-        }
-
-        if (!courseRepository.existsById(courseId)) {
-            log.error("Course not found: {}", courseId);
-            throw ExceptionUtil.notFoundException("course_not_found");
-        }
-
-        if (userCourseRepository.existsByIdUserIdAndIdCourseId(userId, courseId)) {
-            log.error("User already enrolled to course: {}", courseId);
-            throw ExceptionUtil.badRequestException("user_already_enrolled");
-        }
-
-        var uc = new UserCourse();
-        uc.setId(new UserCourseId(userId, courseId));
-        uc.setJoinedAt(LocalDateTime.now());
+    public Boolean enroll(Long courseId, Long userId) {
+        validator.validateEnroll(userId, courseId, repository::existsById, "course_not_found");
+        var uc = new UserCourseEntity();
+        uc.setId(new UserPurchaseId(userId, courseId, LocalDateTime.now()));
 
         userCourseRepository.save(uc);
         return true;
-    }
-
-    @Override
-    public Long getPrice(Long courseId) {
-        return 0L;
-    }
-
-    @Override
-    public boolean isCoursePurchased(Long userId, Long courseId) {
-        return userCourseRepository.existsByIdUserIdAndIdCourseId(userId, courseId);
-    }
-
-    @Override
-    public void unenroll(Long courseId) {
-
     }
 
 }

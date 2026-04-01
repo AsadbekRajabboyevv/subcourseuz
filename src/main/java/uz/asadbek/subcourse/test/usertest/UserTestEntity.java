@@ -1,24 +1,22 @@
-package uz.asadbek.subcourse.course.usercourse;
+package uz.asadbek.subcourse.test.usertest;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uz.asadbek.subcourse.util.embedded.UserPurchaseId;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @Table(name = "user_courses")
-public class UserCourse {
+public class UserTestEntity {
 
     @EmbeddedId
-    private UserCourseId id;
+    private UserPurchaseId id;
 
-    @Column(name = "joined_at")
-    private LocalDateTime joinedAt;
+
 }

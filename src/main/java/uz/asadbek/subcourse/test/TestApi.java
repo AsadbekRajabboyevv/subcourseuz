@@ -9,7 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uz.asadbek.base.dto.BaseResponseDto;
+import uz.asadbek.subcourse.test.dto.SubmitAnswerRequestDto;
+import uz.asadbek.subcourse.test.dto.TestRequestDto;
 import uz.asadbek.subcourse.test.dto.TestResponseDto;
+import uz.asadbek.subcourse.test.dto.TestResultDto;
+import uz.asadbek.subcourse.test.dto.TestReviewDto;
 import uz.asadbek.subcourse.test.dto.TestUpdateRequestDto;
 import uz.asadbek.subcourse.test.filter.TestFilter;
 
@@ -17,6 +21,8 @@ import uz.asadbek.subcourse.test.filter.TestFilter;
 @RequestMapping("/v1/api/tests")
 public interface TestApi {
 
+    @PostMapping
+    BaseResponseDto<Long> create(TestRequestDto request);
 
     @GetMapping
     BaseResponseDto<Page<TestResponseDto>> get(Pageable pageable, TestFilter filter);
@@ -31,7 +37,7 @@ public interface TestApi {
     BaseResponseDto<Long> publish(@PathVariable Long id);
 
     @PutMapping("/submit/{sessionId}")
-    BaseResponseDto<Long> submitAnswer(@PathVariable Long sessionId);
+    BaseResponseDto<Boolean> submitAnswer(SubmitAnswerRequestDto request);
 
     @PatchMapping("/{id}")
     BaseResponseDto<Long> update(@PathVariable Long id, TestUpdateRequestDto request);
@@ -40,9 +46,9 @@ public interface TestApi {
     BaseResponseDto<Long> start(@PathVariable Long id);
 
     @PostMapping("/finish/{id}")
-    BaseResponseDto<Long> finish(@PathVariable Long id);
+    BaseResponseDto<TestResultDto> finish(@PathVariable Long id);
 
     @GetMapping("/review/{sessionId}")
-    BaseResponseDto<TestResponseDto> getReview(@PathVariable Long sessionId);
+    BaseResponseDto<TestReviewDto> getReview(@PathVariable Long sessionId);
 
 }

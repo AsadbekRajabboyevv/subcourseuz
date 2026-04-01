@@ -25,20 +25,20 @@ public class BalanceEntity extends BaseEntity {
     @Column(name = "user_id", nullable = false, unique = true, updatable = false)
     private Long userId;
 
-    @Column(name = "balance", nullable = false, columnDefinition = "DEFAULT SET 0")
-    private Long balance;
+    @Column(name = "balance", nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+    private Long balance = 0L;
 
-    @Column(name = "pending_balance", nullable = false, columnDefinition = "DEFAULT SET 0")
-    private Long pendingBalance; // pul tushgandagi balans
+    @Column(name = "pending_balance", nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+    private Long pendingBalance = 0L;
+
+    @Column(name = "is_active", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private boolean isActive = true;
 
     @Column(name = "last_transaction_at")
     private LocalDateTime lastTransactionAt;
 
     @Column(name = "currency", nullable = false)
     private CurrencyEnum currency;
-
-    @Column(name = "is_active", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private Boolean isActive;
 
     @Version
     @Column(name = "version")

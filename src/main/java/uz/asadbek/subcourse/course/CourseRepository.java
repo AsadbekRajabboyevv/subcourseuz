@@ -26,7 +26,7 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
             from CourseEntity c
             left join UserEntity u on c.ownerId = u.id
             left join CourseLessonEntity l on l.courseId = c.id
-            left join UserCourse sc on sc.id.courseId = c.id
+            left join UserCourseEntity sc on sc.id.referenceId = c.id
             where c.deletedAt is null
             and (:#{#filter.id} is null or c.id = :#{#filter.id})
             and (:#{#filter.createdAtFrom} is null or c.createdAt >= :#{#filter.createdAtFrom})
@@ -73,7 +73,7 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
             from CourseEntity c
             left join UserEntity u on c.ownerId = u.id
             left join CourseLessonEntity l on l.courseId = c.id
-            left join UserCourse sc on sc.id.courseId = c.id
+            left join UserCourseEntity sc on sc.id.referenceId = c.id
             where c.deletedAt is null and c.id = :#{#id}
         """)
     CourseResponseDto get(Long id);
@@ -109,7 +109,7 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
             from CourseEntity c
             left join UserEntity u on c.ownerId = u.id
             left join CourseLessonEntity l on l.courseId = c.id
-            left join UserCourse sc on sc.id.courseId = c.id
+            left join UserCourseEntity sc on sc.id.referenceId = c.id
             left join CourseGradeEntity g on c.gradeId = g.id
             left join ScienceEntity s on c.scienceId = s.id
             where c.deletedAt is null

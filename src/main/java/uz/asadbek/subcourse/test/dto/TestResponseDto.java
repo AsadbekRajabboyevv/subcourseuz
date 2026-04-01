@@ -20,8 +20,40 @@ public class TestResponseDto {
     private Long courseId;
     private Long lessonId;
     private Long gradeId;
-    private String imageUrl;
+    private String imagePath;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<TestQuestionResponseDto> questions;
+
+    public TestResponseDto(
+        Long id,
+        String name,
+        String description,
+        Long price,
+        String lang,
+        Integer duration,
+        Boolean isPublished,
+        Long scienceId,
+        Long courseId,
+        Long lessonId,
+        Long gradeId,
+        String imagePath,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
+    ) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.lang = lang;
+        this.duration = duration;
+        this.isPublished = isPublished;
+        this.scienceId = scienceId;
+        this.courseId = courseId;
+        this.lessonId = lessonId;
+        this.gradeId = gradeId;
+        this.imagePath = imagePath;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }

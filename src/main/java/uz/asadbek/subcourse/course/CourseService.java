@@ -17,11 +17,5 @@ public interface CourseService {
 
     CourseResponseDto get(Long id);
 
-    Boolean enroll(Long courseId);
-
-    Long getPrice(Long courseId);
-
-    boolean isCoursePurchased(Long userId, Long courseId);
-
-    void unenroll(Long courseId);
+    Boolean enroll(Long courseId, Long userId);
 }
