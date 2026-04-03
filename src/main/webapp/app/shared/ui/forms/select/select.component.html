@@ -1,39 +1,61 @@
-<div class="flex flex-col gap-1">
-  @if (label) {
-    <label class="text-sm font-medium text-gray-700">{{ label }}</label>
-  }
-
-  @if (searchable) {
-    <input
-      type="text"
-      placeholder="Qidirish..."
-      [value]="searchQuery()"
-      (input)="onSearch($event)"
-      [disabled]="isDisabled()"
-      class="mb-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm
-             placeholder:text-gray-400
-             focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/30
-             disabled:cursor-not-allowed disabled:bg-gray-50"
-    />
-  }
-
-  <select
-    [multiple]="multiple"
-    [disabled]="isDisabled()"
-    (change)="onSelectChange($event)"
-    (blur)="onBlur()"
-    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm
-           focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/30
-           disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-400"
-    [class.min-h-32]="multiple"
-  >
-    @if (!multiple) {
-      <option value="" disabled [selected]="!value()">Tanlang...</option>
+<div class="space-y-2">
+    @if (label) {
+        <label class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase ml-1 block">
+            {{ label }}
+        </label>
     }
-    @for (option of filteredOptions(); track option.value) {
-      <option [value]="option.value" [selected]="isSelected(option)">
-        {{ option.label }}
-      </option>
-    }
-  </select>
+
+    <div class="relative group flex flex-col gap-2">
+
+        @if (searchable) {
+            <div class="relative flex items-center">
+                <lucide-icon name="search" size="16"
+                             class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-500 transition-colors pointer-events-none">
+                </lucide-icon>
+                <input
+                    type="text"
+                    [placeholder]="placeholder"
+                    [value]="searchQuery()"
+                    (input)="onSearch($event)"
+                    [disabled]="isDisabled()"
+                    class="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border-2 border-transparent
+                 focus:border-green-500 rounded-2xl outline-none dark:text-white transition-all text-sm
+                 disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+            </div>
+        }
+
+        <div class="relative flex items-center">
+            <lucide-icon [name]="multiple ? 'layers' : 'chevron-down-circle'" size="18"
+                         class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-500 transition-colors pointer-events-none">
+            </lucide-icon>
+
+            <select
+                [multiple]="multiple"
+                [disabled]="isDisabled()"
+                (change)="onSelectChange($event)"
+                (blur)="onBlur()"
+                class="w-full pl-12 pr-10 py-3.5 bg-gray-50 dark:bg-gray-800 border-2 border-transparent
+               focus:border-green-500 rounded-2xl outline-none dark:text-white transition-all text-sm
+               disabled:cursor-not-allowed disabled:opacity-50 appearance-none cursor-pointer"
+                [class.min-h-[150px]]="multiple"
+            >
+                @if (!multiple) {
+                    <option value="" disabled [selected]="!value()">{{ placeholder }}</option>
+                }
+                @for (option of filteredOptions(); track option.value) {
+                    <option [value]="option.value" [selected]="isSelected(option)"
+                            class="py-2 px-4 dark:bg-gray-900">
+                        {{ option.label }}
+                    </option>
+                }
+            </select>
+
+            @if (!multiple) {
+                <lucide-icon name="chevron-down" size="16"
+                             class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none transition-transform group-focus-within:rotate-180">
+                </lucide-icon>
+            }
+        </div>
+    </div>
 </div>

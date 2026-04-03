@@ -1,97 +1,113 @@
-<div class="relative overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-gray-900 dark:border-gray-800">
-  <!-- Loading overlay -->
-  @if (loading) {
-    <div class="absolute inset-0 z-10 flex items-center justify-center bg-white/60 dark:bg-gray-900/60">
-      <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200">
-        <span class="h-4 w-4 animate-spin rounded-full border-2 border-green-500 border-t-transparent"></span>
-        <span i18n>Yuklanmoqda...</span>
-      </div>
-    </div>
-  }
+<div class="w-full bg-white dark:bg-gray-900 rounded-2xl shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 overflow-hidden">
 
-  <!-- Empty state -->
-  @if (!loading && (!data || data.length === 0)) {
-    <div class="flex flex-col items-center justify-center px-6 py-10 text-center">
-      <p class="text-sm font-medium text-gray-700 dark:text-gray-100" i18n="@@table_no_data_title">
-        Ma'lumotlar topilmadi
-      </p>
-      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400" i18n="@@table_no_data_description">
-        Filtrlarni o'zgartirib ko'ring yoki keyinroq qayta urinib ko'ring.
-      </p>
-    </div>
-  } @else {
-    <table class="min-w-full divide-y divide-gray-200 text-sm">
-      <thead class="bg-gray-50 dark:bg-gray-800">
-        <tr>
-          @for (column of visibleColumns(); track trackByColumn($index, column)) {
-            <th
-              scope="col"
-              class="px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-300"
-            >
-              <button
-                type="button"
-                class="flex items-center gap-1"
-                [class.cursor-pointer]="column.sortable"
-                [class.text-gray-900]="column.sortable"
-                [class.dark:text-white]="column.sortable"
-                (click)="onHeaderClick(column)"
-              >
-                <span>{{ column.header }}</span>
-                @if (column.sortable) {
-                  <span class="text-[10px] text-gray-400">
-                    @if (isSortedAsc(column)) { ▲ } @else if (isSortedDesc(column)) { ▼ } @else { ⇅ }
-                  </span>
-                }
-              </button>
-            </th>
-          }
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-200 bg-white dark:bg-gray-900">
-        @for (row of data; track trackByRow($index, row)) {
-          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
-            @for (column of visibleColumns(); track trackByColumn($index, column)) {
-              <td class="whitespace-nowrap px-4 py-2 text-sm text-gray-700 dark:text-gray-200">
-                @if (column.template) {
-                  <ng-container
-                    [ngTemplateOutlet]="column.template"
-                    [ngTemplateOutletContext]="{ $implicit: row, row: row }"
-                  ></ng-container>
-                } @else {
-                  <span>{{ row[column.field] }}</span>
-                }
-              </td>
-            }
-          </tr>
+    <div class="relative overflow-x-auto">
+        @if (loading) {
+            <div class="absolute inset-0 z-20 flex items-center justify-center bg-white/70 dark:bg-gray-900/70 backdrop-blur-[2px]">
+                <div class="flex flex-col items-center gap-3">
+                    <div class="w-10 h-10 border-4 border-green-500/20 border-t-green-600 rounded-full animate-spin"></div>
+                    <span class="text-xs font-bold text-green-700 dark:text-green-500 uppercase tracking-widest">Yuklanmoqda...</span>
+                </div>
+            </div>
         }
-      </tbody>
-    </table>
-  }
 
-  <!-- Pagination -->
-  <div class="flex items-center justify-between border-t border-gray-200 bg-gray-50 px-4 py-2 text-xs dark:bg-gray-800 dark:border-gray-700">
-    <div class="text-gray-600 dark:text-gray-300">
-      <span i18n="@@table_pagination_summary">
-        {{ totalCount }} ta yozuv • Sahifa {{ currentPage() + 1 }} / {{ totalPages() || 1 }}
-      </span>
-    <div class="flex items-center gap-2">
-      <button
-        type="button"
-        class="rounded-md border border-gray-300 px-2 py-1 text-xs text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
-        [disabled]="currentPage() === 0 || totalPages() <= 1"
-        (click)="goToPage(-1)"
-      >
-        <span i18n="@@table_prev_page">Oldingi</span>
-      </button>
-      <button
-        type="button"
-        class="rounded-md border border-gray-300 px-2 py-1 text-xs text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
-        [disabled]="currentPage() >= (totalPages() - 1) || totalPages() <= 1"
-        (click)="goToPage(1)"
-      >
-        <span i18n="@@table_next_page">Keyingi</span>
-      </button>
+        <table class="w-full text-left border-collapse">
+            <thead class="bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
+            <tr>
+                @for (col of visibleColumns(); track col.field) {
+                    <th class="px-6 py-4 text-[11px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        <button (click)="onHeaderClick(col)" [disabled]="!col.sortable"
+                                class="flex items-center gap-2 group hover:text-green-600 transition-colors">
+                            {{ col.header }}
+                            @if (col.sortable) {
+                                <lucide-icon [name]="currentSort()?.field === col.field ? (currentSort()?.direction === 'asc' ? 'arrow-up' : 'arrow-down') : 'chevrons-up-down'"
+                                             size="14" class="opacity-0 group-hover:opacity-100 transition-all"></lucide-icon>
+                            }
+                        </button>
+                    </th>
+                }
+                @if (showActions) {
+                    <th class="px-6 py-4 text-[11px] font-black text-gray-400 uppercase text-right">Amallar</th>
+                }
+            </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-50 dark:divide-gray-800">
+                @for (row of data; track row['id']) {
+                    <tr class="group hover:bg-green-50/30 dark:hover:bg-green-900/5 transition-all">
+                        @for (col of visibleColumns(); track col.field) {
+                            <td class="px-6 py-4">
+                                <div class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    @if (col.template) {
+                                        <ng-container [ngTemplateOutlet]="col.template" [ngTemplateOutletContext]="{ $implicit: row }"></ng-container>
+                                    } @else {
+                                        {{ row[col.field] }}
+                                    }
+                                </div>
+                            </td>
+                        }
+
+                        @if (showActions) {
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <ng-container *ngTemplateOutlet="customActions || defaultActions; context: { $implicit: row }"></ng-container>
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
-  </div>
+
+    <div class="p-4 bg-gray-50/50 dark:bg-gray-800/30 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
+        <span class="text-xs font-bold text-gray-400 uppercase">Jami: {{ totalCount }} ta</span>
+
+        <div class="flex items-center gap-2">
+            <button (click)="goToPage(-1)" [disabled]="currentPage() === 0"
+                    class="p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 disabled:opacity-30 hover:border-green-500 transition-all">
+                <lucide-icon name="chevron-left" size="18"></lucide-icon>
+            </button>
+            <span class="text-sm font-black dark:text-white px-3">{{ currentPage() + 1 }}</span>
+            <button (click)="goToPage(1)" [disabled]="currentPage() >= totalPages() - 1"
+                    class="p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 disabled:opacity-30 hover:border-green-500 transition-all">
+                <lucide-icon name="chevron-right" size="18"></lucide-icon>
+            </button>
+        </div>
+    </div>
 </div>
 
+<ng-template #defaultActions let-row>
+    <button (click)="toggleStatus.emit(row)"
+            [class]="row.active ? 'text-green-500 hover:bg-green-50' : 'text-gray-400 hover:bg-gray-100'"
+            class="p-2 rounded-lg transition-colors" title="Holatni o'zgartirish">
+        <lucide-icon [name]="row.active ? 'toggle-right' : 'toggle-left'" size="20"></lucide-icon>
+    </button>
+
+    <button (click)="edit.emit(row)" class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors">
+        <lucide-icon name="edit-3" size="18"></lucide-icon>
+    </button>
+
+    <button (click)="delete.emit(row)" class="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors">
+        <lucide-icon name="trash-2" size="18"></lucide-icon>
+    </button>
+</ng-template>
+
+
+<!--<app-dynamic-table-->
+<!--    [columns]="columns"-->
+<!--    [data]="users()"-->
+<!--    [totalCount]="100"-->
+<!--    [loading]="isLoading"-->
+<!--    (edit)="onEdit($event)"-->
+<!--    (delete)="onDelete($event)"-->
+<!--    (sortChange)="handleSort($event)"-->
+<!--    (pageChange)="handlePage($event)">-->
+
+<!--    <ng-template #statusTemplate let-row>-->
+<!--     <span [class]="row.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"-->
+<!--           class="px-2 py-1 rounded-full text-[10px] font-bold uppercase">-->
+<!--       {{ row.active ? 'Faol' : 'Nofaol' }}-->
+<!--     </span>-->
+<!--    </ng-template>-->
+
+<!--</app-dynamic-table>-->

@@ -1,89 +1,61 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, computed, inject, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, computed, inject, signal, TemplateRef } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { ColumnConfig, FilterQuery, SortEvent } from '../interfaces';
+import { ColumnConfig, SortEvent } from '../interfaces';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-dynamic-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './dynamic-table.component.html',
 })
-export class DynamicTableComponent<T extends Record<string, unknown>> {
+export class DynamicTableComponent<T extends Record<string, any>> {
   @Input() columns: ColumnConfig[] = [];
   @Input() data: T[] = [];
   @Input() totalCount = 0;
   @Input() pageSize = 10;
   @Input() loading = false;
+  @Input() showActions = true; // Amallar ustunini ko'rsatish/yashirish
+
+  // Custom action template (agar foydalanuvchi o'z tugmalarini qo'shmoqchi bo'lsa)
+  @Input() customActions?: TemplateRef<any>;
 
   @Output() sortChange = new EventEmitter<SortEvent>();
   @Output() pageChange = new EventEmitter<{ pageIndex: number; pageSize: number }>();
-  @Output() filterChange = new EventEmitter<FilterQuery>();
+  @Output() edit = new EventEmitter<T>();
+  @Output() delete = new EventEmitter<T>();
+  @Output() toggleStatus = new EventEmitter<T>(); // Enable/Disable uchun
 
   protected currentPage = signal(0);
   protected currentSort = signal<SortEvent | null>(null);
-
   private readonly authService = inject(AuthService);
 
+  // Rollarga qarab ustunlarni filtrlash
   protected visibleColumns = computed(() => {
     const role = this.authService.currentRole();
     return this.columns.filter(col => {
       if (!col.roles || col.roles.length === 0) return true;
-      if (!role) return false;
-      return col.roles.includes(role);
+      return role ? col.roles.includes(role) : false;
     });
   });
 
-  protected totalPages = computed(() => {
-    if (this.pageSize <= 0) return 0;
-    return Math.ceil(this.totalCount / this.pageSize);
-  });
+  protected totalPages = computed(() => Math.ceil(this.totalCount / this.pageSize) || 1);
 
   protected onHeaderClick(column: ColumnConfig): void {
     if (!column.sortable) return;
-
     const current = this.currentSort();
-    let direction: SortEvent['direction'] = 'asc';
-
-    if (current && current.field === column.field) {
-      direction = current.direction === 'asc' ? 'desc' : 'asc';
-    }
-
+    const direction = current?.field === column.field && current.direction === 'asc' ? 'desc' : 'asc';
     const sortEvent: SortEvent = { field: column.field, direction };
     this.currentSort.set(sortEvent);
     this.sortChange.emit(sortEvent);
   }
 
-  protected isSortedAsc(column: ColumnConfig): boolean {
-    const sort = this.currentSort();
-    return !!sort && sort.field === column.field && sort.direction === 'asc';
-  }
-
-  protected isSortedDesc(column: ColumnConfig): boolean {
-    const sort = this.currentSort();
-    return !!sort && sort.field === column.field && sort.direction === 'desc';
-  }
-
   protected goToPage(delta: number): void {
-    const next = this.currentPage() + delta;
-    const lastIndex = Math.max(this.totalPages() - 1, 0);
-    const clamped = Math.min(Math.max(next, 0), lastIndex);
-    if (clamped === this.currentPage()) return;
-
-    this.currentPage.set(clamped);
-    this.pageChange.emit({ pageIndex: clamped, pageSize: this.pageSize });
-  }
-
-  protected trackByRow(_index: number, row: T): unknown {
-    return row;
-  }
-
-  protected trackByColumn(_index: number, column: ColumnConfig): string {
-    return column.field;
-  }
-
-  protected onFilterChange(query: FilterQuery): void {
-    this.filterChange.emit(query);
+    const next = Math.min(Math.max(this.currentPage() + delta, 0), this.totalPages() - 1);
+    if (next !== this.currentPage()) {
+      this.currentPage.set(next);
+      this.pageChange.emit({ pageIndex: next, pageSize: this.pageSize });
+    }
   }
 }
-

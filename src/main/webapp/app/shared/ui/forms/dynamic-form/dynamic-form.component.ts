@@ -12,11 +12,12 @@ import { FieldConfig, ValidatorConfig } from '../../interfaces';
 import { AuthService } from '../../services/auth.service';
 import { InputComponent } from '../input/input.component';
 import { SelectComponent } from '../select/select.component';
+import {LucideAngularModule} from "lucide-angular";
 
 @Component({
   selector: 'app-dynamic-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputComponent, SelectComponent],
+  imports: [CommonModule, ReactiveFormsModule, InputComponent, SelectComponent, LucideAngularModule],
   templateUrl: './dynamic-form.component.html',
 })
 export class DynamicFormComponent implements OnInit {

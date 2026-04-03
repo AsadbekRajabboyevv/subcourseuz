@@ -8,9 +8,6 @@ export * from './services/modal.service';
 export * from './services/menu.service';
 export * from './interceptors/auth.interceptor';
 
-// pipes
-export * from './pipes/translate.pipe';
-
 // directives & guards
 export * from './directives/has-role.directive';
 export * from './directives/has-permission.directive';
@@ -31,6 +28,7 @@ export * from './layout/container.component';
 export * from './layout/grid.component';
 export * from './layout/sidebar-layout.component';
 export * from './layout/page-wrapper.component';
+export {default as PageWrapperComponent} from './layout/page-wrapper.component'
 
 // modal
 export * from './modal/modal.component';
@@ -53,5 +51,4 @@ export * from './state/error-state.component';
 export * from './state/stepper.component';
 export * from './menu/theme-switch.component';
 export * from './menu/sidebar-menu.component';
-export * from './menu/language-switch.component';
 

@@ -1,28 +1,19 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { environment } from 'environments/environment';
-import {
-  AlertComponent, ConfirmModalComponent, ContainerComponent,
-  DatepickerComponent, DynamicFormComponent,
-  DynamicTableComponent, FileUploadComponent, FilterPanelComponent,
-  InputComponent,
-  PageWrapperComponent, SearchInputComponent, SelectComponent,
-  ThemeSwitchComponent, ToastContainerComponent
-} from "../../shared/ui";
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {LucideAngularModule} from "lucide-angular";
+import PageWrapperComponent from "../../shared/ui/layout/page-wrapper.component";
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, PageWrapperComponent, ThemeSwitchComponent],
+  imports: [CommonModule, PageWrapperComponent, LucideAngularModule, PageWrapperComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  environment = environment;
-
   currentSlideIndex = 0;
   private autoSlideInterval: any;
+  private touchStartX = 0;
 
-  // Kurslar ro'yxati
   courses = [
     {
       id: 1,
@@ -94,7 +85,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       students: 67,
       image: 'https://picsum.photos/seed/devops/400/250.jpg'
     }
-  ,
+    ,
     {
       id: 5,
       title: 'DevOps Engineering',
@@ -109,7 +100,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       students: 67,
       image: 'https://picsum.photos/seed/devops/400/250.jpg'
     }
-  ,
+    ,
     {
       id: 5,
       title: 'DevOps Engineering',
@@ -124,7 +115,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       students: 67,
       image: 'https://picsum.photos/seed/devops/400/250.jpg'
     }
-  ,
+    ,
     {
       id: 5,
       title: 'DevOps Engineering',
@@ -139,7 +130,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       students: 67,
       image: 'https://picsum.photos/seed/devops/400/250.jpg'
     }
-  ,
+    ,
     {
       id: 5,
       title: 'DevOps Engineering',
@@ -154,7 +145,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       students: 67,
       image: 'https://picsum.photos/seed/devops/400/250.jpg'
     }
-  ,
+    ,
     {
       id: 5,
       title: 'DevOps Engineering',
@@ -169,7 +160,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       students: 67,
       image: 'https://picsum.photos/seed/devops/400/250.jpg'
     }
-  ,
+    ,
     {
       id: 5,
       title: 'DevOps Engineering',
@@ -194,50 +185,63 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.stopAutoSlide();
   }
 
-  startAutoSlide(): void {
-    this.autoSlideInterval = setInterval(() => {
-      this.nextSlide();
-    }, 5000); // 5 sekund
-  }
-
-  stopAutoSlide(): void {
-    if (this.autoSlideInterval) {
-      clearInterval(this.autoSlideInterval);
-    }
+  // Ko'rinadigan kartalar sonini aniqlash
+  getVisibleCount(): number {
+    if (typeof window === 'undefined') return 6;
+    const width = window.innerWidth;
+    if (width < 640) return 1.2;  // Mobilda keyingi karta biroz ko'rinib tursin (UX)
+    if (width < 768) return 2;
+    if (width < 1024) return 3;
+    if (width < 1280) return 4;
+    return 6;
   }
 
   nextSlide(): void {
-    const maxIndex = Math.max(0, this.courses.length - 6); // 6 ta kurs ko'rinadi
-    this.currentSlideIndex = (this.currentSlideIndex + 1) % (this.courses.length);
+    const visibleCount = Math.floor(this.getVisibleCount());
+    const maxIndex = this.courses.length - visibleCount;
 
-    // Agar oxirgi 6 taga yetib ketsa, boshidan boshlash
-    if (this.currentSlideIndex > maxIndex) {
-      this.currentSlideIndex = 0;
+    if (this.currentSlideIndex >= maxIndex) {
+      this.currentSlideIndex = 0; // Boshiga qaytish
+    } else {
+      this.currentSlideIndex++;
     }
   }
 
   prevSlide(): void {
-    const maxIndex = Math.max(0, this.courses.length - 6);
-    this.currentSlideIndex = this.currentSlideIndex - 1;
+    const visibleCount = Math.floor(this.getVisibleCount());
+    const maxIndex = this.courses.length - visibleCount;
 
-    // Agar 0 dan pastga tushsa, oxiridan boshlash
-    if (this.currentSlideIndex < 0) {
-      this.currentSlideIndex = maxIndex;
+    if (this.currentSlideIndex <= 0) {
+      this.currentSlideIndex = maxIndex; // Oxiriga o'tish
+    } else {
+      this.currentSlideIndex--;
     }
   }
 
-  goToSlide(index: number): void {
-    const maxIndex = Math.max(0, this.courses.length - 6);
-
-    // Faqat ruxsat etilgan indekslarga o'tish
-    if (index <= maxIndex) {
-      this.currentSlideIndex = index;
-    }
-
-    // Auto slide'ni qayta boshlash
+  // Touch Eventlar
+  onTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.touches[0].clientX;
     this.stopAutoSlide();
+  }
+
+  onTouchEnd(event: TouchEvent): void {
+    const touchEndX = event.changedTouches[0].clientX;
+    const diff = this.touchStartX - touchEndX;
+
+    if (Math.abs(diff) > 50) { // 50px dan ortiq surilsa
+      if (diff > 0) this.nextSlide();
+      else this.prevSlide();
+    }
     this.startAutoSlide();
   }
 
-  protected readonly Math = Math;
+  startAutoSlide(): void {
+    this.autoSlideInterval = setInterval(() => this.nextSlide(), 5000);
+  }
+
+  stopAutoSlide(): void {
+    if (this.autoSlideInterval) clearInterval(this.autoSlideInterval);
+  }
 }
+
+// Kurslar ro'yxati

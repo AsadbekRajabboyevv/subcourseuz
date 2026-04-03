@@ -1,18 +1,32 @@
-<div [ngClass]="containerClasses">
-  <div class="flex-1">
-    <ng-content></ng-content>
-    @if (message) {
-      <span>{{ message }}</span>
-    }
-  </div>
-  @if (dismissible) {
-    <button
-      type="button"
-      class="ml-2 inline-flex h-6 w-6 items-center justify-center rounded-full text-xs text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800"
-      (click)="close()"
-    >
-      ✕
-    </button>
-  }
-</div>
+<div [ngClass]="containerClasses" role="alert">
+    <div class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-white/50 dark:bg-black/20 shadow-sm text-inherit">
+        <lucide-icon [name]="iconName()" size="22"></lucide-icon>
+    </div>
 
+    <div class="flex-1 leading-tight">
+        <p class="font-bold opacity-90 capitalize">{{ type }}</p>
+        <div class="text-[13px] opacity-80">
+            <ng-content></ng-content>
+            @if (message) { <span>{{ message }}</span> }
+        </div>
+    </div>
+
+    @if (dismissible) {
+        <button
+            type="button"
+            class="ml-2 p-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+            (click)="close()"
+        >
+            <lucide-icon name="x" size="16"></lucide-icon>
+        </button>
+    }
+</div>
+<!--<app-alert-->
+<!--    type="success"-->
+<!--    message="Siz muvaffaqiyatli ro'yxatdan o'tdingiz! Login orqali kiring."-->
+<!--    [dismissible]="true">-->
+<!--</app-alert>-->
+
+<!--<app-alert type="error">-->
+<!--    <strong>Xatolik!</strong> Parol noto'g'ri kiritilgan, iltimos qayta urinib ko'ring.-->
+<!--</app-alert>-->

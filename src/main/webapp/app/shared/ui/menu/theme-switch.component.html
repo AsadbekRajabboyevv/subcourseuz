@@ -1,22 +1,35 @@
 <button
-  type="button"
-  class="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition-all duration-300 hover:scale-105 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800"
-  (click)="toggle()"
-  [title]="isDark() ? 'Yorqin rejimga o\'tish' : 'Qorong\'u rejimga o\'tish'"
+    (click)="toggle()"
+    type="button"
+    class="relative inline-flex h-9 w-16 items-center rounded-full border-2 border-transparent transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 bg-gray-300 dark:bg-gray-600 px-1"
+    role="switch"
+    [attr.aria-checked]="isDark()"
 >
-  <span class="text-lg transition-transform duration-300" [class]="isDark() ? 'rotate-180' : ''">
-    @if (isDark()) {
-      🌙
-    } @else {
-      ☀️
-    }
-  </span>
-  <span class="font-medium">
-    @if (isDark()) {
-      Qorong'u
-    } @else {
-      Yorqin
-    }
-  </span>
-</button>
+    <span class="sr-only">Mavzuni o'zgartirish</span>
 
+    <span
+        class="pointer-events-none flex h-7 w-7 transform items-center justify-center rounded-full bg-white shadow-lg ring-0 transition duration-300 ease-in-out"
+        [class.translate-x-7]="isDark()"
+        [class.translate-x-0]="!isDark()"
+    >
+        <svg
+            *ngIf="!isDark()"
+            class="h-4 w-4 text-orange-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2.5"
+        >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+
+        <svg
+            *ngIf="isDark()"
+            class="h-4 w-4 text-blue-500"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+        >
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+        </svg>
+    </span>
+</button>

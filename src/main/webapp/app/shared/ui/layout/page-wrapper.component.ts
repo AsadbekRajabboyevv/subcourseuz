@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-page-wrapper',
@@ -7,5 +7,8 @@ import { Component } from '@angular/core';
   imports: [CommonModule],
   templateUrl: './page-wrapper.component.html',
 })
-export class PageWrapperComponent {}
+class PageWrapperComponent {
+}
+
+export default PageWrapperComponent
 

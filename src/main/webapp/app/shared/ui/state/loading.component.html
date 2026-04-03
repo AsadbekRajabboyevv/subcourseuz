@@ -1,10 +1,7 @@
 <div class="flex items-center justify-center gap-2 text-sm text-gray-700 dark:text-gray-200">
-  <span
-    class="animate-spin rounded-full border-2 border-green-500 border-t-transparent"
-    [ngClass]="spinnerClasses"
-  ></span>
-  @if (text) {
-    <span>{{ text }}</span>
-  }
+  <span class="animate-spin rounded-full border-2 border-green-500 border-t-transparent" [ngClass]="spinnerClasses"></span>
+    @if (text) {
+        <span>{{ text }}</span>
+    }
 </div>
 

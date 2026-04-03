@@ -34,8 +34,8 @@ public class BalanceServiceImpl implements BalanceService {
 
     @Override
     @Transactional
-    public void debit(Long userId, Long amount) {
-
+    public void debit(Long amount) {
+        var userId = JwtUtil.getCurrentUser().getId();
         validate(userId, amount);
 
         int updated = repository.decrease(userId, amount);

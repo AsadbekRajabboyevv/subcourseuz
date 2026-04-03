@@ -11,7 +11,7 @@ public interface BalanceService {
     BalanceResponseDto get(Long userId);
     BalanceResponseDto get();
     Page<BalanceResponseDto> get(Pageable pageable, BalanceFilter filter);
-    void debit(Long userId, Long amount);
+    void debit(Long amount);
     void credit(Long userId, Long amount);
     void addPending(Long userId, Long amount);
     void cancelPending(Long userId, Long amount);

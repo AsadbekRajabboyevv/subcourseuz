@@ -1,64 +1,84 @@
-<div class="flex flex-col gap-2">
-  <!-- Drop zone -->
-  <div
-    (dragover)="onDragOver($event)"
-    (dragleave)="onDragLeave()"
-    (drop)="onDrop($event)"
-    [class.border-green-500]="isDragOver()"
-    [class.bg-green-50]="isDragOver()"
-    [class.opacity-50]="isDisabled()"
-    [class.cursor-not-allowed]="isDisabled()"
-    class="flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300
-           bg-white px-6 py-8 text-center shadow-sm transition-colors"
-  >
-    <svg class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-    </svg>
-    <p class="text-sm text-gray-600">
-      Faylni bu yerga tashlang yoki
-      <label
-        [class.pointer-events-none]="isDisabled()"
-        class="cursor-pointer font-medium text-green-600 hover:text-green-700"
-      >
-        tanlang
+<div class="space-y-3">
+    @if (label) {
+        <label
+            class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase ml-1 block tracking-wider">
+            {{ label }}
+        </label>
+    }
+
+    <div
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave()"
+        (drop)="onDrop($event)"
+        [class.border-green-500]="isDragOver()"
+        [class.bg-green-50]="isDragOver()"
+        [class.dark:bg-green-900]="isDragOver()"
+        [class.opacity-50]="isDisabled()"
+        class="relative group flex flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed
+    border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 px-6 py-10
+    text-center transition-all hover:border-green-500/50 cursor-pointer"
+    >
+        <div
+            class="p-4 bg-white dark:bg-gray-800 rounded-2xl shadow-sm text-green-600 group-hover:scale-110 transition-transform">
+            <lucide-icon [name]="isDragOver() ? 'file-up' : 'upload-cloud'" size="32"></lucide-icon>
+        </div>
+
+        <div class="space-y-1">
+            <p class="text-sm font-bold text-gray-700 dark:text-gray-200">
+                Faylni bu yerga tashlang yoki
+                <span class="text-green-600 hover:underline">tanlang</span>
+            </p>
+            <p class="text-xs text-gray-400">
+                {{ accept === '*' ? 'Istalgan format' : accept }} (Maks. {{ maxSizeMb }}MB)
+            </p>
+        </div>
+
         <input
-          type="file"
-          class="sr-only"
-          [accept]="accept"
-          [multiple]="multiple"
-          [disabled]="isDisabled()"
-          (change)="onFileSelected($event)"
-        />
-      </label>
-    </p>
-    <p class="text-xs text-gray-400">Maksimal hajm: {{ maxSizeMb }}MB</p>
-  </div>
-
-  <!-- Rejection error -->
-  @if (rejectionMessage()) {
-    <p class="text-xs text-red-500">{{ rejectionMessage() }}</p>
-  }
-
-  <!-- Selected files list -->
-  @if (selectedFiles().length > 0) {
-    <ul class="flex flex-col gap-1">
-      @for (file of selectedFiles(); track file.name; let i = $index) {
-        <li class="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700">
-          <span class="truncate">{{ file.name }}</span>
-          <button
-            type="button"
-            (click)="removeFile(i)"
+            type="file"
+            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            [accept]="accept"
+            [multiple]="multiple"
             [disabled]="isDisabled()"
-            class="ml-2 shrink-0 text-gray-400 hover:text-red-500 disabled:cursor-not-allowed"
-            aria-label="Faylni olib tashlash"
-          >
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </li>
-      }
-    </ul>
-  }
+            (change)="onFileSelected($event)"
+        />
+    </div>
+
+    @if (rejectionMessage()) {
+        <div
+            class="flex items-center gap-1.5 text-[11px] font-bold text-red-500 ml-1 animate-in slide-in-from-top-1">
+            <lucide-icon name="alert-circle" size="12"></lucide-icon>
+            {{ rejectionMessage() }}
+        </div>
+    }
+
+    @if (selectedFiles().length > 0) {
+        <div class="grid grid-cols-1 gap-2 mt-4">
+            @for (file of selectedFiles(); track file.name; let i = $index) {
+                <div
+                    class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm animate-in fade-in zoom-in duration-200">
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <div class="p-2 bg-green-50 dark:bg-green-900/20 text-green-600 rounded-lg">
+                            <lucide-icon name="file-text" size="16"></lucide-icon>
+                        </div>
+                        <div class="flex flex-col overflow-hidden">
+                            <span
+                                class="text-xs font-bold text-gray-700 dark:text-gray-200 truncate">{{ file.name }}</span>
+                            <span class="text-[10px] text-gray-400 uppercase font-medium">{{
+                                    (file.size / 1024 / 1024).toFixed(2)
+                                }} MB</span>
+                        </div>
+                    </div>
+
+                    <button
+                        type="button"
+                        (click)="removeFile(i)"
+                        [disabled]="isDisabled()"
+                        class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                    >
+                        <lucide-icon name="trash-2" size="16"></lucide-icon>
+                    </button>
+                </div>
+            }
+        </div>
+    }
 </div>

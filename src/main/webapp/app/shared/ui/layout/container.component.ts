@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-container',
@@ -16,19 +16,19 @@ export class ContainerComponent {
       this.maxWidth === 'full'
         ? 'max-w-full'
         : this.maxWidth === '5xl'
-        ? 'max-w-5xl'
-        : this.maxWidth === '3xl'
-        ? 'max-w-3xl'
-        : 'max-w-7xl';
+          ? 'max-w-5xl'
+          : this.maxWidth === '3xl'
+            ? 'max-w-3xl'
+            : 'max-w-7xl';
 
     const paddingClass =
       this.padding === '0'
         ? 'px-0'
         : this.padding === '4'
-        ? 'px-4'
-        : this.padding === '8'
-        ? 'px-8'
-        : 'px-6';
+          ? 'px-4'
+          : this.padding === '8'
+            ? 'px-8'
+            : 'px-6';
 
     return `${widthClass} mx-auto ${paddingClass}`;
   }

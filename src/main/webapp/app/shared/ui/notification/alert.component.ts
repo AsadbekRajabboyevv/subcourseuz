@@ -1,38 +1,61 @@
+import { Component, EventEmitter, Input, Output, signal, computed, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-alert',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './alert.component.html',
 })
-export class AlertComponent {
+export class AlertComponent implements OnInit, OnDestroy {
   @Input() type: 'success' | 'error' | 'warning' | 'info' = 'info';
   @Input() message = '';
-  @Input() dismissible = false;
+  @Input() dismissible = true;
+  @Input() duration = 5000; // 5 soniyadan keyin o'zi yo'qoladi
 
   @Output() dismissed = new EventEmitter<void>();
+
+  private timeoutId?: any;
+
+  ngOnInit() {
+    if (this.duration > 0) {
+      this.timeoutId = setTimeout(() => this.close(), this.duration);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.timeoutId) clearTimeout(this.timeoutId);
+  }
+
+  protected iconName = computed(() => {
+    switch (this.type) {
+      case 'success': return 'check-circle';
+      case 'error': return 'alert-octagon';
+      case 'warning': return 'alert-triangle';
+      case 'info': default: return 'info';
+    }
+  });
 
   protected close(): void {
     this.dismissed.emit();
   }
 
   protected get containerClasses(): string {
-    const base =
-      'flex items-start gap-2 rounded-lg border px-3 py-2 text-sm';
+    // FIXED va Z-INDEX qo'shildi. Joylashuvi: o'ng tepa burchak.
+    const base = 'fixed top-6 right-6 z-[9999] flex items-center gap-4 rounded-2xl border-2 px-4 py-3.5 ' +
+      'text-sm font-medium shadow-2xl backdrop-blur-md animate-in fade-in slide-in-from-right-5 duration-300 w-[350px]';
 
     switch (this.type) {
       case 'success':
-        return `${base} border-green-100 bg-green-50 text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-200`;
+        return `${base} border-green-500/30 bg-green-50/90 text-green-800 dark:bg-green-950/90 dark:text-green-400`;
       case 'error':
-        return `${base} border-red-100 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200`;
+        return `${base} border-red-500/30 bg-red-50/90 text-red-800 dark:bg-red-950/90 dark:text-red-400`;
       case 'warning':
-        return `${base} border-yellow-100 bg-yellow-50 text-yellow-800 dark:border-yellow-900 dark:bg-yellow-950 dark:text-yellow-200`;
+        return `${base} border-yellow-500/30 bg-yellow-50/90 text-yellow-800 dark:bg-yellow-950/90 dark:text-yellow-400`;
       case 'info':
       default:
-        return `${base} border-blue-100 bg-blue-50 text-blue-800 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-200`;
+        return `${base} border-blue-500/30 bg-blue-50/90 text-blue-800 dark:bg-blue-950/90 dark:text-blue-400`;
     }
   }
 }
-

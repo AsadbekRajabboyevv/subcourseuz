@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {LucideAngularModule} from "lucide-angular";
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './app.footer.component.html'
 })
 export class FooterComponent {
@@ -20,9 +21,9 @@ export class FooterComponent {
   payments = [1, 2, 3];
 
   socials = [
-    { icon: 'f', link: '#' },        // facebook
-    { icon: 'ig', link: '#' },       // instagram
+    { icon: 'send', link: '#' },        // facebook
+    { icon: 'message-circle-check', link: '#' },       // instagram
     { icon: 'mail', link: '#' },
-    { icon: 'in', link: '#' }        // linkedin
+    { icon: 'globe', link: '#' }        // linkedin
   ];
 }

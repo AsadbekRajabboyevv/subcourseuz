@@ -1,50 +1,33 @@
 import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { NgOptimizedImage } from "@angular/common";
 import { AuthService } from "../../shared/ui/services/auth.service";
-import { ModalService } from "../../shared/ui/services/modal.service";
-import { LoginModalComponent } from "../auth/login/login.component";
+import { ThemeSwitchComponent } from "../../shared/ui";
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, NgOptimizedImage],
+  standalone: true,
+  imports: [CommonModule, NgOptimizedImage, ThemeSwitchComponent, RouterModule, LucideAngularModule],
   templateUrl: './app.header.component.html'
 })
 export class HeaderComponent {
   private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
-  private readonly modalService = inject(ModalService);
 
   @Input() appTitle: string = 'Subcourse';
 
-  isOpen: boolean = false;
+  isMenuOpen: boolean = false;
+  isProfileOpen: boolean = false;
 
-  get currentUser() {
-    return this.authService.currentUser();
-  }
+  get isLoggedIn() { return this.authService.isLoggedIn(); }
+  get userRole() { return this.authService.currentRole(); }
 
-  get isLoggedIn() {
-    return this.authService.isLoggedIn();
-  }
-
-  get userRole() {
-    return this.authService.currentRole();
-  }
-
-  toggleDropdown(): void {
-    this.isOpen = !this.isOpen;
-  }
+  toggleProfile(): void { this.isProfileOpen = !this.isProfileOpen; }
+  toggleMobileMenu(): void { this.isMenuOpen = !this.isMenuOpen; }
 
   logout(): void {
     this.authService.logout();
-  }
-
-  openLoginModal(): void {
-    this.modalService.open(LoginModalComponent);
-  }
-
-  toggleMobileMenu(): void {
-    this.isOpen = !this.isOpen;
+    this.isProfileOpen = false;
   }
 }

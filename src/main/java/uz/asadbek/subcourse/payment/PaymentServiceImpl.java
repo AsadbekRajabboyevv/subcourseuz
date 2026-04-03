@@ -77,13 +77,12 @@ public class PaymentServiceImpl implements PaymentService {
         var courseId = request.getCourseId();
         var testId = request.getTestId();
         var couponCode = request.getCouponCode();
-        var currentUserId = JwtUtil.getCurrentUser().getId();
         var amount = request.getAmount() != null ? request.getAmount() : 0L;
         TestResponseDto test = null;
         CourseResponseDto course = null;
         var transactionId = "";
         Long savedPaymentId = null;
-        var balance = balanceService.get(currentUserId);
+        var balance = balanceService.get();
         try {
             if (courseId != null && testId != null) {
                 throw ExceptionUtil.badRequestException("only_one_product_allowed");
@@ -106,7 +105,7 @@ public class PaymentServiceImpl implements PaymentService {
             }
 
             if (!isTopUp) {
-                balanceService.debit(currentUserId, amount);
+                balanceService.debit(amount);
             }
 
             var payment = buildPayment(course, test, amount, balance.getCurrency());
@@ -114,9 +113,9 @@ public class PaymentServiceImpl implements PaymentService {
             savedPaymentId = savedPayment.getId();
             transactionId = balanceTransactionService.createTransaction(savedPayment);
             if (testId != null) {
-                testService.enroll(testId, currentUserId);
+                testService.enroll(testId);
             }else {
-                courseService.enroll(courseId, currentUserId);
+                courseService.enroll(courseId);
             }
             return PaymentResponseDto.builder()
                 .exId(savedPayment.getExId())

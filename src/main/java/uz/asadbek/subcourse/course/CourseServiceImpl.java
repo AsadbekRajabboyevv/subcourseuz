@@ -11,10 +11,10 @@ import uz.asadbek.subcourse.course.dto.CourseInfoResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
 import uz.asadbek.subcourse.course.filter.CourseFilter;
 import uz.asadbek.subcourse.course.usercourse.UserCourseEntity;
+import uz.asadbek.subcourse.util.JwtUtil;
 import uz.asadbek.subcourse.util.Validator;
 import uz.asadbek.subcourse.util.embedded.UserPurchaseId;
 import uz.asadbek.subcourse.course.usercourse.UserCourseRepository;
-import uz.asadbek.subcourse.util.JwtUtil;
 import uz.asadbek.subcourse.util.LangUtils;
 
 @Slf4j
@@ -48,7 +48,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Boolean enroll(Long courseId, Long userId) {
+    public Boolean enroll(Long courseId) {
+        var userId = JwtUtil.getCurrentUser().getId();
         validator.validateEnroll(userId, courseId, repository::existsById, "course_not_found");
         var uc = new UserCourseEntity();
         uc.setId(new UserPurchaseId(userId, courseId, LocalDateTime.now()));

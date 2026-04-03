@@ -1,247 +1,159 @@
-
-<app-page-wrapper>
-  <div page-title class="flex items-center justify-between gap-3">
-    <div class="flex items-center gap-3">
-      <span class="text-2xl">🏠</span>
-      <span>Bosh sahifa</span>
-    </div>
-    <app-theme-switch></app-theme-switch>
-  </div>
-  
-  <div breadcrumbs>
-    <span class="text-gray-500 dark:text-gray-400">Home / Dashboard</span>
-  </div>
-  
-  <div content>
-    <!-- Hero Section -->
-    <div class="mb-8 rounded-lg bg-gradient-to-r from-green-500 to-blue-600 p-8 text-white">
-      <h1 class="mb-4 text-3xl font-bold">Subcourse Platform</h1>
-      <p class="mb-6 text-lg opacity-90">Online ta'lim platformasiga xush kelibsiz! Bu yerdan siz o'zingiz uchun eng yaxshi kurslarni topishingiz mumkin.</p>
-      <div class="flex flex-wrap gap-4">
-        <button class="rounded-lg bg-white text-green-600 px-6 py-3 font-semibold hover:bg-gray-100 transition-colors">
-          Kurslarni ko'rish
-        </button>
-        <button class="rounded-lg border-2 border-white px-6 py-3 font-semibold text-white hover:bg-white hover:text-green-600 transition-colors">
-          Ro'yxatdan o'tish
-        </button>
-      </div>
+<app-page-wrapper class="min-h-screen transition-colors duration-300 dark:bg-gray-950">
+    <div page-title class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+            <lucide-icon name="home" class="text-green-600 dark:text-green-400" size="24"></lucide-icon>
+            <span class="text-gray-900 dark:text-gray-100 font-semibold text-xl">Bosh sahifa</span>
+        </div>
     </div>
 
-    <!-- Stats Grid -->
-    <div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-      <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Faol kurslar</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-white">24</p>
-          </div>
-          <div class="rounded-full bg-green-100 p-3 text-green-600 dark:bg-green-900 dark:text-green-300">
-            <span class="text-xl">📚</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm text-gray-600 dark:text-gray-400">O'quvchilar</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-white">1,234</p>
-          </div>
-          <div class="rounded-full bg-blue-100 p-3 text-blue-600 dark:bg-blue-900 dark:text-blue-300">
-            <span class="text-xl">👥</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Mentorlar</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-white">45</p>
-          </div>
-          <div class="rounded-full bg-purple-100 p-3 text-purple-600 dark:bg-purple-900 dark:text-purple-300">
-            <span class="text-xl">👨‍🏫</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Testlar</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-white">156</p>
-          </div>
-          <div class="rounded-full bg-orange-100 p-3 text-orange-600 dark:bg-orange-900 dark:text-orange-300">
-            <span class="text-xl">📝</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Course Slider -->
-    <div class="mb-8">
-      <div class="mb-4 flex items-center justify-between">
-        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Kurslar</h2>
-        <div class="flex items-center gap-2">
-          <!-- Navigation buttons -->
-          <button 
-            (click)="prevSlide()"
-            class="group rounded-full bg-white p-2 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-110 dark:bg-gray-800 dark:text-white">
-            <svg class="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-            </svg>
-          </button>
-          <button 
-            (click)="nextSlide()"
-            class="group rounded-full bg-white p-2 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-110 dark:bg-gray-800 dark:text-white">
-            <svg class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Slider Container -->
-      <div class="slider-container rounded-xl">
-        <div class="slider-track transition-all duration-700 ease-out" 
-             [style.transform]="'translateX(-' + (currentSlideIndex * 16.666) + '%)'"
-             [style.transition]="'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)'">
-          
-          @for (course of courses; track course.id) {
-            <div class="px-1" style="flex: 0 0 16.666%; width: 16.666%; max-width: 16.666%;">
-              <div class="group cursor-pointer">
-                <div style="margin: 0 auto; max-width: 320px; transform: translateX(0); transition: all 0.5s;" class="hover:scale-105 hover:-translate-y-2">
-                  <div style="border-radius: 0.75rem; border: 1px solid rgb(229 231 235); background: white; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); overflow: hidden; transition: all 0.3s;" class="dark:border-gray-700 dark:bg-gray-800 hover:shadow-2xl dark:hover:shadow-black/30">
-                    <!-- Course Image -->
-                    <div class="relative h-28 overflow-hidden">
-                      <img [src]="course.image" [alt]="course.title" 
-                           class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                      
-                      <!-- Overlay gradient -->
-                      <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      
-                      <!-- Category badge -->
-                      <div class="absolute top-2 left-2 z-10">
-                        <span class="rounded-full bg-{{ course.categoryColor }}-500/90 backdrop-blur-sm px-2 py-1 text-xs font-medium text-white shadow-lg animate-pulse">
-                          {{ course.category }}
-                        </span>
-                      </div>
-                      
-                      <!-- Duration badge -->
-                      <div class="absolute top-2 right-2 z-10">
-                        <span class="rounded-full bg-black/70 backdrop-blur-sm px-1.5 py-0.5 text-xs text-white">
-                          {{ course.duration }}
-                        </span>
-                      </div>
-
-                      <!-- Rating overlay on hover -->
-                      <div class="absolute bottom-2 left-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div class="flex items-center gap-1 bg-black/70 backdrop-blur-sm rounded-full px-2 py-1">
-                          <span class="text-yellow-400 text-xs">⭐</span>
-                          <span class="text-white text-xs font-medium">{{ course.rating }}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Course Content -->
-                    <div class="p-3">
-                      <h3 class="mb-1 text-sm font-bold text-gray-900 dark:text-white truncate group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-300">
-                        {{ course.title }}
-                      </h3>
-                      <p class="mb-2 text-xs text-gray-600 dark:text-gray-400 line-clamp-2 group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors duration-300">
-                        {{ course.description }}
-                      </p>
-                      
-                      <!-- Mentor and Price Row -->
-                      <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center gap-1.5">
-                          <div class="relative">
-                            <img [src]="course.mentorImage" [alt]="course.mentor" 
-                                 class="h-5 w-5 rounded-full ring-2 ring-white dark:ring-gray-800">
-                            <div class="absolute -bottom-0.5 -right-0.5 h-2 w-2 bg-green-500 rounded-full border border-white dark:border-gray-800"></div>
-                          </div>
-                          <span class="text-xs text-gray-700 dark:text-gray-300 font-medium truncate max-w-[60px]">{{ course.mentor }}</span>
-                        </div>
-                        <div class="text-right">
-                          <p class="text-xs font-bold text-green-600 dark:text-green-400">{{ (course.price / 1000).toFixed(0) }}k</p>
-                          <p class="text-xs text-gray-500 dark:text-gray-400">UZS</p>
-                        </div>
-                      </div>
-
-                      <!-- Students count -->
-                      <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
-                          <span>👥</span>
-                          <span>{{ course.students }} o'quvchi</span>
-                        </div>
-                        <div class="flex items-center gap-1">
-                          @for (i of [1,2,3,4,5]; track i) {
-                            <span class="text-xs transition-colors duration-300"
-                                  [class]="i <= Math.floor(course.rating) ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'">
-                              ⭐
-                            </span>
-                          }
-                        </div>
-                      </div>
-
-                      <!-- Action Button -->
-                      <button class="w-full rounded-lg bg-gradient-to-r from-green-500 to-green-600 px-3 py-1.5 text-xs text-white font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg dark:from-green-600 dark:to-green-700 dark:hover:from-green-700 dark:hover:to-green-800">
-                        Batafsil →
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+    <div content>
+        <div class="mb-8 rounded-xl bg-gradient-to-r from-green-600 to-blue-700 p-8 text-white shadow-lg dark:from-green-700 dark:to-blue-800">
+            <h1 class="mb-4 text-3xl font-bold">Subcourse Platform</h1>
+            <p class="mb-6 text-lg opacity-90">Online ta'lim platformasiga xush kelibsiz! Bu yerdan siz o'zingiz uchun eng yaxshi kurslarni topishingiz mumkin.</p>
+            <div class="flex flex-wrap gap-4">
+                <button class="flex items-center gap-2 rounded-lg bg-white text-green-700 px-6 py-3 font-semibold hover:bg-gray-100 transition-colors dark:bg-gray-100 dark:hover:bg-white">
+                    <lucide-icon name="search" size="18"></lucide-icon>
+                    Kurslarni ko'rish
+                </button>
+                <button class="flex items-center gap-2 rounded-lg border-2 border-white/50 px-6 py-3 font-semibold text-white hover:bg-white/10 hover:border-white transition-colors">
+                    <lucide-icon name="user-plus" size="18"></lucide-icon>
+                    Ro'yxatdan o'tish
+                </button>
             </div>
-          }
         </div>
-      </div>
 
-      <!-- Slide Indicators -->
-      <div class="mt-6 flex justify-center gap-2">
-        @for (course of courses; track course.id; let i = $index) {
-          <button 
-            (click)="goToSlide(i)"
-            class="h-2 w-2 rounded-full transition-all duration-300 hover:scale-125"
-            [class]="i === currentSlideIndex 
-              ? 'w-8 bg-gradient-to-r from-green-500 to-green-600 shadow-lg animate-pulse' 
-              : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'">
-          </button>
-        }
-      </div>
+        <div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-green-500 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-green-500">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Faol kurslar</p>
+                        <p class="text-2xl font-bold text-gray-900 dark:text-white">24</p>
+                    </div>
+                    <div class="rounded-full bg-green-100 p-3 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+                        <lucide-icon name="book-open" size="24"></lucide-icon>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-blue-500 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-500">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">O'quvchilar</p>
+                        <p class="text-2xl font-bold text-gray-900 dark:text-white">1,234</p>
+                    </div>
+                    <div class="rounded-full bg-blue-100 p-3 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                        <lucide-icon name="users" size="24"></lucide-icon>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-purple-400 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:text-purple-400">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Mentorlar</p>
+                        <p class="text-2xl font-bold text-gray-900 dark:text-white">45</p>
+                    </div>
+                    <div class="rounded-full bg-purple-100 p-3 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
+                        <lucide-icon name="graduation-cap" size="24"></lucide-icon>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-orange-500 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-orange-500">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Testlar</p>
+                        <p class="text-2xl font-bold text-gray-900 dark:text-white">156</p>
+                    </div>
+                    <div class="rounded-full bg-orange-100 p-3 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400">
+                        <lucide-icon name="file-text" size="24"></lucide-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <div class="mb-4 flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Mashhur kurslar</h2>
+                <div class="flex items-center gap-2">
+                    <button (click)="prevSlide()" class="group rounded-full bg-white p-2 shadow-md hover:bg-gray-50 transition-all dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:border dark:border-gray-700">
+                        <lucide-icon name="chevron-left" size="20"></lucide-icon>
+                    </button>
+                    <button (click)="nextSlide()" class="group rounded-full bg-white p-2 shadow-md hover:bg-gray-50 transition-all dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:border dark:border-gray-700">
+                        <lucide-icon name="chevron-right" size="20"></lucide-icon>
+                    </button>
+                </div>
+            </div>
+
+            <div class="slider-container dark:slider-container overflow-hidden rounded-xl">
+                <div class="slider-track flex transition-all duration-700 ease-out"
+                     [style.transform]="'translateX(-' + (currentSlideIndex * 16.666) + '%)'">
+
+                    @for (course of courses; track course.id) {
+                        <div class="px-2" style="flex: 0 0 16.666%; min-width: 280px;">
+                            <div class="group h-full rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl dark:border-gray-800 dark:bg-gray-900">
+                                <div class="relative h-32 overflow-hidden rounded-t-xl">
+                                    <img [src]="course.image" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                    <span class="absolute top-2 left-2 rounded-full bg-green-500 px-2 py-0.5 text-[10px] font-bold text-white uppercase">
+                                        {{ course.category }}
+                                    </span>
+                                </div>
+
+                                <div class="p-4">
+                                    <h3 class="mb-1 text-sm font-bold text-gray-900 dark:text-white line-clamp-1 group-hover:text-green-500 transition-colors">
+                                        {{ course.title }}
+                                    </h3>
+
+                                    <div class="mb-3 flex items-center gap-2">
+                                        <img [src]="course.mentorImage" class="h-5 w-5 rounded-full ring-1 ring-gray-200 dark:ring-gray-700">
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">{{ course.mentor }}</span>
+                                    </div>
+
+                                    <div class="flex items-center justify-between border-t border-gray-100 pt-3 dark:border-gray-800">
+                                        <span class="text-sm font-bold text-green-600 dark:text-green-400">{{ (course.price / 1000).toFixed(0) }}k UZS</span>
+                                        <button class="rounded-lg bg-gray-100 p-1.5 text-gray-600 hover:bg-green-500 hover:text-white transition-all dark:bg-gray-800 dark:text-gray-400">
+                                            <lucide-icon name="arrow-right" size="16"></lucide-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <button class="group flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 transition-all hover:border-green-500 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-green-500 text-left">
+                <div class="rounded-lg bg-green-100 p-3 text-green-600 group-hover:scale-110 transition-transform dark:bg-green-900/30 dark:text-green-400">
+                    <lucide-icon name="target" size="24"></lucide-icon>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 dark:text-white">Test yechish</h4>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">O'z bilimingizni sinab ko'ring</p>
+                </div>
+            </button>
+
+            <button class="group flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 transition-all hover:border-blue-500 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-500 text-left">
+                <div class="rounded-lg bg-blue-100 p-3 text-blue-600 group-hover:scale-110 transition-transform dark:bg-blue-900/30 dark:text-blue-400">
+                    <lucide-icon name="library" size="24"></lucide-icon>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 dark:text-white">Kutubxona</h4>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Barcha bepul resurslar</p>
+                </div>
+            </button>
+
+            <button class="group flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 transition-all hover:border-purple-500 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-purple-500 text-left">
+                <div class="rounded-lg bg-purple-100 p-3 text-purple-600 group-hover:scale-110 transition-transform dark:bg-purple-900/30 dark:text-purple-400">
+                    <lucide-icon name="messages-square" size="24"></lucide-icon>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 dark:text-white">Forum</h4>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Savollarga javob oling</p>
+                </div>
+            </button>
+        </div>
     </div>
-
-    <!-- Quick Actions -->
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-      <button class="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 text-left hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-        <div class="rounded-lg bg-green-100 p-2 text-green-600 dark:bg-green-900 dark:text-green-300">
-          <span class="text-xl">🎯</span>
-        </div>
-        <div>
-          <h4 class="font-semibold text-gray-900 dark:text-white">Test yechish</h4>
-          <p class="text-sm text-gray-600 dark:text-gray-400">Bilimingizni tekshiring</p>
-        </div>
-      </button>
-
-      <button class="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 text-left hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-        <div class="rounded-lg bg-blue-100 p-2 text-blue-600 dark:bg-blue-900 dark:text-blue-300">
-          <span class="text-xl">📖</span>
-        </div>
-        <div>
-          <h4 class="font-semibold text-gray-900 dark:text-white">Kutubxona</h4>
-          <p class="text-sm text-gray-600 dark:text-gray-400">Resurslarni ko'ring</p>
-        </div>
-      </button>
-
-      <button class="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 text-left hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-        <div class="rounded-lg bg-purple-100 p-2 text-purple-600 dark:bg-purple-900 dark:text-purple-300">
-          <span class="text-xl">💬</span>
-        </div>
-        <div>
-          <h4 class="font-semibold text-gray-900 dark:text-white">Forum</h4>
-          <p class="text-sm text-gray-600 dark:text-gray-400">Suhbat qiling</p>
-        </div>
-      </button>
-    </div>
-  </div>
 </app-page-wrapper>

@@ -2,11 +2,12 @@ import { Component, forwardRef, Input, signal, computed } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SelectOption } from '../../interfaces';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-select',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule],
   templateUrl: './select.component.html',
   providers: [
     {
@@ -21,6 +22,7 @@ export class SelectComponent implements ControlValueAccessor {
   @Input() options: SelectOption[] = [];
   @Input() multiple = false;
   @Input() searchable = false;
+  @Input() placeholder = 'Tanlang...';
 
   protected value = signal<unknown>(null);
   protected isDisabled = signal(false);

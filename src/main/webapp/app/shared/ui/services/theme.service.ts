@@ -6,7 +6,7 @@ export class ThemeService {
 
   theme = signal<'light' | 'dark'>('light');
   isDark = computed(() => this.theme() === 'dark');
-  
+
   // Theme change event
   themeChange = new EventEmitter<'light' | 'dark'>();
 
@@ -30,13 +30,14 @@ export class ThemeService {
   }
 
   applyTheme(theme: 'light' | 'dark'): void {
+    const html = document.documentElement;
     if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
+      html.classList.add('dark');
     } else {
-      document.documentElement.classList.remove('dark');
+      html.classList.remove('dark');
     }
   }
-  
+
   // Initialize theme on app start
   initializeTheme(): void {
     const saved = localStorage.getItem(this.STORAGE_KEY) as 'light' | 'dark' | null;

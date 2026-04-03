@@ -1,22 +1,35 @@
-import { Routes } from '@angular/router';
-import { HomeComponent } from './features/home/home.component';
-import { ErrorComponent } from './features/error/error.component';
-
-
+import {Routes} from '@angular/router';
+import {HomeComponent} from './features/home/home.component';
+import {AuthLayoutComponent} from "./common/auth/auth.layout.component";
 export const routes: Routes = [
   {
-    path: '',
-    component: HomeComponent,
-    title: $localize`:@@home.index.headline:Welcome to your new app!`
+    path: 'auth',
+    component: AuthLayoutComponent,
+    children: [
+      {
+        path: 'login',
+        loadComponent: ()=> import('./common/auth/auth.component').then(m => m.AuthComponent),
+        title: 'Kirish'
+      },
+      {
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full'
+      }
+    ]
   },
   {
-    path: 'error',
-    component: ErrorComponent,
-    title: $localize`:@@error.page.headline:Error`
+    path: 'home',
+    component: HomeComponent,
+    title: 'Asosiy sahifa'
+  },
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full'
   },
   {
     path: '**',
-    component: ErrorComponent,
-    title: $localize`:@@notFound.headline:Page not found`
+    loadComponent: () => import('./features/error/error.component').then(m => m.ErrorComponent)
   }
 ];

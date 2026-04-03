@@ -17,5 +17,5 @@ public interface CourseService {
 
     CourseResponseDto get(Long id);
 
-    Boolean enroll(Long courseId, Long userId);
+    Boolean enroll(Long courseId);
 }

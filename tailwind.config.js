@@ -1,11 +1,11 @@
 /** @type {import('tailwindcss').Config} */
-export default {
-  darkMode: 'class',
+module.exports = {
+  darkMode: 'class', // SHU QATOR JUDA MUHIM!
   content: [
-    "./src/**/*.{html,ts}"
+    "./src/**/*.{html,ts}",
   ],
   theme: {
     extend: {},
   },
   plugins: [],
-};
+}

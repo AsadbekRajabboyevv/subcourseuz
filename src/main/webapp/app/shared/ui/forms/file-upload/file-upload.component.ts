@@ -2,11 +2,12 @@ import { Component, EventEmitter, forwardRef, Input, Output, signal } from '@ang
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FileRejectionReason } from '../../interfaces';
+import {LucideAngularModule} from "lucide-angular";
 
 @Component({
   selector: 'app-file-upload',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './file-upload.component.html',
   providers: [
     {
@@ -18,6 +19,7 @@ import { FileRejectionReason } from '../../interfaces';
 })
 export class FileUploadComponent implements ControlValueAccessor {
   @Input() accept = '*';
+  @Input() label = 'Fayl yuklash';
   @Input() maxSizeMb = 10;
   @Input() multiple = false;
 

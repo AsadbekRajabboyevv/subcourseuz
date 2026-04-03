@@ -21,7 +21,7 @@ public interface TestService {
 
     Long updateTest(Long id, TestUpdateRequestDto request);
 
-    void enroll(Long testId, Long userId);
+    void enroll(Long testId);
 
     Long publish(Long id);
 }

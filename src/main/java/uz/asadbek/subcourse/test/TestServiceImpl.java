@@ -30,6 +30,7 @@ import uz.asadbek.subcourse.test.question.TestQuestionRepository;
 import uz.asadbek.subcourse.test.question.dto.TestQuestionRequestDto;
 import uz.asadbek.subcourse.test.question.dto.TestQuestionResponseDto;
 import uz.asadbek.subcourse.test.usertest.UserTestEntity;
+import uz.asadbek.subcourse.util.JwtUtil;
 import uz.asadbek.subcourse.util.Validator;
 import uz.asadbek.subcourse.util.ExceptionUtil;
 import uz.asadbek.subcourse.util.embedded.UserPurchaseId;
@@ -259,7 +260,8 @@ public class TestServiceImpl implements TestService {
 
     @Override
     @Transactional
-    public void enroll(Long testId, Long userId) {
+    public void enroll(Long testId) {
+        var userId =  JwtUtil.getCurrentUser().getId();
         validator.validateEnroll(userId, testId, repository::existsById, "test_not_found");
         var uc = new UserTestEntity();
         uc.setId(new UserPurchaseId(userId, testId, LocalDateTime.now()));

@@ -1,11 +1,12 @@
 import { Component, forwardRef, Input, signal } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-datepicker',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule],
   templateUrl: './datepicker.component.html',
   providers: [
     {
@@ -19,7 +20,7 @@ export class DatepickerComponent implements ControlValueAccessor {
   @Input() label = '';
   @Input() minDate = '';
   @Input() maxDate = '';
-  @Input() format = '';
+  @Input() placeholder = 'Sanani tanlang';
 
   protected value = signal<string>('');
   protected isDisabled = signal(false);

@@ -1,17 +1,42 @@
-<div class="flex flex-col gap-1">
-  @if (label) {
-    <label class="text-sm font-medium text-gray-700">{{ label }}</label>
-  }
-  <input
-    type="date"
-    [value]="value()"
-    [min]="minDate"
-    [max]="maxDate"
-    [disabled]="isDisabled()"
-    (input)="onInput($event)"
-    (blur)="onBlur()"
-    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm
-           focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/30
-           disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-400"
-  />
+<div class="space-y-2">
+    @if (label) {
+        <label class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase ml-1">
+            {{ label }}
+        </label>
+    }
+
+    <div class="relative group flex items-center">
+        <lucide-icon name="calendar" size="18"
+                     class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-500 transition-colors pointer-events-none">
+        </lucide-icon>
+
+        <input
+            type="date"
+            [value]="value()"
+            [min]="minDate"
+            [max]="maxDate"
+            [disabled]="isDisabled()"
+            (input)="onInput($event)"
+            (blur)="onBlur()"
+            class="w-full pl-12 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border-2 border-transparent
+             focus:border-green-500 rounded-2xl outline-none dark:text-white transition-all
+             disabled:cursor-not-allowed disabled:opacity-50 appearance-none font-mono text-sm"
+        />
+
+        <style>
+            /* Kalendar tugmasini (calendar-picker-indicator) dizaynga moslash */
+            input[type="date"]::-webkit-calendar-picker-indicator {
+                background: transparent;
+                bottom: 0;
+                color: transparent;
+                cursor: pointer;
+                height: auto;
+                left: 0;
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: auto;
+            }
+        </style>
+    </div>
 </div>

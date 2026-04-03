@@ -1,22 +1,46 @@
-<div class="flex flex-col gap-1">
-  @if (label) {
-    <label class="text-sm font-medium text-gray-700">{{ label }}</label>
-  }
-  <input
-    [type]="type"
-    [placeholder]="placeholder"
-    [disabled]="isDisabled() || disabled"
-    [value]="value()"
-    (input)="onInput($event)"
-    (blur)="onBlur()"
-    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm
-           placeholder:text-gray-400
-           focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/30
-           disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-400"
-    [class.border-red-400]="errorMessage"
-    [class.focus:ring-red-400]="errorMessage"
-  />
-  @if (errorMessage) {
-    <span class="text-xs text-red-500">{{ errorMessage }}</span>
-  }
+<div class="space-y-2">
+    @if (label) {
+        <label class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase ml-1 block tracking-wider">
+            {{ label }}
+        </label>
+    }
+
+    <div class="relative group flex items-center">
+        @if (icon) {
+            <lucide-icon [name]="icon" size="18"
+                         class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-500 transition-colors pointer-events-none"
+                         [class.text-red-400]="errorMessage">
+            </lucide-icon>
+        }
+
+        <input
+            [type]="getInputType()"
+            [placeholder]="placeholder"
+            [disabled]="isDisabled() || disabled"
+            [value]="value()"
+            (input)="onInput($event)"
+            (blur)="onBlur()"
+            class="w-full py-3.5 bg-gray-50 dark:bg-gray-800 border-2 border-transparent rounded-2xl outline-none dark:text-white transition-all text-sm
+             focus:border-green-500 focus:bg-white dark:focus:bg-gray-900 shadow-sm"
+            [class.pl-12]="icon"
+            [class.pl-5]="!icon"
+            [class.pr-12]="type === 'password'"
+            [class.border-red-500/50]="errorMessage"
+        [class.focus:border-red-500]="errorMessage"
+        />
+
+        @if (type === 'password') {
+            <button type="button" (click)="showPassword.set(!showPassword())"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-green-500 transition-colors focus:outline-none">
+                <lucide-icon [name]="showPassword() ? 'eye-off' : 'eye'" size="18"></lucide-icon>
+            </button>
+        }
+    </div>
+
+    @if (errorMessage) {
+        <div class="flex items-center gap-1.5 text-[11px] font-bold text-red-500 ml-1 animate-in slide-in-from-top-1">
+            <lucide-icon name="alert-circle" size="12"></lucide-icon>
+            {{ errorMessage }}
+        </div>
+    }
 </div>
