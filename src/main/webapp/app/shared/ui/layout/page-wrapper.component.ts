@@ -1,14 +1,12 @@
-import {CommonModule} from '@angular/common';
-import {Component} from '@angular/core';
+// page-wrapper.component.ts
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-page-wrapper',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BreadcrumbComponent],
   templateUrl: './page-wrapper.component.html',
 })
-class PageWrapperComponent {
-}
-
-export default PageWrapperComponent
-
+export class PageWrapperComponent {}

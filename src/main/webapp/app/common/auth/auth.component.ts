@@ -5,12 +5,11 @@ import { Router, RouterModule } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { HttpClient } from '@angular/common/http';
 import {
-  BaseResponseDto,
-  AuthResponseDto,
-  LoginRequestDto,
-  RegisterRequestDto
+  LoginRequest,
+  RegisterRequest
 } from './auth.model';
 import {
+  AuthService,
   DatepickerComponent,
   InputComponent,
   SelectComponent
@@ -25,15 +24,15 @@ import {
 export class AuthComponent {
   private http = inject(HttpClient);
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   isLoginView = true;
   loading = false;
   errorMessage = '';
   showPassword = false;
 
-  // Form ma'lumotlari
-  loginRequest: LoginRequestDto = { email: '', password: '' };
-  registerRequest: RegisterRequestDto = {
+  loginRequest: LoginRequest = { email: '', password: '' };
+  registerRequest: RegisterRequest = {
     email: '',
     password: '',
     firstName: '',
@@ -58,36 +57,38 @@ export class AuthComponent {
 
   onLogin() {
     this.loading = true;
-    this.http.post<BaseResponseDto<AuthResponseDto>>('/v1/api/auth/login', this.loginRequest)
+    this.errorMessage = '';
+
+    this.authService.login(this.loginRequest)
     .subscribe({
-      next: (res) => {
-        if (res.success) {
-          localStorage.setItem('token', res.data.bearerToken);
-          this.router.navigate(['/']);
-        }
+      next: () => {
+        this.router.navigate(['/home']);
       },
       error: (err) => {
-        this.errorMessage = err.error?.message || "Email yoki parol xato!";
+        this.errorMessage =
+          err.error?.message || "Email yoki parol xato!";
         this.loading = false;
-      }
+      },
+      complete: () => this.loading = false
     });
   }
 
   onRegister() {
     this.loading = true;
-    this.http.post<BaseResponseDto<AuthResponseDto>>('/v1/api/auth/register', this.registerRequest)
+    this.errorMessage = '';
+
+    this.authService.register(this.registerRequest)
     .subscribe({
-      next: (res) => {
-        if (res.success) {
-          alert("Tasdiqlash xati yuborildi!");
-          this.isLoginView = true;
-        }
-        this.loading = false;
+      next: () => {
+        alert("Tasdiqlash xati yuborildi!");
+        this.isLoginView = true;
       },
       error: (err) => {
-        this.errorMessage = err.error?.message || "Xatolik yuz berdi!";
+        this.errorMessage =
+          err.error?.message || "Xatolik yuz berdi!";
         this.loading = false;
-      }
+      },
+      complete: () => this.loading = false
     });
   }
 }

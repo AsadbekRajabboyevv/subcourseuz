@@ -1,4 +1,4 @@
-<header class="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md shadow-sm z-[100] dark:bg-gray-900/80 dark:border-b dark:border-gray-800 transition-all duration-300">
+<header class="sticky top-0 z-50x left-0 w-full bg-white/80 backdrop-blur-md shadow-sm dark:bg-gray-900/80 dark:border-b dark:border-gray-800 transition-all duration-300">
     <div class="container mx-auto px-4 py-3 flex items-center justify-between">
 
         <div class="flex items-center gap-10">
@@ -25,8 +25,11 @@
 
             <div *ngIf="isLoggedIn" class="relative">
                 <button (click)="toggleProfile()" class="flex items-center focus:outline-none">
-                    <img ngSrc="/public/logo.png" width="40" height="40"
+                    <img *ngIf="authService.getUser()?.imagePath!=null" ngSrc="/public/logo.png" width="40" height="40"
                          class="rounded-full border-2 border-gray-100 hover:border-green-500 transition-all dark:border-gray-700 shadow-sm">
+                    <div *ngIf="authService.getUser()?.imagePath==null" class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                        <span class="text-gray-500 dark:text-gray-400 text-xl font-bold">{{ authService.getUser()?.firstName?.toUpperCase()?.charAt(0) }}</span>
+                    </div>
                 </button>
 
                 <div *ngIf="isProfileOpen"
@@ -65,7 +68,7 @@
                 <lucide-icon name="book" size="18" class="mr-3 text-green-600"></lucide-icon> Kurslar
             </a>
             <a *ngIf="isLoggedIn && userRole === 'ROLE_USER'" routerLink="/courses/view/me" (click)="isMenuOpen = false" class="flex items-center p-3 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-200 font-medium">
-                <lucide-icon name="layout-dashboard" size="18" class="mr-3 text-green-600"></lucide-icon> Mening kurslarim
+                    <lucide-icon name="layout-dashboard" size="18" class="mr-3 text-green-600"></lucide-icon> Mening kurslarim
             </a>
             <a routerLink="/tests" (click)="isMenuOpen = false" class="flex items-center p-3 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-200 font-medium">
                 <lucide-icon name="clipboard-check" size="18" class="mr-3 text-green-600"></lucide-icon> Online Test

@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RestController;
 import uz.asadbek.base.dto.BaseResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseInfoResponseDto;
+import uz.asadbek.subcourse.course.dto.CourseRequestDto;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
+import uz.asadbek.subcourse.course.dto.CourseUpdateRequestDto;
 import uz.asadbek.subcourse.course.filter.CourseFilter;
 import uz.asadbek.subcourse.course.grade.CourseGradeService;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeRequestDto;
@@ -57,6 +59,21 @@ public class CourseController implements CourseApi {
     @Override
     public BaseResponseDto<Boolean> enroll(Long id) {
         return BaseResponseDto.ok(service.enroll(id));
+    }
+
+    @Override
+    public BaseResponseDto<Long> create(CourseRequestDto request) {
+        return null;
+    }
+
+    @Override
+    public BaseResponseDto<Long> update(Long id, CourseUpdateRequestDto request) {
+        return null;
+    }
+
+    @Override
+    public BaseResponseDto<Long> delete(Long id) {
+        return null;
     }
 
 }

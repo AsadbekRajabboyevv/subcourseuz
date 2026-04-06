@@ -13,7 +13,6 @@ public interface UserService extends BaseService<UserResponseDto, UserRequestDto
     boolean confirmUser(String token);
     String getConfirmationToken();
     void changeEmail(String email);
-    void sendEmailConfirmation(String to, String subject, String body);
     AuthResponseDto register(UserRequestDto userRequestDto, String language);
     AuthResponseDto login(AuthRequestDto authRequestDto, String language);
     Long count();

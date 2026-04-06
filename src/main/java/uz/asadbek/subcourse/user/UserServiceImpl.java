@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final EmailService emailService;
 
     @Override
     public Page<UserResponseDto> get(UserFilter filter, Pageable pageable) {
@@ -125,43 +125,24 @@ public class UserServiceImpl implements UserService {
 
         user.setEmail(newEmail);
         user.setEnabled(false);
-        var token = getConfirmationToken();
+
+        var token = UUID.randomUUID().toString();
         user.setConfirmationToken(token);
 
         userRepository.save(user);
 
-        var confirmationLink = "http://localhost:8080/v1/api/users/confirm?token=" + token;
+        var confirmationLink =
+            STR."http://localhost:8080/v1/api/users/confirm?token=\{token}";
 
-        var body = """
-            Assalomu alaykum!
+        var body = buildChangeEmailTemplate(confirmationLink);
 
-            Siz emailingizni o‘zgartirdingiz.
-            Uni tasdiqlash uchun quyidagi linkni bosing:
-
-            %s
-
-            Agar bu siz bo‘lmasangiz, e’tiborsiz qoldiring.
-            """.formatted(confirmationLink);
-
-        sendEmailConfirmation(newEmail, "Emailni tasdiqlash", body);
+        emailService.sendEmail(
+            newEmail,
+            "Emailni tasdiqlash",
+            body
+        );
     }
 
-    @Override
-    public void sendEmailConfirmation(String to, String subject, String body) {
-        try {
-            var message = new SimpleMailMessage();
-            message.setTo(to);
-            message.setSubject(subject);
-            message.setText(body);
-
-            mailSender.send(message);
-
-            log.info("Email sent to {}", to);
-        } catch (Exception e) {
-            log.error("Email sending failed to {}", to, e);
-            throw new RuntimeException("email_send_failed");
-        }
-    }
 
     @Override
     @Transactional
@@ -178,23 +159,22 @@ public class UserServiceImpl implements UserService {
         user.setRole(UserRoles.ROLE_USER.name());
         user.setEnabled(false);
 
-        var token = getConfirmationToken();
+        var token = UUID.randomUUID().toString();
         user.setConfirmationToken(token);
         user.setLanguage(language);
+
         user = userRepository.save(user);
 
-        var confirmationLink = "http://localhost:8080/v1/api/auth/confirm?token=" + token;
+        var confirmationLink =
+            STR."http://localhost:8080/v1/api/auth/confirm?token=\{token}";
 
-        var body = """
-            Assalomu alaykum!
+        var body = buildEmailTemplate(confirmationLink);
 
-            Ro‘yxatdan o‘tganingiz uchun rahmat.
-            Akkauntingizni tasdiqlash uchun quyidagi linkni bosing:
-
-            %s
-            """.formatted(confirmationLink);
-
-        sendEmailConfirmation(user.getEmail(), "Email tasdiqlash", body);
+        emailService.sendEmail(
+            user.getEmail(),
+            "Email tasdiqlash",
+            body
+        );
 
         return AuthResponseDto.builder()
             .bearerToken(null)
@@ -204,6 +184,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public AuthResponseDto login(AuthRequestDto authRequestDto, String language) {
 
         var user = userRepository.findByEmail(authRequestDto.getEmail())
@@ -241,5 +222,65 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(username)
             .orElseThrow(() -> ExceptionUtil
                 .notFoundException("user_not_found"));
+    }
+    private String buildEmailTemplate(String confirmationLink) {
+        return """
+            <html>
+                <body style="font-family: Arial, sans-serif; background-color:#f6f6f6; padding:20px;">
+                    <div style="max-width:600px;margin:auto;background:white;padding:20px;border-radius:10px;">
+                        <h2 style="color:#2c3e50;">Assalomu alaykum 👋</h2>
+                        <p>Ro‘yxatdan o‘tganingiz uchun rahmat.</p>
+                        <p>Akkauntingizni faollashtirish uchun quyidagi tugmani bosing:</p>
+                        <div style="text-align:center;margin:30px 0;">
+                            <a href="%s"
+                               style="background:#3498db;color:white;padding:12px 24px;
+                               text-decoration:none;border-radius:6px;font-weight:bold;">
+                                Akkauntni tasdiqlash
+                            </a>
+                        </div>
+                        <p style="font-size:12px;color:#888;">
+                            Agar tugma ishlamasa, quyidagi linkni ishlating:
+                        </p>
+                        <p style="word-break:break-all;">
+                            <a href="%s">%s</a>
+                        </p>
+                        <hr>
+                        <p style="font-size:12px;color:#aaa;">
+                            Bu avtomatik yuborilgan xabar.
+                        </p>
+                    </div>
+                </body>
+            </html>
+        """.formatted(confirmationLink, confirmationLink, confirmationLink);
+    }
+    private String buildChangeEmailTemplate(String confirmationLink) {
+        return """
+        <html>
+            <body style="font-family: Arial, sans-serif; background:#f6f6f6; padding:20px;">
+                <div style="max-width:600px;margin:auto;background:white;padding:20px;border-radius:10px;">
+                    <h2 style="color:#2c3e50;">Email o‘zgartirildi 🔄</h2>
+                    <p>Siz emailingizni o‘zgartirdingiz.</p>
+                    <p>Yangi emailni tasdiqlash uchun quyidagi tugmani bosing:</p>
+                    <div style="text-align:center;margin:30px 0;">
+                        <a href="%s"
+                           style="background:#27ae60;color:white;padding:12px 24px;
+                           text-decoration:none;border-radius:6px;font-weight:bold;">
+                            Emailni tasdiqlash
+                        </a>
+                    </div>
+                    <p style="font-size:12px;color:#888;">
+                        Agar tugma ishlamasa, quyidagi linkni ishlating:
+                    </p>
+                    <p style="word-break:break-all;">
+                        <a href="%s">%s</a>
+                    </p>
+                    <hr>
+                    <p style="font-size:12px;color:#aaa;">
+                        Agar bu siz bo‘lmasangiz, iltimos e’tiborsiz qoldiring.
+                    </p>
+                </div>
+            </body>
+        </html>
+    """.formatted(confirmationLink, confirmationLink, confirmationLink);
     }
 }

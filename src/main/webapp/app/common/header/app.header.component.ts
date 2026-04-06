@@ -2,7 +2,7 @@ import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NgOptimizedImage } from "@angular/common";
-import { AuthService } from "../../shared/ui/services/auth.service";
+import { AuthService } from "../auth/auth.service";
 import { ThemeSwitchComponent } from "../../shared/ui";
 import { LucideAngularModule } from 'lucide-angular';
 
@@ -13,7 +13,7 @@ import { LucideAngularModule } from 'lucide-angular';
   templateUrl: './app.header.component.html'
 })
 export class HeaderComponent {
-  private readonly authService = inject(AuthService);
+  protected readonly authService = inject(AuthService);
 
   @Input() appTitle: string = 'Subcourse';
 

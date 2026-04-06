@@ -3,7 +3,7 @@ import {Component, OnDestroy, OnInit, computed, inject, signal, EffectRef} from 
 import { RouterModule } from '@angular/router';
 import { MenuItem } from '../interfaces';
 import { MenuService } from '../services/menu.service';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../../common/auth/auth.service';
 import { Subscription } from 'rxjs';
 import { effect } from '@angular/core';
 

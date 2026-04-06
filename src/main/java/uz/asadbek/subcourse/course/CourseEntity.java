@@ -3,6 +3,8 @@ package uz.asadbek.subcourse.course;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -42,6 +44,7 @@ public class CourseEntity extends BaseEntity implements SoftDeletable {
     @Column(name = "duration")
     private Integer duration;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "duration_type")
     private DurationType durationType;
 

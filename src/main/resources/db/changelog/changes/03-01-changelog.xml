@@ -5,60 +5,61 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd"
     objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
-    <changeSet id="202604011544-1" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-1" author="nitro">
         <createSequence incrementBy="1" sequenceName="balance_transactions_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-2" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-2" author="nitro">
         <createSequence incrementBy="1" sequenceName="balances_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-4" author="AsadbekRajabboyev">
-        <createSequence incrementBy="50" sequenceName="course_grades_seq" startValue="1"/>
-
+    <changeSet id="1775220943057-3" author="nitro">
         <createSequence incrementBy="50" sequenceName="comments_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-5" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-4" author="nitro">
+        <createSequence incrementBy="50" sequenceName="course_grades_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-5" author="nitro">
         <createSequence incrementBy="50" sequenceName="course_lessons_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-6" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-6" author="nitro">
         <createSequence incrementBy="50" sequenceName="courses_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-7" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-7" author="nitro">
         <createSequence incrementBy="50" sequenceName="files_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-8" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-8" author="nitro">
         <createSequence incrementBy="50" sequenceName="lesson_progresses_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-9" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-9" author="nitro">
         <createSequence incrementBy="50" sequenceName="payments_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-10" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-10" author="nitro">
         <createSequence incrementBy="50" sequenceName="sciences_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-11" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-11" author="nitro">
         <createSequence incrementBy="50" sequenceName="test_options_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-12" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-12" author="nitro">
         <createSequence incrementBy="50" sequenceName="test_questions_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-13" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-13" author="nitro">
         <createSequence incrementBy="50" sequenceName="test_session_answers_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-14" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-14" author="nitro">
         <createSequence incrementBy="50" sequenceName="test_session_questions_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-15" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-15" author="nitro">
         <createSequence incrementBy="50" sequenceName="test_sessions_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-16" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-16" author="nitro">
         <createSequence incrementBy="50" sequenceName="tests_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-17" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-17" author="nitro">
         <createSequence incrementBy="50" sequenceName="top_up_req_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-18" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-18" author="nitro">
         <createSequence incrementBy="50" sequenceName="users_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="202604011544-19" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-19" author="nitro">
         <createTable tableName="balance_transactions">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"
@@ -93,50 +94,37 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-20" author="AsadbekRajabboyev">
-
+    <changeSet id="1775220943057-20" author="nitro">
         <createTable tableName="balances">
-
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_balances"/>
             </column>
-
-            <column name="created_at" type="TIMESTAMP"/>
-            <column name="updated_at" type="TIMESTAMP"/>
-            <column name="deleted_at" type="TIMESTAMP"/>
-
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
             <column name="created_by" type="BIGINT"/>
             <column name="updated_by" type="BIGINT"/>
             <column name="deleted_by" type="BIGINT"/>
-
             <column name="user_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-
-            <column name="balance" type="BIGINT" defaultValueNumeric="0">
+            <column defaultValueNumeric="0" name="balance" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-
-            <column name="pending_balance" type="BIGINT" defaultValueNumeric="0">
+            <column defaultValueNumeric="0" name="pending_balance" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-
-            <column name="last_transaction_at" type="TIMESTAMP"/>
-
+            <column defaultValueBoolean="true" name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_transaction_at" type="DATETIME"/>
             <column name="currency" type="SMALLINT">
                 <constraints nullable="false"/>
             </column>
-
-            <column name="is_active" type="BOOLEAN" defaultValueBoolean="true">
-                <constraints nullable="false"/>
-            </column>
-
             <column name="version" type="BIGINT"/>
-
         </createTable>
-
     </changeSet>
-    <changeSet id="202604011544-21" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-21" author="nitro">
         <createTable tableName="comments">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_comments"/>
@@ -152,7 +140,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-22" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-22" author="nitro">
         <createTable tableName="course_grades">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_course_grades"/>
@@ -181,7 +169,7 @@
             <column name="description_crl" type="TEXT"/>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-23" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-23" author="nitro">
         <createTable tableName="course_lessons">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_course_lessons"/>
@@ -203,7 +191,7 @@
             <column name="course_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-24" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-24" author="nitro">
         <createTable tableName="courses">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_courses"/>
@@ -230,7 +218,7 @@
             <column defaultValueBoolean="false" name="is_video_course" type="BOOLEAN"/>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-25" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-25" author="nitro">
         <createTable tableName="files">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_files"/>
@@ -262,7 +250,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-26" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-26" author="nitro">
         <createTable tableName="lesson_progresses">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"
@@ -285,7 +273,7 @@
             <column name="end_time" type="DATETIME"/>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-27" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-27" author="nitro">
         <createTable tableName="payments">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_payments"/>
@@ -321,7 +309,7 @@
             <column name="completed_at" type="DATETIME"/>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-28" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-28" author="nitro">
         <createTable tableName="sciences">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_sciences"/>
@@ -351,7 +339,7 @@
             <column name="description_crl" type="TEXT"/>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-29" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-29" author="nitro">
         <createTable tableName="test_options">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_test_options"/>
@@ -369,7 +357,7 @@
             <column name="image_path" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-30" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-30" author="nitro">
         <createTable tableName="test_questions">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_test_questions"/>
@@ -388,7 +376,7 @@
             <column name="correct_option_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-31" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-31" author="nitro">
         <createTable tableName="test_session_answers">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"
@@ -410,7 +398,7 @@
             <column name="answered_at" type="DATETIME"/>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-32" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-32" author="nitro">
         <createTable tableName="test_session_questions">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"
@@ -435,7 +423,7 @@
             <column name="image_path" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-33" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-33" author="nitro">
         <createTable tableName="test_sessions">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_test_sessions"/>
@@ -466,7 +454,7 @@
             <column name="score" type="INT"/>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-34" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-34" author="nitro">
         <createTable tableName="tests">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tests"/>
@@ -500,7 +488,7 @@
             <column name="grade_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-35" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-35" author="nitro">
         <createTable tableName="top_up_requests">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"
@@ -530,7 +518,7 @@
             <column name="payment_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-36" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-36" author="nitro">
         <createTable tableName="user_courses">
             <column name="user_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_courses"/>
@@ -543,7 +531,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-37" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-37" author="nitro">
         <createTable tableName="users">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
@@ -586,79 +574,79 @@
             <column name="phone" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet id="202604011544-38" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-38" author="nitro">
         <addUniqueConstraint columnNames="external_tx"
             constraintName="uc_balance_transactions_external_tx" tableName="balance_transactions"/>
     </changeSet>
-    <changeSet id="202604011544-39" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-39" author="nitro">
         <addUniqueConstraint columnNames="user_id" constraintName="uc_balances_user"
             tableName="balances"/>
     </changeSet>
-    <changeSet id="202604011544-40" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-40" author="nitro">
         <addUniqueConstraint columnNames="file_key" constraintName="uc_files_file_key"
             tableName="files"/>
     </changeSet>
-    <changeSet id="202604011544-41" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-41" author="nitro">
         <addUniqueConstraint columnNames="confirmation_token"
             constraintName="uc_users_confirmation_token" tableName="users"/>
     </changeSet>
-    <changeSet id="202604011544-42" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-42" author="nitro">
         <addUniqueConstraint columnNames="email" constraintName="uc_users_email" tableName="users"/>
     </changeSet>
-    <changeSet id="202604011544-43" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-43" author="nitro">
         <createIndex indexName="idx_answer_session" tableName="test_session_answers">
             <column name="session_id"/>
         </createIndex>
     </changeSet>
-    <changeSet id="202604011544-44" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-44" author="nitro">
         <createIndex indexName="idx_answer_unique" tableName="test_session_answers" unique="true">
             <column name="session_id"/>
             <column name="question_id"/>
         </createIndex>
     </changeSet>
-    <changeSet id="202604011544-45" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-45" author="nitro">
         <createIndex indexName="idx_file_key" tableName="files" unique="true">
             <column name="file_key"/>
         </createIndex>
     </changeSet>
-    <changeSet id="202604011544-46" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-46" author="nitro">
         <createIndex indexName="idx_file_user" tableName="files">
             <column name="created_by"/>
         </createIndex>
     </changeSet>
-    <changeSet id="202604011544-47" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-47" author="nitro">
         <createIndex indexName="idx_question_order" tableName="test_session_questions">
             <column name="session_id"/>
             <column name="order_index"/>
         </createIndex>
     </changeSet>
-    <changeSet id="202604011544-48" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-48" author="nitro">
         <createIndex indexName="idx_session_question" tableName="test_session_questions">
             <column name="session_id"/>
         </createIndex>
     </changeSet>
-    <changeSet id="202604011544-49" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-49" author="nitro">
         <createIndex indexName="idx_session_status_expire" tableName="test_sessions">
             <column name="status"/>
             <column name="expires_at"/>
         </createIndex>
     </changeSet>
-    <changeSet id="202604011544-50" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-50" author="nitro">
         <createIndex indexName="idx_session_test" tableName="test_sessions">
             <column name="test_id"/>
         </createIndex>
     </changeSet>
-    <changeSet id="202604011544-51" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-51" author="nitro">
         <createIndex indexName="idx_session_user" tableName="test_sessions">
             <column name="user_id"/>
         </createIndex>
     </changeSet>
-    <changeSet id="202604011544-52" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-52" author="nitro">
         <createIndex indexName="idx_top_up_status" tableName="top_up_requests">
             <column name="status"/>
         </createIndex>
     </changeSet>
-    <changeSet id="202604011544-53" author="AsadbekRajabboyev">
+    <changeSet id="1775220943057-53" author="nitro">
         <createIndex indexName="idx_top_up_user" tableName="top_up_requests">
             <column name="user_id"/>
         </createIndex>

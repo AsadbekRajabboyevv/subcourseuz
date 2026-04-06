@@ -1,11 +1,11 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {LucideAngularModule} from "lucide-angular";
-import PageWrapperComponent from "../../shared/ui/layout/page-wrapper.component";
+import {PageWrapperComponent} from "../../shared/ui";
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, PageWrapperComponent, LucideAngularModule, PageWrapperComponent],
+  imports: [CommonModule, LucideAngularModule, PageWrapperComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })

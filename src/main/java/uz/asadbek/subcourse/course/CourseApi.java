@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uz.asadbek.base.dto.BaseResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseInfoResponseDto;
+import uz.asadbek.subcourse.course.dto.CourseRequestDto;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
+import uz.asadbek.subcourse.course.dto.CourseUpdateRequestDto;
 import uz.asadbek.subcourse.course.filter.CourseFilter;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeRequestDto;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeResponseDto;
@@ -42,4 +44,13 @@ public interface CourseApi {
 
     @PostMapping("/enroll/{id}")
     BaseResponseDto<Boolean> enroll(@PathVariable Long id);
+
+    @PostMapping
+    BaseResponseDto<Long> create(@RequestBody @Valid CourseRequestDto request);
+
+    @PutMapping("/{id}")
+    BaseResponseDto<Long> update(@PathVariable Long id, @RequestBody CourseUpdateRequestDto request);
+
+    @DeleteMapping("/{id}")
+    BaseResponseDto<Long> delete(@PathVariable Long id);
 }

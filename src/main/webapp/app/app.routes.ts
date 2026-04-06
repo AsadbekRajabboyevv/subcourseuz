@@ -1,6 +1,7 @@
 import {Routes} from '@angular/router';
 import {HomeComponent} from './features/home/home.component';
 import {AuthLayoutComponent} from "./common/auth/auth.layout.component";
+import {CourseComponent} from "./features/course/component/course.component";
 export const routes: Routes = [
   {
     path: 'auth',
@@ -22,6 +23,11 @@ export const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     title: 'Asosiy sahifa'
+  },
+  {
+    path: 'courses',
+    loadComponent: ()=> import('./features/course/component/course.component').then(m => m.CourseComponent),
+    title: 'Kurslar'
   },
   {
     path: '',

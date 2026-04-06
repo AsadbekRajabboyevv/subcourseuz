@@ -1,30 +1,26 @@
-export interface BaseResponseDto<T> {
-  success: boolean;
-  message: string;
-  timestamp: string;
-  data: T;
-}
-
-export interface UserResponseDto {
+export interface UserResponse {
   id: number;
   email: string;
   firstName: string;
   lastName: string;
   position: string;
+  role: string;
+  permissions: string[];
+  imagePath: string;
 }
 
-export interface AuthResponseDto {
+export interface AuthResponse {
   bearerToken: string;
   expiresIn: string;
-  user: UserResponseDto;
+  user: UserResponse;
 }
 
-export interface LoginRequestDto {
+export interface LoginRequest {
   email: string;
   password: string;
 }
 
-export interface RegisterRequestDto {
+export interface RegisterRequest {
   email: string;
   password: string;
   firstName: string;

@@ -9,7 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { FieldConfig, ValidatorConfig } from '../../interfaces';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../../common/auth/auth.service';
 import { InputComponent } from '../input/input.component';
 import { SelectComponent } from '../select/select.component';
 import {LucideAngularModule} from "lucide-angular";

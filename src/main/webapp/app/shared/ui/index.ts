@@ -1,7 +1,7 @@
 export * from './interfaces';
 
 // services
-export * from './services/auth.service';
+export * from '../../common/auth/auth.service';
 export * from './services/theme.service';
 export * from './services/notification.service';
 export * from './services/modal.service';
@@ -28,7 +28,7 @@ export * from './layout/container.component';
 export * from './layout/grid.component';
 export * from './layout/sidebar-layout.component';
 export * from './layout/page-wrapper.component';
-export {default as PageWrapperComponent} from './layout/page-wrapper.component'
+export * from './layout/page-wrapper.component'
 
 // modal
 export * from './modal/modal.component';

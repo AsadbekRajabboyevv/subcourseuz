@@ -49,7 +49,7 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
                       when 'YIL' then c.duration * 24 * 365
                  end)
                  >=
-                 (case :#{#filter.durationType.name()}
+                 (case :#{#filter.durationType}
                       when 'SOAT' then :#{#filter.duration}
                       when 'KUN' then :#{#filter.duration} * 24
                       when 'OY' then :#{#filter.duration} * 24 * 30

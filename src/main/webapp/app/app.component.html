@@ -1,7 +1,7 @@
 <div class="flex flex-col min-h-screen">
     <app-header *ngIf="!isAuthPage"></app-header>
 
-    <main class="flex-1" [ngClass]="{'my-3': !isAuthPage}">
+    <main class="flex-1 pt-[5px]" [ngClass]="{'my-3': !isAuthPage}">
         <div [class.mx-auto]="!isAuthPage" [class.px-4]="!isAuthPage" [class.md:px-6]="!isAuthPage">
 
             <ng-container *ngIf="!isAuthPage">

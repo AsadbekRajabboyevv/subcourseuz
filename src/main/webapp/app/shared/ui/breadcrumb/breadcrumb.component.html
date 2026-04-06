@@ -1,20 +1,23 @@
-<nav class="flex items-center space-x-2 text-sm font-medium text-gray-500 dark:text-gray-400">
-    @for (bc of breadcrumbs(); track bc.url; let last = $last) {
+<nav class="flex items-center space-x-2 text-[11px] font-medium text-gray-500 dark:text-gray-400">
+    @for (bc of breadcrumbs(); track bc.url; let last = $last; let first = $first) {
         <div class="flex items-center">
             @if (!last) {
                 <a [routerLink]="bc.url"
                    class="flex items-center gap-1.5 transition-colors hover:text-green-600 dark:hover:text-green-400">
-                    <lucide-icon [name]="bc.url === '/' ? 'house' : 'house'" size="14"
-                                 [strokeWidth]="2"></lucide-icon>
+                    @if (first) {
+                        <lucide-icon name="house" size="13" [strokeWidth]="2"></lucide-icon>
+                    }
                     {{ bc.label }}
                 </a>
-                <lucide-icon name="chevron-right" size="16"
-                             class="mx-1 text-gray-400 dark:text-gray-600"></lucide-icon>
+                <lucide-icon name="chevron-right" size="14"
+                             class="mx-1 text-gray-300 dark:text-gray-600"></lucide-icon>
             } @else {
                 <span class="flex items-center gap-1.5 text-gray-900 dark:text-white font-semibold">
-          <lucide-icon name="house" size="14" [strokeWidth]="2.5"></lucide-icon>
+                    @if (first) {
+                        <lucide-icon name="house" size="13" [strokeWidth]="2.5"></lucide-icon>
+                    }
                     {{ bc.label }}
-        </span>
+                </span>
             }
         </div>
     }

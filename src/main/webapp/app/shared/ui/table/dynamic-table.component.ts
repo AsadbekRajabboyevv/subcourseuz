@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, computed, inject, signal, TemplateRef } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../../common/auth/auth.service';
 import { ColumnConfig, SortEvent } from '../interfaces';
 import { LucideAngularModule } from 'lucide-angular';
 
