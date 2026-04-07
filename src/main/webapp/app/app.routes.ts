@@ -25,6 +25,32 @@ export const routes: Routes = [
     title: 'Asosiy sahifa'
   },
   {
+    path: 'course/create',
+    loadComponent: ()=> import('./features/course/component/course.component').then(m => m.CourseComponent),
+    title: 'Kurs yaratish',
+    data: {
+      roles: ['ROLE_ADMIN', 'ROLE_TEACHER']
+    }
+  },
+  {
+    path: 'course/grade/create',
+    loadComponent: ()=> import('./features/course/grade/course-grade.component').then(m => m.CourseGradeComponent),
+    title: 'Kurs darajasini yaratish',
+    data: {
+      roles: ['ROLE_ADMIN', 'ROLE_STUDENT']
+    }
+  },
+  {
+    path: 'course/science/create',
+    loadComponent: ()=> import('./features/course/component/course.component').then(m => m.CourseComponent),
+    title: 'Kurs yaratish',
+    data: {
+      roles: ['ROLE_ADMIN', 'ROLE_TEACHER']
+    }
+  },
+
+
+  {
     path: 'courses',
     loadComponent: ()=> import('./features/course/component/course.component').then(m => m.CourseComponent),
     title: 'Kurslar'

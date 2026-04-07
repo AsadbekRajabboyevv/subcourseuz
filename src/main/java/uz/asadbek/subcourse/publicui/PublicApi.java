@@ -22,7 +22,7 @@ public interface PublicApi {
     BaseResponseDto<HomePageResponseDto> getHomePage();
 
     @GetMapping("/courses")
-    BaseResponseDto<Page<CourseGradeResponseDto>> getCourses(CourseFilter filter, Pageable pageable);
+    BaseResponseDto<Page<CourseResponseDto>> getCourses(CourseFilter filter, Pageable pageable);
 
     @GetMapping("/courses/{id}")
     BaseResponseDto<CourseResponseDto> getCourse(@PathVariable Long id);

@@ -1,11 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {LucideAngularModule} from "lucide-angular";
+import { NgIconsModule, provideIcons } from '@ng-icons/core';
+import { heroChatBubbleLeftEllipsis, heroEnvelope, heroGlobeAlt, heroPaperAirplane } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, NgIconsModule],
+  providers: [provideIcons({ heroPaperAirplane, heroChatBubbleLeftEllipsis, heroEnvelope, heroGlobeAlt })],
   templateUrl: './app.footer.component.html'
 })
 export class FooterComponent {
@@ -21,9 +23,9 @@ export class FooterComponent {
   payments = [1, 2, 3];
 
   socials = [
-    { icon: 'send', link: '#' },        // facebook
-    { icon: 'message-circle-check', link: '#' },       // instagram
-    { icon: 'mail', link: '#' },
-    { icon: 'globe', link: '#' }        // linkedin
+    { icon: 'heroPaperAirplane', link: '#' },
+    { icon: 'heroChatBubbleLeftEllipsis', link: '#' },
+    { icon: 'heroEnvelope', link: '#' },
+    { icon: 'heroGlobeAlt', link: '#' }
   ];
 }

@@ -19,8 +19,8 @@
                                 class="flex items-center gap-2 group hover:text-green-600 transition-colors">
                             {{ col.header }}
                             @if (col.sortable) {
-                                <lucide-icon [name]="currentSort()?.field === col.field ? (currentSort()?.direction === 'asc' ? 'arrow-up' : 'arrow-down') : 'chevrons-up-down'"
-                                             size="14" class="opacity-0 group-hover:opacity-100 transition-all"></lucide-icon>
+                                <ng-icon [name]="currentSort()?.field === col.field ? (currentSort()?.direction === 'asc' ? 'heroArrowUp' : 'heroArrowDown') : 'heroArrowsUpDown'"
+                                         size="14" class="opacity-0 group-hover:opacity-100 transition-all"></ng-icon>
                             }
                         </button>
                     </th>
@@ -65,12 +65,12 @@
         <div class="flex items-center gap-2">
             <button (click)="goToPage(-1)" [disabled]="currentPage() === 0"
                     class="p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 disabled:opacity-30 hover:border-green-500 transition-all">
-                <lucide-icon name="chevron-left" size="18"></lucide-icon>
+                <ng-icon name="heroChevronLeft" size="18"></ng-icon>
             </button>
             <span class="text-sm font-black dark:text-white px-3">{{ currentPage() + 1 }}</span>
             <button (click)="goToPage(1)" [disabled]="currentPage() >= totalPages() - 1"
                     class="p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 disabled:opacity-30 hover:border-green-500 transition-all">
-                <lucide-icon name="chevron-right" size="18"></lucide-icon>
+                <ng-icon name="heroChevronRight" size="18"></ng-icon>
             </button>
         </div>
     </div>
@@ -80,15 +80,15 @@
     <button (click)="toggleStatus.emit(row)"
             [class]="row.active ? 'text-green-500 hover:bg-green-50' : 'text-gray-400 hover:bg-gray-100'"
             class="p-2 rounded-lg transition-colors" title="Holatni o'zgartirish">
-        <lucide-icon [name]="row.active ? 'toggle-right' : 'toggle-left'" size="20"></lucide-icon>
+        <ng-icon [name]="row.active ? 'heroCheckCircle' : 'heroXCircle'" size="20"></ng-icon>
     </button>
 
     <button (click)="edit.emit(row)" class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors">
-        <lucide-icon name="edit-3" size="18"></lucide-icon>
+        <ng-icon name="heroPencil" size="18"></ng-icon>
     </button>
 
     <button (click)="delete.emit(row)" class="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors">
-        <lucide-icon name="trash-2" size="18"></lucide-icon>
+        <ng-icon name="heroTrash" size="18"></ng-icon>
     </button>
 </ng-template>
 

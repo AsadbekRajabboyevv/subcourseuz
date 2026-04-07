@@ -10,16 +10,23 @@ import {
   CourseInfo,
   CourseRequest
 } from "../model/course";
+import {environment} from "../../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService extends BaseApiService {
-  protected override readonly path = '/v1/api/courses';
+  protected override readonly path = `/v1/api/courses`;
+  private readonly publicPath = `${environment.apiPath}/v1/api/public/courses`;
 
   getPaginated(filter: Partial<CourseFilter>, page: number = 0, size: number = 10, sort: string = 'id,desc'): Observable<Base<Pageable<Course>>> {
     const params = {...filter, page, size, sort};
     return this.get<Base<Pageable<Course>>>(params);
+  }
+
+  getPublicPaginated(filter: Partial<CourseFilter>, page: number = 0, size: number = 10, sort: string = 'id,desc'): Observable<Base<Pageable<Course>>> {
+    const params = {...filter, page, size, sort};
+    return this.http.get<Base<Pageable<Course>>>(this.publicPath, {params});
   }
 
   getCourseInfo(id: number): Observable<Base<CourseInfo>> {
@@ -43,7 +50,11 @@ export class CourseService extends BaseApiService {
   }
 
   saveGrade(request: CourseGradeRequest): Observable<Base<CourseGrade>> {
-    return this.http.post<Base<CourseGrade>>(`${this.apiUrl}${this.path}/grades`, request);
+      return this.http.post<Base<CourseGrade>>(`${this.apiUrl}${this.path}/grades`, request);
+  }
+
+  updateGrade(id: number, request: CourseGradeRequest): Observable<Base<CourseGrade>> {
+    return this.http.put<Base<CourseGrade>>(`${this.apiUrl}${this.path}/grades`, request);
   }
 
   updateCourse(id: number, request: CourseRequest): Observable<Base<number>> {

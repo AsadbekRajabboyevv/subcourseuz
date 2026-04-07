@@ -2,8 +2,9 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { LucideAngularModule } from 'lucide-angular';
-import {PageWrapperComponent} from "../../../shared/ui";
+import { NgIconsModule, provideIcons } from '@ng-icons/core';
+import { heroArrowPath, heroBookmark, heroMagnifyingGlass, heroPlusCircle } from '@ng-icons/heroicons/outline';
+import {AuthService, PageWrapperComponent} from "../../../shared/ui";
 import {CourseService} from "../service/course.service";
 import {Course, CourseFilter} from "../model/course";
 import {CourseCardTableComponent} from "./course-card-table.component";
@@ -15,14 +16,16 @@ import {CourseCardTableComponent} from "./course-card-table.component";
     CommonModule,
     RouterModule,
     FormsModule,
-    LucideAngularModule,
+    NgIconsModule,
     CourseCardTableComponent,
     PageWrapperComponent
   ],
+  providers: [provideIcons({ heroBookmark, heroArrowPath, heroPlusCircle, heroMagnifyingGlass })],
   templateUrl: './course.component.html'
 })
 export class CourseComponent implements OnInit {
   private courseService = inject(CourseService);
+  protected authService = inject(AuthService);
   courses = signal<Course[]>([]);
   totalElements = signal(0);
   isLoading = signal(false);
@@ -45,7 +48,7 @@ export class CourseComponent implements OnInit {
   loadCourses(): void {
     this.isLoading.set(true);
 
-    this.courseService.getPaginated(
+    this.courseService.getPublicPaginated(
       this.filter,
       this.currentPage(),
       this.pageSize()

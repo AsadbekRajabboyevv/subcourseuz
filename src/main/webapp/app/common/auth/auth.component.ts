@@ -2,7 +2,18 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { LucideAngularModule } from 'lucide-angular';
+import { NgIconsModule, provideIcons } from '@ng-icons/core';
+import {
+  heroAcademicCap,
+  heroArrowRightOnRectangle,
+  heroEnvelope,
+  heroExclamationCircle,
+  heroEye,
+  heroEyeSlash,
+  heroLockClosed,
+  heroShieldCheck,
+  heroUserPlus
+} from '@ng-icons/heroicons/outline';
 import { HttpClient } from '@angular/common/http';
 import {
   LoginRequest,
@@ -18,7 +29,18 @@ import {
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, LucideAngularModule, DatepickerComponent, SelectComponent, InputComponent],
+  imports: [CommonModule, FormsModule, RouterModule, NgIconsModule, DatepickerComponent, SelectComponent, InputComponent],
+  providers: [provideIcons({
+    heroAcademicCap,
+    heroShieldCheck,
+    heroExclamationCircle,
+    heroEnvelope,
+    heroLockClosed,
+    heroEye,
+    heroEyeSlash,
+    heroArrowRightOnRectangle,
+    heroUserPlus
+  })],
   templateUrl: './auth.component.html'
 })
 export class AuthComponent {

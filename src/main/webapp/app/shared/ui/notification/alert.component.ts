@@ -1,11 +1,13 @@
 import { Component, EventEmitter, Input, Output, signal, computed, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule } from 'lucide-angular';
+import { NgIconsModule, provideIcons } from '@ng-icons/core';
+import { heroCheckCircle, heroExclamationCircle, heroExclamationTriangle, heroInformationCircle, heroXCircle, heroXMark } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-alert',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, NgIconsModule],
+  providers: [provideIcons({ heroCheckCircle, heroXCircle, heroExclamationTriangle, heroInformationCircle, heroExclamationCircle, heroXMark })],
   templateUrl: './alert.component.html',
 })
 export class AlertComponent implements OnInit, OnDestroy {
@@ -30,10 +32,10 @@ export class AlertComponent implements OnInit, OnDestroy {
 
   protected iconName = computed(() => {
     switch (this.type) {
-      case 'success': return 'check-circle';
-      case 'error': return 'alert-octagon';
-      case 'warning': return 'alert-triangle';
-      case 'info': default: return 'info';
+      case 'success': return 'heroCheckCircle';
+      case 'error': return 'heroXCircle';
+      case 'warning': return 'heroExclamationTriangle';
+      case 'info': default: return 'heroInformationCircle';
     }
   });
 

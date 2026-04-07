@@ -14,7 +14,8 @@ export class HasPermissionDirective {
 
   constructor() {
     effect(() => {
-      const permissions = this.authService.currentPermissions();
+      const permissions = this.authService.currentUser()?.permissions ?? [];
+
       if (this.permission && permissions.includes(this.permission)) {
         if (this.viewContainer.length === 0) {
           this.viewContainer.createEmbeddedView(this.templateRef);

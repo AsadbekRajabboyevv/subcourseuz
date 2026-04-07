@@ -22,7 +22,7 @@ export class SidebarMenuComponent implements OnInit, OnDestroy {
   private effectRef!: EffectRef;
   private sub?: Subscription;
 
-  private readonly role = computed(() => this.authService.currentRole());
+  private readonly role = computed(() => this.authService.currentUser()?.role);
 
   ngOnInit(): void {
     this.loadMenu();

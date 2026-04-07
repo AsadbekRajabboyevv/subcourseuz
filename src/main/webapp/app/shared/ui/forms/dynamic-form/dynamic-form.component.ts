@@ -12,12 +12,14 @@ import { FieldConfig, ValidatorConfig } from '../../interfaces';
 import { AuthService } from '../../../../common/auth/auth.service';
 import { InputComponent } from '../input/input.component';
 import { SelectComponent } from '../select/select.component';
-import {LucideAngularModule} from "lucide-angular";
+import { NgIconsModule, provideIcons } from '@ng-icons/core';
+import { heroCheck, heroExclamationCircle, heroPaperAirplane } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-dynamic-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputComponent, SelectComponent, LucideAngularModule],
+  imports: [CommonModule, ReactiveFormsModule, InputComponent, SelectComponent, NgIconsModule],
+  providers: [provideIcons({ heroCheck, heroExclamationCircle, heroPaperAirplane })],
   templateUrl: './dynamic-form.component.html',
 })
 export class DynamicFormComponent implements OnInit {
@@ -83,7 +85,7 @@ export class DynamicFormComponent implements OnInit {
 
   isFieldVisible(field: FieldConfig): boolean {
     // Role check
-    const role = this.authService.currentRole();
+    const role = this.authService.currentUser()?.role;
     if (field.roles && field.roles.length > 0) {
       if (!role || !field.roles.includes(role)) {
         return false;

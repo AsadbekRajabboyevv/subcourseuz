@@ -18,14 +18,16 @@ import uz.asadbek.subcourse.test.filter.TestFilter;
 @RequiredArgsConstructor
 public class PublicController implements PublicApi {
 
+    private final PublicService publicService;
+
     @Override
     public BaseResponseDto<HomePageResponseDto> getHomePage() {
         return null;
     }
 
     @Override
-    public BaseResponseDto<Page<CourseGradeResponseDto>> getCourses(CourseFilter filter, Pageable pageable) {
-        return null;
+    public BaseResponseDto<Page<CourseResponseDto>> getCourses(CourseFilter filter, Pageable pageable) {
+        return BaseResponseDto.ok(publicService.getCourses(filter, pageable));
     }
 
     @Override

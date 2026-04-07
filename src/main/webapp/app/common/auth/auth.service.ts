@@ -1,96 +1,90 @@
-import {Injectable, computed, inject, signal} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Router} from '@angular/router';
-import {Observable, map, tap} from 'rxjs';
-import {AuthCredentials, UserInfo} from '../../shared/ui/interfaces';
-import {AuthResponse, LoginRequest, RegisterRequest, UserResponse} from "./auth.model";
-import {environment} from "../../../environments/environment";
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+import { AuthResponse, LoginRequest, RegisterRequest, UserResponse } from "./auth.model";
+import { environment } from "../../../environments/environment";
 import {Base} from "../model/base";
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly TOKEN_KEY = 'jwt_token';
-  private readonly BASE_URL = environment.apiPath;
 
+  private readonly PATH = `${environment.apiPath}/v1/api/auth`;
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
+
+  private readonly TOKEN_KEY = 'access_token';
   private readonly USER_KEY = 'auth_user';
-  currentUser = signal<UserResponse | null>(null);
-  currentRole = computed(() => this.getUser()?.role ?? null);
-  currentPermissions = computed(() => this.currentUser()?.permissions ?? []);
-  isLoggedIn = computed(() => this.getUser() !== null);
 
-  constructor() {
-    this.restoreSession();
-  }
+  private accessToken = signal<string | null>(this.loadToken());
+  currentUser = signal<UserResponse | null>(this.loadUser());
 
-  login(credentials: LoginRequest): Observable<void> {
-    return this.http
-    .post<Base<AuthResponse>>(
-      `${this.BASE_URL}/v1/api/auth/login`,
-      credentials
-    )
-    .pipe(
-      tap(response => {
-        localStorage.setItem(this.TOKEN_KEY, response.data.bearerToken);
-        localStorage.setItem(this.USER_KEY, JSON.stringify(response.data.user));
-        this.currentUser.set(response.data.user);
-      }),
-      map(() => void 0),
+  isLoggedIn = computed(() => !!this.accessToken());
+  userRole = computed(() => this.currentUser()?.role ?? null);
+  isAdmin = computed(() => this.userRole() === 'ROLE_ADMIN');
+
+  login(request: LoginRequest): Observable<void> {
+    return this.http.post<Base<AuthResponse>>(`${this.PATH}/login`, request, {
+      withCredentials: true
+    }).pipe(
+      tap(response => this.setSession(response.data)),
+      map(() => void 0)
     );
   }
 
-  register(credentials: RegisterRequest): Observable<void> {
-    return this.http.post<void>(`${this.BASE_URL + '/v1/api/auth/register'}`, credentials);
+  register(request: RegisterRequest): Observable<void> {
+    return this.http.post<void>(`${this.PATH}/register`, request);
+  }
+
+  refreshToken(): Observable<void> {
+    return this.http.post<Base<AuthResponse>>(`${this.PATH}/refresh`, {}, {
+      withCredentials: true
+    }).pipe(
+      tap(response => this.setSession(response.data)),
+      map(() => void 0),
+      catchError(err => {
+        this.clearSession();
+        return throwError(() => err);
+      })
+    );
   }
 
   logout(): void {
-    this.clearStorage();
-    this.currentUser.set(null);
-    this.router.navigate(['/auth/login']);
-  }
+    this.http.post(`${this.PATH}/logout`, {}, {
+      withCredentials: true
+    }).subscribe();
 
-  isAuthenticated(): boolean {
-    const token = this.getToken();
-    if (!token) return false;
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.exp * 1000 > Date.now();
-    } catch {
-      return false;
-    }
+    this.clearSession();
+    this.router.navigate(['/auth/login']);
   }
 
   getToken(): string | null {
+    return this.accessToken();
+  }
+
+  private setSession(res: AuthResponse) {
+    this.accessToken.set(res.bearerToken);
+    this.currentUser.set(res.user);
+
+    localStorage.setItem(this.TOKEN_KEY, res.bearerToken);
+    localStorage.setItem(this.USER_KEY, JSON.stringify(res.user));
+  }
+
+  private clearSession() {
+    this.accessToken.set(null);
+    this.currentUser.set(null);
+
+    localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.USER_KEY);
+  }
+
+  private loadToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
-  getUser(): UserResponse | null {
+  private loadUser(): UserResponse | null {
     const user = localStorage.getItem(this.USER_KEY);
     return user ? JSON.parse(user) : null;
-  }
-
-  handleUnauthorized(): void {
-    this.clearStorage();
-    this.currentUser.set(null);
-    this.router.navigate(['/auth/login']);
-  }
-
-  private restoreSession(): void {
-    const token = this.getToken();
-    const user = localStorage.getItem(this.USER_KEY);
-
-    if (!token || !this.isAuthenticated() || !user) return;
-
-    try {
-      this.currentUser.set(JSON.parse(user));
-    } catch {
-      this.clearStorage();
-    }
-  }
-
-  private clearStorage(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.USER_KEY);
   }
 }

@@ -4,7 +4,7 @@
         <div class="flex items-center gap-10">
             <a routerLink="/" class="flex items-center group">
                 <div class="bg-green-600 text-white p-1.5 rounded-lg mr-2.5 shadow-sm group-hover:scale-110 transition-transform">
-                    <lucide-icon name="graduation-cap" size="24"></lucide-icon>
+                    <ng-icon name="heroAcademicCap" size="24"></ng-icon>
                 </div>
                 <span class="font-bold text-xl tracking-tight text-gray-900 dark:text-white">
                     {{ appTitle }}
@@ -25,10 +25,10 @@
 
             <div *ngIf="isLoggedIn" class="relative">
                 <button (click)="toggleProfile()" class="flex items-center focus:outline-none">
-                    <img *ngIf="authService.getUser()?.imagePath!=null" ngSrc="/public/logo.png" width="40" height="40"
+                    <img *ngIf="authService.currentUser()?.imagePath!=null" ngSrc="/public/logo.png" width="40" height="40"
                          class="rounded-full border-2 border-gray-100 hover:border-green-500 transition-all dark:border-gray-700 shadow-sm">
-                    <div *ngIf="authService.getUser()?.imagePath==null" class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                        <span class="text-gray-500 dark:text-gray-400 text-xl font-bold">{{ authService.getUser()?.firstName?.toUpperCase()?.charAt(0) }}</span>
+                    <div *ngIf="authService.currentUser()?.imagePath==null" class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                        <span class="text-gray-500 dark:text-gray-400 text-xl font-bold">{{ authService.currentUser()?.firstName?.toUpperCase()?.charAt(0) }}</span>
                     </div>
                 </button>
 
@@ -36,13 +36,13 @@
                      (click)="isProfileOpen = false"
                      class="absolute right-0 mt-3 w-52 bg-white border border-gray-100 rounded-xl shadow-xl py-2 z-50 dark:bg-gray-800 dark:border-gray-700 animate-in fade-in zoom-in duration-200">
                     <a routerLink="/profile" class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700/50">
-                        <lucide-icon name="user" size="16" class="mr-2.5 text-gray-400"></lucide-icon> Profil
+                        <ng-icon name="heroUser" size="16" class="mr-2.5 text-gray-400"></ng-icon> Profil
                     </a>
                     <a routerLink="/settings" class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700/50 border-b dark:border-gray-700">
-                        <lucide-icon name="settings" size="16" class="mr-2.5 text-gray-400"></lucide-icon> Sozlamalar
+                        <ng-icon name="heroCog6Tooth" size="16" class="mr-2.5 text-gray-400"></ng-icon> Sozlamalar
                     </a>
                     <button (click)="logout()" class="flex items-center w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20">
-                        <lucide-icon name="log-out" size="16" class="mr-2.5"></lucide-icon> Chiqish
+                        <ng-icon name="heroArrowLeftOnRectangle" size="16" class="mr-2.5"></ng-icon> Chiqish
                     </button>
                 </div>
             </div>
@@ -50,13 +50,13 @@
             <button *ngIf="!isLoggedIn"
                     routerLink="/auth/login"
                     class="hidden sm:flex items-center gap-2 bg-green-600 text-white px-6 py-2.5 rounded-xl font-bold text-xs hover:bg-green-700 transition-all shadow-md active:scale-95">
-                <lucide-icon name="log-in" size="16"></lucide-icon>
+                <ng-icon name="heroArrowRightOnRectangle" size="16"></ng-icon>
                 KIRISH
             </button>
 
             <button class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
                     (click)="toggleMobileMenu()">
-                <lucide-icon [name]="isMenuOpen ? 'x' : 'menu'" size="24"></lucide-icon>
+                <ng-icon [name]="isMenuOpen ? 'heroXMark' : 'heroBars3'" size="24"></ng-icon>
             </button>
         </div>
     </div>
@@ -65,16 +65,16 @@
          class="lg:hidden absolute top-full left-0 w-full bg-white border-b border-gray-100 shadow-xl dark:bg-gray-900 dark:border-gray-800 z-40 animate-in slide-in-from-top duration-300">
         <nav class="flex flex-col p-4 space-y-1">
             <a routerLink="/courses" (click)="isMenuOpen = false" class="flex items-center p-3 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-200 font-medium">
-                <lucide-icon name="book" size="18" class="mr-3 text-green-600"></lucide-icon> Kurslar
+                <ng-icon name="heroBookOpen" size="18" class="mr-3 text-green-600"></ng-icon> Kurslar
             </a>
             <a *ngIf="isLoggedIn && userRole === 'ROLE_USER'" routerLink="/courses/view/me" (click)="isMenuOpen = false" class="flex items-center p-3 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-200 font-medium">
-                    <lucide-icon name="layout-dashboard" size="18" class="mr-3 text-green-600"></lucide-icon> Mening kurslarim
+                    <ng-icon name="heroViewColumns" size="18" class="mr-3 text-green-600"></ng-icon> Mening kurslarim
             </a>
             <a routerLink="/tests" (click)="isMenuOpen = false" class="flex items-center p-3 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-200 font-medium">
-                <lucide-icon name="clipboard-check" size="18" class="mr-3 text-green-600"></lucide-icon> Online Test
+                <ng-icon name="heroClipboardDocumentCheck" size="18" class="mr-3 text-green-600"></ng-icon> Online Test
             </a>
             <a routerLink="/blog" (click)="isMenuOpen = false" class="flex items-center p-3 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-200 font-medium">
-                <lucide-icon name="newspaper" size="18" class="mr-3 text-green-600"></lucide-icon> Blog
+                <ng-icon name="heroNewspaper" size="18" class="mr-3 text-green-600"></ng-icon> Blog
             </a>
             <hr class="my-2 border-gray-100 dark:border-gray-800">
             <button *ngIf="!isLoggedIn" routerLink="/auth/login" (click)="isMenuOpen = false" class="w-full mt-2 bg-green-600 text-white p-3 rounded-lg font-bold">

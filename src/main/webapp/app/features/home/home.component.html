@@ -1,7 +1,7 @@
 <app-page-wrapper class="min-h-screen transition-colors duration-300 dark:bg-gray-950">
     <div page-title class="flex items-center justify-between gap-3">
         <div class="flex items-center gap-3">
-            <lucide-icon name="home" class="text-green-600 dark:text-green-400" size="24"></lucide-icon>
+            <ng-icon name="heroHome" class="text-green-600 dark:text-green-400" size="24"></ng-icon>
             <span class="text-gray-900 dark:text-gray-100 font-semibold text-xl">Bosh sahifa</span>
         </div>
     </div>
@@ -12,11 +12,11 @@
             <p class="mb-6 text-lg opacity-90">Online ta'lim platformasiga xush kelibsiz! Bu yerdan siz o'zingiz uchun eng yaxshi kurslarni topishingiz mumkin.</p>
             <div class="flex flex-wrap gap-4">
                 <button class="flex items-center gap-2 rounded-lg bg-white text-green-700 px-6 py-3 font-semibold hover:bg-gray-100 transition-colors dark:bg-gray-100 dark:hover:bg-white">
-                    <lucide-icon name="search" size="18"></lucide-icon>
+                    <ng-icon name="heroMagnifyingGlass" size="18"></ng-icon>
                     Kurslarni ko'rish
                 </button>
                 <button class="flex items-center gap-2 rounded-lg border-2 border-white/50 px-6 py-3 font-semibold text-white hover:bg-white/10 hover:border-white transition-colors">
-                    <lucide-icon name="user-plus" size="18"></lucide-icon>
+                    <ng-icon name="heroUserPlus" size="18"></ng-icon>
                     Ro'yxatdan o'tish
                 </button>
             </div>
@@ -30,7 +30,7 @@
                         <p class="text-2xl font-bold text-gray-900 dark:text-white">24</p>
                     </div>
                     <div class="rounded-full bg-green-100 p-3 text-green-600 dark:bg-green-900/30 dark:text-green-400">
-                        <lucide-icon name="book-open" size="24"></lucide-icon>
+                        <ng-icon name="heroBookOpen" size="24"></ng-icon>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                         <p class="text-2xl font-bold text-gray-900 dark:text-white">1,234</p>
                     </div>
                     <div class="rounded-full bg-blue-100 p-3 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-                        <lucide-icon name="users" size="24"></lucide-icon>
+                        <ng-icon name="heroUsers" size="24"></ng-icon>
                     </div>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                         <p class="text-2xl font-bold text-gray-900 dark:text-white">45</p>
                     </div>
                     <div class="rounded-full bg-purple-100 p-3 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
-                        <lucide-icon name="graduation-cap" size="24"></lucide-icon>
+                        <ng-icon name="heroAcademicCap" size="24"></ng-icon>
                     </div>
                 </div>
             </div>
@@ -66,7 +66,7 @@
                         <p class="text-2xl font-bold text-gray-900 dark:text-white">156</p>
                     </div>
                     <div class="rounded-full bg-orange-100 p-3 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400">
-                        <lucide-icon name="file-text" size="24"></lucide-icon>
+                        <ng-icon name="heroDocumentText" size="24"></ng-icon>
                     </div>
                 </div>
             </div>
@@ -77,10 +77,10 @@
                 <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Mashhur kurslar</h2>
                 <div class="flex items-center gap-2">
                     <button (click)="prevSlide()" class="group rounded-full bg-white p-2 shadow-md hover:bg-gray-50 transition-all dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:border dark:border-gray-700">
-                        <lucide-icon name="chevron-left" size="20"></lucide-icon>
+                        <ng-icon name="heroChevronLeft" size="20"></ng-icon>
                     </button>
                     <button (click)="nextSlide()" class="group rounded-full bg-white p-2 shadow-md hover:bg-gray-50 transition-all dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:border dark:border-gray-700">
-                        <lucide-icon name="chevron-right" size="20"></lucide-icon>
+                        <ng-icon name="heroChevronRight" size="20"></ng-icon>
                     </button>
                 </div>
             </div>
@@ -113,7 +113,7 @@
                                     <div class="flex items-center justify-between border-t border-gray-100 pt-3 dark:border-gray-800">
                                         <span class="text-sm font-bold text-green-600 dark:text-green-400">{{ (course.price / 1000).toFixed(0) }}k UZS</span>
                                         <button class="rounded-lg bg-gray-100 p-1.5 text-gray-600 hover:bg-green-500 hover:text-white transition-all dark:bg-gray-800 dark:text-gray-400">
-                                            <lucide-icon name="arrow-right" size="16"></lucide-icon>
+                                            <ng-icon name="heroArrowRight" size="16"></ng-icon>
                                         </button>
                                     </div>
                                 </div>
@@ -127,7 +127,7 @@
         <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
             <button class="group flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 transition-all hover:border-green-500 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-green-500 text-left">
                 <div class="rounded-lg bg-green-100 p-3 text-green-600 group-hover:scale-110 transition-transform dark:bg-green-900/30 dark:text-green-400">
-                    <lucide-icon name="target" size="24"></lucide-icon>
+                    <ng-icon name="heroCursorArrowRays" size="24"></ng-icon>
                 </div>
                 <div>
                     <h4 class="font-semibold text-gray-900 dark:text-white">Test yechish</h4>
@@ -137,7 +137,7 @@
 
             <button class="group flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 transition-all hover:border-blue-500 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-500 text-left">
                 <div class="rounded-lg bg-blue-100 p-3 text-blue-600 group-hover:scale-110 transition-transform dark:bg-blue-900/30 dark:text-blue-400">
-                    <lucide-icon name="library" size="24"></lucide-icon>
+                    <ng-icon name="heroBuildingLibrary" size="24"></ng-icon>
                 </div>
                 <div>
                     <h4 class="font-semibold text-gray-900 dark:text-white">Kutubxona</h4>
@@ -147,7 +147,7 @@
 
             <button class="group flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 transition-all hover:border-purple-500 hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-purple-500 text-left">
                 <div class="rounded-lg bg-purple-100 p-3 text-purple-600 group-hover:scale-110 transition-transform dark:bg-purple-900/30 dark:text-purple-400">
-                    <lucide-icon name="messages-square" size="24"></lucide-icon>
+                    <ng-icon name="heroChatBubbleLeftRight" size="24"></ng-icon>
                 </div>
                 <div>
                     <h4 class="font-semibold text-gray-900 dark:text-white">Forum</h4>

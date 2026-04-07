@@ -2,20 +2,22 @@ import { Component, forwardRef, Input, signal, computed } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SelectOption } from '../../interfaces';
-import { LucideAngularModule } from 'lucide-angular';
+import { NgIconsModule, provideIcons } from '@ng-icons/core';
+import { heroChevronDown, heroMagnifyingGlass, heroSquares2x2 } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-select',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule],
-  templateUrl: './select.component.html',
+  imports: [CommonModule, FormsModule, NgIconsModule],
   providers: [
+    provideIcons({ heroMagnifyingGlass, heroSquares2x2, heroChevronDown }),
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => SelectComponent),
       multi: true,
     },
   ],
+  templateUrl: './select.component.html',
 })
 export class SelectComponent implements ControlValueAccessor {
   @Input() label = '';

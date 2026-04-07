@@ -40,7 +40,6 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
             and (:#{#filter.lang} is null or c.lang = :#{#filter.lang})
             and (:#{#filter.name} is null or lower(c.name) like lower(concat('%', :#{#filter.name}, '%')))
             and (:#{#filter.ownerName} is null or lower(concat(coalesce(u.firstName, ''), ' ', coalesce(u.lastName, ''))) like lower(concat('%', :#{#filter.ownerName}, '%')))
-
             and (:#{#filter.duration} is null or :#{#filter.durationType} is null or
                 ((case c.durationType
                       when 'SOAT' then c.duration
@@ -55,6 +54,14 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
                       when 'OY' then :#{#filter.duration} * 24 * 30
                       when 'YIL' then :#{#filter.duration} * 24 * 365
                  end)))
+            group by
+                c.id,
+                c.name,
+                u.firstName,
+                u.lastName,
+                c.price,
+                c.imagePath,
+                c.lang
         """)
     Page<CourseResponseDto> get(Pageable pageable,
         CourseFilter filter, String lang);

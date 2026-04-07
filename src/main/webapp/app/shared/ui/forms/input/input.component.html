@@ -7,10 +7,10 @@
 
     <div class="relative group flex items-center">
         @if (icon) {
-            <lucide-icon [name]="icon" size="18"
-                         class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-500 transition-colors pointer-events-none"
-                         [class.text-red-400]="errorMessage">
-            </lucide-icon>
+            <ng-icon [name]="iconMap[icon] || icon" size="18"
+                     class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-500 transition-colors pointer-events-none"
+                     [class.text-red-400]="errorMessage">
+            </ng-icon>
         }
 
         <input
@@ -32,14 +32,14 @@
         @if (type === 'password') {
             <button type="button" (click)="showPassword.set(!showPassword())"
                     class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-green-500 transition-colors focus:outline-none">
-                <lucide-icon [name]="showPassword() ? 'eye-off' : 'eye'" size="18"></lucide-icon>
+                <ng-icon [name]="showPassword() ? 'heroEyeSlash' : 'heroEye'" size="18"></ng-icon>
             </button>
         }
     </div>
 
     @if (errorMessage) {
         <div class="flex items-center gap-1.5 text-[11px] font-bold text-red-500 ml-1 animate-in slide-in-from-top-1">
-            <lucide-icon name="alert-circle" size="12"></lucide-icon>
+            <ng-icon name="heroExclamationCircle" size="12"></ng-icon>
             {{ errorMessage }}
         </div>
     }

@@ -2,7 +2,7 @@
 
     <div page-title class="flex items-center gap-2">
         <div class="p-2 bg-green-50 dark:bg-green-900/20 rounded-lg text-green-600">
-            <lucide-icon name="book-marked" size="20"></lucide-icon>
+            <ng-icon name="heroBookmark" size="20"></ng-icon>
         </div>
         <span>Kurslar</span>
     </div>
@@ -11,12 +11,12 @@
         <button (click)="loadCourses()"
                 class="p-2.5 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-all"
                 [class.animate-spin]="isLoading()">
-            <lucide-icon name="refresh-cw" size="18"></lucide-icon>
+            <ng-icon name="heroArrowPath" size="18"></ng-icon>
         </button>
 
-        <button routerLink="create"
+        <button *ngIf="authService.isAdmin()" routerLink="create"
                 class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-green-600/20 flex items-center gap-2 active:scale-95 transition-all">
-            <lucide-icon name="plus-circle" size="18"></lucide-icon>
+            <ng-icon name="heroPlusCircle" size="18"></ng-icon>
             YANGI QO'SHISH
         </button>
     </div>
@@ -25,7 +25,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-5 bg-gray-50/50 dark:bg-gray-800/30 rounded-2xl border border-gray-100 dark:border-gray-800">
             <div class="md:col-span-2 relative">
-                <lucide-icon name="search" size="18" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></lucide-icon>
+                <ng-icon name="heroMagnifyingGlass" size="18" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></ng-icon>
                 <input type="text"
                        [(ngModel)]="filter.name"
                        (keyup.enter)="onSearch()"

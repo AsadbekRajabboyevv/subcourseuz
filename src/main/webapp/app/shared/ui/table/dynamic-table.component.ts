@@ -2,12 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, computed, inject, signal, TemplateRef } from '@angular/core';
 import { AuthService } from '../../../common/auth/auth.service';
 import { ColumnConfig, SortEvent } from '../interfaces';
-import { LucideAngularModule } from 'lucide-angular';
+import { NgIconsModule, provideIcons } from '@ng-icons/core';
+import { heroArrowDown, heroArrowUp, heroArrowsUpDown, heroCheckCircle, heroChevronLeft, heroChevronRight, heroPencil, heroTrash, heroXCircle } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-dynamic-table',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, NgIconsModule],
+  providers: [provideIcons({ heroArrowUp, heroArrowDown, heroArrowsUpDown, heroChevronLeft, heroChevronRight, heroCheckCircle, heroXCircle, heroPencil, heroTrash })],
   templateUrl: './dynamic-table.component.html',
 })
 export class DynamicTableComponent<T extends Record<string, any>> {
@@ -33,7 +35,7 @@ export class DynamicTableComponent<T extends Record<string, any>> {
 
   // Rollarga qarab ustunlarni filtrlash
   protected visibleColumns = computed(() => {
-    const role = this.authService.currentRole();
+    const role = this.authService.currentUser()?.role;
     return this.columns.filter(col => {
       if (!col.roles || col.roles.length === 0) return true;
       return role ? col.roles.includes(role) : false;

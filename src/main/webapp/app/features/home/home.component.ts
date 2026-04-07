@@ -1,11 +1,41 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {LucideAngularModule} from "lucide-angular";
+import { NgIconsModule, provideIcons } from '@ng-icons/core';
+import {
+  heroAcademicCap,
+  heroArrowRight,
+  heroBookOpen,
+  heroBuildingLibrary,
+  heroChatBubbleLeftRight,
+  heroChevronLeft,
+  heroChevronRight,
+  heroCursorArrowRays,
+  heroDocumentText,
+  heroHome,
+  heroMagnifyingGlass,
+  heroUserPlus,
+  heroUsers
+} from '@ng-icons/heroicons/outline';
 import {PageWrapperComponent} from "../../shared/ui";
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, LucideAngularModule, PageWrapperComponent],
+  imports: [CommonModule, NgIconsModule, PageWrapperComponent],
+  providers: [provideIcons({
+    heroHome,
+    heroMagnifyingGlass,
+    heroUserPlus,
+    heroBookOpen,
+    heroUsers,
+    heroAcademicCap,
+    heroDocumentText,
+    heroChevronLeft,
+    heroChevronRight,
+    heroArrowRight,
+    heroCursorArrowRays,
+    heroBuildingLibrary,
+    heroChatBubbleLeftRight
+  })],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })

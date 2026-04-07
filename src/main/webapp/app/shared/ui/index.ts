@@ -6,7 +6,6 @@ export * from './services/theme.service';
 export * from './services/notification.service';
 export * from './services/modal.service';
 export * from './services/menu.service';
-export * from './interceptors/auth.interceptor';
 
 // directives & guards
 export * from './directives/has-role.directive';

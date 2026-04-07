@@ -9,9 +9,9 @@
 
         @if (searchable) {
             <div class="relative flex items-center">
-                <lucide-icon name="search" size="16"
-                             class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-500 transition-colors pointer-events-none">
-                </lucide-icon>
+                <ng-icon name="heroMagnifyingGlass" size="16"
+                         class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-500 transition-colors pointer-events-none">
+                </ng-icon>
                 <input
                     type="text"
                     [placeholder]="placeholder"
@@ -26,9 +26,9 @@
         }
 
         <div class="relative flex items-center">
-            <lucide-icon [name]="multiple ? 'layers' : 'chevron-down-circle'" size="18"
-                         class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-500 transition-colors pointer-events-none">
-            </lucide-icon>
+            <ng-icon [name]="multiple ? 'heroSquares2x2' : 'heroChevronDown'" size="18"
+                     class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-500 transition-colors pointer-events-none">
+            </ng-icon>
 
             <select
                 [multiple]="multiple"
@@ -52,9 +52,9 @@
             </select>
 
             @if (!multiple) {
-                <lucide-icon name="chevron-down" size="16"
-                             class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none transition-transform group-focus-within:rotate-180">
-                </lucide-icon>
+                <ng-icon name="heroChevronDown" size="16"
+                         class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none transition-transform group-focus-within:rotate-180">
+                </ng-icon>
             }
         </div>
     </div>

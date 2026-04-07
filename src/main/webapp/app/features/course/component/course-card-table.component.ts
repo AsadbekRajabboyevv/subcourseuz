@@ -1,11 +1,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule } from 'lucide-angular';
+import { NgIconsModule, provideIcons } from '@ng-icons/core';
+import { heroAcademicCap, heroBookOpen, heroPencil, heroSquares2x2, heroTrash } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-course-card-table',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, NgIconsModule],
+  providers: [provideIcons({ heroBookOpen, heroPencil, heroTrash, heroAcademicCap, heroSquares2x2 })],
   templateUrl: './course-card-table.component.html'
 })
 export class CourseCardTableComponent {

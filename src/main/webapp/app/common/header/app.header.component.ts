@@ -4,12 +4,38 @@ import { RouterModule } from '@angular/router';
 import { NgOptimizedImage } from "@angular/common";
 import { AuthService } from "../auth/auth.service";
 import { ThemeSwitchComponent } from "../../shared/ui";
-import { LucideAngularModule } from 'lucide-angular';
+import { NgIconsModule, provideIcons } from '@ng-icons/core';
+import {
+  heroAcademicCap,
+  heroArrowLeftOnRectangle,
+  heroArrowRightOnRectangle,
+  heroBars3,
+  heroBookOpen,
+  heroClipboardDocumentCheck,
+  heroCog6Tooth,
+  heroNewspaper,
+  heroUser,
+  heroViewColumns,
+  heroXMark
+} from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage, ThemeSwitchComponent, RouterModule, LucideAngularModule],
+  imports: [CommonModule, NgOptimizedImage, ThemeSwitchComponent, RouterModule, NgIconsModule],
+  providers: [provideIcons({
+    heroAcademicCap,
+    heroUser,
+    heroCog6Tooth,
+    heroArrowLeftOnRectangle,
+    heroArrowRightOnRectangle,
+    heroXMark,
+    heroBars3,
+    heroBookOpen,
+    heroViewColumns,
+    heroClipboardDocumentCheck,
+    heroNewspaper
+  })],
   templateUrl: './app.header.component.html'
 })
 export class HeaderComponent {
@@ -21,7 +47,7 @@ export class HeaderComponent {
   isProfileOpen: boolean = false;
 
   get isLoggedIn() { return this.authService.isLoggedIn(); }
-  get userRole() { return this.authService.currentRole(); }
+  get userRole() { return this.authService.userRole(); }
 
   toggleProfile(): void { this.isProfileOpen = !this.isProfileOpen; }
   toggleMobileMenu(): void { this.isMenuOpen = !this.isMenuOpen; }

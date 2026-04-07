@@ -1,20 +1,22 @@
 import { Component, forwardRef, Input, signal } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule } from 'lucide-angular';
+import { NgIconsModule, provideIcons } from '@ng-icons/core';
+import { heroCalendar } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-datepicker',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule],
-  templateUrl: './datepicker.component.html',
+  imports: [CommonModule, FormsModule, NgIconsModule],
   providers: [
+    provideIcons({ heroCalendar }),
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => DatepickerComponent),
       multi: true,
     },
   ],
+  templateUrl: './datepicker.component.html',
 })
 export class DatepickerComponent implements ControlValueAccessor {
   @Input() label = '';

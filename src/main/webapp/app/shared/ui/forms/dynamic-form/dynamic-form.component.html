@@ -33,7 +33,7 @@
                                 [formControlName]="field.key"
                                 class="peer appearance-none w-6 h-6 border-2 border-gray-200 dark:border-gray-700 rounded-lg checked:bg-green-600 checked:border-green-600 transition-all cursor-pointer"
                             />
-                            <lucide-icon name="check" size="14" class="absolute left-1.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"></lucide-icon>
+                            <ng-icon name="heroCheck" size="14" class="absolute left-1.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"></ng-icon>
                         </div>
                         <span class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-green-600 transition-colors">
               {{ field.label }}
@@ -68,7 +68,7 @@
 
                 @if (getErrorMessage(field)) {
                     <div class="flex items-center gap-1.5 text-[11px] font-bold text-red-500 mt-1 ml-1 animate-in slide-in-from-top-1">
-                        <lucide-icon name="alert-circle" size="12"></lucide-icon>
+                        <ng-icon name="heroExclamationCircle" size="12"></ng-icon>
                         {{ getErrorMessage(field) }}
                     </div>
                 }
@@ -81,7 +81,7 @@
         type="submit"
         class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-2xl shadow-xl shadow-green-600/20 transition-all flex items-center justify-center gap-3 active:scale-[0.98] mt-4"
     >
-        <lucide-icon name="send" size="18"></lucide-icon>
+        <ng-icon name="heroPaperAirplane" size="18"></ng-icon>
         {{ submitLabel }}
     </button>
 

@@ -25,6 +25,7 @@ public class CourseGradeServiceImpl implements CourseGradeService {
     }
 
     @Override
+    @Transactional
     public CourseGradeResponseDto create(CourseGradeRequestDto request) {
 
         CourseGradeEntity entity = mapper.toEntity(request);
@@ -32,7 +33,9 @@ public class CourseGradeServiceImpl implements CourseGradeService {
 
         return getCourseGradeResponseDto(saved);
     }
+
     @Override
+    @Transactional
     public CourseGradeResponseDto update(Long id, CourseGradeUpdateRequestDto request) {
         var courseGrade = repository.findById(id)
             .orElseThrow(() -> ExceptionUtil.notFoundException("course_grade_not_found"));
@@ -50,6 +53,7 @@ public class CourseGradeServiceImpl implements CourseGradeService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         repository.deleteById(id);
     }

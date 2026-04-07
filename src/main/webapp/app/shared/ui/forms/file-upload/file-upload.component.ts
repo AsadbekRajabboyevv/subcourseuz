@@ -2,14 +2,16 @@ import { Component, EventEmitter, forwardRef, Input, Output, signal } from '@ang
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FileRejectionReason } from '../../interfaces';
-import {LucideAngularModule} from "lucide-angular";
+import { NgIconsModule, provideIcons } from '@ng-icons/core';
+import { heroCloudArrowUp, heroDocumentArrowUp, heroDocumentText, heroExclamationCircle, heroTrash } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-file-upload',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, NgIconsModule],
   templateUrl: './file-upload.component.html',
   providers: [
+    provideIcons({ heroDocumentArrowUp, heroCloudArrowUp, heroExclamationCircle, heroDocumentText, heroTrash }),
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => FileUploadComponent),

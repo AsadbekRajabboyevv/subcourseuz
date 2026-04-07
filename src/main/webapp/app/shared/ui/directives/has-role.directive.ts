@@ -14,7 +14,7 @@ export class HasRoleDirective {
 
   constructor() {
     effect(() => {
-      const currentRole = this.authService.currentRole();
+      const currentRole = this.authService.currentUser()?.role;
       if (currentRole && this.roles.includes(currentRole)) {
         if (this.viewContainer.length === 0) {
           this.viewContainer.createEmbeddedView(this.templateRef);

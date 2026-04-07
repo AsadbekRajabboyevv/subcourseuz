@@ -1,20 +1,22 @@
 import { Component, forwardRef, Input, signal } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule } from 'lucide-angular';
+import { NgIconsModule, provideIcons } from '@ng-icons/core';
+import { heroEnvelope, heroExclamationCircle, heroEye, heroEyeSlash, heroLockClosed, heroPhone, heroUser } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule],
-  templateUrl: './input.component.html',
+  imports: [CommonModule, FormsModule, NgIconsModule],
   providers: [
+    provideIcons({ heroUser, heroEnvelope, heroPhone, heroLockClosed, heroEye, heroEyeSlash, heroExclamationCircle }),
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => InputComponent),
       multi: true,
     },
   ],
+  templateUrl: './input.component.html',
 })
 export class InputComponent implements ControlValueAccessor {
   @Input() label = '';
@@ -27,6 +29,12 @@ export class InputComponent implements ControlValueAccessor {
   protected value = signal<unknown>('');
   protected isDisabled = signal(false);
   protected showPassword = signal(false); // Parol ko'rinishi uchun
+  protected iconMap: Record<string, string> = {
+    user: 'heroUser',
+    mail: 'heroEnvelope',
+    phone: 'heroPhone',
+    lock: 'heroLockClosed',
+  };
 
   private onChange: (v: unknown) => void = () => {};
   private onTouched: () => void = () => {};
