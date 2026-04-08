@@ -7,7 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeRequestDto;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeResponseDto;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeUpdateRequestDto;
+import uz.asadbek.subcourse.course.grade.dto.OneCourseGradeResponseDto;
 import uz.asadbek.subcourse.util.ExceptionUtil;
+import uz.asadbek.subcourse.util.JwtUtil;
 import uz.asadbek.subcourse.util.LangUtils;
 
 @Service
@@ -21,7 +23,14 @@ public class CourseGradeServiceImpl implements CourseGradeService {
     @Override
     public List<CourseGradeResponseDto> get() {
         var lang= "uz";
+        String language = JwtUtil.getLanguage();
+        System.out.println(language);
         return repository.get(lang);
+    }
+
+    @Override
+    public OneCourseGradeResponseDto get(Long id) {
+        return repository.get(id);
     }
 
     @Override

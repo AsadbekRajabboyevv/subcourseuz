@@ -92,6 +92,10 @@ public class JwtUtil {
             .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
     }
 
+    public static String getLanguage() {
+        return getCurrentUser().getLanguage();
+    }
+
     public static String generateAccessToken(CustomUserDetails userDetails) {
 
         List<String> roles = userDetails.getAuthorities().stream()

@@ -29,6 +29,11 @@ export interface CourseRequest {
   price: number;
 }
 
+export interface OneCourseGrade {
+  id: number;
+  name: Nameable;
+  description: Descriptive;
+}
 export interface CourseGrade {
   id: number;
   name: string;

@@ -25,6 +25,14 @@ export const routes: Routes = [
     title: 'Asosiy sahifa'
   },
   {
+    path: 'sciences',
+    loadComponent: ()=> import('./features/science/component/science.component').then(m => m.ScienceComponent),
+    title: 'Fanlar',
+    data: {
+      roles: ['ROLE_ADMIN', 'ROLE_TEACHER']
+    }
+  },
+  {
     path: 'course/create',
     loadComponent: ()=> import('./features/course/component/course.component').then(m => m.CourseComponent),
     title: 'Kurs yaratish',
@@ -33,7 +41,7 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'course/grade/create',
+    path: 'courses/grades',
     loadComponent: ()=> import('./features/course/grade/course-grade.component').then(m => m.CourseGradeComponent),
     title: 'Kurs darajasini yaratish',
     data: {

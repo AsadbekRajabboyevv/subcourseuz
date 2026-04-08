@@ -8,7 +8,7 @@ import {
   CourseGrade,
   CourseGradeRequest,
   CourseInfo,
-  CourseRequest
+  CourseRequest, OneCourseGrade
 } from "../model/course";
 import {environment} from "../../../../environments/environment";
 
@@ -37,10 +37,6 @@ export class CourseService extends BaseApiService {
     return this.http.post<Base<boolean>>(`${this.apiUrl}${this.path}/enroll/${id}`, {});
   }
 
-  getGrades(): Observable<Base<CourseGrade[]>> {
-    return this.http.get<Base<CourseGrade[]>>(`${this.apiUrl}${this.path}/grades`);
-  }
-
   createCourse(request: CourseRequest): Observable<Base<number>> {
     return this.post<Base<number>>(request);
   }
@@ -49,15 +45,28 @@ export class CourseService extends BaseApiService {
     return this.delete<Base<number>>(id);
   }
 
+  updateCourse(id: number, request: CourseRequest): Observable<Base<number>> {
+    return this.put<Base<number>>(id, request);
+  }
+
+
+  getGrades(): Observable<Base<CourseGrade[]>> {
+    return this.http.get<Base<CourseGrade[]>>(`${this.apiUrl}${this.path}/grades`);
+  }
+
   saveGrade(request: CourseGradeRequest): Observable<Base<CourseGrade>> {
-      return this.http.post<Base<CourseGrade>>(`${this.apiUrl}${this.path}/grades`, request);
+    return this.http.post<Base<CourseGrade>>(`${this.apiUrl}${this.path}/grades`, request);
   }
 
   updateGrade(id: number, request: CourseGradeRequest): Observable<Base<CourseGrade>> {
-    return this.http.put<Base<CourseGrade>>(`${this.apiUrl}${this.path}/grades`, request);
+    return this.http.put<Base<CourseGrade>>(`${this.apiUrl}${this.path}/grades/${id}`, request);
   }
 
-  updateCourse(id: number, request: CourseRequest): Observable<Base<number>> {
-    return this.put<Base<number>>(id, request);
+  getGradeById(id: number): Observable<Base<OneCourseGrade>> {
+    return this.http.get<Base<OneCourseGrade>>(`${this.apiUrl}${this.path}/grades/${id}`);
+  }
+
+  deleteGrade(id: number) {
+    return this.http.delete(`${this.apiUrl}${this.path}/grades/${id}`);
   }
 }

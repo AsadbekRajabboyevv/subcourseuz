@@ -1,9 +1,9 @@
 import {
-  APP_INITIALIZER,
   ApplicationConfig,
   importProvidersFrom,
   provideZoneChangeDetection
 } from '@angular/core';
+import { provideIcons } from '@ng-icons/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   provideRouter,
@@ -34,6 +34,7 @@ export const appConfig: ApplicationConfig = {
     ),
 
     provideZoneChangeDetection({ eventCoalescing: true }),
+    provideIcons({}),
 
     importProvidersFrom(
       BrowserAnimationsModule,

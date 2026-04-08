@@ -29,7 +29,7 @@ export interface Nameable {
   nameUz: string;
   nameRu: string;
   nameEn: string;
-  nameCrl: string;
+  nameCrl?: string;
 }
 
 export interface BaseFilter {
@@ -48,5 +48,5 @@ export interface Descriptive {
   descriptionUz: string;
   descriptionRu: string;
   descriptionEn: string;
-  descriptionCrl: string;
+  descriptionCrl?: string;
 }

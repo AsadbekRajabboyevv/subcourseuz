@@ -1,0 +1,115 @@
+<app-page-wrapper>
+    <div page-title class="flex items-center gap-3">
+        <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded-2xl text-green-600 shadow-sm border border-green-100 dark:border-green-800">
+            <ng-icon name="heroBeaker" size="24"></ng-icon>
+        </div>
+        <div>
+            <h1 class="text-xl font-black tracking-tight dark:text-white">Fanlar Boshqaruvi</h1>
+            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em]">O'quv dasturi fanlari</p>
+        </div>
+    </div>
+
+    <div actions class="flex items-center gap-2">
+        <button (click)="loadSciences()" [class.animate-spin]="isLoading()"
+                class="p-2.5 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-all">
+            <ng-icon name="heroArrowPath" size="20"></ng-icon>
+        </button>
+    </div>
+
+    <div content class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+        <div class="lg:col-span-7 space-y-4">
+            @if (isLoading() && sciences().length === 0) {
+                <div class="p-20 flex justify-center"><div class="w-10 h-10 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div></div>
+            }
+
+            <div class="grid grid-cols-1 gap-4">
+                @for (science of sciences(); track science.id) {
+                    <div class="bg-white dark:bg-gray-900 p-4 rounded-[2rem] border border-gray-100 dark:border-gray-800 flex items-center justify-between group hover:shadow-xl hover:scale-[1.01] transition-all duration-300">
+                        <div class="flex items-center gap-5">
+                            <div class="relative">
+                                <img [src]="science.imagePath" class="w-16 h-16 rounded-[1.5rem] object-cover shadow-inner bg-gray-50">
+                                <div class="absolute -top-2 -right-2 bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg">
+                                    #{{science.id}}
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-black text-gray-900 dark:text-white leading-tight">{{ science.name }}</h4>
+                                <p class="text-xs text-gray-400 mt-1 line-clamp-1 max-w-[250px]">{{ science.description || 'Tavsif mavjud emas' }}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2 pr-2">
+                            <button (click)="onEdit(science.id)" class="p-3 text-blue-600 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-600 hover:text-white rounded-2xl transition-all duration-300">
+                                <ng-icon name="heroPencil" size="18"></ng-icon>
+                            </button>
+                            <button (click)="onDelete(science.id)" class="p-3 text-red-600 bg-red-50 dark:bg-red-900/20 hover:bg-red-600 hover:text-white rounded-2xl transition-all duration-300">
+                                <ng-icon name="heroTrash" size="18"></ng-icon>
+                            </button>
+                        </div>
+                    </div>
+                } @empty {
+                    <div class="text-center py-20 bg-gray-50 dark:bg-gray-800/50 rounded-[3rem] border-2 border-dashed border-gray-200 dark:border-gray-700">
+                        <ng-icon name="heroBeaker" size="48" class="text-gray-300 mb-3"></ng-icon>
+                        <p class="text-gray-400 font-bold">Hozircha fanlar qo'shilmagan</p>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="lg:col-span-5">
+            <div class="bg-white dark:bg-gray-900 p-8 rounded-[3rem] border border-gray-100 dark:border-gray-800 shadow-2xl sticky top-8">
+                <div class="mb-8 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-lg font-black text-gray-900 dark:text-white">{{ isEditing() ? 'Fanni Tahrirlash' : 'Yangi Fan Qo\'shish' }}</h3>
+                        <div class="w-12 h-1.5 bg-green-500 rounded-full mt-1"></div>
+                    </div>
+                    @if (isEditing()) {
+                        <button (click)="cancelEdit()" class="group flex items-center gap-2 text-xs font-black text-red-500 hover:bg-red-50 p-2 rounded-xl transition-all">
+                            <ng-icon name="heroXCircle" size="20"></ng-icon>
+                            BEKOR QILISH
+                        </button>
+                    }
+                </div>
+
+                <div class="mb-8">
+                    <label class="text-[11px] font-black text-gray-400 uppercase ml-2 mb-3 block tracking-[0.1em]">Fan Muqovasi</label>
+                    <div class="relative h-44 w-full bg-gray-50 dark:bg-gray-800 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-[2.5rem] flex flex-col items-center justify-center overflow-hidden group transition-all hover:border-green-500">
+
+                        @if (imagePreview) {
+                            <img [src]="imagePreview" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                <ng-icon name="heroCloudArrowUp" size="32" class="text-white"></ng-icon>
+                            </div>
+                        } @else {
+                            <div class="flex flex-col items-center">
+                                <div class="p-4 bg-white dark:bg-gray-900 rounded-2xl shadow-sm mb-3">
+                                    <ng-icon name="heroPhoto" size="30" class="text-gray-300 group-hover:text-green-500 transition-colors"></ng-icon>
+                                </div>
+                                <span class="text-[10px] font-black text-gray-400 tracking-widest">RASM YUKLASH</span>
+                            </div>
+                        }
+                        <input type="file" (change)="onFileSelected($event)" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+                    </div>
+                </div>
+
+                <app-dynamic-form
+                    #scienceForm
+                    [fields]="scienceFields"
+                    [submitLabel]="isEditing() ? 'O\'ZGARISHNI SAQLASH' : 'FANNI YARATISH'"
+                    (formSubmit)="onHandleSubmit($event)">
+                </app-dynamic-form>
+
+                @if (isSubmitting()) {
+                    <div class="absolute inset-0 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm flex items-center justify-center rounded-[3rem] z-50">
+                        <div class="flex flex-col items-center gap-3">
+                            <div class="w-12 h-12 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+                            <span class="text-xs font-black text-green-600 uppercase tracking-widest">Saqlanmoqda...</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+</app-page-wrapper>

@@ -15,6 +15,7 @@ import uz.asadbek.subcourse.course.grade.CourseGradeService;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeRequestDto;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeResponseDto;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeUpdateRequestDto;
+import uz.asadbek.subcourse.course.grade.dto.OneCourseGradeResponseDto;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,6 +44,11 @@ public class CourseController implements CourseApi {
     public BaseResponseDto<?> deleteCourseGrade(Long id) {
         courseGradeService.delete(id);
         return BaseResponseDto.ok("Successfully deleted");
+    }
+
+    @Override
+    public BaseResponseDto<OneCourseGradeResponseDto> getCourseGrade(Long id) {
+        return BaseResponseDto.ok(courseGradeService.get(id));
     }
 
     @Override
