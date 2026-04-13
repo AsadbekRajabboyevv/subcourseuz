@@ -1,12 +1,15 @@
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-footer',
-  templateUrl: './app.footer.component.html'
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl:  './app.footer.component.html'
 })
 export class FooterComponent {
 
-  @Input() appTitle: string = 'My App';
+  @Input() appTitle: string = 'Subcourse';
 
   year: number = new Date().getFullYear();
 
@@ -17,9 +20,9 @@ export class FooterComponent {
   payments = [1, 2, 3];
 
   socials = [
-    { icon: 'f', link: '#' },        // facebook
-    { icon: 'ig', link: '#' },       // instagram
-    { icon: 'mail', link: '#' },
-    { icon: 'in', link: '#' }        // linkedin
+    { icon: 'heroPaperAirplane', link: '#' },
+    { icon: 'heroChatBubbleLeftEllipsis', link: '#' },
+    { icon: 'heroEnvelope', link: '#' },
+    { icon: 'heroGlobeAlt', link: '#' }
   ];
 }

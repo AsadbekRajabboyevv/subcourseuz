@@ -1,43 +1,49 @@
 package uz.asadbek.subcourse.test;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import uz.asadbek.subcourse.filestorage.FileStorageService;
 import uz.asadbek.subcourse.filestorage.dto.FileUploadOptions;
-import uz.asadbek.subcourse.test.dto.SubmitAnswerRequestDto;
 import uz.asadbek.subcourse.test.dto.TestRequestDto;
 import uz.asadbek.subcourse.test.dto.TestResponseDto;
-import uz.asadbek.subcourse.test.dto.TestResultDto;
-import uz.asadbek.subcourse.test.dto.TestReviewDto;
 import uz.asadbek.subcourse.test.dto.TestUpdateRequestDto;
 import uz.asadbek.subcourse.test.filter.TestFilter;
 import uz.asadbek.subcourse.test.option.TestOptionEntity;
 import uz.asadbek.subcourse.test.option.TestOptionMapper;
 import uz.asadbek.subcourse.test.option.TestOptionRepository;
 import uz.asadbek.subcourse.test.option.dto.TestOptionRequestDto;
+import uz.asadbek.subcourse.test.option.dto.TestOptionResponseDto;
 import uz.asadbek.subcourse.test.question.TestQuestionEntity;
 import uz.asadbek.subcourse.test.question.TestQuestionMapper;
 import uz.asadbek.subcourse.test.question.TestQuestionRepository;
 import uz.asadbek.subcourse.test.question.dto.TestQuestionRequestDto;
-import uz.asadbek.subcourse.test.validator.TestValidator;
+import uz.asadbek.subcourse.test.question.dto.TestQuestionResponseDto;
+import uz.asadbek.subcourse.test.usertest.UserTestEntity;
+import uz.asadbek.subcourse.util.JwtUtil;
+import uz.asadbek.subcourse.util.Validator;
 import uz.asadbek.subcourse.util.ExceptionUtil;
+import uz.asadbek.subcourse.util.embedded.UserPurchaseId;
 
 @Slf4j
 @Service
-@Transactional
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TestServiceImpl implements TestService {
 
     private final TestRepository repository;
-    private final TestValidator testValidator;
+    private final Validator validator;
     private final FileStorageService fileStorageService;
     private final TestOptionRepository testOptionRepository;
     private final TestQuestionRepository testQuestionRepository;
@@ -45,36 +51,44 @@ public class TestServiceImpl implements TestService {
     private final TestQuestionMapper testQuestionMapper;
     private final TestOptionMapper testOptionMapper;
 
-    public TestServiceImpl(TestRepository repository, TestValidator testValidator,
-        FileStorageService fileStorageService, TestOptionRepository testOptionRepository,
-        TestQuestionRepository testQuestionRepository, TestMapper testMapper,
-        TestQuestionMapper testQuestionMapper, TestOptionMapper testOptionMapper) {
-        this.repository = repository;
-        this.testValidator = testValidator;
-        this.fileStorageService = fileStorageService;
-        this.testOptionRepository = testOptionRepository;
-        this.testQuestionRepository = testQuestionRepository;
-        this.testMapper = testMapper;
-        this.testQuestionMapper = testQuestionMapper;
-        this.testOptionMapper = testOptionMapper;
-    }
-
     @Override
     public Long count() {
         return repository.countAllByDeletedAtIsNullAndIsPublishedIsTrue();
     }
 
     @Override
+    public Page<TestResponseDto> get(TestFilter filter, Pageable pageable) {
+        return repository.get(filter, pageable);
+    }
+
+    @Override
+    public TestResponseDto get(Long id) {
+        var test = repository.get(id);
+        var questions = testQuestionRepository.getByTestId(id);
+        if (questions.isEmpty()) {
+            test.setQuestions(List.of());
+            return test;
+        }
+        var questionIds = questions.stream().map(TestQuestionResponseDto::getId).toList();
+        var options = testOptionRepository.getByQuestionIds(questionIds);
+        var optionMap = options.stream().collect(Collectors.groupingBy(TestOptionResponseDto::getQuestionId));
+        questions.forEach(question ->
+            question.setOptions(optionMap.getOrDefault(question.getId(), List.of()))
+        );
+        test.setQuestions(questions);
+
+        return test;
+    }
+    @Override
     @Transactional
-    public Long createTest(TestRequestDto request) {
+    public Long createTest(TestRequestDto request, MultipartFile image) {
 
-        testValidator.validate(request);
+        validator.validateTest(request);
 
-        // 1. Test image
         String testImage = null;
-        if (request.getImage() != null && !request.getImage().isEmpty()) {
+        if (image != null && !image.isEmpty()) {
             testImage = fileStorageService
-                .upload(request.getImage(), new FileUploadOptions().setTestImages())
+                .upload(image, new FileUploadOptions().setTestImages())
                 .getFileKey();
         }
 
@@ -82,7 +96,6 @@ public class TestServiceImpl implements TestService {
         test.setImagePath(testImage);
         repository.save(test);
 
-        // 3. Questions
         for (TestQuestionRequestDto questionDto : request.getQuestions()) {
 
             String questionImage = null;
@@ -132,26 +145,6 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public Page<TestResponseDto> getAllTest(TestFilter filter, Pageable pageable) {
-        return repository.get(filter, pageable);
-    }
-
-    @Override
-    public TestResponseDto get(Long id) {
-        return repository.get(id);
-    }
-
-    @Override
-    public Long unpublishTest(Long id) {
-        int updated = repository.unpublishTest(id);
-        if (updated == 0) {
-            throw ExceptionUtil.notFoundException("test_not_found");
-        }
-
-        return id;
-    }
-
-    @Override
     @Transactional
     public Long updateTest(Long id, TestUpdateRequestDto request) {
 
@@ -168,7 +161,7 @@ public class TestServiceImpl implements TestService {
             test.setImagePath(uploaded.getFileKey());
         }
 
-        testValidator.validateForUpdate(test);
+        validator.validateTestForUpdate(test);
 
         if (request.getQuestions() != null) {
             var existingQuestions = testQuestionRepository.findByTestId(test.getId());
@@ -267,22 +260,33 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public Long getPrice(Long testId) {
-        return 0L;
+    @Transactional
+    public void enroll(Long testId) {
+        var userId =  JwtUtil.getCurrentUser().getId();
+        validator.validateEnroll(userId, testId, repository::existsById, "test_not_found");
+        var uc = new UserTestEntity();
+        uc.setId(new UserPurchaseId(userId, testId, LocalDateTime.now()));
     }
 
     @Override
-    public void enroll(Long userId, Long testId) {
-
+    @Transactional
+    public Long publish(Long id) {
+        int updated = repository.publish(id);
+        if (updated == 0) {
+            throw ExceptionUtil.notFoundException("test_not_found");
+        }
+        return id;
     }
 
     @Override
-    public void unenroll(Long userId, Long testId) {
+    @Transactional
+    public Long unpublishTest(Long id) {
+        int updated = repository.unpublish(id);
+        if (updated == 0) {
+            throw ExceptionUtil.notFoundException("test_not_found");
+        }
 
+        return id;
     }
 
-    private TestEntity findById(Long id) {
-        return repository.findById(id)
-            .orElseThrow(() -> ExceptionUtil.notFoundException("test_not_found"));
-    }
 }

@@ -1,0 +1,48 @@
+<div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="w-full max-w-md overflow-hidden rounded-[2.5rem] bg-white dark:bg-gray-900 shadow-2xl animate-in zoom-in duration-300">
+
+        <div class="p-8 pb-0">
+            <h2 class="text-2xl font-black uppercase tracking-tight text-gray-900 dark:text-white">
+                {{ type === 'COURSE' ? 'Kursni sotib olish' : 'Testga kirish' }}
+            </h2>
+            <p class="text-[10px] font-bold text-gray-400 uppercase mt-1">Tranzaksiyani tasdiqlang</p>
+        </div>
+
+        <div class="p-8 space-y-6">
+            <div class="flex items-center gap-4 rounded-3xl bg-gray-50 p-4 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800">
+                <div class="h-14 w-14 overflow-hidden rounded-2xl bg-white">
+                    <img [src]="itemData?.imagePath || 'assets/placeholder.png'" class="h-full w-full object-cover">
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-sm font-black text-gray-900 dark:text-white">{{ itemData?.name }}</h4>
+                    <span class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-600 font-bold uppercase">
+                        {{ type }}
+                    </span>
+                </div>
+            </div>
+
+            <app-input label="Promo kod" placeholder="Ixtiyoriy" [(ngModel)]="couponCode"></app-input>
+
+            <div class="rounded-3xl border-2 border-dashed border-gray-100 p-5 dark:border-gray-800">
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] font-black uppercase text-gray-400">To'lov miqdori:</span>
+                    <span class="text-2xl font-black text-gray-900 dark:text-emerald-400">
+                        {{ itemData?.price | number }} <small class="text-xs">UZS</small>
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button (click)="close.emit()" class="flex-1 rounded-2xl py-4 text-[10px] font-black uppercase text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">
+                    Bekor qilish
+                </button>
+                <button (click)="confirmPurchase()"
+                        [disabled]="isLoading()"
+                        class="flex-[2] flex items-center justify-center gap-2 rounded-2xl bg-gray-900 py-4 text-[10px] font-black uppercase text-white hover:bg-emerald-600 dark:bg-white dark:text-gray-900 dark:hover:bg-emerald-500 transition-all active:scale-95 shadow-xl">
+                    <i *ngIf="isLoading()" class="fa-solid fa-spinner animate-spin"></i>
+                    <span>To'lovni amalga oshirish</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

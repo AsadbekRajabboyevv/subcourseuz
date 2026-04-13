@@ -8,9 +8,9 @@ import uz.asadbek.subcourse.course.dto.DurationType;
 public class CourseFilter extends BaseFilter {
 
     private String name;
+    private String search;
     private Long gradeId;
     private Long scienceId;
-    private String ownerName;
     private Long priceTo;
     private Long priceFrom;
     private String lang;

@@ -7,7 +7,6 @@ import org.mapstruct.MappingConstants.ComponentModel;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import uz.asadbek.subcourse.test.dto.TestRequestDto;
-import uz.asadbek.subcourse.test.dto.TestResponseDto;
 import uz.asadbek.subcourse.test.dto.TestUpdateRequestDto;
 
 @Mapper(componentModel = ComponentModel.SPRING)
@@ -22,8 +21,5 @@ public interface TestMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void update(@MappingTarget TestEntity entity, TestUpdateRequestDto dto);
-
-    @Mapping(target = "imageUrl", source = "imagePath")
-    TestResponseDto toResponse(TestEntity entity);
 
 }

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="uz" target-language="ru" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="HOME" datatype="html">
+        <source>Bosh sahifa</source>
+        <target>Главная</target>
+      </trans-unit>
+      <trans-unit id="LOGIN" datatype="html">
+        <source>Kirish</source>
+        <target>Вход</target>
+      </trans-unit>
+      <trans-unit id="LOGOUT" datatype="html">
+        <source>Chiqish</source>
+        <target>Выход</target>
+      </trans-unit>
+      <trans-unit id="COURSES" datatype="html">
+        <source>Kurslar</source>
+        <target>Курсы</target>
+      </trans-unit>
+      <trans-unit id="PROFILE" datatype="html">
+        <source>Profil</source>
+        <target>Профиль</target>
+      </trans-unit>
+      <trans-unit id="SETTINGS" datatype="html">
+        <source>Sozlamalar</source>
+        <target>Настройки</target>
+      </trans-unit>
+      <trans-unit id="LANGUAGE" datatype="html">
+        <source>Til</source>
+        <target>Язык</target>
+      </trans-unit>
+      <trans-unit id="THEME" datatype="html">
+        <source>Mavzu</source>
+        <target>Тема</target>
+      </trans-unit>
+      <trans-unit id="MY_COURSES" datatype="html">
+        <source>Mening kurslarim</source>
+        <target>Мои курсы</target>
+      </trans-unit>
+      <trans-unit id="ONLINE_TEST" datatype="html">
+        <source>Online Test</source>
+        <target>Онлайн Тест</target>
+      </trans-unit>
+      <trans-unit id="BLOG" datatype="html">
+        <source>Blog</source>
+        <target>Блог</target>
+      </trans-unit>
+      <trans-unit id="HELP" datatype="html">
+        <source>Yordam</source>
+        <target>Помощь</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.CANCEL" datatype="html">
+        <source>Bekor qilish</source>
+        <target>Отмена</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.CONFIRM" datatype="html">
+        <source>Tasdiqlash</source>
+        <target>Подтвердить</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.LOADING" datatype="html">
+        <source>Yuklanmoqda...</source>
+        <target>Загрузка...</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.NO_DATA" datatype="html">
+        <source>Ma'lumotlar topilmadi</source>
+        <target>Данные не найдены</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.NO_DATA_DESC" datatype="html">
+        <source>Filtrlarni o'zgartirib ko'ring yoki keyinroq qayta urinib ko'ring.</source>
+        <target>Попробуйте изменить фильтры или повторите попытку позже.</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.PREV" datatype="html">
+        <source>Oldingi</source>
+        <target>Предыдущий</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.NEXT" datatype="html">
+        <source>Keyingi</source>
+        <target>Следующий</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.RECORDS" datatype="html">
+        <source>ta yozuv</source>
+        <target>записей</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.PAGE" datatype="html">
+        <source>Sahifa</source>
+        <target>Страница</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.SEARCH" datatype="html">
+        <source>Qidirish...</source>
+        <target>Поиск...</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.SELECT" datatype="html">
+        <source>Tanlang</source>
+        <target>Выберите</target>
+      </trans-unit>
+      <trans-unit id="UI.FILTER.SEARCH" datatype="html">
+        <source>Qidiruv</source>
+        <target>Поиск</target>
+      </trans-unit>
+      <trans-unit id="UI.FILTER.RESET" datatype="html">
+        <source>Tozalash</source>
+        <target>Очистить</target>
+      </trans-unit>
+      <trans-unit id="UI.FILE_UPLOAD.DROP_ZONE" datatype="html">
+        <source>Faylni bu yerga tashlang yoki</source>
+        <target>Перетащите файл сюда или</target>
+      </trans-unit>
+      <trans-unit id="UI.FILE_UPLOAD.SELECT" datatype="html">
+        <source>tanlang</source>
+        <target>выберите</target>
+      </trans-unit>
+      <trans-unit id="UI.FILE_UPLOAD.MAX_SIZE" datatype="html">
+        <source>Maksimal hajm: {size}MB</source>
+        <target>Максимальный размер: {size}МБ</target>
+      </trans-unit>
+      <trans-unit id="UI.FILE_UPLOAD.REMOVE" datatype="html">
+        <source>Faylni olib tashlash</source>
+        <target>Удалить файл</target>
+      </trans-unit>
+      <trans-unit id="UI.FILE_UPLOAD.ERROR_SIZE" datatype="html">
+        <source>Fayl hajmi {size}MB dan oshmasligi kerak</source>
+        <target>Размер файла не должен превышать {size}МБ</target>
+      </trans-unit>
+      <trans-unit id="UI.FILE_UPLOAD.ERROR_TYPE" datatype="html">
+        <source>Fayl turi qabul qilinmaydi</source>
+        <target>Тип файла не поддерживается</target>
+      </trans-unit>
+      <trans-unit id="USEFUL_LINKS" datatype="html">
+        <source>Foydali havolalar</source>
+        <target>Полезные ссылки</target>
+      </trans-unit>
+      <trans-unit id="ABOUT_US" datatype="html">
+        <source>Biz haqimizda</source>
+        <target>О нас</target>
+      </trans-unit>
+      <trans-unit id="FAQ" datatype="html">
+        <source>FAQ</source>
+        <target>FAQ</target>
+      </trans-unit>
+      <trans-unit id="SUBSCRIBE_NEWS" datatype="html">
+        <source>Yangiliklarimizga obuna bo'ling</source>
+        <target>Подпишитесь на наши новости</target>
+      </trans-unit>
+      <trans-unit id="PARTNERSHIP" datatype="html">
+        <source>Hamkorlik uchun</source>
+        <target>Для сотрудничества</target>
+      </trans-unit>
+      <trans-unit id="PRIVACY_POLICY" datatype="html">
+        <source>Maxfiylik siyosati</source>
+        <target>Политика конфиденциальности</target>
+      </trans-unit>
+      <trans-unit id="PAYMENT_TYPES" datatype="html">
+        <source>To'lov turlari</source>
+        <target>Типы оплаты</target>
+      </trans-unit>
+      <trans-unit id="SOCIAL_NETWORKS" datatype="html">
+        <source>Ijtimoiy tarmoqlarimiz bilan bog'laning</source>
+        <target>Свяжитесь с нами в социальных сетях</target>
+      </trans-unit>
+      <trans-unit id="FOOTER_ABOUT_DESC" datatype="html">
+        <source>Sizni, har bir o'quvchimizni bilim olishingizda ko'maklashishdan mamnunmiz.</source>
+        <target>Мы рады помочь каждому нашему ученику в получении знаний.</target>
+      </trans-unit>
+      <trans-unit id="ADDRESS" datatype="html">
+        <source>Manzil</source>
+        <target>Адрес</target>
+      </trans-unit>
+      <trans-unit id="ALL_RIGHTS_RESERVED" datatype="html">
+        <source>Barcha huquqlar himoyalangan</source>
+        <target>Все права защищены</target>
+      </trans-unit>
+      <trans-unit id="LOGIN_TITLE" datatype="html">
+        <source>Tizimga kirish</source>
+        <target>Вход в систему</target>
+      </trans-unit>
+      <trans-unit id="EMAIL_LABEL" datatype="html">
+        <source>Email manzil</source>
+        <target>Электронная почта</target>
+      </trans-unit>
+      <trans-unit id="PASSWORD_LABEL" datatype="html">
+        <source>Parol</source>
+        <target>Пароль</target>
+      </trans-unit>
+      <trans-unit id="FORGOT_PASSWORD" datatype="html">
+        <source>Parolni unutdingizmi?</source>
+        <target>Забыли пароль?</target>
+      </trans-unit>
+      <trans-unit id="LOGIN_ERROR" datatype="html">
+        <source>Email yoki parol noto'g'ri!</source>
+        <target>Неверный email или пароль!</target>
+      </trans-unit>
+      <trans-unit id="LOGGING_IN" datatype="html">
+        <source>Kirilmoqda...</source>
+        <target>Вход...</target>
+      </trans-unit>
+      <trans-unit id="OR" datatype="html">
+        <source>yoki</source>
+        <target>или</target>
+      </trans-unit>
+      <trans-unit id="NO_ACCOUNT" datatype="html">
+        <source>Akkauntingiz yo'qmi?</source>
+        <target>Нет аккаунта?</target>
+      </trans-unit>
+      <trans-unit id="REGISTER_NOW" datatype="html">
+        <source>Ro'yxatdan o'ting</source>
+        <target>Зарегистрируйтесь</target>
+      </trans-unit>
+      <trans-unit id="REGISTER_TITLE" datatype="html">
+        <source>Ro'yxatdan o'tish</source>
+        <target>Регистрация</target>
+      </trans-unit>
+      <trans-unit id="FIRST_NAME" datatype="html">
+        <source>Ism</source>
+        <target>Имя</target>
+      </trans-unit>
+      <trans-unit id="LAST_NAME" datatype="html">
+        <source>Familiya</source>
+        <target>Фамилия</target>
+      </trans-unit>
+      <trans-unit id="PHONE" datatype="html">
+        <source>Telefon</source>
+        <target>Телефон</target>
+      </trans-unit>
+      <trans-unit id="BIRTH_DATE" datatype="html">
+        <source>Tug'ilgan sana</source>
+        <target>Дата рождения</target>
+      </trans-unit>
+      <trans-unit id="CONFIRM_PASSWORD_LABEL" datatype="html">
+        <source>Parolni tasdiqlang</source>
+        <target>Подтвердите пароль</target>
+      </trans-unit>
+      <trans-unit id="PASSWORD_MISMATCH" datatype="html">
+        <source>Parollar mos kelmaydi</source>
+        <target>Пароли не совпадают</target>
+      </trans-unit>
+      <trans-unit id="REGISTER_ERROR" datatype="html">
+        <source>Xatolik yuz berdi. Qayta urinib ko'ring.</source>
+        <target>Произошла ошибка. Попробуйте снова.</target>
+      </trans-unit>
+      <trans-unit id="REGISTER_SUCCESS" datatype="html">
+        <source>Emailingizga tasdiqlash xati yuborildi!</source>
+        <target>На ваш email отправлено письмо с подтверждением!</target>
+      </trans-unit>
+      <trans-unit id="SENDING" datatype="html">
+        <source>Yuborilmoqda...</source>
+        <target>Отправка...</target>
+      </trans-unit>
+      <trans-unit id="ALREADY_HAVE_ACCOUNT" datatype="html">
+        <source>Akkauntingiz bormi?</source>
+        <target>Уже есть аккаунт?</target>
+      </trans-unit>
+      <trans-unit id="FIRST_NAME_PLACEHOLDER" datatype="html">
+        <source>Asadbek</source>
+        <target>Асадбек</target>
+      </trans-unit>
+      <trans-unit id="LAST_NAME_PLACEHOLDER" datatype="html">
+        <source>Rajabboyev</source>
+        <target>Ражаббоев</target>
+      </trans-unit>
+      <trans-unit id="PASSWORD_HINT" datatype="html">
+        <source>Kamida 8 ta belgi</source>
+        <target>Минимум 8 символов</target>
+      </trans-unit>
+      <trans-unit id="CONFIRM_PASSWORD_PLACEHOLDER" datatype="html">
+        <source>Parolni qayta kiriting</source>
+        <target>Введите пароль еще раз</target>
+      </trans-unit>
+      <trans-unit id="EMAIL_PLACEHOLDER" datatype="html">
+        <source>email@example.com</source>
+        <target>email@example.com</target>
+      </trans-unit>
+      <trans-unit id="ERROR_MESSAGE" datatype="html">
+        <source>Siz izlayotgan sahifa hozirda mavjud emas.</source>
+        <target>Страница, которую вы ищете, в данный момент недоступна.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

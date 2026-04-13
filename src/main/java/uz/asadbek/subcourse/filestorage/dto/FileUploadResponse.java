@@ -15,4 +15,5 @@ public class FileUploadResponse {
     private String fileName;    // stored name
     private Long size;          // bytes
     private String contentType; // MIME
+    private String url;         // public URL
 }

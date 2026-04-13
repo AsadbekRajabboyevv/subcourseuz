@@ -10,6 +10,4 @@ public class PaymentRequestDto {
     private Long testId;
     private Long amount;
     private String couponCode;
-
-
 }

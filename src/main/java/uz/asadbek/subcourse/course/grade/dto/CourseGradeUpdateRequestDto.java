@@ -6,6 +6,6 @@ import uz.asadbek.subcourse.util.dto.NameDto;
 
 @Data
 public class CourseGradeUpdateRequestDto {
-    private NameDto name;
+    private NameDtoOptional name;
     private DescriptionDto description;
 }

@@ -1,34 +1,33 @@
-import { Component, Input } from '@angular/core';
-import {NgOptimizedImage} from "@angular/common";
+import { Component, Input, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { NgOptimizedImage } from "@angular/common";
+import { AuthService } from "../auth/auth.service";
+import {ThemeSwitchComponent} from "../../shared/ui/menu/theme-switch.component";
 
 @Component({
   selector: 'app-header',
-  imports: [
-    NgOptimizedImage
-  ],
+  standalone: true,
+  imports: [CommonModule, NgOptimizedImage, RouterModule, ThemeSwitchComponent],
+
   templateUrl: './app.header.component.html'
 })
 export class HeaderComponent {
+  protected readonly authService = inject(AuthService);
 
-  @Input() isAuthenticated: boolean = true;
-  @Input() role: string = '';
-  @Input() appTitle: string = 'My App';
+  @Input() appTitle: string = 'Subcourse';
 
-  isOpen: boolean = false;
+  isMenuOpen: boolean = false;
+  isProfileOpen: boolean = false;
 
-  toggleDropdown() {
-    this.isOpen = !this.isOpen;
-  }
+  get isLoggedIn() { return this.authService.isLoggedIn(); }
+  get userRole() { return this.authService.userRole(); }
 
-  logout() {
-    console.log('Logout clicked');
-  }
+  toggleProfile(): void { this.isProfileOpen = !this.isProfileOpen; }
+  toggleMobileMenu(): void { this.isMenuOpen = !this.isMenuOpen; }
 
-  openLoginModal() {
-    console.log('Open login modal');
-  }
-
-  toggleMobileMenu() {
-    console.log('Mobile menu');
+  logout(): void {
+    this.authService.logout();
+    this.isProfileOpen = false;
   }
 }

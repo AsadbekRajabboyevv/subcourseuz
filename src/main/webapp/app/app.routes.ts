@@ -1,22 +1,50 @@
-import { Routes } from '@angular/router';
-import { HomeComponent } from './features/home/home.component';
-import { ErrorComponent } from './features/error/error.component';
-
-
+import {Routes} from '@angular/router';
+import {HomeComponent} from './features/home/home.component';
+import {AuthLayoutComponent} from "./common/auth/auth.layout.component";
 export const routes: Routes = [
   {
-    path: '',
-    component: HomeComponent,
-    title: $localize`:@@home.index.headline:Welcome to your new app!`
+    path: 'auth',
+    component: AuthLayoutComponent,
+    children: [
+      {
+        path: 'login',
+        loadComponent: ()=> import('./common/auth/component/login.component').then(m => m.LoginComponent),
+        title: 'Kirish'
+      },
+      {
+        path: 'register',
+        loadComponent: ()=> import('./common/auth/component/register.component').then(m => m.RegisterComponent),
+        title: 'Registratsiya'
+      },
+    ]
   },
   {
-    path: 'error',
-    component: ErrorComponent,
-    title: $localize`:@@error.page.headline:Error`
+    path: 'courses-list',
+    loadComponent: () => import('./features/course/list/course-list.component').then(m => m.CourseListComponent),
+    title: 'Kurslar ro\'yxati'
+  },
+  // {
+  //   path: 'course-update/:courseName',
+  //   loadComponent: () => import('./features/course/list/course-list.component').then(m => m.CourseListComponent),
+  //   title: 'Kursni tahrirlash'
+  // },
+  // {
+  //   path: 'course-view/:courseName',
+  //   loadComponent: () => import('./features/course/list/course-list.component').then(m => m.CourseListComponent),
+  //   title: 'Kursni ko\'rish'
+  // },
+  {
+    path: 'home',
+    component: HomeComponent,
+    title: 'Asosiy sahifa'
+  },
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full'
   },
   {
     path: '**',
-    component: ErrorComponent,
-    title: $localize`:@@notFound.headline:Page not found`
+    loadComponent: () => import('./features/error/error.component').then(m => m.ErrorPageComponent)
   }
 ];

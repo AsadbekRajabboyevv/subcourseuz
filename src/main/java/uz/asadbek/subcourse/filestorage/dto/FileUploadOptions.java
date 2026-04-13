@@ -37,6 +37,12 @@ public class FileUploadOptions {
         return this;
     }
 
+    public FileUploadOptions setScienceImages() {
+        this.folder = "science-images/";
+        this.publicAccess = true;
+        return this;
+    }
+
     public FileUploadOptions setLessonImages() {
         this.folder = "lesson-images/";
         this.publicAccess = true;

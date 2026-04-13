@@ -23,7 +23,7 @@ import uz.asadbek.base.entity.BaseEntity;
 @Entity
 @Table(name = "files", indexes = {
     @Index(name = "idx_file_key", columnList = "file_key", unique = true),
-    @Index(name = "idx_file_user", columnList = "user_id")
+    @Index(name = "idx_file_user", columnList = "created_by")
 })
 public class FileStorageEntity extends BaseEntity {
 

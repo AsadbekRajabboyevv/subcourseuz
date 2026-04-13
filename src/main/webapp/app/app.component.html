@@ -1,32 +1,11 @@
 <div class="flex flex-col min-h-screen">
+    <app-header *ngIf="!isAuthPage"></app-header>
 
-    <app-header></app-header>
-
-    <main class="flex-1 my-12">
-        <div class="container mx-auto px-4 md:px-6">
-
-            @if (msgSuccess) {
-                <p class="bg-green-200 border-green-800 text-green-800 border rounded p-4 mb-6">
-                    {{ msgSuccess }}
-                </p>
-            }
-
-            @if (msgInfo) {
-                <p class="bg-blue-200 border-blue-800 text-blue-800 border rounded p-4 mb-6">
-                    {{ msgInfo }}
-                </p>
-            }
-
-            @if (msgError) {
-                <p class="bg-red-200 border-red-800 text-red-800 border rounded p-4 mb-6">
-                    {{ msgError }}
-                </p>
-            }
-
+    <main class="flex-1 pt-[5px]" [ngClass]="{'my-3': !isAuthPage}">
+        <div [class.mx-auto]="!isAuthPage" [class.px-4]="!isAuthPage" [class.md:px-6]="!isAuthPage">
             <router-outlet></router-outlet>
         </div>
     </main>
 
-    <app-footer></app-footer>
-
+    <app-footer *ngIf="!isAuthPage"></app-footer>
 </div>

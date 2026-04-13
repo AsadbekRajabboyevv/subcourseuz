@@ -15,8 +15,9 @@ import uz.asadbek.subcourse.balance.dto.CurrencyEnum;
 public class PaymentResponseDto {
 
     private String exId;
-    private String status;
+    private PaymentStatus status;
     private String transactionId;
     private Long amount;
     private CurrencyEnum currency;
+    private PaymentType type;
 }

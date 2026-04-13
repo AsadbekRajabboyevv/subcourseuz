@@ -12,6 +12,8 @@ import uz.asadbek.subcourse.course.filter.CourseFilter;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeResponseDto;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
 import uz.asadbek.subcourse.publicui.dto.HomePageResponseDto;
+import uz.asadbek.subcourse.test.dto.TestResponseDto;
+import uz.asadbek.subcourse.test.filter.TestFilter;
 
 @RequestMapping("/v1/api/public")
 public interface PublicApi {
@@ -20,7 +22,7 @@ public interface PublicApi {
     BaseResponseDto<HomePageResponseDto> getHomePage();
 
     @GetMapping("/courses")
-    BaseResponseDto<Page<CourseGradeResponseDto>> getCourses(CourseFilter filter, Pageable pageable);
+    BaseResponseDto<Page<CourseResponseDto>> getCourses(CourseFilter filter, Pageable pageable);
 
     @GetMapping("/courses/{id}")
     BaseResponseDto<CourseResponseDto> getCourse(@PathVariable Long id);
@@ -31,4 +33,9 @@ public interface PublicApi {
     @GetMapping("/courses/{id}/lessons")
     BaseResponseDto<List<CourseLessonResponseDto>> getCourseLessons(@PathVariable Long id);
 
+    @GetMapping("/tests")
+    BaseResponseDto<List<TestResponseDto>> getTests(TestFilter filter, Pageable pageable);
+
+    @GetMapping("/duration-types")
+    BaseResponseDto<?> getDurationTypes();
 }

@@ -22,7 +22,7 @@ spring:
   security:
     custom:
       jwt-secret: ${JWT_SECRET_KEY}
-      jwt-expiration-in-ms: 300000
+      jwt-expiration-in-ms: 3000000
     user:
       name: ${SECURITY_USER_NAME}
       password: ${SECURITY_USER_PASSWORD}
@@ -35,6 +35,12 @@ spring:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+
 error:
   handling:
     http-status-in-json-response: true
@@ -46,3 +52,5 @@ error:
       UserEntityUsernameUnique: USER_ENTITY_USERNAME_UNIQUE
 springdoc:
   pathsToMatch: /v1/api/**
+app:
+  file-server-url: http://localhost:8080/v1/api/files/
