@@ -1,13 +1,13 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
-import { AuthResponse, LoginRequest, RegisterRequest, UserResponse } from "./auth.model";
-import { environment } from "../../../environments/environment";
+import {Injectable, computed, inject, signal} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {Observable, throwError} from 'rxjs';
+import {catchError, map, tap} from 'rxjs/operators';
+import {AuthResponse, LoginRequest, RegisterRequest, UserResponse} from "./auth.model";
+import {environment} from "../../../environments/environment";
 import {Base} from "../model/base";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class AuthService {
 
   private readonly PATH = `${environment.apiPath}/v1/api/auth`;

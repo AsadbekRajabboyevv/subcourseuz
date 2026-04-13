@@ -13,6 +13,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -26,11 +27,13 @@ import uz.asadbek.subcourse.util.ExceptionUtil;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class FileStorageServiceImpl implements FileStorageService {
 
     private final FileStorageRepository repository;
     private final FileStorageMapper mapper;
+    @Value("${app.file-server-url}")
+    private String fileServerUrl;
 
     private final Path root = Paths.get("uploads").toAbsolutePath().normalize();
 
@@ -40,6 +43,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     @Override
+    @Transactional
     public FileUploadResponse upload(MultipartFile file, FileUploadOptions options) {
 
         validate(file);
@@ -72,8 +76,8 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     @Override
-    public void delete(String fileKey) {
-
+    public void delete(String fileUrl) {
+        var fileKey = fileUrl.substring(fileServerUrl.length());
         FileStorageEntity entity = repository.findByFileKey(fileKey)
             .orElseThrow(() -> ExceptionUtil.notFoundException("file_not_found"));
 
@@ -89,7 +93,6 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<FileResource> get(String fileKey) {
 
         return repository.findByFileKey(fileKey)

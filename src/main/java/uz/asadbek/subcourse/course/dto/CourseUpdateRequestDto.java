@@ -11,4 +11,6 @@ public class CourseUpdateRequestDto {
     private Long scienceId;
     private Long gradeId;
     private Long price;
+    private String lang;
+    private Boolean isPublished;
 }

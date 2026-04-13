@@ -20,7 +20,6 @@ public class TestSessionServiceImpl implements TestSessionService{
 
     @Override
     public Boolean submitAnswer(SubmitAnswerRequestDto request) {
-
         return true;
     }
 

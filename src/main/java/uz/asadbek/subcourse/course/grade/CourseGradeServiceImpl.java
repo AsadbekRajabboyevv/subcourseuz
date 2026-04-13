@@ -22,10 +22,7 @@ public class CourseGradeServiceImpl implements CourseGradeService {
 
     @Override
     public List<CourseGradeResponseDto> get() {
-        var lang= "uz";
-        String language = JwtUtil.getLanguage();
-        System.out.println(language);
-        return repository.get(lang);
+        return repository.get(LangUtils.currentLang());
     }
 
     @Override

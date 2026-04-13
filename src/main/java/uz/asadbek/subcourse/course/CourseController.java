@@ -1,10 +1,12 @@
 package uz.asadbek.subcourse.course;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import uz.asadbek.base.dto.BaseResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseInfoResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseRequestDto;
@@ -68,18 +70,19 @@ public class CourseController implements CourseApi {
     }
 
     @Override
-    public BaseResponseDto<Long> create(CourseRequestDto request) {
-        return null;
+    public BaseResponseDto<Long> create(CourseRequestDto request, MultipartFile image) {
+        return BaseResponseDto.ok(service.create(image, request));
     }
 
     @Override
-    public BaseResponseDto<Long> update(Long id, CourseUpdateRequestDto request) {
-        return null;
+    public BaseResponseDto<Long> update(Long id, MultipartFile image,
+        CourseUpdateRequestDto request) {
+        return BaseResponseDto.ok(service.update(id, request, image));
     }
 
     @Override
     public BaseResponseDto<Long> delete(Long id) {
-        return null;
+        return BaseResponseDto.ok(service.delete(id));
     }
 
 }

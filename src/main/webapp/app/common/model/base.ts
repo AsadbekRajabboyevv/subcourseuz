@@ -5,16 +5,7 @@ export interface Base<T> {
   data: T;
 }
 
-export interface BaseAudit {
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-  createdBy: number;
-  updatedBy: number;
-  deletedBy: number;
-}
-
-export interface Pageable<T> {
+export interface Page<T> {
   content: T[];
   totalElements: number;
   totalPages: number;
@@ -25,28 +16,37 @@ export interface Pageable<T> {
   empty: boolean;
 }
 
-export interface Nameable {
+export interface BaseAudit {
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string;
+  createdBy?: number;
+  updatedBy?: number;
+  deletedBy?: number;
+}
+
+export interface BaseFilter {
+  id?: number;
+  createdAtFrom?: string;
+  createdAtTo?: string;
+  updatedAtFrom?: string;
+  updatedAtTo?: string;
+  createdBy?: number;
+  updatedBy?: number;
+  createdByName?: string;
+  updatedByName?: string;
+}
+
+export interface Name {
   nameUz: string;
   nameRu: string;
   nameEn: string;
   nameCrl?: string;
 }
 
-export interface BaseFilter {
-  id: number;
-  createdAtFrom: string;
-  createdAtTo: string;
-  updatedAtFrom: string;
-  updatedAtTo: string;
-  createdBy: number;
-  updatedBy: number;
-  createdByName: string;
-  updatedByName: string;
-}
-
-export interface Descriptive {
-  descriptionUz: string;
-  descriptionRu: string;
-  descriptionEn: string;
+export interface Description {
+  descriptionUz?: string;
+  descriptionRu?: string;
+  descriptionEn?: string;
   descriptionCrl?: string;
 }

@@ -1,0 +1,56 @@
+<div content class="flex min-h-[90vh] items-center justify-center py-10 px-4">
+      <div class="w-full max-w-2xl rounded-[3rem] border border-gray-100 bg-white p-8 shadow-2xl hover:border-emerald-500 transition-all duration-500 dark:border-gray-800 dark:bg-gray-900 md:p-16">
+
+          <div class="mb-12 text-center">
+              <h2 class="text-4xl font-black tracking-tighter text-gray-900 dark:text-white uppercase">Ro'yxatdan o'tish</h2>
+              <p class="mt-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">Professional hamjamiyatga qo'shiling</p>
+          </div>
+
+            <form (submit)="onRegister()" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div class="md:col-span-2">
+                    <app-input type="text" label="Email" placeholder="asadbek@example.com" [(ngModel)]="regData.email" name="email"></app-input>
+                </div>
+
+                <app-input type="text" label="Ism" placeholder="Asadbek" [(ngModel)]="regData.firstName" name="firstName"></app-input>
+                <app-input type="text" label="Familiya" placeholder="Rajabboyev" [(ngModel)]="regData.lastName" name="lastName"></app-input>
+
+                <div class="md:col-span-2">
+                    <app-input type="text" label="Parol" placeholder="Kamida 8 ta belgi" [(ngModel)]="regData.password" name="password"></app-input>
+                </div>
+
+                <app-input type="text" label="Telefon" placeholder="+998 90 123 45 67" [(ngModel)]="regData.phone" name="phone"></app-input>
+                <app-input type="date" label="Tug'ilgan sana" [(ngModel)]="regData.birthDate" name="birthDate"></app-input>
+                <div class="md:col-span-2">
+                    <app-input type="select" label="Lavozimingiz (Position)"
+                        [options]="[
+              {label: 'O`qituvchi', value: 'OQITUVCHI'},
+              {label: 'Talaba', value: 'TALABA'},
+              {label: 'Ota ona', value: 'OTA_ONA'},
+              {label: 'Boshqa', value: 'BOSHQA'}
+            ]"
+                        [(ngModel)]="regData.position"
+                        name="position">
+                    </app-input>
+                </div>
+
+                <div class="md:col-span-2">
+                    <app-input type="text" label="O'zingiz haqingizda (Bio)" placeholder="Tajribangiz haqida qisqacha..." [(ngModel)]="regData.bio" name="bio"></app-input>
+                </div>
+
+                <div class="md:col-span-2 mt-4">
+                    <button type="submit"
+                            class="w-full rounded-[1.5rem] bg-emerald-600 py-6 text-xs font-black uppercase tracking-[0.2em] text-white shadow-xl hover:bg-emerald-700 hover:scale-[1.01] transition-all active:scale-95">
+                        Ro'yxatdan o'tish
+                  </button>
+              </div>
+          </form>
+
+          <div class="mt-10 text-center">
+              <p class="text-[10px] font-black uppercase tracking-widest text-gray-400">
+                  Akkauntingiz bormi?
+                  <a routerLink="/auth/login" class="ml-1 text-emerald-600 hover:underline">Tizimga kirish</a>
+              </p>
+          </div>
+      </div>
+</div>

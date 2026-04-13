@@ -1,6 +1,7 @@
 package uz.asadbek.subcourse.payment;
 
 import java.time.LocalDateTime;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import uz.asadbek.subcourse.test.dto.TestResponseDto;
 import uz.asadbek.subcourse.util.ExceptionUtil;
 import uz.asadbek.subcourse.util.JwtUtil;
 
+@Slf4j
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
@@ -125,6 +127,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .build();
 
         } catch (Exception e) {
+            log.error("Payment failed: {}", e.getMessage());
             balanceTransactionService.cancelTransaction(savedPaymentId);
             throw ExceptionUtil.badRequestException("payment_failed");
         }

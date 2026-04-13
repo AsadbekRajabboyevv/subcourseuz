@@ -1,15 +1,19 @@
 package uz.asadbek.subcourse.balance;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.asadbek.subcourse.balance.dto.BalanceResponseDto;
+import uz.asadbek.subcourse.balance.dto.CurrencyEnum;
 import uz.asadbek.subcourse.balance.filter.BalanceFilter;
+import uz.asadbek.subcourse.user.UserEntity;
 import uz.asadbek.subcourse.util.ExceptionUtil;
 import uz.asadbek.subcourse.util.JwtUtil;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BalanceServiceImpl implements BalanceService {
@@ -76,8 +80,18 @@ public class BalanceServiceImpl implements BalanceService {
         repository.cancelPending(userId, amount);
     }
 
+    @Override
+    @Transactional
+    public void createBalance(UserEntity user) {
+        var balance = new BalanceEntity();
+        balance.setUserId(user.getId());
+        balance.setCurrency(CurrencyEnum.UZS);
+        repository.save(balance);
+    }
+
     private void validate(Long userId, Long amount) {
         if (userId == null || amount == null || amount <= 0) {
+            log.error("Invalid user or amount: userId={}, amount={}", userId, amount);
             throw ExceptionUtil.insufficientBalanceException("invalid_amount");
         }
     }

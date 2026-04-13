@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import uz.asadbek.base.dto.BaseResponseDto;
 import uz.asadbek.subcourse.test.dto.SubmitAnswerRequestDto;
 import uz.asadbek.subcourse.test.dto.TestRequestDto;
@@ -22,8 +23,8 @@ public class TestController implements TestApi {
     private final TestSessionService testSessionService;
 
     @Override
-    public BaseResponseDto<Long> create(TestRequestDto request) {
-        return BaseResponseDto.ok(service.createTest(request));
+    public BaseResponseDto<Long> create(TestRequestDto request, MultipartFile image) {
+        return BaseResponseDto.ok(service.createTest(request, image));
     }
 
     @Override

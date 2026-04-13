@@ -1,18 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgIconsModule, provideIcons } from '@ng-icons/core';
-import { heroChatBubbleLeftEllipsis, heroEnvelope, heroGlobeAlt, heroPaperAirplane } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, NgIconsModule],
-  providers: [provideIcons({ heroPaperAirplane, heroChatBubbleLeftEllipsis, heroEnvelope, heroGlobeAlt })],
-  templateUrl: './app.footer.component.html'
+  imports: [CommonModule],
+  templateUrl:  './app.footer.component.html'
 })
 export class FooterComponent {
 
-  @Input() appTitle: string = 'My App';
+  @Input() appTitle: string = 'Subcourse';
 
   year: number = new Date().getFullYear();
 

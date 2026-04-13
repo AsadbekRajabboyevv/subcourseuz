@@ -1,277 +1,72 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import { NgIconsModule, provideIcons } from '@ng-icons/core';
-import {
-  heroAcademicCap,
-  heroArrowRight,
-  heroBookOpen,
-  heroBuildingLibrary,
-  heroChatBubbleLeftRight,
-  heroChevronLeft,
-  heroChevronRight,
-  heroCursorArrowRays,
-  heroDocumentText,
-  heroHome,
-  heroMagnifyingGlass,
-  heroUserPlus,
-  heroUsers
-} from '@ng-icons/heroicons/outline';
-import {PageWrapperComponent} from "../../shared/ui";
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { PageWrapperComponent } from '../../shared/ui/layout/page-wrapper.component';
+
+interface Course {
+  id: number;
+  title: string;
+  category: string;
+  image: string;
+  mentor: string;
+  mentorImage: string;
+  price: number;
+}
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, NgIconsModule, PageWrapperComponent],
-  providers: [provideIcons({
-    heroHome,
-    heroMagnifyingGlass,
-    heroUserPlus,
-    heroBookOpen,
-    heroUsers,
-    heroAcademicCap,
-    heroDocumentText,
-    heroChevronLeft,
-    heroChevronRight,
-    heroArrowRight,
-    heroCursorArrowRays,
-    heroBuildingLibrary,
-    heroChatBubbleLeftRight
-  })],
+  standalone: true,
+  imports: [CommonModule, PageWrapperComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit {
   currentSlideIndex = 0;
-  private autoSlideInterval: any;
   private touchStartX = 0;
+  private touchEndX = 0;
 
-  courses = [
-    {
-      id: 1,
-      title: 'Web Development',
-      description: 'Zamonaviy web dasturlash asoslari',
-      mentor: 'John Doe',
-      mentorImage: 'https://picsum.photos/seed/mentor1/32/32.jpg',
-      category: 'Yangi',
-      categoryColor: 'green',
-      duration: '2 kun oldin',
-      price: 250000,
-      rating: 4.8,
-      students: 156,
-      image: 'https://picsum.photos/seed/webdev/400/250.jpg'
-    },
-    {
-      id: 2,
-      title: 'Mobile Development',
-      description: 'iOS va Android uchun ilovalar',
-      mentor: 'Jane Smith',
-      mentorImage: 'https://picsum.photos/seed/mentor2/32/32.jpg',
-      category: 'Mashhur',
-      categoryColor: 'blue',
-      duration: '5 kun oldin',
-      price: 350000,
-      rating: 4.9,
-      students: 234,
-      image: 'https://picsum.photos/seed/mobiledev/400/250.jpg'
-    },
-    {
-      id: 3,
-      title: 'Data Science',
-      description: 'Ma\'lumotlar tahlili va machine learning',
-      mentor: 'Mike Johnson',
-      mentorImage: 'https://picsum.photos/seed/mentor3/32/32.jpg',
-      category: 'Premium',
-      categoryColor: 'purple',
-      duration: '1 hafta oldin',
-      price: 450000,
-      rating: 4.7,
-      students: 89,
-      image: 'https://picsum.photos/seed/datascience/400/250.jpg'
-    },
-    {
-      id: 4,
-      title: 'UI/UX Design',
-      description: 'Foydalanuvchi interfeysi dizayni',
-      mentor: 'Sarah Wilson',
-      mentorImage: 'https://picsum.photos/seed/mentor4/32/32.jpg',
-      category: 'Yangi',
-      categoryColor: 'green',
-      duration: '3 kun oldin',
-      price: 200000,
-      rating: 4.6,
-      students: 112,
-      image: 'https://picsum.photos/seed/uiux/400/250.jpg'
-    },
-    {
-      id: 5,
-      title: 'DevOps Engineering',
-      description: 'Cloud va CI/CD asoslari',
-      mentor: 'Tom Brown',
-      mentorImage: 'https://picsum.photos/seed/mentor5/32/32.jpg',
-      category: 'Advanced',
-      categoryColor: 'orange',
-      duration: '1 kun oldin',
-      price: 550000,
-      rating: 4.9,
-      students: 67,
-      image: 'https://picsum.photos/seed/devops/400/250.jpg'
-    }
-    ,
-    {
-      id: 5,
-      title: 'DevOps Engineering',
-      description: 'Cloud va CI/CD asoslari',
-      mentor: 'Tom Brown',
-      mentorImage: 'https://picsum.photos/seed/mentor5/32/32.jpg',
-      category: 'Advanced',
-      categoryColor: 'orange',
-      duration: '1 kun oldin',
-      price: 550000,
-      rating: 4.9,
-      students: 67,
-      image: 'https://picsum.photos/seed/devops/400/250.jpg'
-    }
-    ,
-    {
-      id: 5,
-      title: 'DevOps Engineering',
-      description: 'Cloud va CI/CD asoslari',
-      mentor: 'Tom Brown',
-      mentorImage: 'https://picsum.photos/seed/mentor5/32/32.jpg',
-      category: 'Advanced',
-      categoryColor: 'orange',
-      duration: '1 kun oldin',
-      price: 550000,
-      rating: 4.9,
-      students: 67,
-      image: 'https://picsum.photos/seed/devops/400/250.jpg'
-    }
-    ,
-    {
-      id: 5,
-      title: 'DevOps Engineering',
-      description: 'Cloud va CI/CD asoslari',
-      mentor: 'Tom Brown',
-      mentorImage: 'https://picsum.photos/seed/mentor5/32/32.jpg',
-      category: 'Advanced',
-      categoryColor: 'orange',
-      duration: '1 kun oldin',
-      price: 550000,
-      rating: 4.9,
-      students: 67,
-      image: 'https://picsum.photos/seed/devops/400/250.jpg'
-    }
-    ,
-    {
-      id: 5,
-      title: 'DevOps Engineering',
-      description: 'Cloud va CI/CD asoslari',
-      mentor: 'Tom Brown',
-      mentorImage: 'https://picsum.photos/seed/mentor5/32/32.jpg',
-      category: 'Advanced',
-      categoryColor: 'orange',
-      duration: '1 kun oldin',
-      price: 550000,
-      rating: 4.9,
-      students: 67,
-      image: 'https://picsum.photos/seed/devops/400/250.jpg'
-    }
-    ,
-    {
-      id: 5,
-      title: 'DevOps Engineering',
-      description: 'Cloud va CI/CD asoslari',
-      mentor: 'Tom Brown',
-      mentorImage: 'https://picsum.photos/seed/mentor5/32/32.jpg',
-      category: 'Advanced',
-      categoryColor: 'orange',
-      duration: '1 kun oldin',
-      price: 550000,
-      rating: 4.9,
-      students: 67,
-      image: 'https://picsum.photos/seed/devops/400/250.jpg'
-    }
-    ,
-    {
-      id: 5,
-      title: 'DevOps Engineering',
-      description: 'Cloud va CI/CD asoslari',
-      mentor: 'Tom Brown',
-      mentorImage: 'https://picsum.photos/seed/mentor5/32/32.jpg',
-      category: 'Advanced',
-      categoryColor: 'orange',
-      duration: '1 kun oldin',
-      price: 550000,
-      rating: 4.9,
-      students: 67,
-      image: 'https://picsum.photos/seed/devops/400/250.jpg'
-    }
+  courses: Course[] = [
+    { id: 1, title: 'Java Backend Pro', category: 'Backend', image: 'https://picsum.photos/400/250?random=1', mentor: 'Asadbek R.', mentorImage: 'https://i.pravatar.cc/150?u=1', price: 1200000 },
+    { id: 2, title: 'Angular Masterclass', category: 'Frontend', image: 'https://picsum.photos/400/250?random=2', mentor: 'Farhod A.', mentorImage: 'https://i.pravatar.cc/150?u=2', price: 900000 },
+    { id: 3, title: 'Spring Boot & Kafka', category: 'Backend', image: 'https://picsum.photos/400/250?random=3', mentor: 'Asadbek R.', mentorImage: 'https://i.pravatar.cc/150?u=1', price: 1500000 },
+    { id: 4, title: 'Python Data Science', category: 'Data', image: 'https://picsum.photos/400/250?random=4', mentor: 'Malika T.', mentorImage: 'https://i.pravatar.cc/150?u=3', price: 850000 },
+    { id: 5, title: 'UI/UX Essentials', category: 'Design', image: 'https://picsum.photos/400/250?random=5', mentor: 'Sardor M.', mentorImage: 'https://i.pravatar.cc/150?u=4', price: 700000 },
+    { id: 6, title: 'Flutter Mobile', category: 'Mobile', image: 'https://picsum.photos/400/250?random=6', mentor: 'Doston B.', mentorImage: 'https://i.pravatar.cc/150?u=5', price: 1100000 },
+    { id: 7, title: 'DevOps Docker', category: 'DevOps', image: 'https://picsum.photos/400/250?random=7', mentor: 'Nodir X.', mentorImage: 'https://i.pravatar.cc/150?u=6', price: 1300000 },
   ];
 
   ngOnInit(): void {
-    this.startAutoSlide();
+    setInterval(() => {
+      this.nextSlide();
+    }, 5000);
   }
 
-  ngOnDestroy(): void {
-    this.stopAutoSlide();
-  }
+  nextSlide() {
+    const visibleCards = 6;
+    const totalCourses = this.courses.length;
 
-  // Ko'rinadigan kartalar sonini aniqlash
-  getVisibleCount(): number {
-    if (typeof window === 'undefined') return 6;
-    const width = window.innerWidth;
-    if (width < 640) return 1.2;  // Mobilda keyingi karta biroz ko'rinib tursin (UX)
-    if (width < 768) return 2;
-    if (width < 1024) return 3;
-    if (width < 1280) return 4;
-    return 6;
-  }
-
-  nextSlide(): void {
-    const visibleCount = Math.floor(this.getVisibleCount());
-    const maxIndex = this.courses.length - visibleCount;
-
-    if (this.currentSlideIndex >= maxIndex) {
-      this.currentSlideIndex = 0; // Boshiga qaytish
+    if (this.currentSlideIndex >= totalCourses - visibleCards) {
+      this.currentSlideIndex = 0;
     } else {
       this.currentSlideIndex++;
     }
   }
 
-  prevSlide(): void {
-    const visibleCount = Math.floor(this.getVisibleCount());
-    const maxIndex = this.courses.length - visibleCount;
+  prevSlide() {
+    const visibleCards = 6;
+    const totalCourses = this.courses.length;
 
     if (this.currentSlideIndex <= 0) {
-      this.currentSlideIndex = maxIndex; // Oxiriga o'tish
+      this.currentSlideIndex = totalCourses - visibleCards;
     } else {
       this.currentSlideIndex--;
     }
   }
 
-  // Touch Eventlar
-  onTouchStart(event: TouchEvent): void {
-    this.touchStartX = event.touches[0].clientX;
-    this.stopAutoSlide();
+  onTouchStart(e: TouchEvent) { this.touchStartX = e.changedTouches[0].screenX; }
+  onTouchEnd(e: TouchEvent) {
+    this.touchEndX = e.changedTouches[0].screenX;
+    if (this.touchStartX - this.touchEndX > 50) this.nextSlide();
+    if (this.touchEndX - this.touchStartX > 50) this.prevSlide();
   }
 
-  onTouchEnd(event: TouchEvent): void {
-    const touchEndX = event.changedTouches[0].clientX;
-    const diff = this.touchStartX - touchEndX;
-
-    if (Math.abs(diff) > 50) { // 50px dan ortiq surilsa
-      if (diff > 0) this.nextSlide();
-      else this.prevSlide();
-    }
-    this.startAutoSlide();
-  }
-
-  startAutoSlide(): void {
-    this.autoSlideInterval = setInterval(() => this.nextSlide(), 5000);
-  }
-
-  stopAutoSlide(): void {
-    if (this.autoSlideInterval) clearInterval(this.autoSlideInterval);
-  }
 }
-
-// Kurslar ro'yxati

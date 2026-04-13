@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RestController;
 import uz.asadbek.base.dto.BaseResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
+import uz.asadbek.subcourse.course.dto.DurationType;
 import uz.asadbek.subcourse.course.filter.CourseFilter;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeResponseDto;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
@@ -37,7 +38,7 @@ public class PublicController implements PublicApi {
 
     @Override
     public BaseResponseDto<List<CourseGradeResponseDto>> getCourseGrades() {
-        return null;
+        return BaseResponseDto.ok(publicService.getCourseGrades());
     }
 
     @Override
@@ -48,5 +49,10 @@ public class PublicController implements PublicApi {
     @Override
     public BaseResponseDto<List<TestResponseDto>> getTests(TestFilter filter, Pageable pageable) {
         return null;
+    }
+
+    @Override
+    public BaseResponseDto<?> getDurationTypes() {
+        return BaseResponseDto.ok(DurationType.values());
     }
 }

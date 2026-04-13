@@ -52,3 +52,5 @@ error:
       UserEntityUsernameUnique: USER_ENTITY_USERNAME_UNIQUE
 springdoc:
   pathsToMatch: /v1/api/**
+app:
+  file-server-url: http://localhost:8080/v1/api/files/

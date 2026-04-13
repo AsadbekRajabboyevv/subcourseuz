@@ -36,4 +36,6 @@ public interface PublicApi {
     @GetMapping("/tests")
     BaseResponseDto<List<TestResponseDto>> getTests(TestFilter filter, Pageable pageable);
 
+    @GetMapping("/duration-types")
+    BaseResponseDto<?> getDurationTypes();
 }

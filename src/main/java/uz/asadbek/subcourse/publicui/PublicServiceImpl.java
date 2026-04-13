@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import uz.asadbek.subcourse.course.CourseService;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
 import uz.asadbek.subcourse.course.filter.CourseFilter;
+import uz.asadbek.subcourse.course.grade.CourseGradeService;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeResponseDto;
 import uz.asadbek.subcourse.course.lesson.CourseLessonService;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
@@ -26,6 +27,7 @@ public class PublicServiceImpl implements PublicService {
     private final TestService testService;
     private final UserService userService;
     private final CourseLessonService courseLessonService;
+    private final CourseGradeService courseGradeService;
 
     @Override
     public HomePageResponseDto getHomePage() {
@@ -56,6 +58,6 @@ public class PublicServiceImpl implements PublicService {
 
     @Override
     public List<CourseGradeResponseDto> getCourseGrades() {
-        return List.of();
+        return courseGradeService.get();
     }
 }

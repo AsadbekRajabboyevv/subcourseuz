@@ -55,8 +55,8 @@ public interface CourseApi {
 
     @PostMapping
     BaseResponseDto<Long> create(
-        @RequestPart(required = false) MultipartFile image,
-        @RequestPart @Valid CourseRequestDto request
+        @RequestPart(required = false) @Valid CourseRequestDto request,
+        @RequestPart MultipartFile image
     );
 
     @PutMapping("/{id}")

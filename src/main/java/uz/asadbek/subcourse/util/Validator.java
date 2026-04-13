@@ -5,11 +5,11 @@ import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import uz.asadbek.subcourse.course.CourseRepository;
+import uz.asadbek.subcourse.course.dto.CourseRequestDto;
 import uz.asadbek.subcourse.course.grade.CourseGradeRepository;
 import uz.asadbek.subcourse.course.lesson.CourseLessonRepository;
 import uz.asadbek.subcourse.science.ScienceRepository;
 import uz.asadbek.subcourse.test.TestEntity;
-import uz.asadbek.subcourse.test.TestRepository;
 import uz.asadbek.subcourse.test.dto.TestRequestDto;
 import uz.asadbek.subcourse.test.usertest.UserTestRepository;
 import uz.asadbek.subcourse.user.UserRepository;
@@ -33,6 +33,11 @@ public class Validator {
             courseRepository::existsByIdAndScienceId, "invalid_course");
 
         validateLesson(dto.getLessonId(), dto.getCourseId());
+    }
+
+    public void validateCourse(CourseRequestDto dto) {
+        validateExists(dto.getScienceId(), scienceRepository::existsById, "science_not_found");
+        validateExists(dto.getGradeId(), gradeRepository::existsById, "grade_not_found");
     }
 
     public void validateTestForUpdate(TestEntity test) {

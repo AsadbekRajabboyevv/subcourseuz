@@ -12,6 +12,7 @@ import uz.asadbek.subcourse.auth.dto.AuthRequestDto;
 import uz.asadbek.subcourse.auth.dto.AuthResponseDto;
 import uz.asadbek.subcourse.auth.refresh.RefreshTokenEntity;
 import uz.asadbek.subcourse.auth.refresh.RefreshTokenRepository;
+import uz.asadbek.subcourse.balance.BalanceService;
 import uz.asadbek.subcourse.user.EmailService;
 import uz.asadbek.subcourse.user.UserEntity;
 import uz.asadbek.subcourse.user.UserMapper;
@@ -30,6 +31,7 @@ public class AuthServiceImpl implements AuthService {
     private final EmailService emailService;
     private final UserService userService;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final BalanceService balanceService;
 
     @Override
     @Transactional
@@ -66,7 +68,7 @@ public class AuthServiceImpl implements AuthService {
         user.setConfirmationToken(confirmToken);
 
         user = userService.save(user);
-
+        balanceService.createBalance(user);
         String confirmationLink =
             STR."http://localhost:8080/v1/api/auth/confirm?token=\{confirmToken}";
 

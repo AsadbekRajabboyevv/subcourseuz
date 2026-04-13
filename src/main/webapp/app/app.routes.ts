@@ -1,7 +1,6 @@
 import {Routes} from '@angular/router';
 import {HomeComponent} from './features/home/home.component';
 import {AuthLayoutComponent} from "./common/auth/auth.layout.component";
-import {CourseComponent} from "./features/course/component/course.component";
 export const routes: Routes = [
   {
     path: 'auth',
@@ -9,59 +8,35 @@ export const routes: Routes = [
     children: [
       {
         path: 'login',
-        loadComponent: ()=> import('./common/auth/auth.component').then(m => m.AuthComponent),
+        loadComponent: ()=> import('./common/auth/component/login.component').then(m => m.LoginComponent),
         title: 'Kirish'
       },
       {
-        path: '',
-        redirectTo: 'login',
-        pathMatch: 'full'
-      }
+        path: 'register',
+        loadComponent: ()=> import('./common/auth/component/register.component').then(m => m.RegisterComponent),
+        title: 'Registratsiya'
+      },
     ]
   },
+  {
+    path: 'courses-list',
+    loadComponent: () => import('./features/course/list/course-list.component').then(m => m.CourseListComponent),
+    title: 'Kurslar ro\'yxati'
+  },
+  // {
+  //   path: 'course-update/:courseName',
+  //   loadComponent: () => import('./features/course/list/course-list.component').then(m => m.CourseListComponent),
+  //   title: 'Kursni tahrirlash'
+  // },
+  // {
+  //   path: 'course-view/:courseName',
+  //   loadComponent: () => import('./features/course/list/course-list.component').then(m => m.CourseListComponent),
+  //   title: 'Kursni ko\'rish'
+  // },
   {
     path: 'home',
     component: HomeComponent,
     title: 'Asosiy sahifa'
-  },
-  {
-    path: 'sciences',
-    loadComponent: ()=> import('./features/science/component/science.component').then(m => m.ScienceComponent),
-    title: 'Fanlar',
-    data: {
-      roles: ['ROLE_ADMIN', 'ROLE_TEACHER']
-    }
-  },
-  {
-    path: 'course/create',
-    loadComponent: ()=> import('./features/course/component/course.component').then(m => m.CourseComponent),
-    title: 'Kurs yaratish',
-    data: {
-      roles: ['ROLE_ADMIN', 'ROLE_TEACHER']
-    }
-  },
-  {
-    path: 'courses/grades',
-    loadComponent: ()=> import('./features/course/grade/course-grade.component').then(m => m.CourseGradeComponent),
-    title: 'Kurs darajasini yaratish',
-    data: {
-      roles: ['ROLE_ADMIN', 'ROLE_STUDENT']
-    }
-  },
-  {
-    path: 'course/science/create',
-    loadComponent: ()=> import('./features/course/component/course.component').then(m => m.CourseComponent),
-    title: 'Kurs yaratish',
-    data: {
-      roles: ['ROLE_ADMIN', 'ROLE_TEACHER']
-    }
-  },
-
-
-  {
-    path: 'courses',
-    loadComponent: ()=> import('./features/course/component/course.component').then(m => m.CourseComponent),
-    title: 'Kurslar'
   },
   {
     path: '',
@@ -70,6 +45,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    loadComponent: () => import('./features/error/error.component').then(m => m.ErrorComponent)
+    loadComponent: () => import('./features/error/error.component').then(m => m.ErrorPageComponent)
   }
 ];

@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import uz.asadbek.subcourse.filestorage.FileStorageService;
 import uz.asadbek.subcourse.filestorage.dto.FileUploadOptions;
 import uz.asadbek.subcourse.test.dto.TestRequestDto;
@@ -80,14 +81,14 @@ public class TestServiceImpl implements TestService {
     }
     @Override
     @Transactional
-    public Long createTest(TestRequestDto request) {
+    public Long createTest(TestRequestDto request, MultipartFile image) {
 
         validator.validateTest(request);
 
         String testImage = null;
-        if (request.getImage() != null && !request.getImage().isEmpty()) {
+        if (image != null && !image.isEmpty()) {
             testImage = fileStorageService
-                .upload(request.getImage(), new FileUploadOptions().setTestImages())
+                .upload(image, new FileUploadOptions().setTestImages())
                 .getFileKey();
         }
 

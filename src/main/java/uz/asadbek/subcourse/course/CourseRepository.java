@@ -38,8 +38,11 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
             and (:#{#filter.priceFrom} is null or c.price >= :#{#filter.priceFrom})
             and (:#{#filter.priceTo} is null or c.price <= :#{#filter.priceTo})
             and (:#{#filter.lang} is null or c.lang = :#{#filter.lang})
-            and (:#{#filter.name} is null or lower(c.name) like lower(concat('%', :#{#filter.name}, '%')))
-            and (:#{#filter.ownerName} is null or lower(concat(coalesce(u.firstName, ''), ' ', coalesce(u.lastName, ''))) like lower(concat('%', :#{#filter.ownerName}, '%')))
+            and (:#{#filter.search} is null or (
+                       lower(c.name) like lower(concat('%', :#{#filter.search}, '%'))
+                    or lower(concat(coalesce(u.firstName, ''), ' ', coalesce(u.lastName, ''))) like lower(concat('%', :#{#filter.search}, '%'))
+                    or lower(c.description) like lower(concat('%', :#{#filter.search}, '%'))
+                ))
             and (:#{#filter.duration} is null or :#{#filter.durationType} is null or
                 ((case c.durationType
                       when 'SOAT' then c.duration
@@ -81,7 +84,8 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
             left join UserEntity u on c.ownerId = u.id
             left join CourseLessonEntity l on l.courseId = c.id
             left join UserCourseEntity sc on sc.id.referenceId = c.id
-            where c.deletedAt is null and c.id = :#{#id}
+            where c.deletedAt is null and c.id = :id
+            group by c.id, c.name, u.firstName, u.lastName, c.price, c.imagePath, c.lang
         """)
     CourseResponseDto get(Long id);
 
@@ -106,7 +110,6 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
                 WHEN :lang = 'crl' THEN s.name_crl
                 ELSE s.name_uz
             END AS science_name,
-
             c.duration,
             c.duration_type,
 
@@ -134,8 +137,9 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
                     )
                 ) FILTER (WHERE l.id IS NOT NULL),
                 '[]'
-            ) AS lessons
-
+            ) AS lessons,
+            c.science_id,
+            c.grade_id
         FROM courses c
         LEFT JOIN users u ON c.owner_id = u.id
         LEFT JOIN course_lessons l ON l.course_id = c.id

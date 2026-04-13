@@ -23,4 +23,6 @@ public class CourseInfoResponseDto {
     private String lang;
     private boolean purchased;
     private List<CourseLessonResponseDto> lessons;
+    private Long scienceId;
+    private Long gradeId;
 }

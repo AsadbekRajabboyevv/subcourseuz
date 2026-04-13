@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.asadbek.subcourse.balance.dto.BalanceResponseDto;
 import uz.asadbek.subcourse.balance.filter.BalanceFilter;
+import uz.asadbek.subcourse.user.UserEntity;
 
 public interface BalanceService {
 
@@ -15,4 +16,6 @@ public interface BalanceService {
     void credit(Long userId, Long amount);
     void addPending(Long userId, Long amount);
     void cancelPending(Long userId, Long amount);
+
+    void createBalance(UserEntity user);
 }
