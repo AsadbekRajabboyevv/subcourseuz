@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {CourseService} from "../course.service";
 import {InputComponent} from "../../../shared/ui/forms/input.component";
-import {GridComponent} from "../../../shared/ui/layout/grid.component";
 import {PageWrapperComponent} from "../../../shared/ui/layout/page-wrapper.component";
 import {CourseFilter, DurationType} from "../course.model";
 import {RouterLink} from "@angular/router";
@@ -13,7 +12,7 @@ import {PaymentService} from "../../payment/payment.service";
 @Component({
   selector: 'app-course-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputComponent, GridComponent, PageWrapperComponent, RouterLink],
+  imports: [CommonModule, FormsModule, InputComponent, PageWrapperComponent, RouterLink],
   templateUrl: './course-list.component.html'
 })
 export class CourseListComponent implements OnInit {
@@ -86,9 +85,6 @@ export class CourseListComponent implements OnInit {
       next: (res) => {
         console.log('To\'lov muvaffaqiyatli:', res.data);
         this.closeModal();
-      },
-      error: (err) => {
-        console.error('Xatolik:', err);
       }
     });
   }
