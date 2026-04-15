@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
-import {InputComponent} from "../../shared/ui/forms/input.component";
-import {PaymentService} from "./payment.service";
-import {PaymentRequestDto} from "./payment.model";
+import {InputComponent} from "../../../shared/ui/forms/input.component";
+import {PaymentService} from "../payment.service";
+import {PaymentRequestDto} from "../payment.model";
 
 @Component({
   selector: 'app-payment-modal',
