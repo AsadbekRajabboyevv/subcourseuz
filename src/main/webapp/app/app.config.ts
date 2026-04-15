@@ -10,10 +10,11 @@ import {
   withInMemoryScrolling,
   TitleStrategy
 } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors} from '@angular/common/http';
 import { routes } from 'app/app.routes';
 import { CustomTitleStrategy } from 'app/common/title-strategy.injectable';
 import { authInterceptor } from './common/auth/auth.interceptor';
+import { errorInterceptor } from "./common/error/error.interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -29,7 +30,10 @@ export const appConfig: ApplicationConfig = {
     ),
 
     provideHttpClient(
-      withInterceptors([authInterceptor])
+      withInterceptors([
+        authInterceptor,
+        errorInterceptor
+      ])
     ),
 
     provideZoneChangeDetection({ eventCoalescing: true }),
