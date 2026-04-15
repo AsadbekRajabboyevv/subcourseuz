@@ -27,6 +27,7 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
             LEFT JOIN BalanceTransactionEntity t on p.id = t.paymentId
             WHERE p.deletedAt is null
             AND (:#{#filter.id} IS NULL OR p.id = :#{#filter.id})
+            AND (:#{#filter.userId} IS NULL OR p.userId = :#{#filter.userId})
             AND (:#{#filter.status} IS NULL OR p.status = :#{#filter.status})
             AND (:#{#filter.type} IS NULL OR p.type = :#{#filter.type})
             AND (:#{#filter.createdAtFrom} IS NULL OR p.createdAt >= :#{#filter.createdAtFrom})
@@ -53,6 +54,7 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
             LEFT JOIN BalanceTransactionEntity t on p.id = t.paymentId
             WHERE p.deletedAt is null
             AND p.exId = :id
+            AND (:userId IS NULL OR p.userId = :userId)
         """)
-    PaymentResponseDto get(String id);
+    PaymentResponseDto get(String id, Long userId);
 }

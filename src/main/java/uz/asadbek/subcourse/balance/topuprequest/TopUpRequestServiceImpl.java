@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,9 +32,6 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
     private final BalanceService balanceService;
     private final PaymentService paymentService;
     private final FileStorageService fileStorageService;
-    private static final String TOP_UP_REQUEST_PATH = "top_up_requests";
-
-    // ================= USER =================
 
     @Override
     public Page<TopUpRequestResponseDto> getMy(Pageable pageable, TopUpRequestFilter filter) {
@@ -101,11 +99,13 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
     // ================= ADMIN =================
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Page<TopUpRequestResponseDto> getAll(Pageable pageable, TopUpRequestFilter filter) {
         return repository.get(pageable, filter);
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public TopUpRequestResponseDto getById(Long id) {
         return repository.get(id)
             .orElseThrow(() -> ExceptionUtil.notFoundException("top_up_not_found"));
@@ -113,6 +113,7 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public PaymentResponseDto accept(TopUpRequestActionRequestDto request) {
         if (!JwtUtil.isAdmin()) {
             throw ExceptionUtil.forbiddenException("is_not_admin");
@@ -137,6 +138,7 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public PaymentResponseDto reject(TopUpRequestActionRequestDto request) {
         if (!JwtUtil.isAdmin()) {
             throw ExceptionUtil.forbiddenException("is_not_admin");
