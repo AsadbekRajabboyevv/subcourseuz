@@ -13,8 +13,11 @@
                 <h1 class="mb-4 text-3xl md:text-5xl font-black tracking-tighter">Subcourse Platform</h1>
                 <p class="mb-8 text-base md:text-lg opacity-90 font-medium">Online ta'lim platformasiga xush kelibsiz! O'z kelajagingizni professional mentorlar bilan quring.</p>
                 <div class="flex flex-wrap gap-4">
-                    <button class="flex items-center gap-3 rounded-2xl bg-white text-indigo-700 px-8 py-4 font-black text-xs uppercase hover:scale-105 transition-transform">
+                    <button class="flex items-center gap-3 rounded-2xl bg-white text-indigo-700 px-8 py-4 font-black text-xs uppercase active:scale-95 hover:rotate-2 transition-transform">
                         <i class="fa-solid fa-play"></i> Kurslarni ko'rish
+                    </button>
+                    <button class="flex items-center gap-3 rounded-2xl bg-white text-indigo-700 px-8 py-4 font-black text-xs uppercase active:scale-95 hover:rotate-2 transition-transform">
+                        <i class="fa-solid fa-play"></i> Test yechish
                     </button>
                 </div>
             </div>
@@ -29,7 +32,7 @@
                     {l:'Testlar', v:'156', i:'fa-vial', c:'orange', bh:'hover:border-orange-500'}
                 ]"
                  [ngClass]="stat.bh"
-                 class="group rounded-3xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 dark:border-gray-800 dark:bg-gray-900 hover:shadow-md">
+                 class="group rounded-3xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 dark:border-gray-800 dark:bg-gray-900 hover:shadow-md  active:scale-95 hover:rotate-2">
 
                 <div class="flex items-center justify-between">
                     <div>
@@ -103,7 +106,7 @@
         {t:'Kutubxona', d:'Bepul resurslar', i:'fa-book', c:'blue', borderH: 'hover:border-blue-500'},
         {t:'Forum', d:'Savollarga javob', i:'fa-comments', c:'purple', borderH: 'hover:border-purple-500'}]"
                     [ngClass]="act.borderH"
-                    class="group flex items-center gap-5 rounded-[2rem] border border-gray-100 bg-white p-6 shadow-sm hover:shadow-xl transition-all duration-300 dark:border-gray-800 dark:bg-gray-900">
+                    class="group flex items-center gap-5 rounded-[2rem] border border-gray-100 bg-white p-6 shadow-sm hover:shadow-xl transition-all duration-300 dark:border-gray-800 dark:bg-gray-900  active:scale-95 hover:rotate-2">
 
                 <div class="rounded-2xl p-4 transition-transform duration-300 group-hover:scale-110 shadow-inner"
                      [ngClass]="'bg-' + act.c + '-100 text-' + act.c + '-600 dark:bg-' + act.c + '-900/30 dark:text-' + act.c + '-400'">
