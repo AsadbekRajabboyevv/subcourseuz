@@ -1,4 +1,5 @@
 import {BaseFilter, Description, Name} from "../../common/model/base";
+import {Lesson} from "../lesson/lesson.model";
 
 export interface Course {
   id: number;
@@ -45,6 +46,7 @@ export interface CourseInfo extends Course {
   purchased: boolean;
   scienceId: number;
   gradeId: number;
+  lessons: Lesson[];
 }
 
 export interface CourseFilter extends BaseFilter {

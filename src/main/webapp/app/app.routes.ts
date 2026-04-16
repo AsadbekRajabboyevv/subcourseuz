@@ -23,16 +23,21 @@ export const routes: Routes = [
     loadComponent: () => import('./features/course/list/course-list.component').then(m => m.CourseListComponent),
     title: 'Kurslar ro\'yxati'
   },
-  // {
-  //   path: 'course-update/:courseName',
-  //   loadComponent: () => import('./features/course/list/course-list.component').then(m => m.CourseListComponent),
-  //   title: 'Kursni tahrirlash'
-  // },
-  // {
-  //   path: 'course-view/:courseName',
-  //   loadComponent: () => import('./features/course/list/course-list.component').then(m => m.CourseListComponent),
-  //   title: 'Kursni ko\'rish'
-  // },
+  {
+    path: 'courses-create',
+    loadComponent: () => import('./features/course/create/course-create.component').then(m => m.CourseCreateComponent),
+    title: 'Kurs yaratish'
+  },
+  {
+    path: 'courses-view/:courseName',
+    loadComponent: () => import('./features/course/view/course-view.component').then(m => m.CourseViewComponent),
+    title: 'Kursni ko\'rish'
+  },
+  {
+    path: 'courses-me',
+    loadComponent: () => import('./features/course/me/course-me.component').then(m => m.CourseMeComponent),
+    title: 'Mening kurslarim'
+  },
   {
     path: 'home',
     component: HomeComponent,
