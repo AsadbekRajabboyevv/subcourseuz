@@ -14,4 +14,5 @@ public class PaymentFilter extends BaseFilter {
     private PaymentType type;
     private LocalDateTime completedAtFrom;
     private LocalDateTime completedAtTo;
+    private Long userId;
 }

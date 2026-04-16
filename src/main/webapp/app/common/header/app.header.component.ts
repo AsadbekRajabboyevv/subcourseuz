@@ -1,14 +1,13 @@
 import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { NgOptimizedImage } from "@angular/common";
 import { AuthService } from "../auth/auth.service";
 import {ThemeSwitchComponent} from "../../shared/ui/menu/theme-switch.component";
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage, RouterModule, ThemeSwitchComponent],
+  imports: [CommonModule, RouterModule, ThemeSwitchComponent],
 
   templateUrl: './app.header.component.html'
 })

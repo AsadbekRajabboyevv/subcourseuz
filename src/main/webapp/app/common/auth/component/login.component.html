@@ -16,7 +16,7 @@
            <div class="mt-8 text-center">
                <p class="text-[10px] font-black uppercase tracking-widest text-gray-400">
                    Akkauntingiz yo'qmi?
-                   <a routerLink="/auth/register" class="ml-1 text-green-600 hover:underline">Ro'yxatdan o'ting</a>
+                   <a [routerLink]="['/auth/register']" [queryParams]="{ returnUrl: route.snapshot.queryParams['returnUrl']}"  class="ml-1 text-green-600 hover:underline">Ro'yxatdan o'ting</a>
                </p>
            </div>
       </div>

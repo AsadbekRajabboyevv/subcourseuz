@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.asadbek.subcourse.balance.dto.BalanceResponseDto;
@@ -21,6 +22,7 @@ public class BalanceServiceImpl implements BalanceService {
     private final BalanceRepository repository;
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public BalanceResponseDto get(Long userId) {
         return repository.get(userId);
     }
@@ -32,6 +34,7 @@ public class BalanceServiceImpl implements BalanceService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Page<BalanceResponseDto> get(Pageable pageable, BalanceFilter filter) {
         return repository.get(pageable, filter);
     }
@@ -45,7 +48,7 @@ public class BalanceServiceImpl implements BalanceService {
         int updated = repository.decrease(userId, amount);
 
         if (updated == 0) {
-            throw ExceptionUtil.badRequestException("hold_not_found_or_insufficient");
+            throw ExceptionUtil.insufficientBalanceException("hold_not_found_or_insufficient");
         }
     }
 
@@ -73,6 +76,7 @@ public class BalanceServiceImpl implements BalanceService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void cancelPending(Long userId, Long amount) {
 
         validate(userId, amount);

@@ -1,0 +1,49 @@
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-md" (click)="onClose()"></div>
+
+    <div class="relative w-full max-w-md overflow-hidden rounded-[2.5rem] border border-gray-100 bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900 animate-in zoom-in duration-300">
+        <div class="h-24 bg-gray-900 dark:bg-emerald-950/30 flex items-center px-8">
+            <h2 class="text-xl font-black uppercase tracking-tight text-white">
+                {{ type === 'COURSE' ? 'Kurs xaridi' : 'Test xaridi' }}
+            </h2>
+        </div>
+
+        <div class="p-8 space-y-6">
+            <div class="flex items-center gap-4 rounded-3xl bg-gray-50 p-4 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800">
+                <div class="h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-white shadow-sm">
+                    <img [src]="item.imagePath || 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png'" class="h-full w-full object-cover">
+                </div>
+                <div class="overflow-hidden">
+                    <h4 class="text-sm font-black text-gray-900 dark:text-white truncate">{{ item.name }}</h4>
+                    <p class="text-[10px] font-bold text-emerald-500 uppercase tracking-tighter">
+                        {{ item.price | number }} UZS
+                    </p>
+                </div>
+            </div>
+
+            <app-input label="Promo-kod" placeholder="Ixtiyoriy..." [(ngModel)]="couponCode"></app-input>
+
+            <div class="space-y-3 rounded-3xl border border-gray-100 p-5 dark:border-gray-800">
+                <div class="flex justify-between text-[10px] font-black uppercase text-gray-400">
+                    <span>Asosiy narx:</span>
+                    <span class="text-gray-900 dark:text-white">{{ item.price | number }} UZS</span>
+                </div>
+                <div class="flex justify-between border-t border-dashed border-gray-200 pt-3 dark:border-gray-700">
+                    <span class="text-xs font-black uppercase text-gray-900 dark:text-white">To'lov miqdori:</span>
+                    <span class="text-lg font-black text-emerald-500">{{ item.price | number }} UZS</span>
+                </div>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button (click)="onClose()"
+                        class="flex-1 rounded-2xl py-4 text-[10px] font-black uppercase text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    Bekor qilish
+                </button>
+                <button (click)="onConfirm()"
+                        class="flex-[2] rounded-2xl bg-gray-900 py-4 text-[10px] font-black uppercase text-white shadow-xl transition-all hover:bg-emerald-600 active:scale-95 dark:bg-white dark:text-gray-900 dark:hover:bg-emerald-500 dark:hover:text-white">
+                    Tasdiqlash
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

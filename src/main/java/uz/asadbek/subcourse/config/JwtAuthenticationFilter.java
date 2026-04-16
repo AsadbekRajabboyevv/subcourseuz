@@ -40,14 +40,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Claims claims = JwtUtil.parseToken(token);
 
             String username = claims.getSubject();
+            Long userId = claims.get("id", Long.class);
             List<String> roles = claims.get("roles", List.class);
             String lang = claims.get("lang", String.class);
 
-            if (username != null &&
-                SecurityContextHolder.getContext().getAuthentication() == null) {
-
+            if (username != null
+                && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UsernamePasswordAuthenticationToken authentication = getAuthenticationToken(
-                    username, lang, roles);
+                    userId, username, lang, roles);
 
                 authentication.setDetails(
                     new WebAuthenticationDetailsSource()
@@ -73,20 +73,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private static UsernamePasswordAuthenticationToken getAuthenticationToken(
-        String username, String lang, List<String> roles) {
+        Long id, String username, String lang, List<String> roles) {
+
         UserEntity user = new UserEntity();
+        user.setId(id);
         user.setEmail(username);
         user.setLanguage(lang);
-        user.setRole(roles.get(0));
+        if (roles != null && !roles.isEmpty()) {
+            user.setRole(roles.get(0));
+        }
 
         var userDetails = CustomUserDetails.builder().user(user).build();
 
-        UsernamePasswordAuthenticationToken authentication =
-            new UsernamePasswordAuthenticationToken(
-                userDetails,
-                null,
-                userDetails.getAuthorities()
-            );
-        return authentication;
+        return new UsernamePasswordAuthenticationToken(
+            userDetails,
+            null,
+            userDetails.getAuthorities()
+        );
     }
 }

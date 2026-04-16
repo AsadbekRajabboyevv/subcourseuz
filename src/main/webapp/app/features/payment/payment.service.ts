@@ -16,16 +16,10 @@ export class PaymentService {
   payments = signal<PaymentResponseDto[]>([]);
   isLoading = signal(false);
 
-  /**
-   * Kurs yoki Test sotib olish
-   */
   purchase(request: PaymentRequestDto): Observable<Base<PaymentResponseDto>> {
     return this.http.post<Base<PaymentResponseDto>>(this.PATH, request);
   }
 
-  /**
-   * To'lovlar tarixini olish (Filter bilan)
-   */
   getHistory(filter: PaymentFilter, page: number = 0, size: number = 10): Observable<Base<Page<PaymentResponseDto>>> {
     this.isLoading.set(true);
 
@@ -33,7 +27,6 @@ export class PaymentService {
     .set('page', page.toString())
     .set('size', size.toString());
 
-    // Filtrlarni dinamik qo'shish
     Object.entries(filter).forEach(([key, value]) => {
       if (value) params = params.set(key, value.toString());
     });
@@ -46,9 +39,6 @@ export class PaymentService {
     );
   }
 
-  /**
-   * Bitta to'lov ma'lumotini olish
-   */
   getOne(exId: string): Observable<Base<PaymentResponseDto>> {
     return this.http.get<Base<PaymentResponseDto>>(`${this.PATH}/${exId}`);
   }

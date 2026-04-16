@@ -3,65 +3,103 @@
 
         <div class="flex items-center gap-4 lg:gap-10">
             <a routerLink="/home" class="flex items-center group">
-                <div class="bg-green-600 text-white p-2 rounded-lg mr-2 shadow-sm group-hover:scale-110 transition-transform">
-                    <i class="fa-solid fa-graduation-cap"></i>
+                <div class="bg-emerald-600 text-white p-2.5 rounded-xl mr-2.5 shadow-lg shadow-emerald-500/20 group-hover:rotate-6 transition-transform">
+                    <i class="fa-solid fa-graduation-cap text-lg"></i>
                 </div>
-                <span class="font-bold text-lg md:text-xl tracking-tight text-gray-900 dark:text-white truncate max-w-[150px] md:max-w-none">
+                <span class="font-black text-xl tracking-tighter text-gray-900 dark:text-white uppercase">
                     {{ appTitle }}
                 </span>
             </a>
 
-            <nav class="hidden lg:flex items-center space-x-8 text-[13px] font-bold text-gray-600 dark:text-gray-300">
-                <a routerLink="/courses-list" class="hover:text-green-600 dark:hover:text-green-400 transition-colors uppercase">Kurslar</a>
-                <a *ngIf="isLoggedIn && userRole === 'ROLE_USER'" routerLink="/courses/view/me" class="hover:text-green-600 dark:hover:text-green-400 transition-colors uppercase">Mening kurslarim</a>
-                <a routerLink="/tests" class="hover:text-green-600 dark:hover:text-green-400 transition-colors uppercase">Online Test</a>
-                <a routerLink="/blog" class="hover:text-green-600 dark:hover:text-green-400 transition-colors uppercase">Blog</a>
+            <nav class="hidden lg:flex items-center space-x-8 text-[11px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400">
+                <a routerLink="/courses-list" routerLinkActive="text-emerald-600 dark:text-emerald-400" class="hover:text-emerald-600 transition-colors">Kurslar</a>
+                <a *ngIf="isLoggedIn && userRole === 'ROLE_USER'" routerLink="/courses-me" routerLinkActive="text-emerald-600" class="hover:text-emerald-600 transition-colors text-nowrap">Mening kurslarim</a>
+                <a routerLink="/tests" routerLinkActive="text-emerald-600" class="hover:text-emerald-600 transition-colors text-nowrap">Online Test</a>
+                <a routerLink="/blog" routerLinkActive="text-emerald-600" class="hover:text-emerald-600 transition-colors">Blog</a>
             </nav>
         </div>
 
-        <div class="flex items-center space-x-2 md:space-x-5">
+        <div class="flex items-center gap-3 md:gap-6">
+
             <app-theme-switch></app-theme-switch>
 
-            <div *ngIf="isLoggedIn" class="relative">
-                <button (click)="toggleProfile()" class="flex items-center focus:outline-none">
-                    <div *ngIf="authService.currentUser()?.imagePath==null" class="w-9 h-9 md:w-10 md:h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center border-2 border-transparent hover:border-green-500 transition-all">
-                        <span class="text-gray-500 dark:text-gray-400 text-sm md:text-base font-bold">{{ authService.currentUser()?.firstName?.charAt(0) }}</span>
+            <div *ngIf="isLoggedIn" class="hidden md:flex items-center gap-3 pl-4 border-l border-gray-100 dark:border-gray-800">
+                <div class="flex flex-col items-end">
+                    <span class="text-[8px] font-black uppercase tracking-widest text-emerald-500 leading-none">Balans</span>
+                    <span class="text-[13px] font-black text-gray-900 dark:text-white leading-tight">
+                       0 <small class="text-[9px] font-bold opacity-60">UZS</small>
+                    </span>
+                </div>
+                <button [routerLink]="['/top-up']"
+                        class="active:scale-95 hover:rotate-12 flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 transition-all hover:bg-emerald-600 hover:text-white dark:bg-emerald-500/10 dark:text-emerald-400">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                </button>
+            </div>
+
+            <div *ngIf="isLoggedIn" class="relative group">
+                <button (click)="toggleProfile()" class=" active:scale-95 hover:rotate-12 flex items-center gap-2 focus:outline-none p-0.5 rounded-full border-2 border-transparent hover:border-emerald-500 transition-all">
+                    <div class="w-9 h-9 md:w-10 md:h-10 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center shadow-inner">
+                        <img *ngIf="authService.currentUser()?.imagePath" [src]="authService.currentUser()?.imagePath" class="w-full h-full object-cover">
+                        <span *ngIf="!authService.currentUser()?.imagePath" class="text-gray-500 dark:text-gray-400 font-black text-sm uppercase">
+                            {{ authService.currentUser()?.firstName?.charAt(0) }}
+                        </span>
                     </div>
                 </button>
 
-                <div *ngIf="isProfileOpen" class="absolute right-0 mt-3 w-52 bg-white border border-gray-100 rounded-xl shadow-xl py-2 z-50 dark:bg-gray-800 dark:border-gray-700">
-                    <a routerLink="/profile" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700/50">
-                        <i class="fa-solid fa-user mr-3"></i> Profil
+                <div *ngIf="isProfileOpen"
+                     class="absolute right-0 mt-3 w-56 bg-white border border-gray-100 rounded-[1.5rem] shadow-2xl py-3 z-[60] dark:bg-gray-800 dark:border-gray-700 animate-in fade-in slide-in-from-top-2 duration-200">
+
+                    <div class="px-4 py-2 mb-2 border-b border-gray-50 dark:border-gray-700/50">
+                        <p class="text-[10px] font-black uppercase text-gray-400 tracking-tighter leading-none">Foydalanuvchi</p>
+                        <p class="text-sm font-black text-gray-900 dark:text-white truncate">{{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}</p>
+                    </div>
+
+                    <a routerLink="/profile" class="flex items-center px-4 py-2.5 text-[11px] font-black uppercase tracking-widest text-gray-600 hover:text-emerald-600 hover:bg-emerald-50/50 dark:text-gray-300 dark:hover:bg-gray-700/50 transition-all">
+                        <i class="fa-solid fa-user-gear mr-3 text-emerald-500"></i> Profil Sozlamalari
                     </a>
-                    <button (click)="logout()" class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20">
-                        <i class="fa-solid fa-right-from-bracket mr-3"></i> Chiqish
+
+                    <div class="h-px bg-gray-50 dark:bg-gray-700 my-2 mx-4"></div>
+
+                    <button (click)="logout()" class="flex items-center w-full px-4 py-2.5 text-[11px] font-black uppercase tracking-widest text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all">
+                        <i class="fa-solid fa-power-off mr-3"></i> Tizimdan chiqish
                     </button>
                 </div>
             </div>
 
-            <button *ngIf="!isLoggedIn" routerLink="/auth/login" class="hidden sm:flex items-center gap-2 bg-green-600 text-white px-5 py-2 rounded-xl font-bold text-xs hover:bg-green-700 transition-all shadow-md active:scale-95">
-                KIRISH
+            <button *ngIf="!isLoggedIn" routerLink="/auth/login"
+                    class="hidden sm:flex items-center gap-2 bg-gray-900 dark:bg-white dark:text-gray-900 text-white px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-600 dark:hover:bg-emerald-500 dark:hover:text-white transition-all shadow-xl active:scale-95">
+                Kirish
             </button>
 
-            <button class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors" (click)="toggleMobileMenu()">
+            <button class="lg:hidden h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 transition-all" (click)="toggleMobileMenu()">
                 <i class="fa-solid" [ngClass]="isMenuOpen ? 'fa-xmark' : 'fa-bars-staggered'"></i>
             </button>
         </div>
     </div>
 
-    <div *ngIf="isMenuOpen" class="lg:hidden absolute top-full left-0 w-full bg-white border-b border-gray-100 shadow-xl dark:bg-gray-900 dark:border-gray-800 z-40 animate-in slide-in-from-top duration-300">
-        <nav class="flex flex-col p-4 space-y-1">
-            <a routerLink="/courses-list" (click)="isMenuOpen = false" class="flex items-center p-3 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-200 font-medium">
-                <i class="fa-solid fa-book-open mr-3 w-5"></i> Kurslar
+    <div *ngIf="isMenuOpen" class="lg:hidden absolute top-full left-0 w-full bg-white border-b border-gray-100 shadow-2xl dark:bg-gray-900 dark:border-gray-800 z-40 animate-in slide-in-from-top duration-300">
+        <nav class="flex flex-col p-6 space-y-2">
+            <div *ngIf="isLoggedIn" class="flex justify-between items-center p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 mb-4">
+                <span class="text-[10px] font-black uppercase tracking-widest text-emerald-600">Sizning Balansingiz</span>
+                <span class="font-black text-gray-900 dark:text-white">0 UZS</span>
+            </div>
+
+            <a routerLink="/courses-list" (click)="isMenuOpen = false" class="flex items-center p-4 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-gray-700 dark:text-gray-200 font-black uppercase text-[10px] tracking-widest transition-all">
+                <i class="fa-solid fa-book-open mr-4 text-emerald-500 text-base"></i> Kurslar
             </a>
-            <a routerLink="/tests" (click)="isMenuOpen = false" class="flex items-center p-3 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-200 font-medium">
-                <i class="fa-solid fa-vial mr-3 w-5"></i> Online Testlar
+            <a *ngIf="isLoggedIn && userRole === 'ROLE_USER'" routerLink="/courses-me" (click)="isMenuOpen = false" class="flex items-center p-4 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-gray-700 dark:text-gray-200 font-black uppercase text-[10px] tracking-widest transition-all">
+                <i class="fa-solid fa-book-open mr-4 text-emerald-500 text-base"></i> Mening kurslarim
             </a>
-            <a routerLink="/tests" (click)="isMenuOpen = false" class="flex items-center p-3 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-700 dark:text-gray-200 font-medium">
-                <i class="fa-solid fa-vial mr-3 w-5"></i> Blog
+            <a routerLink="/tests" (click)="isMenuOpen = false" class="flex items-center p-4 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-gray-700 dark:text-gray-200 font-black uppercase text-[10px] tracking-widest transition-all">
+                <i class="fa-solid fa-vial mr-4 text-emerald-500 text-base"></i> Online Testlar
             </a>
-            <hr class="my-2 dark:border-gray-800">
-            <button *ngIf="!isLoggedIn" routerLink="/auth/login" class="w-full bg-green-600 text-white p-3 rounded-xl font-bold">KIRISH</button>
+            <a routerLink="/blog" (click)="isMenuOpen = false" class="flex items-center p-4 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-gray-700 dark:text-gray-200 font-black uppercase text-[10px] tracking-widest transition-all">
+                <i class="fa-solid fa-newspaper mr-4 text-emerald-500 text-base"></i> Blog
+            </a>
+
+            <div class="h-px bg-gray-50 dark:border-gray-800 my-4"></div>
+
+            <button *ngIf="!isLoggedIn" routerLink="/auth/login" class="w-full bg-emerald-600 text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs shadow-lg shadow-emerald-500/30">KIRISH</button>
         </nav>
     </div>
 </header>

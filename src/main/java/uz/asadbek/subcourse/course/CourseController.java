@@ -1,6 +1,5 @@
 package uz.asadbek.subcourse.course;
 
-import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -57,6 +56,11 @@ public class CourseController implements CourseApi {
     public BaseResponseDto<Page<CourseResponseDto>> get(CourseFilter filter,
         Pageable pageable) {
         return BaseResponseDto.ok(service.getInfo(pageable, filter));
+    }
+
+    @Override
+    public BaseResponseDto<Page<CourseResponseDto>> getMe(CourseFilter filter, Pageable pageable) {
+        return BaseResponseDto.ok(service.getMe(pageable, filter));
     }
 
     @Override

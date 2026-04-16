@@ -47,52 +47,75 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Page<CourseResponseDto> getInfo(Pageable pageable, CourseFilter filter) {
-        return repository.get(pageable, filter, LangUtils.currentLang());
+        return repository.get(pageable, filter, LangUtils.currentLang(), null);
+    }
+
+    @Override
+    public Page<CourseResponseDto> getMe(Pageable pageable, CourseFilter filter) {
+        return repository.get(pageable, filter, LangUtils.currentLang(), JwtUtil.getCurrentUser().getId());
     }
 
     @Override
     public CourseInfoResponseDto getInfo(Long id) {
-        var row = repository.get(id, LangUtils.currentLang(), JwtUtil.getCurrentUser().getId());
+        Long currentUserId = null;
+        if (JwtUtil.isAuthenticated() && !JwtUtil.isAdmin()) {
+            currentUserId = JwtUtil.getCurrentUser().getId();
+        }
 
-        if (row == null) {
+        Object[] result = repository.get(id, LangUtils.currentLang(), currentUserId);
+
+        if (result == null || result.length == 0) {
             throw ExceptionUtil.notFoundException("course_not_found");
         }
 
-        var i = 0;
+        Object[] row;
+        if (result[0] instanceof Object[]) {
+            row = (Object[]) result[0];
+        } else {
+            row = result;
+        }
 
-        var dto = new CourseInfoResponseDto(
-            ((Number) row[i++]).longValue(),          // id
-            (String) row[i++],                        // name
-            (String) row[i++],                        // description
-            (String) row[i++],                        // gradeName
-            (String) row[i++],                        // scienceName
-            ((Number) row[i++]).intValue(),           // duration
-            DurationType.valueOf((String) row[i++]),  // durationType
-            ((Number) row[i++]).longValue(),          // lessonsCount
-            ((Number) row[i++]).longValue(),          // studentsCount
-            (String) row[i++],                        // ownerName
-            ((Number) row[i++]).longValue(),          // price
-            (String) row[i++],                        // imagePath
-            (String) row[i++],                        // lang
-            row[i++] != null && (Boolean) row[i - 1], // purchased
-            null,                                     // lessons
-            ((Number) row[i++]).longValue(),          // scienceId
-            ((Number) row[i++]).longValue()           // gradeId
-        );
+        int i = 0;
+        CourseInfoResponseDto dto = new CourseInfoResponseDto();
 
-        String lessonsJson = (String) row[i];
+        dto.setId(convertToLong(row[i++]));
+        dto.setName((String) row[i++]);
+        dto.setDescription((String) row[i++]);
+        dto.setGradeName((String) row[i++]);
+        dto.setScienceName((String) row[i++]);
+        dto.setDuration(row[i] != null ? ((Number) row[i++]).intValue() : 0);
+        dto.setDurationType(row[i] != null ? DurationType.valueOf((String) row[i++]) : null);
+        dto.setLessonsCount(convertToLong(row[i++]));
+        dto.setStudentsCount(convertToLong(row[i++]));
+        dto.setOwnerName((String) row[i++]);
+        dto.setPrice(convertToLong(row[i++]));
+        dto.setImagePath((String) row[i++]);
+        dto.setLang((String) row[i++]);
 
+        // Purchased (Boolean) tekshiruvi
+        Object purchasedObj = row[i++];
+        dto.setPurchased(purchasedObj != null && (Boolean) purchasedObj);
+
+        String lessonsJson = (row[i] != null) ? row[i++].toString() : "[]";
         try {
-            List<CourseLessonResponseDto> lessons =
-                new ObjectMapper().readValue(lessonsJson, new TypeReference<>() {
-                });
+            List<CourseLessonResponseDto> lessons = new ObjectMapper()
+                .readValue(lessonsJson, new TypeReference<List<CourseLessonResponseDto>>() {});
             dto.setLessons(lessons);
         } catch (Exception e) {
             log.error("Error parsing lessons JSON: {}", e.getMessage());
             dto.setLessons(List.of());
         }
 
+        dto.setScienceId(convertToLong(row[i++]));
+        dto.setGradeId(convertToLong(row[i++]));
+
         return dto;
+    }
+
+    private Long convertToLong(Object obj) {
+        if (obj == null) return 0L;
+        if (obj instanceof Number) return ((Number) obj).longValue();
+        return 0L;
     }
 
     @Override

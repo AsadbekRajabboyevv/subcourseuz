@@ -1,0 +1,91 @@
+<app-page-wrapper>
+    <div page-title>
+        <nav class="mb-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
+            <a routerLink="/" class="hover:text-emerald-500">Asosiy</a>
+            <i class="fa-solid fa-chevron-right text-[7px]"></i>
+            <a routerLink="/courses/view/me" class="text-emerald-500">Mening kurslarim</a>
+            <i class="fa-solid fa-chevron-right text-[7px]"></i>
+        </nav>
+    </div>
+
+    <div content class="grid grid-cols-12 gap-8">
+        <aside class="col-span-12 lg:col-span-3">
+            <div class="sticky top-24 space-y-5 rounded-[2.5rem] border border-gray-100 bg-white p-7 shadow-2xl dark:border-gray-800 dark:bg-gray-900">
+                <div class="flex items-center justify-between px-1">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-emerald-500 text-xs"></i>
+                        <h3 class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">Filtrlash</h3>
+                    </div>
+                    <button (click)="resetFilters()" class="active:scale-95 hover:rotate-2 text-[9px] font-bold uppercase text-gray-400 hover:text-red-500 transition-colors">Tozalash</button>
+                </div>
+
+                <div class="space-y-4 ">
+                    <app-input type="text" label="Qidiruv" placeholder="Nomi..." [(ngModel)]="filter.search"></app-input>
+                    <button (click)="applyFilters()" class="mt-5 hover:rotate-2 w-full rounded-2xl bg-emerald-600 py-4 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-emerald-500/20 hover:bg-emerald-700 transition-all active:scale-95">
+                        Natijalarni ko'rish
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <main class="col-span-12 lg:col-span-9">
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+                @if (courseService.isLoading() && courseService.courses().length === 0) {
+                    @for (i of [1,2,3,4,5,6]; track i) {
+                        <div class="h-80 animate-pulse rounded-[2.5rem] bg-gray-100 dark:bg-gray-800"></div>
+                    }
+                }
+
+                @for (course of courseService.courses(); track course.id) {
+                    <div class="active:scale-95 hover:rotate-2 group relative flex flex-col rounded-[2.5rem] border border-gray-100 bg-white p-4 transition-all hover:border-emerald-500 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900">
+                        <div class="relative h-44 overflow-hidden rounded-[1.8rem]">
+                            <img [src]="course.imagePath || 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png'" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute top-3 left-3 rounded-lg bg-black/40 backdrop-blur-md px-2 py-1 text-[9px] font-black text-white uppercase">
+                                {{ course.lang }}
+                            </div>
+                        </div>
+
+                        <div class="mt-5 px-1 flex-1 flex flex-col">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[9px] font-black uppercase text-emerald-500 tracking-tighter">{{ course.ownerName }}</span>
+                                <span class="text-[9px] font-bold text-gray-400">{{ course.lessonsCount }} dars</span>
+                            </div>
+
+                            <h3 class="text-lg font-black tracking-tight text-gray-900 dark:text-white line-clamp-2 leading-tight">
+                                {{ course.name }}
+                            </h3>
+
+                            <div class="mt-auto pt-4 flex items-center gap-2">
+                                <button [routerLink]="['/courses-view/', course.name]"
+                                        [queryParams]="{ id: course.id }"
+                                        class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-[10px] font-black uppercase text-white transition-all hover:bg-emerald-600 dark:bg-white dark:text-gray-900 active:scale-95">
+                                    <i class="fa-solid fa-play text-xs"></i>
+                                    <span>Davom ettirish</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (courseService.isLoading() && courseService.courses().length > 0) {
+                <div class="flex justify-center py-12">
+                    <div class="flex items-center gap-3">
+                        <div class="h-2 w-2 animate-bounce rounded-full bg-emerald-500"></div>
+                        <div class="h-2 w-2 animate-bounce rounded-full bg-emerald-500 [animation-delay:-0.3s]"></div>
+                        <div class="h-2 w-2 animate-bounce rounded-full bg-emerald-500 [animation-delay:-0.5s]"></div>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-2">Yuklanmoqda...</span>
+                    </div>
+                </div>
+            }
+
+            @if (!courseService.isLoading() && courseService.courses().length === 0) {
+                <div class="py-20 text-center opacity-30">
+                    <i class="fa-solid fa-box-open text-5xl mb-4 text-gray-300"></i>
+                    <p class="font-black uppercase tracking-widest text-xs">Kurslar topilmadi</p>
+                </div>
+            }
+        </main>
+    </div>
+</app-page-wrapper>

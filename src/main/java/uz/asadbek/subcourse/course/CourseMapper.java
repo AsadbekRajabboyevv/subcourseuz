@@ -15,7 +15,6 @@ public interface CourseMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "isVideoCourse", expression = "java(Boolean.TRUE.equals(dto.getIsVideoCourse()))")
     @Mapping(target = "isPublished", expression = "java(Boolean.TRUE.equals(dto.getIsPublished()))")
-    @Mapping(target = "lang", source = "lang")
     @Mapping(target = "ownerId", expression = "java(uz.asadbek.subcourse.util.JwtUtil.getCurrentUser().getId())")
     CourseEntity toEntity(CourseRequestDto dto);
 

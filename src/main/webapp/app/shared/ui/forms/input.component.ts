@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef } from '@angular/core';
+import { Component, Input, forwardRef, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
@@ -6,6 +6,7 @@ import { FormsModule, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/f
   selector: 'app-input',
   standalone: true,
   imports: [CommonModule, FormsModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -31,6 +32,22 @@ import { FormsModule, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/f
                         hover:border-emerald-500 focus:border-emerald-500 focus:bg-white
                         dark:border-gray-800 dark:bg-gray-800 dark:text-white dark:focus:bg-gray-900 dark:focus:border-emerald-500
                         placeholder:text-gray-400 dark:placeholder:text-gray-600">
+        </ng-container>
+
+        <ng-container *ngIf="type === 'trix'">
+          <div class="w-full rounded-[2rem] border-2 border-gray-50 bg-gray-50 overflow-hidden transition-all
+              hover:border-emerald-500 focus-within:border-emerald-500 focus-within:bg-white
+              dark:border-gray-800 dark:bg-gray-800">
+
+            <input [id]="label + '-trix-input'" type="hidden" [value]="value">
+
+            <trix-editor
+              [attr.input]="label + '-trix-input'"
+              class="trix-content min-h-[400px] p-6 text-sm font-bold dark:text-white outline-none"
+              (trix-change)="onTrixChange($event)"
+              [attr.placeholder]="placeholder">
+            </trix-editor>
+          </div>
         </ng-container>
 
         <ng-container *ngIf="type === 'textarea'">
@@ -86,12 +103,7 @@ import { FormsModule, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/f
               <p class="text-xs font-black uppercase dark:text-white">{{ fileName || placeholder || 'Faylni yuklang' }}</p>
             </div>
           </div>
-
           <div *ngIf="uploadProgress > 0" class="px-2">
-            <div class="flex justify-between mb-1">
-              <span class="text-[9px] font-black text-emerald-600 uppercase">Yuklanmoqda...</span>
-              <span class="text-[9px] font-black text-emerald-600">{{ uploadProgress }}%</span>
-            </div>
             <div class="h-1.5 w-full rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden">
               <div class="h-full bg-emerald-500 transition-all duration-300" [style.width.%]="uploadProgress"></div>
             </div>
@@ -100,32 +112,104 @@ import { FormsModule, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/f
 
       </div>
     </div>
-  `
+  `,
+  styles: [`
+    /* Trix Toolbar */
+    trix-toolbar {
+      border-bottom: 2px solid #f3f4f6 !important; /* gray-100 */
+      background-color: rgba(255, 255, 255, 0.5) !important;
+      padding: 0.5rem !important;
+    }
+
+    .dark trix-toolbar {
+      border-bottom-color: #1f2937 !important; /* gray-800 */
+      background-color: rgba(31, 41, 55, 0.5) !important;
+    }
+
+    trix-toolbar .trix-button-row {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 0.25rem !important;
+    }
+
+    trix-toolbar .trix-button {
+      border: none !important;
+      background-color: transparent !important;
+      border-radius: 0.5rem !important;
+      transition: all 0.2s !important;
+      color: #4b5563 !important; /* gray-600 */
+    }
+
+    .dark trix-toolbar .trix-button {
+      color: #9ca3af !important; /* gray-400 */
+    }
+
+    trix-toolbar .trix-button:hover {
+      background-color: #ecfdf5 !important; /* emerald-50 */
+      color: #10b981 !important; /* emerald-500 */
+    }
+
+    trix-toolbar .trix-button--active {
+      background-color: #10b981 !important;
+      color: white !important;
+    }
+
+    /* Trix Editor Body */
+    trix-editor {
+      min-height: 200px !important;
+      border: none !important;
+      outline: none !important;
+      font-weight: 400 !important;
+    }
+
+    /* Content Styling */
+    .trix-content h1 {
+      font-size: 1.25rem !important;
+      font-weight: 900 !important;
+      margin-bottom: 0.5rem !important;
+    }
+
+    .trix-content blockquote {
+      border-left: 4px solid #10b981 !important;
+      padding-left: 1rem !important;
+      font-style: italic !important;
+      color: #6b7280 !important;
+    }
+  `]
 })
 export class InputComponent implements ControlValueAccessor {
-  @Input() type: 'text' | 'number' | 'select' | 'multi-select' | 'checkbox' | 'date' | 'textarea' | 'file' = 'text';
+  @Input() type: 'text' | 'number' | 'select' | 'multi-select' | 'checkbox' | 'date' | 'textarea' | 'file' | 'trix' = 'text';
   @Input() label: string = '';
   @Input() placeholder: string = 'Tanlang';
   @Input() options: { label: string, value: any }[] = [];
 
-  value: any;
+  value: any = '';
   uploadProgress: number = 0;
   fileName: string = '';
 
   onChange: any = () => {};
   onTouch: any = () => {};
 
+  onTrixChange(event: any) {
+    const newValue = event.target.value;
+
+    if (this.value !== newValue) {
+      this.value = newValue;
+      this.onChange(newValue);
+      this.onTouch();
+    }
+  }
   onValueChange(newValue: any) {
     this.value = newValue;
     this.onChange(newValue);
   }
 
+  // --- MAVJUD METODLAR ---
   handleFileUpload(event: any) {
     const file = event.target.files[0];
     if (file) {
       this.fileName = file.name;
       this.uploadProgress = 0;
-
       const interval = setInterval(() => {
         this.uploadProgress += 10;
         if (this.uploadProgress >= 100) {
@@ -147,7 +231,7 @@ export class InputComponent implements ControlValueAccessor {
     return Array.isArray(this.value) && this.value.includes(optValue);
   }
 
-  writeValue(value: any): void { this.value = value; if(!value) { this.fileName = ''; this.uploadProgress = 0; } }
+  writeValue(value: any): void { this.value = value || ''; }
   registerOnChange(fn: any): void { this.onChange = fn; }
   registerOnTouched(fn: any): void { this.onTouch = fn; }
 }

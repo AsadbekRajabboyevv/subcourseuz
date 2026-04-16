@@ -12,32 +12,44 @@ import {
   OneCourseScience
 } from "./course.model";
 import {catchError} from "rxjs/operators";
+import {AuthService} from "../../common/auth/auth.service";
 
 @Injectable({providedIn: 'root'})
 export class CourseService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
   private readonly PATH = `${environment.apiPath}/v1/api/courses`;
-  private readonly PUBLIC_PATH = `${environment.apiPath}/v1/public`;
+  private readonly PUBLIC_PATH = `${environment.apiPath}/v1/api/public`;
   private readonly SCIENCE_PATH = `${environment.apiPath}/v1/api/sciences`;
 
   courses = signal<Course[]>([]);
   isLoading = signal<boolean>(false);
-//====================Course============================================
-  get(filter: CourseFilter): Observable<Base<Page<Course>>> {
+
+  get(filter: CourseFilter, page: number, size: number): Observable<Base<Page<Course>>> {
+    const path = !this.authService.isLoggedIn() ? `${this.PUBLIC_PATH}/courses` : this.PATH;
+    return this.fetchCourses(path, filter, page, size);
+  }
+
+  getMe(filter: CourseFilter, page: number, size: number): Observable<Base<Page<Course>>> {
+    return this.fetchCourses(`${this.PATH}/me`, filter, page, size);
+  }
+
+
+  private fetchCourses(url: string, filter: CourseFilter, page: number, size: number): Observable<Base<Page<Course>>> {
     this.isLoading.set(true);
 
-    let params = new HttpParams();
+    let params = new HttpParams()
+    .set('page', page.toString())
+    .set('size', size.toString());
 
     Object.entries(filter).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') {
         params = params.set(key, value.toString());
       }
     });
-    return this.http.get<Base<Page<Course>>>(this.PATH, {params}).pipe(
-      tap((res) => {
-        this.courses.set(res.data.content);
-        this.isLoading.set(false);
-      }),
+
+    return this.http.get<Base<Page<Course>>>(url, { params }).pipe(
+      tap(() => this.isLoading.set(false)),
       catchError((err) => {
         this.isLoading.set(false);
         throw err;
@@ -45,8 +57,21 @@ export class CourseService {
     );
   }
 
+  setCourses(newCourses: Course[]) {
+    this.courses.set(newCourses);
+  }
+
+  resetCourses() {
+    this.courses.set([]);
+  }
+
+  appendCourses(newCourses: Course[]) {
+    this.courses.update(prev => [...prev, ...newCourses]);
+  }
+
   getById(id: number): Observable<Base<CourseInfo>> {
-    return this.http.get<Base<CourseInfo>>(`${this.PATH}/${id}`);
+    const path = !this.authService.isLoggedIn() ? `${this.PUBLIC_PATH}/courses` : this.PATH;
+    return this.http.get<Base<CourseInfo>>(`${path}/${id}`);
   }
 
   create(course: Partial<Course>, image: File): Observable<Base<Course>> {
@@ -69,10 +94,6 @@ export class CourseService {
         this.courses.update(list => list.filter(c => c.id !== id));
       })
     );
-  }
-
-  getPublic(): Observable<Base<Page<Course>>> {
-    return this.http.get<Base<Page<Course>>>(`${this.PUBLIC_PATH}/courses`);
   }
 
 //====================Grade============================================
@@ -119,4 +140,6 @@ export class CourseService {
   deleteScience(id: number): Observable<Base<void>> {
     return this.http.delete<Base<void>>(`${this.SCIENCE_PATH}/${id}`);
   }
+
+
 }

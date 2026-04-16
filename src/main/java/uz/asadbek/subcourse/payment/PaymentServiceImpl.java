@@ -75,24 +75,17 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public PaymentResponseDto purchase(PaymentRequestDto request, Boolean isTopUp) {
+        if (JwtUtil.isAuthenticated()) {
+            var courseId = request.getCourseId();
+            var testId = request.getTestId();
+            var couponCode = request.getCouponCode();
 
-        var courseId = request.getCourseId();
-        var testId = request.getTestId();
-        var couponCode = request.getCouponCode();
-        var amount = request.getAmount() != null ? request.getAmount() : 0L;
-        TestResponseDto test = null;
-        CourseResponseDto course = null;
-        var transactionId = "";
-        Long savedPaymentId = null;
-        var balance = balanceService.get();
-        try {
-            if (courseId != null && testId != null) {
-                throw ExceptionUtil.badRequestException("only_one_product_allowed");
-            }
+            validatePurchaseRequest(courseId, testId);
 
-            if (courseId == null && testId == null) {
-                throw ExceptionUtil.badRequestException("product_required");
-            }
+            var balance = balanceService.get();
+            Long amount;
+            CourseResponseDto course = null;
+            TestResponseDto test = null;
 
             if (courseId != null) {
                 course = courseService.get(courseId);
@@ -106,30 +99,40 @@ public class PaymentServiceImpl implements PaymentService {
                 amount = 0L;
             }
 
-            if (!isTopUp) {
+            if (!isTopUp && amount > 0) {
                 balanceService.debit(amount);
+            } else if (amount == 0) {
+                log.info("Xarid kupon orqali tekin amalga oshirilmoqda. CourseId: {}", courseId);
             }
 
             var payment = buildPayment(course, test, amount, balance.getCurrency());
             var savedPayment = repository.save(payment);
-            savedPaymentId = savedPayment.getId();
-            transactionId = balanceTransactionService.createTransaction(savedPayment);
+
+            var transactionId = balanceTransactionService.createTransaction(savedPayment);
+
             if (testId != null) {
                 testService.enroll(testId);
-            }else {
+            } else {
                 courseService.enroll(courseId);
             }
+
             return PaymentResponseDto.builder()
                 .exId(savedPayment.getExId())
                 .amount(amount)
                 .transactionId(transactionId)
                 .status(savedPayment.getStatus())
                 .build();
+        } else {
+            throw ExceptionUtil.unAuthorizedException("user_not_authenticated");
+        }
+    }
 
-        } catch (Exception e) {
-            log.error("Payment failed: {}", e.getMessage());
-            balanceTransactionService.cancelTransaction(savedPaymentId);
-            throw ExceptionUtil.badRequestException("payment_failed");
+    private void validatePurchaseRequest(Long courseId, Long testId) {
+        if (courseId != null && testId != null) {
+            throw ExceptionUtil.paymentException("only_one_product_allowed");
+        }
+        if (courseId == null && testId == null) {
+            throw ExceptionUtil.paymentException("product_required");
         }
     }
 
@@ -141,7 +144,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         if (payment.getStatus() == PaymentStatus.SUCCESS) {
             if (action == PaymentAction.CANCEL) {
-                throw ExceptionUtil.badRequestException("payment_already_success");
+                throw ExceptionUtil.paymentException("payment_already_success");
             }
             return buildResponse(payment, null);
         }
@@ -149,7 +152,7 @@ public class PaymentServiceImpl implements PaymentService {
         if (payment.getStatus() != PaymentStatus.PROCESSING &&
             payment.getStatus() != PaymentStatus.CREATED) {
 
-            throw ExceptionUtil.badRequestException("invalid_payment_status");
+            throw ExceptionUtil.paymentException("invalid_payment_status");
         }
 
         payment.setCompletedAt(LocalDateTime.now());
@@ -175,12 +178,19 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Page<PaymentResponseDto> get(Pageable pageable, PaymentFilter filter) {
+        if (!JwtUtil.isAdmin()){
+            filter.setUserId(JwtUtil.getCurrentUser().getId());
+        }
         return repository.get(filter, pageable);
     }
 
     @Override
     public PaymentResponseDto get(String exId) {
-        return repository.get(exId);
+        Long userId = null;
+        if (!JwtUtil.isAdmin()){
+           userId = JwtUtil.getCurrentUser().getId();
+        }
+        return repository.get(exId, userId);
     }
 
     private PaymentResponseDto buildResponse(PaymentEntity payment,

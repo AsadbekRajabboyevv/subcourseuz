@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import uz.asadbek.subcourse.course.CourseService;
+import uz.asadbek.subcourse.course.dto.CourseInfoResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
 import uz.asadbek.subcourse.course.filter.CourseFilter;
 import uz.asadbek.subcourse.course.grade.CourseGradeService;
@@ -47,8 +48,8 @@ public class PublicServiceImpl implements PublicService {
     }
 
     @Override
-    public CourseResponseDto getCourse() {
-        return null;
+    public CourseInfoResponseDto getCourse(Long id) {
+        return courseService.getInfo(id);
     }
 
     @Override

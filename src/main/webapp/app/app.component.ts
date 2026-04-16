@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { NavigationStart, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./common/header/app.header.component";
 import { FooterComponent } from "./common/footer/app.footer.component";
+import {ErrorModalComponent} from "./common/error/error-modal.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, ErrorModalComponent],
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
