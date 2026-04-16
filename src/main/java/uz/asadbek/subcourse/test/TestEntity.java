@@ -39,11 +39,11 @@ public class TestEntity extends BaseEntity implements SoftDeletable {
     )
     private Long id;
 
-    @Embedded
-    private NameEmbedded nameEmbedded;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @Embedded
-    private DescriptionEmbedded descriptionEmbedded;
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
 
     @Column(name = "science_id", nullable = false)
     private Long scienceId;
@@ -54,8 +54,17 @@ public class TestEntity extends BaseEntity implements SoftDeletable {
     @Column(name = "lesson_id")
     private Long lessonId;
 
+    @Column(name = "lang", nullable = false)
+    private String lang;
+
     @Column(name = "duration", nullable = false)
     private Integer duration;
+
+    @Column(name = "is_published", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean isPublished;
+
+    @Column(name = "price", nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+    private Long price;
 
     @Column(name = "image_path")
     private String imagePath;

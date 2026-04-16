@@ -1,1 +1,33 @@
+/* home.component.css */
+.slider-container {
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-drag: none;
+}
 
+.slider-track {
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+/* Mobil qurilmalarda gorizontal skrollni yashirish */
+.slider-container::-webkit-scrollbar {
+    display: none;
+}
+
+.line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-in {
+    animation: slideIn 0.3s ease-out forwards;
+}

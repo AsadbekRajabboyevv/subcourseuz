@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd"
+    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1775220943057-1" author="nitro">
+        <createSequence incrementBy="1" sequenceName="balance_transactions_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-2" author="nitro">
+        <createSequence incrementBy="1" sequenceName="balances_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-3" author="nitro">
+        <createSequence incrementBy="50" sequenceName="comments_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-4" author="nitro">
+        <createSequence incrementBy="50" sequenceName="course_grades_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-5" author="nitro">
+        <createSequence incrementBy="50" sequenceName="course_lessons_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-6" author="nitro">
+        <createSequence incrementBy="50" sequenceName="courses_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-7" author="nitro">
+        <createSequence incrementBy="50" sequenceName="files_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-8" author="nitro">
+        <createSequence incrementBy="50" sequenceName="lesson_progresses_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-9" author="nitro">
+        <createSequence incrementBy="50" sequenceName="payments_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-10" author="nitro">
+        <createSequence incrementBy="50" sequenceName="sciences_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-11" author="nitro">
+        <createSequence incrementBy="50" sequenceName="test_options_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-12" author="nitro">
+        <createSequence incrementBy="50" sequenceName="test_questions_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-13" author="nitro">
+        <createSequence incrementBy="50" sequenceName="test_session_answers_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-14" author="nitro">
+        <createSequence incrementBy="50" sequenceName="test_session_questions_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-15" author="nitro">
+        <createSequence incrementBy="50" sequenceName="test_sessions_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-16" author="nitro">
+        <createSequence incrementBy="50" sequenceName="tests_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-17" author="nitro">
+        <createSequence incrementBy="50" sequenceName="top_up_req_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-18" author="nitro">
+        <createSequence incrementBy="50" sequenceName="users_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1775220943057-19" author="nitro">
+        <createTable tableName="balance_transactions">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"
+                    primaryKeyName="pk_balance_transactions"/>
+            </column>
+            <column name="external_tx" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_id" type="BIGINT"/>
+            <column name="transaction_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance_before" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance_after" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="reference_id" type="BIGINT"/>
+            <column name="completed_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-20" author="nitro">
+        <createTable tableName="balances">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_balances"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="balance" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="pending_balance" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="true" name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_transaction_at" type="DATETIME"/>
+            <column name="currency" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-21" author="nitro">
+        <createTable tableName="comments">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_comments"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="text" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-22" author="nitro">
+        <createTable tableName="course_grades">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_course_grades"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="name_uz" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_ru" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_en" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_crl" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description_uz" type="TEXT"/>
+            <column name="description_ru" type="TEXT"/>
+            <column name="description_en" type="TEXT"/>
+            <column name="description_crl" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-23" author="nitro">
+        <createTable tableName="course_lessons">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_course_lessons"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lesson_number" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text_content" type="text"/>
+            <column name="video_url" type="VARCHAR(255)"/>
+            <column name="course_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-24" author="nitro">
+        <createTable tableName="courses">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_courses"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="price" type="BIGINT"/>
+            <column name="name" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="duration" type="INT"/>
+            <column name="duration_type" type="SMALLINT"/>
+            <column name="image_path" type="VARCHAR(255)"/>
+            <column defaultValueBoolean="false" name="is_published" type="BOOLEAN"/>
+            <column name="science_id" type="BIGINT"/>
+            <column name="grade_id" type="BIGINT"/>
+            <column name="owner_id" type="BIGINT"/>
+            <column name="lang" type="VARCHAR(255)"/>
+            <column defaultValueBoolean="false" name="is_video_course" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-25" author="nitro">
+        <createTable tableName="files">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_files"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="file_key" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="original_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stored_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="path" type="VARCHAR(255)"/>
+            <column name="size" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_public" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-26" author="nitro">
+        <createTable tableName="lesson_progresses">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"
+                    primaryKeyName="pk_lesson_progresses"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lesson_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="start_time" type="DATETIME"/>
+            <column name="end_time" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-27" author="nitro">
+        <createTable tableName="payments">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_payments"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="reference_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ex_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cancel_reason" type="VARCHAR(255)"/>
+            <column name="completed_at" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-28" author="nitro">
+        <createTable tableName="sciences">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_sciences"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="image_path" type="VARCHAR(255)"/>
+            <column name="name_uz" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_ru" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_en" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_crl" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description_uz" type="TEXT"/>
+            <column name="description_ru" type="TEXT"/>
+            <column name="description_en" type="TEXT"/>
+            <column name="description_crl" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-29" author="nitro">
+        <createTable tableName="test_options">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_test_options"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="text" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="question_id" type="BIGINT"/>
+            <column name="image_path" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-30" author="nitro">
+        <createTable tableName="test_questions">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_test_questions"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="text" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_path" type="VARCHAR(255)"/>
+            <column name="test_id" type="BIGINT"/>
+            <column name="correct_option_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-31" author="nitro">
+        <createTable tableName="test_session_answers">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"
+                    primaryKeyName="pk_test_session_answers"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="session_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="question_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="selected_option_id" type="BIGINT"/>
+            <column name="answered_at" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-32" author="nitro">
+        <createTable tableName="test_session_questions">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"
+                    primaryKeyName="pk_test_session_questions"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="session_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="question_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order_index" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="question_text" type="TEXT"/>
+            <column name="image_path" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-33" author="nitro">
+        <createTable tableName="test_sessions">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_test_sessions"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="test_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="started_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expires_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="finished_at" type="DATETIME"/>
+            <column name="duration_seconds" type="INT"/>
+            <column name="score" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-34" author="nitro">
+        <createTable tableName="tests">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tests"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="science_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="course_id" type="BIGINT"/>
+            <column name="lesson_id" type="BIGINT"/>
+            <column name="lang" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="false" name="is_published" type="BOOLEAN"/>
+            <column defaultValueNumeric="0" name="price" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_path" type="VARCHAR(255)"/>
+            <column name="grade_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-35" author="nitro">
+        <createTable tableName="top_up_requests">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"
+                    primaryKeyName="pk_top_up_requests"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_key" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="VARCHAR(255)"/>
+            <column name="comment" type="VARCHAR(255)"/>
+            <column name="approved_by" type="BIGINT"/>
+            <column name="approved_at" type="DATETIME"/>
+            <column name="rejected_at" type="DATETIME"/>
+            <column name="payment_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-36" author="nitro">
+        <createTable tableName="user_courses">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_courses"/>
+            </column>
+            <column name="reference_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_courses"/>
+            </column>
+            <column name="purchased_at" type="DATETIME">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_courses"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-37" author="nitro">
+        <createTable tableName="users">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bio" type="TEXT"/>
+            <column name="first_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="language" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="position" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="confirmation_token" type="VARCHAR(255)"/>
+            <column name="birth_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775220943057-38" author="nitro">
+        <addUniqueConstraint columnNames="external_tx"
+            constraintName="uc_balance_transactions_external_tx" tableName="balance_transactions"/>
+    </changeSet>
+    <changeSet id="1775220943057-39" author="nitro">
+        <addUniqueConstraint columnNames="user_id" constraintName="uc_balances_user"
+            tableName="balances"/>
+    </changeSet>
+    <changeSet id="1775220943057-40" author="nitro">
+        <addUniqueConstraint columnNames="file_key" constraintName="uc_files_file_key"
+            tableName="files"/>
+    </changeSet>
+    <changeSet id="1775220943057-41" author="nitro">
+        <addUniqueConstraint columnNames="confirmation_token"
+            constraintName="uc_users_confirmation_token" tableName="users"/>
+    </changeSet>
+    <changeSet id="1775220943057-42" author="nitro">
+        <addUniqueConstraint columnNames="email" constraintName="uc_users_email" tableName="users"/>
+    </changeSet>
+    <changeSet id="1775220943057-43" author="nitro">
+        <createIndex indexName="idx_answer_session" tableName="test_session_answers">
+            <column name="session_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1775220943057-44" author="nitro">
+        <createIndex indexName="idx_answer_unique" tableName="test_session_answers" unique="true">
+            <column name="session_id"/>
+            <column name="question_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1775220943057-45" author="nitro">
+        <createIndex indexName="idx_file_key" tableName="files" unique="true">
+            <column name="file_key"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1775220943057-46" author="nitro">
+        <createIndex indexName="idx_file_user" tableName="files">
+            <column name="created_by"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1775220943057-47" author="nitro">
+        <createIndex indexName="idx_question_order" tableName="test_session_questions">
+            <column name="session_id"/>
+            <column name="order_index"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1775220943057-48" author="nitro">
+        <createIndex indexName="idx_session_question" tableName="test_session_questions">
+            <column name="session_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1775220943057-49" author="nitro">
+        <createIndex indexName="idx_session_status_expire" tableName="test_sessions">
+            <column name="status"/>
+            <column name="expires_at"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1775220943057-50" author="nitro">
+        <createIndex indexName="idx_session_test" tableName="test_sessions">
+            <column name="test_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1775220943057-51" author="nitro">
+        <createIndex indexName="idx_session_user" tableName="test_sessions">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1775220943057-52" author="nitro">
+        <createIndex indexName="idx_top_up_status" tableName="top_up_requests">
+            <column name="status"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1775220943057-53" author="nitro">
+        <createIndex indexName="idx_top_up_user" tableName="top_up_requests">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

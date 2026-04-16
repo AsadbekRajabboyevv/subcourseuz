@@ -1,10 +1,14 @@
 package uz.asadbek.subcourse.course.dto;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CourseInfoResponseDto {
     private Long id;
     private String name;
@@ -19,4 +23,8 @@ public class CourseInfoResponseDto {
     private Long price;
     private String imagePath;
     private String lang;
+    private boolean purchased;
+    private List<CourseLessonResponseDto> lessons;
+    private Long scienceId;
+    private Long gradeId;
 }

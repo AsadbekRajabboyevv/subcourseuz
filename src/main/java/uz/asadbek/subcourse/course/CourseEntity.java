@@ -1,9 +1,10 @@
 package uz.asadbek.subcourse.course;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,8 +16,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uz.asadbek.base.entity.BaseEntity;
 import uz.asadbek.base.repository.SoftDeletable;
 import uz.asadbek.subcourse.course.dto.DurationType;
-import uz.asadbek.subcourse.util.embedded.DescriptionEmbedded;
-import uz.asadbek.subcourse.util.embedded.NameEmbedded;
 
 @Getter
 @Setter
@@ -45,6 +44,7 @@ public class CourseEntity extends BaseEntity implements SoftDeletable {
     @Column(name = "duration")
     private Integer duration;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "duration_type")
     private DurationType durationType;
 

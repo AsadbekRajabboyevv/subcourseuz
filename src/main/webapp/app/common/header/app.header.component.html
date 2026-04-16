@@ -1,79 +1,105 @@
-<header class="bg-white shadow-sm sticky top-0 z-40">
+<header class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-sm dark:bg-gray-900/80 dark:border-b dark:border-gray-800 transition-all duration-300">
     <div class="container mx-auto px-4 py-3 flex items-center justify-between">
 
-        <!-- LEFT -->
-        <div class="flex items-center">
-            <div class="flex items-center">
-                <div class="bg-green-500 text-white p-1 rounded mr-2">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor"/>
-                        <path d="M2 17L12 22L22 17" fill="currentColor"/>
-                        <path d="M2 12L12 17L22 12" fill="currentColor"/>
-                    </svg>
+        <div class="flex items-center gap-4 lg:gap-10">
+            <a routerLink="/home" class="flex items-center group">
+                <div class="bg-emerald-600 text-white p-2.5 rounded-xl mr-2.5 shadow-lg shadow-emerald-500/20 group-hover:rotate-6 transition-transform">
+                    <i class="fa-solid fa-graduation-cap text-lg"></i>
                 </div>
-                <a routerLink="/" class="font-bold text-xl">
+                <span class="font-black text-xl tracking-tighter text-gray-900 dark:text-white uppercase">
                     {{ appTitle }}
-                </a>
-            </div>
+                </span>
+            </a>
 
-            <!-- NAV -->
-            <nav class="hidden md:flex space-x-6 text-sm text-gray-600 ml-8">
-                <a routerLink="/courses" class="hover:text-green-500">KURSLAR</a>
-
-                <a *ngIf="isAuthenticated && role === 'ROLE_USER'"
-                   routerLink="/courses/view/me"
-                   class="hover:text-green-300">
-                    MENING KURSLARIM
-                </a>
-
-                <a href="#" class="hover:text-green-500">ONLINE TEST</a>
-                <a href="#" class="hover:text-green-500">BLOG</a>
-                <a href="#" class="hover:text-green-500">YORDAM</a>
+            <nav class="hidden lg:flex items-center space-x-8 text-[11px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400">
+                <a routerLink="/courses-list" routerLinkActive="text-emerald-600 dark:text-emerald-400" class="hover:text-emerald-600 transition-colors">Kurslar</a>
+                <a *ngIf="isLoggedIn && userRole === 'ROLE_USER'" routerLink="/courses-me" routerLinkActive="text-emerald-600" class="hover:text-emerald-600 transition-colors text-nowrap">Mening kurslarim</a>
+                <a routerLink="/tests" routerLinkActive="text-emerald-600" class="hover:text-emerald-600 transition-colors text-nowrap">Online Test</a>
+                <a routerLink="/blog" routerLinkActive="text-emerald-600" class="hover:text-emerald-600 transition-colors">Blog</a>
             </nav>
         </div>
 
-        <!-- RIGHT -->
-        <div class="flex items-center space-x-3">
+        <div class="flex items-center gap-3 md:gap-6">
 
-            <!-- PROFILE -->
-            <div *ngIf="isAuthenticated" class="relative">
-                <button (click)="toggleDropdown()" class="flex items-center space-x-2">
-                    <img ngSrc="/public/logo.png"
-                         class="w-10 h-10 rounded-full border-2 border-gray-300 hover:border-blue-500 transition">
+            <app-theme-switch></app-theme-switch>
+
+            <div *ngIf="isLoggedIn" class="hidden md:flex items-center gap-3 pl-4 border-l border-gray-100 dark:border-gray-800">
+                <div class="flex flex-col items-end">
+                    <span class="text-[8px] font-black uppercase tracking-widest text-emerald-500 leading-none">Balans</span>
+                    <span class="text-[13px] font-black text-gray-900 dark:text-white leading-tight">
+                       0 <small class="text-[9px] font-bold opacity-60">UZS</small>
+                    </span>
+                </div>
+                <button [routerLink]="['/top-up']"
+                        class="active:scale-95 hover:rotate-12 flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 transition-all hover:bg-emerald-600 hover:text-white dark:bg-emerald-500/10 dark:text-emerald-400">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                </button>
+            </div>
+
+            <div *ngIf="isLoggedIn" class="relative group">
+                <button (click)="toggleProfile()" class=" active:scale-95 hover:rotate-12 flex items-center gap-2 focus:outline-none p-0.5 rounded-full border-2 border-transparent hover:border-emerald-500 transition-all">
+                    <div class="w-9 h-9 md:w-10 md:h-10 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center shadow-inner">
+                        <img *ngIf="authService.currentUser()?.imagePath" [src]="authService.currentUser()?.imagePath" class="w-full h-full object-cover">
+                        <span *ngIf="!authService.currentUser()?.imagePath" class="text-gray-500 dark:text-gray-400 font-black text-sm uppercase">
+                            {{ authService.currentUser()?.firstName?.charAt(0) }}
+                        </span>
+                    </div>
                 </button>
 
-                <div *ngIf="isOpen"
-                     class="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg overflow-hidden z-50">
+                <div *ngIf="isProfileOpen"
+                     class="absolute right-0 mt-3 w-56 bg-white border border-gray-100 rounded-[1.5rem] shadow-2xl py-3 z-[60] dark:bg-gray-800 dark:border-gray-700 animate-in fade-in slide-in-from-top-2 duration-200">
 
-                    <a routerLink="/profile"
-                       class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                        Profil
+                    <div class="px-4 py-2 mb-2 border-b border-gray-50 dark:border-gray-700/50">
+                        <p class="text-[10px] font-black uppercase text-gray-400 tracking-tighter leading-none">Foydalanuvchi</p>
+                        <p class="text-sm font-black text-gray-900 dark:text-white truncate">{{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}</p>
+                    </div>
+
+                    <a routerLink="/profile" class="flex items-center px-4 py-2.5 text-[11px] font-black uppercase tracking-widest text-gray-600 hover:text-emerald-600 hover:bg-emerald-50/50 dark:text-gray-300 dark:hover:bg-gray-700/50 transition-all">
+                        <i class="fa-solid fa-user-gear mr-3 text-emerald-500"></i> Profil Sozlamalari
                     </a>
 
-                    <a routerLink="/settings"
-                       class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                        Sozlamalar
-                    </a>
+                    <div class="h-px bg-gray-50 dark:bg-gray-700 my-2 mx-4"></div>
 
-                    <button (click)="logout()"
-                            class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                        Chiqish
+                    <button (click)="logout()" class="flex items-center w-full px-4 py-2.5 text-[11px] font-black uppercase tracking-widest text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all">
+                        <i class="fa-solid fa-power-off mr-3"></i> Tizimdan chiqish
                     </button>
                 </div>
             </div>
 
-            <!-- LOGIN -->
-            <button *ngIf="!isAuthenticated"
-                    (click)="openLoginModal()"
-                    class="md:flex hidden bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
-                KIRISH
+            <button *ngIf="!isLoggedIn" routerLink="/auth/login"
+                    class="hidden sm:flex items-center gap-2 bg-gray-900 dark:bg-white dark:text-gray-900 text-white px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-600 dark:hover:bg-emerald-500 dark:hover:text-white transition-all shadow-xl active:scale-95">
+                Kirish
             </button>
 
-            <!-- MOBILE MENU -->
-            <button class="md:hidden p-2 -mr-2" (click)="toggleMobileMenu()">
-                <i class="w-6 h-6">☰</i>
+            <button class="lg:hidden h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 transition-all" (click)="toggleMobileMenu()">
+                <i class="fa-solid" [ngClass]="isMenuOpen ? 'fa-xmark' : 'fa-bars-staggered'"></i>
             </button>
-
         </div>
+    </div>
+
+    <div *ngIf="isMenuOpen" class="lg:hidden absolute top-full left-0 w-full bg-white border-b border-gray-100 shadow-2xl dark:bg-gray-900 dark:border-gray-800 z-40 animate-in slide-in-from-top duration-300">
+        <nav class="flex flex-col p-6 space-y-2">
+            <div *ngIf="isLoggedIn" class="flex justify-between items-center p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 mb-4">
+                <span class="text-[10px] font-black uppercase tracking-widest text-emerald-600">Sizning Balansingiz</span>
+                <span class="font-black text-gray-900 dark:text-white">0 UZS</span>
+            </div>
+
+            <a routerLink="/courses-list" (click)="isMenuOpen = false" class="flex items-center p-4 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-gray-700 dark:text-gray-200 font-black uppercase text-[10px] tracking-widest transition-all">
+                <i class="fa-solid fa-book-open mr-4 text-emerald-500 text-base"></i> Kurslar
+            </a>
+            <a *ngIf="isLoggedIn && userRole === 'ROLE_USER'" routerLink="/courses-me" (click)="isMenuOpen = false" class="flex items-center p-4 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-gray-700 dark:text-gray-200 font-black uppercase text-[10px] tracking-widest transition-all">
+                <i class="fa-solid fa-book-open mr-4 text-emerald-500 text-base"></i> Mening kurslarim
+            </a>
+            <a routerLink="/tests" (click)="isMenuOpen = false" class="flex items-center p-4 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-gray-700 dark:text-gray-200 font-black uppercase text-[10px] tracking-widest transition-all">
+                <i class="fa-solid fa-vial mr-4 text-emerald-500 text-base"></i> Online Testlar
+            </a>
+            <a routerLink="/blog" (click)="isMenuOpen = false" class="flex items-center p-4 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-gray-700 dark:text-gray-200 font-black uppercase text-[10px] tracking-widest transition-all">
+                <i class="fa-solid fa-newspaper mr-4 text-emerald-500 text-base"></i> Blog
+            </a>
+
+            <div class="h-px bg-gray-50 dark:border-gray-800 my-4"></div>
+
+            <button *ngIf="!isLoggedIn" routerLink="/auth/login" class="w-full bg-emerald-600 text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs shadow-lg shadow-emerald-500/30">KIRISH</button>
+        </nav>
     </div>
 </header>

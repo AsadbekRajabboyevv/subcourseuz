@@ -1,2 +1,22 @@
-@import 'tailwindcss';
-@plugin '@tailwindcss/forms';
+@custom-variant dark (&:where(.dark, .dark *));
+@import "tailwindcss";
+
+@layer base {
+    :root {
+        --color-scheme: light;
+    }
+
+    .dark {
+        --color-scheme: dark;
+    }
+}
+
+html.dark body {
+    background-color: #030712;
+    color: #f9fafb;
+}
+
+* {
+    transition-property: color, background-color, border-color;
+    transition-duration: 200ms;
+}

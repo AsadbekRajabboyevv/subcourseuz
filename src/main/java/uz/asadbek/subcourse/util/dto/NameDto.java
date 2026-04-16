@@ -2,9 +2,11 @@ package uz.asadbek.subcourse.util.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class NameDto {
 
     @NotNull

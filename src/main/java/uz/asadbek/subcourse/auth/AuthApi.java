@@ -1,5 +1,7 @@
 package uz.asadbek.subcourse.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,11 +17,18 @@ import uz.asadbek.subcourse.user.dto.UserRequestDto;
 public interface AuthApi {
 
     @PostMapping("/login")
-    BaseResponseDto<AuthResponseDto> login(@RequestBody @Valid AuthRequestDto dto, @RequestParam(required = false, defaultValue = "UZ") String language);
+    BaseResponseDto<AuthResponseDto> login(@RequestBody @Valid AuthRequestDto dto, @RequestParam(required = false, defaultValue = "UZ") String language,
+        HttpServletResponse response);
 
     @PostMapping("/register")
     BaseResponseDto<AuthResponseDto> register(@RequestBody @Valid UserRequestDto dto, @RequestParam(required = false, defaultValue = "UZ") String language);
 
     @GetMapping("/confirm")
     BaseResponseDto<Boolean> confirm(@RequestParam String confirmToken);
+
+    @PostMapping("/refresh")
+    BaseResponseDto<AuthResponseDto> refresh(HttpServletRequest request, HttpServletResponse response);
+
+    @PostMapping("/logout")
+    BaseResponseDto<?> logout(HttpServletRequest request, HttpServletResponse response);
 }

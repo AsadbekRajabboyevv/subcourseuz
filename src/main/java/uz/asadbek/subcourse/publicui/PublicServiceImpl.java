@@ -7,8 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import uz.asadbek.subcourse.course.CourseService;
+import uz.asadbek.subcourse.course.dto.CourseInfoResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
 import uz.asadbek.subcourse.course.filter.CourseFilter;
+import uz.asadbek.subcourse.course.grade.CourseGradeService;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeResponseDto;
 import uz.asadbek.subcourse.course.lesson.CourseLessonService;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
@@ -26,6 +28,7 @@ public class PublicServiceImpl implements PublicService {
     private final TestService testService;
     private final UserService userService;
     private final CourseLessonService courseLessonService;
+    private final CourseGradeService courseGradeService;
 
     @Override
     public HomePageResponseDto getHomePage() {
@@ -41,12 +44,12 @@ public class PublicServiceImpl implements PublicService {
 
     @Override
     public Page<CourseResponseDto> getCourses(CourseFilter filter, Pageable pageable) {
-        return courseService.get(pageable, filter);
+        return courseService.getInfo(pageable, filter);
     }
 
     @Override
-    public CourseResponseDto getCourse() {
-        return null;
+    public CourseInfoResponseDto getCourse(Long id) {
+        return courseService.getInfo(id);
     }
 
     @Override
@@ -56,6 +59,6 @@ public class PublicServiceImpl implements PublicService {
 
     @Override
     public List<CourseGradeResponseDto> getCourseGrades() {
-        return List.of();
+        return courseGradeService.get();
     }
 }

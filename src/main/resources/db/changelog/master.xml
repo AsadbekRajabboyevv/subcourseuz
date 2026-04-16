@@ -14,7 +14,7 @@
     <property name="datetimeType" value="datetime(6)" dbms="mysql, mariadb"/>
     <property name="datetimeType" value="datetime" dbms="oracle, mssql, postgresql, h2"/>
 
-    <!--  create table  -->
-    <include file="/db/changelog/changes/user/create_user_table.xml"/>
+    <include file="db/changelog/changes/03-01-changelog.xml"/>
+    <include file="/db/changelog/changes/07-01-changelog.xml"/>
 
 </databaseChangeLog>

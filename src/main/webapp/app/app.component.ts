@@ -1,25 +1,30 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavigationStart, Router, RouterOutlet } from '@angular/router';
+import { NavigationStart, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./common/header/app.header.component";
-import {FooterComponent} from "./common/footer/app.footer.component";
-
+import { FooterComponent } from "./common/footer/app.footer.component";
+import {ErrorModalComponent} from "./common/error/error-modal.component";
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, RouterOutlet, HeaderComponent, HeaderComponent, FooterComponent],
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, ErrorModalComponent],
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
+  private router = inject(Router);
 
-  router = inject(Router);
-
-  msgSuccess = null;
-  msgInfo = null;
-  msgError = null;
+  isAuthPage = false;
+  msgSuccess: string | null = null;
+  msgInfo: string | null = null;
+  msgError: string | null = null;
 
   ngOnInit() {
     this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.isAuthPage = event.url.startsWith('/auth');
+      }
+
       if (event instanceof NavigationStart) {
         const navigationState = this.router.getCurrentNavigation()?.extras.state;
         this.msgSuccess = navigationState?.['msgSuccess'] || null;
@@ -28,5 +33,4 @@ export class AppComponent implements OnInit {
       }
     });
   }
-
 }

@@ -7,7 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeRequestDto;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeResponseDto;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeUpdateRequestDto;
+import uz.asadbek.subcourse.course.grade.dto.OneCourseGradeResponseDto;
 import uz.asadbek.subcourse.util.ExceptionUtil;
+import uz.asadbek.subcourse.util.JwtUtil;
 import uz.asadbek.subcourse.util.LangUtils;
 
 @Service
@@ -20,11 +22,16 @@ public class CourseGradeServiceImpl implements CourseGradeService {
 
     @Override
     public List<CourseGradeResponseDto> get() {
-        var lang= "uz";
-        return repository.get(lang);
+        return repository.get(LangUtils.currentLang());
     }
 
     @Override
+    public OneCourseGradeResponseDto get(Long id) {
+        return repository.get(id);
+    }
+
+    @Override
+    @Transactional
     public CourseGradeResponseDto create(CourseGradeRequestDto request) {
 
         CourseGradeEntity entity = mapper.toEntity(request);
@@ -32,7 +39,9 @@ public class CourseGradeServiceImpl implements CourseGradeService {
 
         return getCourseGradeResponseDto(saved);
     }
+
     @Override
+    @Transactional
     public CourseGradeResponseDto update(Long id, CourseGradeUpdateRequestDto request) {
         var courseGrade = repository.findById(id)
             .orElseThrow(() -> ExceptionUtil.notFoundException("course_grade_not_found"));
@@ -50,6 +59,7 @@ public class CourseGradeServiceImpl implements CourseGradeService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         repository.deleteById(id);
     }

@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import uz.asadbek.subcourse.auth.CustomUserDetailsServiceImpl;
 
 @Configuration
@@ -28,7 +29,8 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+        HandlerExceptionResolver handlerExceptionResolver) {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
@@ -47,6 +49,8 @@ public class SecurityConfig {
                     "/static/**",
                     "/favicon.ico",
                     "/v1/api/auth/**",
+                    "/v1/api/public/**",
+                    "/v1/api/files/**",
                     "/v3/api-docs/**",
                     "/swagger-ui/**",
                     "/swagger-ui.html",
@@ -61,9 +65,21 @@ public class SecurityConfig {
             )
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
             )
+
             .authenticationProvider(authenticationProvider())
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling(
+                ex -> ex.authenticationEntryPoint((request, response, authException) -> {
+                        handlerExceptionResolver.resolveException(request, response, null,
+                            authException);
+                    })
+                    .accessDeniedHandler((request, response, accessDeniedException) -> {
+                        handlerExceptionResolver.resolveException(request, response, null,
+                            accessDeniedException);
+                    })
+            );
 
         return http.build();
     }

@@ -1,35 +1,28 @@
 package uz.asadbek.subcourse.test;
 
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 import uz.asadbek.subcourse.test.dto.TestRequestDto;
 import uz.asadbek.subcourse.test.dto.TestResponseDto;
-import uz.asadbek.subcourse.test.dto.TestResultDto;
-import uz.asadbek.subcourse.test.dto.TestReviewDto;
+import uz.asadbek.subcourse.test.dto.TestUpdateRequestDto;
 import uz.asadbek.subcourse.test.filter.TestFilter;
 
 public interface TestService {
 
     Long count();
 
-    Long createTest(TestRequestDto testRequestDto);
+    Long createTest(TestRequestDto testRequestDto, MultipartFile image);
 
-    Page<TestResponseDto> getAllTest(TestFilter filter, Pageable pageable);
+    Page<TestResponseDto> get(TestFilter filter, Pageable pageable);
 
-    TestResponseDto getTestById(Long id);
+    TestResponseDto get(Long id);
 
-    void deleteTestById(Long id);
+    Long unpublishTest(Long id);
 
-    TestResponseDto updateTest(Long id, TestRequestDto testRequestDto);
+    Long updateTest(Long id, TestUpdateRequestDto request);
 
-    Long startTest(Long testId);
+    void enroll(Long testId);
 
-    void finishTest(Long testId, Long sessionId);
-
-    void submitAnswer(Long sessionId, Long questionId, Long optionId);
-
-    TestResultDto getResult(Long sessionId);
-
-    List<TestReviewDto> getReview(Long sessionId);
+    Long publish(Long id);
 }

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="uz" target-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="HOME" datatype="html">
+        <source>Bosh sahifa</source>
+        <target>Home</target>
+      </trans-unit>
+      <trans-unit id="LOGIN" datatype="html">
+        <source>Kirish</source>
+        <target>Login</target>
+      </trans-unit>
+      <trans-unit id="LOGOUT" datatype="html">
+        <source>Chiqish</source>
+        <target>Logout</target>
+      </trans-unit>
+      <trans-unit id="COURSES" datatype="html">
+        <source>Kurslar</source>
+        <target>Courses</target>
+      </trans-unit>
+      <trans-unit id="PROFILE" datatype="html">
+        <source>Profil</source>
+        <target>Profile</target>
+      </trans-unit>
+      <trans-unit id="SETTINGS" datatype="html">
+        <source>Sozlamalar</source>
+        <target>Settings</target>
+      </trans-unit>
+      <trans-unit id="LANGUAGE" datatype="html">
+        <source>Til</source>
+        <target>Language</target>
+      </trans-unit>
+      <trans-unit id="THEME" datatype="html">
+        <source>Mavzu</source>
+        <target>Theme</target>
+      </trans-unit>
+      <trans-unit id="MY_COURSES" datatype="html">
+        <source>Mening kurslarim</source>
+        <target>My Courses</target>
+      </trans-unit>
+      <trans-unit id="ONLINE_TEST" datatype="html">
+        <source>Online Test</source>
+        <target>Online Test</target>
+      </trans-unit>
+      <trans-unit id="BLOG" datatype="html">
+        <source>Blog</source>
+        <target>Blog</target>
+      </trans-unit>
+      <trans-unit id="HELP" datatype="html">
+        <source>Yordam</source>
+        <target>Help</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.CANCEL" datatype="html">
+        <source>Bekor qilish</source>
+        <target>Cancel</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.CONFIRM" datatype="html">
+        <source>Tasdiqlash</source>
+        <target>Confirm</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.LOADING" datatype="html">
+        <source>Yuklanmoqda...</source>
+        <target>Loading...</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.NO_DATA" datatype="html">
+        <source>Ma'lumotlar topilmadi</source>
+        <target>No data found</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.NO_DATA_DESC" datatype="html">
+        <source>Filtrlarni o'zgartirib ko'ring yoki keyinroq qayta urinib ko'ring.</source>
+        <target>Try changing the filters or try again later.</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.PREV" datatype="html">
+        <source>Oldingi</source>
+        <target>Previous</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.NEXT" datatype="html">
+        <source>Keyingi</source>
+        <target>Next</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.RECORDS" datatype="html">
+        <source>ta yozuv</source>
+        <target>records</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.PAGE" datatype="html">
+        <source>Sahifa</source>
+        <target>Page</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.SEARCH" datatype="html">
+        <source>Qidirish...</source>
+        <target>Search...</target>
+      </trans-unit>
+      <trans-unit id="UI.COMMON.SELECT" datatype="html">
+        <source>Tanlang</source>
+        <target>Select</target>
+      </trans-unit>
+      <trans-unit id="UI.FILTER.SEARCH" datatype="html">
+        <source>Qidiruv</source>
+        <target>Search</target>
+      </trans-unit>
+      <trans-unit id="UI.FILTER.RESET" datatype="html">
+        <source>Tozalash</source>
+        <target>Reset</target>
+      </trans-unit>
+      <trans-unit id="UI.FILE_UPLOAD.DROP_ZONE" datatype="html">
+        <source>Faylni bu yerga tashlang yoki</source>
+        <target>Drop the file here or</target>
+      </trans-unit>
+      <trans-unit id="UI.FILE_UPLOAD.SELECT" datatype="html">
+        <source>tanlang</source>
+        <target>select</target>
+      </trans-unit>
+      <trans-unit id="UI.FILE_UPLOAD.MAX_SIZE" datatype="html">
+        <source>Maksimal hajm: {size}MB</source>
+        <target>Max size: {size}MB</target>
+      </trans-unit>
+      <trans-unit id="UI.FILE_UPLOAD.REMOVE" datatype="html">
+        <source>Faylni olib tashlash</source>
+        <target>Remove file</target>
+      </trans-unit>
+      <trans-unit id="UI.FILE_UPLOAD.ERROR_SIZE" datatype="html">
+        <source>Fayl hajmi {size}MB dan oshmasligi kerak</source>
+        <target>File size must not exceed {size}MB</target>
+      </trans-unit>
+      <trans-unit id="UI.FILE_UPLOAD.ERROR_TYPE" datatype="html">
+        <source>Fayl turi qabul qilinmaydi</source>
+        <target>File type not accepted</target>
+      </trans-unit>
+      <trans-unit id="USEFUL_LINKS" datatype="html">
+        <source>Foydali havolalar</source>
+        <target>Useful Links</target>
+      </trans-unit>
+      <trans-unit id="ABOUT_US" datatype="html">
+        <source>Biz haqimizda</source>
+        <target>About Us</target>
+      </trans-unit>
+      <trans-unit id="FAQ" datatype="html">
+        <source>FAQ</source>
+        <target>FAQ</target>
+      </trans-unit>
+      <trans-unit id="SUBSCRIBE_NEWS" datatype="html">
+        <source>Yangiliklarimizga obuna bo'ling</source>
+        <target>Subscribe to our newsletter</target>
+      </trans-unit>
+      <trans-unit id="PARTNERSHIP" datatype="html">
+        <source>Hamkorlik uchun</source>
+        <target>For partnership</target>
+      </trans-unit>
+      <trans-unit id="PRIVACY_POLICY" datatype="html">
+        <source>Maxfiylik siyosati</source>
+        <target>Privacy Policy</target>
+      </trans-unit>
+      <trans-unit id="PAYMENT_TYPES" datatype="html">
+        <source>To'lov turlari</source>
+        <target>Payment Types</target>
+      </trans-unit>
+      <trans-unit id="SOCIAL_NETWORKS" datatype="html">
+        <source>Ijtimoiy tarmoqlarimiz bilan bog'laning</source>
+        <target>Connect with us on social networks</target>
+      </trans-unit>
+      <trans-unit id="FOOTER_ABOUT_DESC" datatype="html">
+        <source>Sizni, har bir o'quvchimizni bilim olishingizda ko'maklashishdan mamnunmiz.</source>
+        <target>We are pleased to assist each of our students in their pursuit of knowledge.</target>
+      </trans-unit>
+      <trans-unit id="ADDRESS" datatype="html">
+        <source>Manzil</source>
+        <target>Address</target>
+      </trans-unit>
+      <trans-unit id="ALL_RIGHTS_RESERVED" datatype="html">
+        <source>Barcha huquqlar himoyalangan</source>
+        <target>All rights reserved</target>
+      </trans-unit>
+      <trans-unit id="LOGIN_TITLE" datatype="html">
+        <source>Tizimga kirish</source>
+        <target>Login</target>
+      </trans-unit>
+      <trans-unit id="EMAIL_LABEL" datatype="html">
+        <source>Email manzil</source>
+        <target>Email address</target>
+      </trans-unit>
+      <trans-unit id="PASSWORD_LABEL" datatype="html">
+        <source>Parol</source>
+        <target>Password</target>
+      </trans-unit>
+      <trans-unit id="FORGOT_PASSWORD" datatype="html">
+        <source>Parolni unutdingizmi?</source>
+        <target>Forgot password?</target>
+      </trans-unit>
+      <trans-unit id="LOGIN_ERROR" datatype="html">
+        <source>Email yoki parol noto'g'ri!</source>
+        <target>Invalid email or password!</target>
+      </trans-unit>
+      <trans-unit id="LOGGING_IN" datatype="html">
+        <source>Kirilmoqda...</source>
+        <target>Logging in...</target>
+      </trans-unit>
+      <trans-unit id="OR" datatype="html">
+        <source>yoki</source>
+        <target>or</target>
+      </trans-unit>
+      <trans-unit id="NO_ACCOUNT" datatype="html">
+        <source>Akkauntingiz yo'qmi?</source>
+        <target>Don't have an account?</target>
+      </trans-unit>
+      <trans-unit id="REGISTER_NOW" datatype="html">
+        <source>Ro'yxatdan o'ting</source>
+        <target>Register now</target>
+      </trans-unit>
+      <trans-unit id="REGISTER_TITLE" datatype="html">
+        <source>Ro'yxatdan o'tish</source>
+        <target>Registration</target>
+      </trans-unit>
+      <trans-unit id="FIRST_NAME" datatype="html">
+        <source>Ism</source>
+        <target>First name</target>
+      </trans-unit>
+      <trans-unit id="LAST_NAME" datatype="html">
+        <source>Familiya</source>
+        <target>Last name</target>
+      </trans-unit>
+      <trans-unit id="PHONE" datatype="html">
+        <source>Telefon</source>
+        <target>Phone</target>
+      </trans-unit>
+      <trans-unit id="BIRTH_DATE" datatype="html">
+        <source>Tug'ilgan sana</source>
+        <target>Birth date</target>
+      </trans-unit>
+      <trans-unit id="CONFIRM_PASSWORD_LABEL" datatype="html">
+        <source>Parolni tasdiqlang</source>
+        <target>Confirm password</target>
+      </trans-unit>
+      <trans-unit id="PASSWORD_MISMATCH" datatype="html">
+        <source>Parollar mos kelmaydi</source>
+        <target>Passwords do not match</target>
+      </trans-unit>
+      <trans-unit id="REGISTER_ERROR" datatype="html">
+        <source>Xatolik yuz berdi. Qayta urinib ko'ring.</source>
+        <target>An error occurred. Please try again.</target>
+      </trans-unit>
+      <trans-unit id="REGISTER_SUCCESS" datatype="html">
+        <source>Emailingizga tasdiqlash xati yuborildi!</source>
+        <target>A confirmation email has been sent to your address!</target>
+      </trans-unit>
+      <trans-unit id="SENDING" datatype="html">
+        <source>Yuborilmoqda...</source>
+        <target>Sending...</target>
+      </trans-unit>
+      <trans-unit id="ALREADY_HAVE_ACCOUNT" datatype="html">
+        <source>Akkauntingiz bormi?</source>
+        <target>Already have an account?</target>
+      </trans-unit>
+      <trans-unit id="FIRST_NAME_PLACEHOLDER" datatype="html">
+        <source>Asadbek</source>
+        <target>John</target>
+      </trans-unit>
+      <trans-unit id="LAST_NAME_PLACEHOLDER" datatype="html">
+        <source>Rajabboyev</source>
+        <target>Doe</target>
+      </trans-unit>
+      <trans-unit id="PASSWORD_HINT" datatype="html">
+        <source>Kamida 8 ta belgi</source>
+        <target>At least 8 characters</target>
+      </trans-unit>
+      <trans-unit id="CONFIRM_PASSWORD_PLACEHOLDER" datatype="html">
+        <source>Parolni qayta kiriting</source>
+        <target>Re-enter password</target>
+      </trans-unit>
+      <trans-unit id="EMAIL_PLACEHOLDER" datatype="html">
+        <source>email@example.com</source>
+        <target>email@example.com</target>
+      </trans-unit>
+      <trans-unit id="ERROR_MESSAGE" datatype="html">
+        <source>Siz izlayotgan sahifa hozirda mavjud emas.</source>
+        <target>The page you are looking for is not available right now.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
