@@ -75,51 +75,56 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public PaymentResponseDto purchase(PaymentRequestDto request, Boolean isTopUp) {
+        if (JwtUtil.isAuthenticated()) {
+            var courseId = request.getCourseId();
+            var testId = request.getTestId();
+            var couponCode = request.getCouponCode();
 
-        var courseId = request.getCourseId();
-        var testId = request.getTestId();
-        var couponCode = request.getCouponCode();
+            validatePurchaseRequest(courseId, testId);
 
-        validatePurchaseRequest(courseId, testId);
+            var balance = balanceService.get();
+            Long amount;
+            CourseResponseDto course = null;
+            TestResponseDto test = null;
 
-        var balance = balanceService.get();
-        Long amount;
-        CourseResponseDto course = null;
-        TestResponseDto test = null;
+            if (courseId != null) {
+                course = courseService.get(courseId);
+                amount = course.getPrice();
+            } else {
+                test = testService.get(testId);
+                amount = test.getPrice();
+            }
 
-        if (courseId != null) {
-            course = courseService.get(courseId);
-            amount = course.getPrice();
+            if ("free".equalsIgnoreCase(couponCode)) {
+                amount = 0L;
+            }
+
+            if (!isTopUp && amount > 0) {
+                balanceService.debit(amount);
+            } else if (amount == 0) {
+                log.info("Xarid kupon orqali tekin amalga oshirilmoqda. CourseId: {}", courseId);
+            }
+
+            var payment = buildPayment(course, test, amount, balance.getCurrency());
+            var savedPayment = repository.save(payment);
+
+            var transactionId = balanceTransactionService.createTransaction(savedPayment);
+
+            if (testId != null) {
+                testService.enroll(testId);
+            } else {
+                courseService.enroll(courseId);
+            }
+
+            return PaymentResponseDto.builder()
+                .exId(savedPayment.getExId())
+                .amount(amount)
+                .transactionId(transactionId)
+                .status(savedPayment.getStatus())
+                .build();
         } else {
-            test = testService.get(testId);
-            amount = test.getPrice();
+            throw ExceptionUtil.unAuthorizedException("user_not_authenticated");
         }
-
-        if ("free".equalsIgnoreCase(couponCode)) {
-            amount = 0L;
-        }
-
-        if (!isTopUp) {
-            balanceService.debit(amount);
-        }
-
-        var payment = buildPayment(course, test, amount, balance.getCurrency());
-        var savedPayment = repository.save(payment);
-
-        var transactionId = balanceTransactionService.createTransaction(savedPayment);
-
-        if (testId != null) {
-            testService.enroll(testId);
-        } else {
-            courseService.enroll(courseId);
-        }
-
-        return PaymentResponseDto.builder()
-            .exId(savedPayment.getExId())
-            .amount(amount)
-            .transactionId(transactionId)
-            .status(savedPayment.getStatus())
-            .build();
     }
 
     private void validatePurchaseRequest(Long courseId, Long testId) {

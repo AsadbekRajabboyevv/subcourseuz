@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RestController;
 import uz.asadbek.base.dto.BaseResponseDto;
+import uz.asadbek.subcourse.course.dto.CourseInfoResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
 import uz.asadbek.subcourse.course.dto.DurationType;
 import uz.asadbek.subcourse.course.filter.CourseFilter;
@@ -32,8 +33,8 @@ public class PublicController implements PublicApi {
     }
 
     @Override
-    public BaseResponseDto<CourseResponseDto> getCourse(Long id) {
-        return null;
+    public BaseResponseDto<CourseInfoResponseDto> getCourse(Long id) {
+        return BaseResponseDto.ok(publicService.getCourse(id));
     }
 
     @Override

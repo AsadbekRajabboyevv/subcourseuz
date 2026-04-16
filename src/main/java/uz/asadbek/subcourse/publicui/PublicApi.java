@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uz.asadbek.base.dto.BaseResponseDto;
+import uz.asadbek.subcourse.course.dto.CourseInfoResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
 import uz.asadbek.subcourse.course.filter.CourseFilter;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeResponseDto;
@@ -25,7 +26,7 @@ public interface PublicApi {
     BaseResponseDto<Page<CourseResponseDto>> getCourses(CourseFilter filter, Pageable pageable);
 
     @GetMapping("/courses/{id}")
-    BaseResponseDto<CourseResponseDto> getCourse(@PathVariable Long id);
+    BaseResponseDto<CourseInfoResponseDto> getCourse(@PathVariable Long id);
 
     @GetMapping("/course-grades")
     BaseResponseDto<List<CourseGradeResponseDto>> getCourseGrades();
