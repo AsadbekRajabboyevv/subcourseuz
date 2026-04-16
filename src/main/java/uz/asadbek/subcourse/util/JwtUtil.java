@@ -77,14 +77,19 @@ public class JwtUtil {
     }
 
     public static CustomUserDetails getCurrentUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        if (authentication == null || !authentication.isAuthenticated()
+            || authentication.getPrincipal().equals("anonymousUser")) {
+            return null;
+        }
+
+        Object principal = authentication.getPrincipal();
         if (principal instanceof CustomUserDetails userDetails) {
             return userDetails;
         }
 
-        log.error("User is not authenticated");
-        throw ExceptionUtil.badRequestException("user_not_authenticated");
+        return null;
     }
 
     public static boolean isAdmin() {
@@ -94,6 +99,9 @@ public class JwtUtil {
 
     public static String getLanguage() {
         return getCurrentUser().getLanguage();
+    }
+    public static boolean isAuthenticated() {
+        return getCurrentUser() != null;
     }
 
     public static String generateAccessToken(CustomUserDetails userDetails) {

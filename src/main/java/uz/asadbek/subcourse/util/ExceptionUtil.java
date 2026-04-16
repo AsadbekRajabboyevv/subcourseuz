@@ -6,6 +6,7 @@ import uz.asadbek.subcourse.exception.ForbiddenException;
 import uz.asadbek.subcourse.exception.InsufficientBalanceException;
 import uz.asadbek.subcourse.exception.NotFoundException;
 import uz.asadbek.subcourse.exception.PaymentException;
+import uz.asadbek.subcourse.exception.UnAuthorizedException;
 
 @UtilityClass
 public class ExceptionUtil {
@@ -28,4 +29,7 @@ public class ExceptionUtil {
         return new PaymentException(message);
     }
 
+    public static UnAuthorizedException unAuthorizedException(String message) {
+        return new UnAuthorizedException(message);
+    }
 }

@@ -37,4 +37,10 @@ public class AuthController implements AuthApi {
         return BaseResponseDto.ok(authService.refresh(request, response));
     }
 
+    @Override
+    public BaseResponseDto<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        authService.logout(request, response);
+        return BaseResponseDto.ok(true);
+    }
+
 }

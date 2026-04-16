@@ -28,4 +28,7 @@ public interface AuthApi {
 
     @PostMapping("/refresh")
     BaseResponseDto<AuthResponseDto> refresh(HttpServletRequest request, HttpServletResponse response);
+
+    @PostMapping("/logout")
+    BaseResponseDto<?> logout(HttpServletRequest request, HttpServletResponse response);
 }
