@@ -3,10 +3,12 @@ package uz.asadbek.subcourse.course.dto;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CourseInfoResponseDto {
     private Long id;
     private String name;

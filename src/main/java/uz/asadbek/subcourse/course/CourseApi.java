@@ -47,6 +47,9 @@ public interface CourseApi {
     @GetMapping
     BaseResponseDto<Page<CourseResponseDto>> get(CourseFilter filter, Pageable pageable);
 
+    @GetMapping("/me")
+    BaseResponseDto<Page<CourseResponseDto>> getMe(CourseFilter filter, Pageable pageable);
+
     @GetMapping("/{id}")
     BaseResponseDto<CourseInfoResponseDto> get(@PathVariable Long id);
 
