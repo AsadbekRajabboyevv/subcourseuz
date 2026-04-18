@@ -97,6 +97,16 @@ public class JwtUtil {
             .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
     }
 
+    public static boolean isTeacher() {
+        return getCurrentUser().getAuthorities().stream()
+            .anyMatch(a -> a.getAuthority().equals("ROLE_TEACHER"));
+    }
+
+    public static boolean isStudent() {
+        return getCurrentUser().getAuthorities().stream()
+            .anyMatch(a -> a.getAuthority().equals("ROLE_STUDENT"));
+    }
+
     public static String getLanguage() {
         return getCurrentUser().getLanguage();
     }

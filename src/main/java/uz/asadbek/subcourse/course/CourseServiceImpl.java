@@ -17,6 +17,7 @@ import uz.asadbek.subcourse.course.dto.CourseResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseUpdateRequestDto;
 import uz.asadbek.subcourse.course.dto.DurationType;
 import uz.asadbek.subcourse.course.filter.CourseFilter;
+import uz.asadbek.subcourse.course.lesson.CourseLessonRepository;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
 import uz.asadbek.subcourse.course.usercourse.UserCourseEntity;
 import uz.asadbek.subcourse.filestorage.FileStorageService;
@@ -39,6 +40,7 @@ public class CourseServiceImpl implements CourseService {
     private final Validator validator;
     private final CourseMapper mapper;
     private final FileStorageService fileStorageService;
+    private final CourseLessonRepository courseLessonRepository;
 
     @Override
     public Long count() {
@@ -47,6 +49,11 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Page<CourseResponseDto> getInfo(Pageable pageable, CourseFilter filter) {
+        if (filter.getIsPublished()) {
+            if (JwtUtil.isAuthenticated() && JwtUtil.isStudent()) {
+                throw ExceptionUtil.forbiddenException("not_allowed");
+            }
+        }
         return repository.get(pageable, filter, LangUtils.currentLang(), null);
     }
 
@@ -57,57 +64,20 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseInfoResponseDto getInfo(Long id) {
-        Long currentUserId = null;
-        if (JwtUtil.isAuthenticated() && !JwtUtil.isAdmin()) {
-            currentUserId = JwtUtil.getCurrentUser().getId();
+        CourseInfoResponseDto dto = repository.getCourseBasicInfo(id, LangUtils.currentLang())
+            .orElseThrow(() -> ExceptionUtil.notFoundException("course_not_found"));
+
+        List<CourseLessonResponseDto> lessons = courseLessonRepository.findAllByCourseId(id);
+        dto.setLessons(lessons);
+        dto.setLessonsCount((long) lessons.size());
+
+        dto.setStudentsCount(userCourseRepository.countByIdReferenceId(id));
+
+        if (JwtUtil.isAuthenticated()) {
+            Long currentUserId = JwtUtil.getCurrentUser().getId();
+            boolean exists = userCourseRepository.existsByIdUserIdAndIdReferenceId(currentUserId, id);
+            dto.setPurchased(exists);
         }
-
-        Object[] result = repository.get(id, LangUtils.currentLang(), currentUserId);
-
-        if (result == null || result.length == 0) {
-            throw ExceptionUtil.notFoundException("course_not_found");
-        }
-
-        Object[] row;
-        if (result[0] instanceof Object[]) {
-            row = (Object[]) result[0];
-        } else {
-            row = result;
-        }
-
-        int i = 0;
-        CourseInfoResponseDto dto = new CourseInfoResponseDto();
-
-        dto.setId(convertToLong(row[i++]));
-        dto.setName((String) row[i++]);
-        dto.setDescription((String) row[i++]);
-        dto.setGradeName((String) row[i++]);
-        dto.setScienceName((String) row[i++]);
-        dto.setDuration(row[i] != null ? ((Number) row[i++]).intValue() : 0);
-        dto.setDurationType(row[i] != null ? DurationType.valueOf((String) row[i++]) : null);
-        dto.setLessonsCount(convertToLong(row[i++]));
-        dto.setStudentsCount(convertToLong(row[i++]));
-        dto.setOwnerName((String) row[i++]);
-        dto.setPrice(convertToLong(row[i++]));
-        dto.setImagePath((String) row[i++]);
-        dto.setLang((String) row[i++]);
-
-        // Purchased (Boolean) tekshiruvi
-        Object purchasedObj = row[i++];
-        dto.setPurchased(purchasedObj != null && (Boolean) purchasedObj);
-
-        String lessonsJson = (row[i] != null) ? row[i++].toString() : "[]";
-        try {
-            List<CourseLessonResponseDto> lessons = new ObjectMapper()
-                .readValue(lessonsJson, new TypeReference<List<CourseLessonResponseDto>>() {});
-            dto.setLessons(lessons);
-        } catch (Exception e) {
-            log.error("Error parsing lessons JSON: {}", e.getMessage());
-            dto.setLessons(List.of());
-        }
-
-        dto.setScienceId(convertToLong(row[i++]));
-        dto.setGradeId(convertToLong(row[i++]));
 
         return dto;
     }
@@ -146,6 +116,11 @@ public class CourseServiceImpl implements CourseService {
         }
 
         return repository.save(entity).getId();
+    }
+
+    @Override
+    public CourseUpdateRequestDto getUpdateData(Long id) {
+        return repository.getUpdateData(id).orElseThrow(()-> ExceptionUtil.notFoundException("course_not_found"));
     }
 
     @Override

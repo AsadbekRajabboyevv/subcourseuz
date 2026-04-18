@@ -231,7 +231,13 @@ export class InputComponent implements ControlValueAccessor {
     return Array.isArray(this.value) && this.value.includes(optValue);
   }
 
-  writeValue(value: any): void { this.value = value || ''; }
+  writeValue(value: any): void {
+    this.value = value;
+    const trixElement = document.querySelector('trix-editor');
+    if (trixElement && value) {
+      (trixElement as any).editor.loadHTML(value);
+    }
+  }
   registerOnChange(fn: any): void { this.onChange = fn; }
   registerOnTouched(fn: any): void { this.onTouch = fn; }
 }

@@ -24,4 +24,7 @@ public class CourseLessonRequestDto {
     @NotNull
     @ExistsInDb(entity = CourseLessonEntity.class)
     private Long courseId;
+
+    @NotNull
+    private Boolean isPublished;
 }

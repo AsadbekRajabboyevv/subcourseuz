@@ -1,0 +1,112 @@
+<app-page-wrapper>
+    <div page-title class="mb-8">
+        <nav class="mb-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-gray-400">
+            <a [routerLink]="['/courses-list']" class="hover:text-emerald-500">Kurslar</a>
+            <i class="fa-solid fa-chevron-right text-[7px]"></i>
+            <span class="text-emerald-500">Yangi dars qo'shish</span>
+        </nav>
+        <h1 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white uppercase">Dars yaratish</h1>
+    </div>
+
+    <div content class="grid grid-cols-12 gap-8">
+        <div class="col-span-12 lg:col-span-7 space-y-6">
+            <div class="rounded-[2.5rem] border border-gray-100 bg-white p-6 md:p-8 shadow-2xl dark:border-gray-800 dark:bg-gray-900">
+                <form (ngSubmit)="onSubmit()" #f="ngForm" class="space-y-6">
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="md:col-span-3">
+                            <app-input type="text" label="Dars nomi" [(ngModel)]="lessonForm.name" name="name" placeholder="Mavzu sarlavhasi..." required></app-input>
+                        </div>
+                        <div class="md:col-span-1">
+                            <app-input type="number" label="Tartib #" [(ngModel)]="lessonForm.lessonNumber" name="lessonNumber"></app-input>
+                        </div>
+                    </div>
+
+                    <app-input type="text" label="YouTube Video URL" [(ngModel)]="lessonForm.videoUrl" name="videoUrl" placeholder="https://youtube.com/watch?v=..."></app-input>
+
+                    <div class="space-y-2">
+                        <label class="ml-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Dars matni (Trix)</label>
+                        <app-input type="trix" [(ngModel)]="lessonForm.textContent" name="textContent"></app-input>
+                    </div>
+
+                    <div class="flex items-center justify-between rounded-2xl border border-gray-100 bg-gray-50/50 p-4 dark:border-gray-800 dark:bg-gray-800/30">
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-700 dark:text-gray-300">Dars holati</span>
+                            <span class="text-[9px] text-gray-400">Darsni hamma ko'ra oladimi?</span>
+                        </div>
+                        <label class="relative inline-flex cursor-pointer items-center">
+                            <input type="checkbox" name="isPublished" [(ngModel)]="lessonForm.isPublished" class="peer sr-only">
+                            <div class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-emerald-500 peer-checked:after:translate-x-full peer-checked:after:border-white dark:bg-gray-700"></div>
+                        </label>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="ml-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Qo'shimcha fayllar</label>
+                        <div class="relative group cursor-pointer rounded-2xl border-2 border-dashed border-gray-200 p-8 text-center transition-all hover:border-emerald-500 dark:border-gray-800">
+                            <input type="file" (change)="onFileSelected($event)" multiple class="absolute inset-0 z-10 cursor-pointer opacity-0">
+                            <i class="fa-solid fa-cloud-arrow-up mb-3 text-3xl text-gray-300 group-hover:text-emerald-500"></i>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase leading-relaxed">Fayllarni tanlang yoki <br> shu yerga tashlang</p>
+                            @if (selectedFiles.length > 0) {
+                                <div class="mt-4 flex flex-wrap justify-center gap-2">
+                                    @for (file of selectedFiles; track $index) {
+                                        <span class="rounded-lg bg-emerald-50 px-3 py-1 text-[9px] font-bold text-emerald-600 dark:bg-emerald-500/10">{{ file.name }}</span>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <button type="submit" [disabled]="isLoading() || !f.valid"
+                            class="w-full rounded-2xl bg-emerald-600 py-5 text-[11px] font-black uppercase tracking-widest text-white shadow-xl shadow-emerald-500/20 transition-all hover:bg-emerald-700 active:scale-95 disabled:opacity-50">
+                        @if (isLoading()) {
+                            <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Saqlanmoqda...
+                        } @else {
+                            Darsni saqlash
+                        }
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-span-12 lg:col-span-5 space-y-6">
+            <div class="sticky top-24 space-y-6">
+                <div class="overflow-hidden rounded-[2.5rem] border border-gray-100 bg-black shadow-2xl dark:border-gray-800 aspect-video">
+                    @if (getYoutubeId(lessonForm.videoUrl)) {
+                        <iframe
+                            [src]="'https://www.youtube-nocookie.com/embed/' + getYoutubeId(lessonForm.videoUrl) | safeUrl"
+                            class="h-full w-full"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    } @else {
+                        <div class="flex h-full w-full flex-col items-center justify-center bg-gray-900 text-center">
+                            <i class="fa-brands fa-youtube mb-4 text-5xl text-gray-800"></i>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-gray-700">Video preview mavjud emas</p>
+                        </div>
+                    }
+                </div>
+
+                <div class="rounded-[2rem] bg-emerald-50 p-6 dark:bg-emerald-500/5 border border-emerald-100 dark:border-emerald-500/10">
+                    <h4 class="text-[10px] font-black uppercase tracking-widest text-emerald-600 mb-4">Ma'lumotlar</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between text-[10px] font-bold text-gray-500">
+                            <span>Kurs ID:</span>
+                            <span class="text-emerald-600">#{{ lessonForm.courseId }}</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[10px] font-bold text-gray-500">
+                            <span>Dars raqami:</span>
+                            <span class="text-emerald-600">{{ lessonForm.lessonNumber }}</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[10px] font-bold text-gray-500">
+                            <span>Holat:</span>
+                            <span [class]="lessonForm.isPublished ? 'text-emerald-600' : 'text-amber-500'">
+                {{ lessonForm.isPublished ? `E'LON QILINADI` : `QORALAMA (DRAFT)` }}
+              </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-page-wrapper>

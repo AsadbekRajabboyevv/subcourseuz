@@ -22,7 +22,7 @@ export class CourseListComponent implements OnInit {
   private router = inject(Router);
   protected authService = inject(AuthService);
   private route = inject(ActivatedRoute);
-
+  isFilterVisible = false;
   page = 0;
   size = 10;
   hasMore = true;
@@ -34,6 +34,7 @@ export class CourseListComponent implements OnInit {
 
   filter: CourseFilter = {
     search: '',
+    isPublished: true,
     scienceId: undefined,
     gradeId: undefined,
     priceFrom: undefined,
@@ -55,7 +56,7 @@ export class CourseListComponent implements OnInit {
   ];
 
   ngOnInit() {
-    this.applyFilters(); // Birinchi yuklash
+    this.applyFilters();
 
     this.route.queryParams.subscribe(params => {
       const buyNow = params['buyNow'];
@@ -66,11 +67,9 @@ export class CourseListComponent implements OnInit {
     });
   }
 
-  // Window emas, capture mode orqali istalgan scrollni eshitish
-  // Variant 1: Eventni qabul qiladigan qilish (Tavsiya etiladi)
   @HostListener('window:scroll', ['$event'])
   @HostListener('document:scroll', ['$event'])
-  onScroll(event?: Event) { // <-- Bu yerga parametr qo'shildi
+  onScroll(event?: Event) {
     const pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
     const max = document.documentElement.scrollHeight;
 
@@ -84,7 +83,6 @@ export class CourseListComponent implements OnInit {
     if (this.loading || !this.hasMore) return;
 
     this.loading = true;
-    console.log(`Yuklanmoqda: Sahifa ${this.page}`);
 
     this.courseService.get(this.filter, this.page, this.size)
     .subscribe({
@@ -97,11 +95,11 @@ export class CourseListComponent implements OnInit {
           this.courseService.appendCourses(newData);
         }
 
+        this.courseService.setCourseLength(res.data.totalElements);
         this.hasMore = !res.data.last;
         this.page++;
         this.loading = false;
 
-        // Agar yuklangan ma'lumot ekranni to'ldirmasa, yana bitta sahifa yuklash
         this.checkIfNeedMoreContent();
       },
       error: (err) => {
@@ -111,7 +109,6 @@ export class CourseListComponent implements OnInit {
     });
   }
 
-  // Ekran to'lmagan bo'lsa avtomatik keyingi sahifani chaqirish
   private checkIfNeedMoreContent() {
     setTimeout(() => {
       if (document.documentElement.scrollHeight <= window.innerHeight && this.hasMore) {
@@ -123,16 +120,18 @@ export class CourseListComponent implements OnInit {
   applyFilters() {
     this.page = 0;
     this.hasMore = true;
-    this.courseService.setCourses([]); // Eski ma'lumotlarni tozalash
+    this.courseService.setCourses([]);
     this.loadData();
   }
 
   resetFilters() {
-    this.filter = { search: '' };
+    this.filter = {
+      search: '',
+      isPublished: true
+    };
     this.applyFilters();
   }
 
-  // --- To'lov va Modal mantiqi (O'zgarishsiz) ---
   onBuy(item: any, type: 'COURSE' | 'TEST' = 'COURSE') {
     if (!this.authService.isLoggedIn()) {
       const currentUrl = this.router.url.split('?')[0];
@@ -163,6 +162,14 @@ export class CourseListComponent implements OnInit {
       next: () => { this.closeModal(); }
     });
   }
+
+  changeTab(published: boolean) {
+    if (this.filter.isPublished === published) return;
+
+    this.filter.isPublished = published;
+    this.applyFilters();
+  }
+
 
   private handleAutoOpenAfterLogin(courseId: number) {
     const checkInterval = setInterval(() => {

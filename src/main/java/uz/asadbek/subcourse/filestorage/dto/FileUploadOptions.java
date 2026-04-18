@@ -43,8 +43,8 @@ public class FileUploadOptions {
         return this;
     }
 
-    public FileUploadOptions setLessonImages() {
-        this.folder = "lesson-images/";
+    public FileUploadOptions setLessonFiles() {
+        this.folder = "lesson-files/";
         this.publicAccess = true;
         return this;
     }

@@ -24,14 +24,29 @@ export const routes: Routes = [
     title: 'Kurslar ro\'yxati'
   },
   {
-    path: 'courses-create',
-    loadComponent: () => import('./features/course/create/course-create.component').then(m => m.CourseCreateComponent),
-    title: 'Kurs yaratish'
+    path: 'courses-lesson-add/:courseName',
+    loadComponent: () => import('./features/lesson/create/lesson-create.component').then(m => m.LessonCreateComponent),
+    title: 'Dars qo\'shish'
+  },
+  {
+    path: 'courses-lesson-edit/:lessonName',
+    loadComponent: () => import('./features/lesson/update/lesson-update.component').then(m => m.LessonUpdateComponent),
+    title: 'Dars tahrirlash'
   },
   {
     path: 'courses-view/:courseName',
     loadComponent: () => import('./features/course/view/course-view.component').then(m => m.CourseViewComponent),
     title: 'Kursni ko\'rish'
+  },
+  {
+    path: 'courses-update/:courseName',
+    loadComponent: () => import('./features/course/update/course-update.component').then(m => m.CourseUpdateComponent),
+    title: 'Kursni tahrirlash'
+  },
+  {
+    path: 'courses-create',
+    loadComponent: () => import('./features/course/create/course-create.component').then(m => m.CourseCreateComponent),
+    title: 'Kurs yaratish'
   },
   {
     path: 'courses-me',

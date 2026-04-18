@@ -15,6 +15,7 @@ public interface CourseService {
     Long count();
 
     Page<CourseResponseDto> getInfo(Pageable pageable, CourseFilter filter);
+
     Page<CourseResponseDto> getMe(Pageable pageable, CourseFilter filter);
 
     CourseInfoResponseDto getInfo(Long id);
@@ -28,4 +29,6 @@ public interface CourseService {
     Long update(Long id, CourseUpdateRequestDto request, MultipartFile image);
 
     Long create(MultipartFile image, CourseRequestDto request);
+
+    CourseUpdateRequestDto getUpdateData(Long id);
 }

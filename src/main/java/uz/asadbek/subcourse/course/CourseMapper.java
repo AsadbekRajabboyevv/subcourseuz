@@ -18,6 +18,8 @@ public interface CourseMapper {
     @Mapping(target = "ownerId", expression = "java(uz.asadbek.subcourse.util.JwtUtil.getCurrentUser().getId())")
     CourseEntity toEntity(CourseRequestDto dto);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "imagePath", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void update(@MappingTarget CourseEntity entity, CourseUpdateRequestDto dto);
 }

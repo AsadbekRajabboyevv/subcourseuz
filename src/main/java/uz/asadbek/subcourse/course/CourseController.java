@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import uz.asadbek.base.dto.BaseResponseDto;
@@ -17,6 +18,11 @@ import uz.asadbek.subcourse.course.grade.dto.CourseGradeRequestDto;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeResponseDto;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeUpdateRequestDto;
 import uz.asadbek.subcourse.course.grade.dto.OneCourseGradeResponseDto;
+import uz.asadbek.subcourse.course.lesson.CourseLessonService;
+import uz.asadbek.subcourse.course.lesson.dto.CourseLessonInfoResponseDto;
+import uz.asadbek.subcourse.course.lesson.dto.CourseLessonRequestDto;
+import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
+import uz.asadbek.subcourse.course.lesson.dto.CourseLessonUpdateRequestDto;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +30,7 @@ public class CourseController implements CourseApi {
 
     private final CourseGradeService courseGradeService;
     private final CourseService service;
+    private final CourseLessonService courseLessonService;
 
     @Override
     public BaseResponseDto<List<CourseGradeResponseDto>> getCourseGrades() {
@@ -69,13 +76,13 @@ public class CourseController implements CourseApi {
     }
 
     @Override
-    public BaseResponseDto<Boolean> enroll(Long id) {
-        return BaseResponseDto.ok(service.enroll(id));
+    public BaseResponseDto<Long> create(CourseRequestDto request, MultipartFile image) {
+        return BaseResponseDto.ok(service.create(image, request));
     }
 
     @Override
-    public BaseResponseDto<Long> create(CourseRequestDto request, MultipartFile image) {
-        return BaseResponseDto.ok(service.create(image, request));
+    public BaseResponseDto<CourseUpdateRequestDto> update(Long id) {
+        return BaseResponseDto.ok(service.getUpdateData(id));
     }
 
     @Override
@@ -87,6 +94,35 @@ public class CourseController implements CourseApi {
     @Override
     public BaseResponseDto<Long> delete(Long id) {
         return BaseResponseDto.ok(service.delete(id));
+    }
+
+    @Override
+    public BaseResponseDto<Long> saveLesson(
+        @RequestPart CourseLessonRequestDto request,
+        @RequestPart List<MultipartFile> files
+    ) {
+        return BaseResponseDto.ok(courseLessonService.create(request, files));
+    }
+
+    @Override
+    public BaseResponseDto<Long> updateLesson(Long id, CourseLessonUpdateRequestDto request,
+        List<MultipartFile> files, List<String> deleteFileUrls) {
+        return BaseResponseDto.ok(courseLessonService.update(id, request, files, deleteFileUrls));
+    }
+
+    @Override
+    public BaseResponseDto<Long> deleteLesson(Long id) {
+        return BaseResponseDto.ok(courseLessonService.delete(id));
+    }
+
+    @Override
+    public BaseResponseDto<CourseLessonInfoResponseDto> getLesson(Long id) {
+        return BaseResponseDto.ok(courseLessonService.get(id));
+    }
+
+    @Override
+    public BaseResponseDto<List<CourseLessonResponseDto>> getLessonsByCourseId(Long courseId) {
+        return BaseResponseDto.ok(courseLessonService.getByCourseId(courseId));
     }
 
 }

@@ -48,15 +48,15 @@ public class FileStorageServiceImpl implements FileStorageService {
 
         validate(file);
 
-        String fileKey = UUID.randomUUID().toString();
-        String extension = getExtension(Objects.requireNonNull(file.getOriginalFilename()));
-        String storedName = STR."\{fileKey}.\{extension}";
+        var fileKey = UUID.randomUUID().toString();
+        var extension = getExtension(Objects.requireNonNull(file.getOriginalFilename()));
+        var storedName = STR."\{fileKey}.\{extension}";
 
         try {
-            Path target = root.resolve(storedName);
+            var target = root.resolve(storedName);
             Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
 
-            FileStorageEntity entity = FileStorageEntity.builder()
+            var entity = FileStorageEntity.builder()
                 .fileKey(fileKey)
                 .originalName(file.getOriginalFilename())
                 .storedName(storedName)
@@ -76,20 +76,23 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     @Override
+    @Transactional
     public void delete(String fileUrl) {
-        var fileKey = fileUrl.substring(fileServerUrl.length());
-        FileStorageEntity entity = repository.findByFileKey(fileKey)
-            .orElseThrow(() -> ExceptionUtil.notFoundException("file_not_found"));
+        if (fileUrl != null) {
+            var fileKey = fileUrl.substring(fileServerUrl.length());
+            FileStorageEntity entity = repository.findByFileKey(fileKey)
+                .orElseThrow(() -> ExceptionUtil.notFoundException("file_not_found"));
 
-        try {
-            Path filePath = root.resolve(entity.getStoredName());
-            Files.deleteIfExists(filePath);
-        } catch (IOException e) {
-            log.error("Error deleting file: {}", ExceptionUtils.getStackTrace(e));
-            throw ExceptionUtil.badRequestException("file_delete_error");
+            try {
+                Path filePath = root.resolve(entity.getStoredName());
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                log.error("Error deleting file: {}", ExceptionUtils.getStackTrace(e));
+                throw ExceptionUtil.badRequestException("file_delete_error");
+            }
+
+            repository.delete(entity);
         }
-
-        repository.delete(entity);
     }
 
     @Override

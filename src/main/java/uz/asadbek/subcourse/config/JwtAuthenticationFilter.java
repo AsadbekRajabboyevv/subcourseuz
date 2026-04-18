@@ -8,6 +8,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -17,9 +20,13 @@ import uz.asadbek.subcourse.auth.CustomUserDetails;
 import uz.asadbek.subcourse.user.UserEntity;
 import uz.asadbek.subcourse.util.JwtUtil;
 
+@Slf4j
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_PREFIX = "Bearer ";
+    private static final Integer BEGIN_INDEX = 7;
     @Override
     protected void doFilterInternal(
         HttpServletRequest request,
@@ -27,26 +34,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         FilterChain filterChain
     ) throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
+        var authHeader = request.getHeader(AUTHORIZATION_HEADER);
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token = authHeader.substring(7);
+        var token = authHeader.substring(BEGIN_INDEX);
 
         try {
-            Claims claims = JwtUtil.parseToken(token);
+            var claims = JwtUtil.parseToken(token);
 
-            String username = claims.getSubject();
-            Long userId = claims.get("id", Long.class);
-            List<String> roles = claims.get("roles", List.class);
-            String lang = claims.get("lang", String.class);
+            var username = claims.getSubject();
+            var userId = claims.get("id", Long.class);
+            var roles = claims.get("roles", List.class);
+            var lang = claims.get("lang", String.class);
 
             if (username != null
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UsernamePasswordAuthenticationToken authentication = getAuthenticationToken(
+                var authentication = getAuthenticationToken(
                     userId, username, lang, roles);
 
                 authentication.setDetails(
@@ -59,10 +66,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
         } catch (JwtException e) {
+            log.error("Invalid JWT token: {}", ExceptionUtils.getStackTrace(e));
             SecurityContextHolder.clearContext();
 
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.getWriter().write(
                 "{\"success\":false,\"message\":\"Invalid or expired token\"}"
             );
@@ -75,7 +83,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static UsernamePasswordAuthenticationToken getAuthenticationToken(
         Long id, String username, String lang, List<String> roles) {
 
-        UserEntity user = new UserEntity();
+        var user = new UserEntity();
         user.setId(id);
         user.setEmail(username);
         user.setLanguage(lang);
