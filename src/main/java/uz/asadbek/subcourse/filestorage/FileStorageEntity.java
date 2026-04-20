@@ -56,4 +56,9 @@ public class FileStorageEntity extends BaseEntity {
     @Column(name = "is_public", nullable = false)
     private Boolean isPublic;
 
+    @Column(name = "tg_file_id")
+    private String tgFileId;
+
+    @Column(name = "tg_message_id")
+    private Long tgMessageId;
 }

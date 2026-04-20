@@ -54,3 +54,10 @@ springdoc:
   pathsToMatch: /v1/api/**
 app:
   file-server-url: http://localhost:8080/v1/api/files/
+
+telegram:
+  api-hash: ${TELEGRAM_API_HASH}
+  api-id: ${TELEGRAM_API_ID}
+  session-path: ${TELEGRAM_SESSION_PATH}
+  phone-number: ${TELEGRAM_PHONE_NUMBER}
+  session-name: ${TELEGRAM_SESSION_NAME}
