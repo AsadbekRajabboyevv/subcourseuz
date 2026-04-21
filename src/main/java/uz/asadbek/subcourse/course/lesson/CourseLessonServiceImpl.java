@@ -44,7 +44,7 @@ public class CourseLessonServiceImpl implements CourseLessonService {
                 if (!file.isEmpty()) {
                     var upload = fileStorageService.upload(file,
                         new FileUploadOptions().setLessonFiles());
-                    urls.add(upload.getUrl());
+                    urls.add(upload.url());
                 }
             }
         }
@@ -71,7 +71,7 @@ public class CourseLessonServiceImpl implements CourseLessonService {
                 if (!file.isEmpty()) {
                     var upload = fileStorageService.upload(file,
                         new FileUploadOptions().setLessonFiles());
-                    entity.getFileUrls().add(upload.getUrl());
+                    entity.getFileUrls().add(upload.url());
                 }
             }
         }

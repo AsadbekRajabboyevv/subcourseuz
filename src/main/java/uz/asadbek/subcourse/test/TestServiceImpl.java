@@ -89,7 +89,7 @@ public class TestServiceImpl implements TestService {
         if (image != null && !image.isEmpty()) {
             testImage = fileStorageService
                 .upload(image, new FileUploadOptions().setTestImages())
-                .getFileKey();
+                .fileKey();
         }
 
         var test = testMapper.toEntity(request);
@@ -102,7 +102,7 @@ public class TestServiceImpl implements TestService {
             if (questionDto.getImage() != null && !questionDto.getImage().isEmpty()) {
                 questionImage = fileStorageService
                     .upload(questionDto.getImage(), new FileUploadOptions().setTestQuestions())
-                    .getFileKey();
+                    .fileKey();
             }
 
             TestQuestionEntity question = new TestQuestionEntity();
@@ -121,7 +121,7 @@ public class TestServiceImpl implements TestService {
                     optionImage = fileStorageService
                         .upload(optionDto.getImage(),
                             new FileUploadOptions().setTestOptionsImages())
-                        .getFileKey();
+                        .fileKey();
                 }
 
                 TestOptionEntity option = new TestOptionEntity();
@@ -158,7 +158,7 @@ public class TestServiceImpl implements TestService {
                 request.getImage(),
                 new FileUploadOptions().setTestImages()
             );
-            test.setImagePath(uploaded.getFileKey());
+            test.setImagePath(uploaded.fileKey());
         }
 
         validator.validateTestForUpdate(test);
@@ -188,7 +188,7 @@ public class TestServiceImpl implements TestService {
                         qDto.getImage(),
                         new FileUploadOptions().setTestQuestions()
                     );
-                    question.setImagePath(uploaded.getFileKey());
+                    question.setImagePath(uploaded.fileKey());
                 }
 
                 testQuestionRepository.save(question);
@@ -224,7 +224,7 @@ public class TestServiceImpl implements TestService {
                                 oDto.getImage(),
                                 new FileUploadOptions().setTestOptionsImages()
                             );
-                            option.setImagePath(uploaded.getFileKey());
+                            option.setImagePath(uploaded.fileKey());
                         }
 
                         savedOptions.add(option);

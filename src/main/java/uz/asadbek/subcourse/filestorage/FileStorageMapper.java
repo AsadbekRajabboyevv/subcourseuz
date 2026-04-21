@@ -1,21 +1,22 @@
 package uz.asadbek.subcourse.filestorage;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants.ComponentModel;
+import uz.asadbek.subcourse.filestorage.dto.FileMetadata;
 import uz.asadbek.subcourse.filestorage.dto.FileUploadResponse;
 
-@Component
-public class FileStorageMapper {
-    @Value("${app.file-server-url}")
-    private String fileServerUrl;
 
-    public FileUploadResponse toResponse(FileStorageEntity entity) {
-        return FileUploadResponse.builder()
-            .fileKey(entity.getFileKey())
-            .fileName(entity.getStoredName())
-            .size(entity.getSize())
-            .contentType(entity.getContentType())
-            .url(fileServerUrl + entity.getFileKey())
-            .build();
-    }
+@Mapper(componentModel = ComponentModel.SPRING)
+public interface FileStorageMapper {
+
+    @Mapping(target = "uploadedAt", source = "createdAt")
+    @Mapping(target = "isPublic", source = "isPublic")
+    @Mapping(target = "url", source = "url")
+    FileUploadResponse toUploadResponse(FileStorageEntity entity, String url);
+
+    @Mapping(target = "uploadedAt", source = "createdAt")
+    @Mapping(target = "isPublic", source = "isPublic")
+    FileMetadata toMetadata(FileStorageEntity entity);
 }
+

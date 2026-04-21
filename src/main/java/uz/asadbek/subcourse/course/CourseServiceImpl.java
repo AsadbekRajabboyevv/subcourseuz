@@ -1,7 +1,5 @@
 package uz.asadbek.subcourse.course;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +13,6 @@ import uz.asadbek.subcourse.course.dto.CourseInfoResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseRequestDto;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseUpdateRequestDto;
-import uz.asadbek.subcourse.course.dto.DurationType;
 import uz.asadbek.subcourse.course.filter.CourseFilter;
 import uz.asadbek.subcourse.course.lesson.CourseLessonRepository;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
@@ -111,7 +108,7 @@ public class CourseServiceImpl implements CourseService {
 
         if (image != null && !image.isEmpty()) {
             var url = fileStorageService.upload(image, new FileUploadOptions().setCourseImages())
-                .getUrl();
+                .url();
             entity.setImagePath(url);
         }
 
@@ -130,7 +127,7 @@ public class CourseServiceImpl implements CourseService {
         mapper.update(entity, request);
         if (image != null && !image.isEmpty()) {
             var url = fileStorageService.upload(image, new FileUploadOptions().setCourseImages())
-                .getUrl();
+                .url();
             fileStorageService.delete(entity.getImagePath());
             entity.setImagePath(url);
         }

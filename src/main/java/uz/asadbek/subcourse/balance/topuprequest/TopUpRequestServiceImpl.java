@@ -69,7 +69,7 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
             .userId(userId)
             .amount(amount)
             .status(TopUpStatus.PENDING)
-            .fileKey(uploaded.getFileKey())
+            .fileKey(uploaded.fileKey())
             .message(request.getMessage())
             .build();
 

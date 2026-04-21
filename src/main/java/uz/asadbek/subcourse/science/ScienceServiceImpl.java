@@ -40,7 +40,7 @@ public class ScienceServiceImpl implements ScienceService {
         var entity = mapper.toEntity(request);
         if (image != null && !image.isEmpty()) {
             var path = fileStorageService.upload(image,
-                new FileUploadOptions().setScienceImages()).getUrl();
+                new FileUploadOptions().setScienceImages()).url();
             entity.setImagePath(path);
         }
         var saved = repository.save(entity);
@@ -55,7 +55,7 @@ public class ScienceServiceImpl implements ScienceService {
         mapper.update(science, request);
         if (image != null && !image.isEmpty()) {
             var path = fileStorageService.upload(image,
-                new FileUploadOptions().setScienceImages()).getUrl();
+                new FileUploadOptions().setScienceImages()).url();
             science.setImagePath(path);
         }
         var saved = repository.save(science);
