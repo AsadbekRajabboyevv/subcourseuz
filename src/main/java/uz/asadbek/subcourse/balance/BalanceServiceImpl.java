@@ -29,7 +29,7 @@ public class BalanceServiceImpl implements BalanceService {
 
     @Override
     public BalanceResponseDto get() {
-        Long currentUser = JwtUtil.getCurrentUser().getId();
+        Long currentUser = JwtUtil.getCurrentUserId();
         return repository.get(currentUser);
     }
 
@@ -42,7 +42,7 @@ public class BalanceServiceImpl implements BalanceService {
     @Override
     @Transactional
     public void debit(Long amount) {
-        var userId = JwtUtil.getCurrentUser().getId();
+        var userId = JwtUtil.getCurrentUserId();
         validate(userId, amount);
 
         int updated = repository.decrease(userId, amount);

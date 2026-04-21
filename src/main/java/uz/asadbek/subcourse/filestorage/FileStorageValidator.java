@@ -48,16 +48,19 @@ public class FileStorageValidator {
 
     private void validateMimeType(MultipartFile file, FileUploadOptions options) {
         String mime = file.getContentType();
-        if (mime == null || FileUtils.APPLICATION_BLOCKED_MIMES.contains(mime.toLowerCase())) {
+
+        if (mime == null) {
             throw ExceptionUtil.badRequestException("file_type_not_allowed");
         }
-        if (options.allowedMimeTypes() != null) {
-            boolean allowed = Arrays.stream(options.allowedMimeTypes().split(","))
-                .map(String::trim)
-                .anyMatch(t -> t.equals(mime) || mime.startsWith(t.replace("*", "")));
-            if (!allowed) {
-                throw ExceptionUtil.badRequestException("file_type_not_allowed");
-            }
+
+        String normalizedMime = mime.toLowerCase();
+
+        if (FileUtils.APPLICATION_BLOCKED_MIMES.contains(normalizedMime)) {
+            throw ExceptionUtil.badRequestException("file_type_not_allowed");
+        }
+
+        if (!options.isMimeAllowed(normalizedMime)) {
+            throw ExceptionUtil.badRequestException("file_type_not_allowed");
         }
     }
 

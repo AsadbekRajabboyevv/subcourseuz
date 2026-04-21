@@ -88,8 +88,8 @@ public class TestServiceImpl implements TestService {
         String testImage = null;
         if (image != null && !image.isEmpty()) {
             testImage = fileStorageService
-                .upload(image, new FileUploadOptions().setTestImages())
-                .fileKey();
+                .upload(image, FileUploadOptions.TEST_IMAGE)
+                .getUrl();
         }
 
         var test = testMapper.toEntity(request);
@@ -101,8 +101,8 @@ public class TestServiceImpl implements TestService {
             String questionImage = null;
             if (questionDto.getImage() != null && !questionDto.getImage().isEmpty()) {
                 questionImage = fileStorageService
-                    .upload(questionDto.getImage(), new FileUploadOptions().setTestQuestions())
-                    .fileKey();
+                    .upload(questionDto.getImage(), FileUploadOptions.QUESTION_IMAGE)
+                    .getUrl();
             }
 
             TestQuestionEntity question = new TestQuestionEntity();
@@ -120,8 +120,8 @@ public class TestServiceImpl implements TestService {
                 if (optionDto.getImage() != null && !optionDto.getImage().isEmpty()) {
                     optionImage = fileStorageService
                         .upload(optionDto.getImage(),
-                            new FileUploadOptions().setTestOptionsImages())
-                        .fileKey();
+                            FileUploadOptions.OPTION_IMAGE)
+                        .getUrl();
                 }
 
                 TestOptionEntity option = new TestOptionEntity();
@@ -156,9 +156,9 @@ public class TestServiceImpl implements TestService {
         if (request.getImage() != null && !request.getImage().isEmpty()) {
             var uploaded = fileStorageService.upload(
                 request.getImage(),
-                new FileUploadOptions().setTestImages()
+                FileUploadOptions.TEST_IMAGE
             );
-            test.setImagePath(uploaded.fileKey());
+            test.setImagePath(uploaded.getUrl());
         }
 
         validator.validateTestForUpdate(test);
@@ -186,9 +186,9 @@ public class TestServiceImpl implements TestService {
                 if (qDto.getImage() != null && !qDto.getImage().isEmpty()) {
                     var uploaded = fileStorageService.upload(
                         qDto.getImage(),
-                        new FileUploadOptions().setTestQuestions()
+                        FileUploadOptions.QUESTION_IMAGE
                     );
-                    question.setImagePath(uploaded.fileKey());
+                    question.setImagePath(uploaded.getUrl());
                 }
 
                 testQuestionRepository.save(question);
@@ -222,9 +222,9 @@ public class TestServiceImpl implements TestService {
                         if (oDto.getImage() != null && !oDto.getImage().isEmpty()) {
                             var uploaded = fileStorageService.upload(
                                 oDto.getImage(),
-                                new FileUploadOptions().setTestOptionsImages()
+                                FileUploadOptions.OPTION_IMAGE
                             );
-                            option.setImagePath(uploaded.fileKey());
+                            option.setImagePath(uploaded.getUrl());
                         }
 
                         savedOptions.add(option);
@@ -262,7 +262,7 @@ public class TestServiceImpl implements TestService {
     @Override
     @Transactional
     public void enroll(Long testId) {
-        var userId =  JwtUtil.getCurrentUser().getId();
+        var userId =  JwtUtil.getCurrentUserId();
         validator.validateEnroll(userId, testId, repository::existsById, "test_not_found");
         var uc = new UserTestEntity();
         uc.setId(new UserPurchaseId(userId, testId, LocalDateTime.now()));

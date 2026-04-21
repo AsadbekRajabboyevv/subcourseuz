@@ -12,8 +12,7 @@ public interface FileStorageMapper {
 
     @Mapping(target = "uploadedAt", source = "createdAt")
     @Mapping(target = "isPublic", source = "isPublic")
-    @Mapping(target = "url", source = "url")
-    FileUploadResponse toUploadResponse(FileStorageEntity entity, String url);
+    FileUploadResponse toUploadResponse(FileStorageEntity entity);
 
     @Mapping(target = "uploadedAt", source = "createdAt")
     @Mapping(target = "isPublic", source = "isPublic")

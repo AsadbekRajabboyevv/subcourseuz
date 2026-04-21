@@ -31,10 +31,6 @@ import uz.asadbek.subcourse.util.JwtUtil;
 @Transactional(readOnly = true)
 public class FileStorageServiceImpl implements FileStorageService {
 
-    private final FileStorageRepository repository;
-    private final FileStorageMapper mapper;
-    private final FileStorageValidator validator;
-    private final Map<String, VideoUploadSession> sessionStore = new ConcurrentHashMap<>();
     private final static String SHA_256_ALGORITHM = "SHA-256";
     private final static String CHUNK_PREFIX = "chunk_";
     private final static String BYTES_PREFIX = "bytes";
@@ -43,7 +39,10 @@ public class FileStorageServiceImpl implements FileStorageService {
     private final static String DOT = ".";
     private final static String EMPTY = "";
     private final static String HYPHEN = "-";
-
+    private final FileStorageRepository repository;
+    private final FileStorageMapper mapper;
+    private final FileStorageValidator validator;
+    private final Map<String, VideoUploadSession> sessionStore = new ConcurrentHashMap<>();
     @Value("${app.file.server.url}")
     private String fileServerUrl;
 
@@ -64,17 +63,15 @@ public class FileStorageServiceImpl implements FileStorageService {
         tempRoot = root.resolve(TEMP_PREFIX);
         Files.createDirectories(root);
         Files.createDirectories(tempRoot);
-        log.info("FileStorage root: {}", root);
     }
-
 
     @Override
     @Transactional
     public FileUploadResponse upload(MultipartFile file, FileUploadOptions options) {
         validator.validate(file, options);
 
-        if (options.ownerId() != null) {
-            enforceQuota(options.ownerId(), file.getSize());
+        if (JwtUtil.getCurrentUserId() != null) {
+            enforceQuota(JwtUtil.getCurrentUserId(), file.getSize());
         }
 
         var checksum = computeChecksum(file);
@@ -93,7 +90,6 @@ public class FileStorageServiceImpl implements FileStorageService {
             Files.createDirectories(target.getParent());
             Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            log.error("Failed to write file: {}", ExceptionUtils.getStackTrace(e));
             throw ExceptionUtil.badRequestException("file_upload_error");
         }
 
@@ -111,14 +107,9 @@ public class FileStorageServiceImpl implements FileStorageService {
             .build();
 
         repository.save(entity);
-        log.info("File uploaded: key={}, size={}, type={}", fileKey, file.getSize(),
-            file.getContentType());
+
         return buildResponse(entity);
     }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Download
-    // ─────────────────────────────────────────────────────────────────────────
 
     @Override
     @Transactional
@@ -129,7 +120,6 @@ public class FileStorageServiceImpl implements FileStorageService {
                 var resource = toUrlResource(physicalPath, fileKey);
 
                 if (!resource.exists()) {
-                    log.warn("DB record exists but physical file missing: key={}", fileKey);
                     throw ExceptionUtil.notFoundException("file_not_found");
                 }
 
@@ -158,7 +148,6 @@ public class FileStorageServiceImpl implements FileStorageService {
         Long deletedBy = JwtUtil.getCurrentUserId();
         entity.markDeleted(deletedBy);
         repository.save(entity);
-        log.info("Soft-deleted: key={}, by={}", fileKey, deletedBy);
     }
 
     @Override
@@ -168,7 +157,6 @@ public class FileStorageServiceImpl implements FileStorageService {
             .orElseThrow(() -> ExceptionUtil.notFoundException("file_not_found"));
         deletePhysicalFile(entity);
         repository.delete(entity);
-        log.info("Hard-deleted: key={}", fileKey);
     }
 
     @Override
@@ -179,7 +167,6 @@ public class FileStorageServiceImpl implements FileStorageService {
             .orElseThrow(() -> ExceptionUtil.notFoundException("file_not_found_or_active"));
         entity.restore();
         repository.save(entity);
-        log.info("Restored: key={}", fileKey);
     }
 
     @Override
@@ -189,16 +176,10 @@ public class FileStorageServiceImpl implements FileStorageService {
         }
         long used = repository.sumSizeByOwner(ownerId);
         if (used + incomingBytes > defaultQuotaBytes) {
-            log.warn("Quota exceeded: owner={}, used={}, incoming={}, limit={}",
-                ownerId, used, incomingBytes, defaultQuotaBytes);
             throw ExceptionUtil.badRequestException("storage_quota_exceeded");
         }
     }
 
-    /**
-     * Step 1. Client announces total size and chunk count. Server creates a temp directory and
-     * returns a session id.
-     */
     @Override
     public VideoUploadSession initVideoUpload(VideoUploadInitRequestDto request) {
         validator.validateVideoInit(request.contentType(), request.totalSize());
@@ -227,15 +208,10 @@ public class FileStorageServiceImpl implements FileStorageService {
             .build();
 
         sessionStore.put(sessionId, session);
-        log.info("Video upload session created: sessionId={}, chunks={}, size={}",
-            sessionId, request.totalChunks(), request.totalSize());
+
         return session;
     }
 
-    /**
-     * Step 2. Client sends each chunk independently (can be parallel or sequential). chunkIndex is
-     * 0-based.
-     */
     @Override
     public void uploadChunk(String sessionId, int chunkIndex, MultipartFile chunk) {
         var session = requireSession(sessionId);
@@ -252,8 +228,6 @@ public class FileStorageServiceImpl implements FileStorageService {
         try {
             Files.copy(chunk.getInputStream(), chunkPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            log.error("Failed to write chunk {}/{}: {}", chunkIndex, session.totalChunks(),
-                ExceptionUtils.getStackTrace(e));
             throw ExceptionUtil.badRequestException("chunk_write_error");
         }
 
@@ -261,17 +235,12 @@ public class FileStorageServiceImpl implements FileStorageService {
             session.totalChunks());
     }
 
-    /**
-     * Step 3. Client signals all chunks are uploaded. Server merges chunks into the final video
-     * file and creates the DB record.
-     */
     @Override
     @Transactional
     public FileUploadResponse completeVideoUpload(String sessionId) {
         var session = requireSession(sessionId);
         var tmpDir = tempRoot.resolve(sessionId);
 
-        // Verify all chunks are present
         for (int i = 0; i < session.totalChunks(); i++) {
             if (!Files.exists(tmpDir.resolve(CHUNK_PREFIX + i))) {
                 throw ExceptionUtil.badRequestException("chunk_missing_" + i);
@@ -291,8 +260,6 @@ public class FileStorageServiceImpl implements FileStorageService {
             finalSize = mergeChunks(tmpDir, session.totalChunks(), finalPath);
             checksum = computeChecksumFromPath(finalPath);
         } catch (IOException e) {
-            log.error("Failed to merge chunks for session={}: {}", sessionId,
-                ExceptionUtils.getStackTrace(e));
             throw ExceptionUtil.badRequestException("video_merge_error");
         } finally {
             cleanupTempDir(tmpDir);
@@ -313,13 +280,9 @@ public class FileStorageServiceImpl implements FileStorageService {
             .build();
 
         repository.save(entity);
-        log.info("Video upload complete: key={}, size={}", fileKey, finalSize);
         return buildResponse(entity);
     }
 
-    /**
-     * Client-initiated abort — cleans up temp chunks and removes session.
-     */
     @Override
     public void abortVideoUpload(String sessionId) {
         sessionStore.remove(sessionId);
@@ -327,14 +290,6 @@ public class FileStorageServiceImpl implements FileStorageService {
         log.info("Video upload aborted: sessionId={}", sessionId);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Video — HTTP range streaming
-    // ─────────────────────────────────────────────────────────────────────────
-
-    /**
-     * Supports HTTP Range requests (browsers, mobile players). If rangeHeader is null → returns
-     * full file with 200. If rangeHeader present → returns partial content with 206.
-     */
     @Override
     @Transactional
     public VideoStreamResource streamVideo(String fileKey, String rangeHeader) {
@@ -353,7 +308,6 @@ public class FileStorageServiceImpl implements FileStorageService {
 
         repository.incrementDownloadCount(fileKey);
 
-        // No Range header → full response
         if (rangeHeader == null || rangeHeader.isBlank()) {
             return VideoStreamResource.builder()
                 .resource(toUrlResource(filePath, fileKey))
@@ -365,7 +319,6 @@ public class FileStorageServiceImpl implements FileStorageService {
                 .build();
         }
 
-        // Parse "bytes=start-end"
         long[] range = parseRange(rangeHeader, fileSize);
         var rangeStart = range[0];
         var rangeEnd = range[1];
@@ -386,14 +339,9 @@ public class FileStorageServiceImpl implements FileStorageService {
                 .partial(true)
                 .build();
         } catch (IOException e) {
-            log.error("Failed to open video for streaming: key={}", fileKey, e);
             throw ExceptionUtil.badRequestException("video_stream_error");
         }
     }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Private helpers
-    // ─────────────────────────────────────────────────────────────────────────
 
     private Path resolveStoragePath(String folder, String storedName) {
         var base = (folder != null && !folder.isBlank())
@@ -416,7 +364,9 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     private FileUploadResponse buildResponse(FileStorageEntity entity) {
-        return mapper.toUploadResponse(entity, fileServerUrl + entity.getFileKey());
+        var response = mapper.toUploadResponse(entity);
+        response.setUrl(fileServerUrl + entity.getFileKey());
+        return response;
     }
 
     private Optional<FileStorageEntity> findDuplicate(String checksum, FileUploadOptions options) {
@@ -431,7 +381,6 @@ public class FileStorageServiceImpl implements FileStorageService {
         try {
             return new UrlResource(path.toUri());
         } catch (MalformedURLException e) {
-            log.error("Malformed path for key={}", fileKey, e);
             throw ExceptionUtil.badRequestException("file_read_error");
         }
     }
@@ -443,15 +392,10 @@ public class FileStorageServiceImpl implements FileStorageService {
                 log.warn("Physical file already absent: key={}", entity.getFileKey());
             }
         } catch (IOException e) {
-            log.error("Failed to delete physical file: key={}", entity.getFileKey(), e);
             throw ExceptionUtil.badRequestException("file_delete_error");
         }
     }
 
-    /**
-     * Merges ordered chunks into one file using FileChannel for zero-copy performance. Returns the
-     * total number of bytes written.
-     */
     private long mergeChunks(Path tmpDir, int totalChunks, Path destination) throws IOException {
         var totalBytes = 0;
         try (var out = FileChannel.open(destination,
@@ -490,9 +434,6 @@ public class FileStorageServiceImpl implements FileStorageService {
         }
     }
 
-    /**
-     * Parse "bytes=start-end" or "bytes=start-"
-     */
     private long[] parseRange(String rangeHeader, long fileSize) {
         try {
             var range = rangeHeader.replace(BYTES_PREFIX + EQUAL, EMPTY).trim();
@@ -544,7 +485,6 @@ public class FileStorageServiceImpl implements FileStorageService {
         return dot > 0 ? filename.substring(dot + 1).toLowerCase() : EMPTY;
     }
 
-    // ── BoundedInputStream — reads exactly `limit` bytes then stops ───────────
     private static final class BoundedInputStream extends FilterInputStream {
 
         private long remaining;

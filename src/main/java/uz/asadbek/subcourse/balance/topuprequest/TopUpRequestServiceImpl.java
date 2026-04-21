@@ -35,13 +35,13 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
 
     @Override
     public Page<TopUpRequestResponseDto> getMy(Pageable pageable, TopUpRequestFilter filter) {
-        var userId = JwtUtil.getCurrentUser().getId();
+        var userId = JwtUtil.getCurrentUserId();
         return repository.get(userId, filter, pageable);
     }
 
     @Override
     public TopUpRequestResponseDto getMyById(Long id) {
-        var userId = JwtUtil.getCurrentUser().getId();
+        var userId = JwtUtil.getCurrentUserId();
         return repository.get(id, userId)
             .orElseThrow(() -> ExceptionUtil.notFoundException("top_up_not_found"));
     }
@@ -57,9 +57,9 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
             throw ExceptionUtil.badRequestException("invalid_screenshot_type");
         }
 
-        var uploaded = fileStorageService.upload(screenshot, new FileUploadOptions().setTopUpRequestImages());
+        var uploaded = fileStorageService.upload(screenshot, FileUploadOptions.TOP_UP_REQUEST_IMAGE);
 
-        var userId = JwtUtil.getCurrentUser().getId();
+        var userId = JwtUtil.getCurrentUserId();
         var amount = request.getAmount();
         validateAmount(amount);
 
@@ -69,7 +69,7 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
             .userId(userId)
             .amount(amount)
             .status(TopUpStatus.PENDING)
-            .fileKey(uploaded.fileKey())
+            .fileKey(uploaded.getFileKey())
             .message(request.getMessage())
             .build();
 
@@ -81,7 +81,7 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
     @Transactional
     public Long cancel(Long id) {
 
-        var userId = JwtUtil.getCurrentUser().getId();
+        var userId = JwtUtil.getCurrentUserId();
 
         var entity = repository.findByIdAndUserId(id, userId)
             .orElseThrow(() -> ExceptionUtil.notFoundException("top_up_not_found"));

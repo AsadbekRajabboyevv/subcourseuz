@@ -43,8 +43,8 @@ public class CourseLessonServiceImpl implements CourseLessonService {
             for (var file : files) {
                 if (!file.isEmpty()) {
                     var upload = fileStorageService.upload(file,
-                        new FileUploadOptions().setLessonFiles());
-                    urls.add(upload.url());
+                        FileUploadOptions.LESSON_FILE);
+                    urls.add(upload.getUrl());
                 }
             }
         }
@@ -62,7 +62,7 @@ public class CourseLessonServiceImpl implements CourseLessonService {
         if (deletedFileUrls != null && !deletedFileUrls.isEmpty()) {
             entity.getFileUrls().removeAll(deletedFileUrls);
             for (var url : deletedFileUrls) {
-                fileStorageService.delete(url);
+                fileStorageService.softDelete(url);
             }
         }
 
@@ -70,8 +70,8 @@ public class CourseLessonServiceImpl implements CourseLessonService {
             for (var file : files) {
                 if (!file.isEmpty()) {
                     var upload = fileStorageService.upload(file,
-                        new FileUploadOptions().setLessonFiles());
-                    entity.getFileUrls().add(upload.url());
+                        FileUploadOptions.LESSON_FILE);
+                    entity.getFileUrls().add(upload.getUrl());
                 }
             }
         }

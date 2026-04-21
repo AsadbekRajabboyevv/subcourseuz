@@ -60,7 +60,7 @@ public class PaymentServiceImpl implements PaymentService {
         return PaymentEntity.builder()
             .type(type)
             .amount(amount)
-            .userId(JwtUtil.getCurrentUser().getId())
+            .userId(JwtUtil.getCurrentUserId())
             .referenceId(referenceId)
             .currency(currency)
             .status(PaymentStatus.PROCESSING)
@@ -179,7 +179,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Page<PaymentResponseDto> get(Pageable pageable, PaymentFilter filter) {
         if (!JwtUtil.isAdmin()){
-            filter.setUserId(JwtUtil.getCurrentUser().getId());
+            filter.setUserId(JwtUtil.getCurrentUserId());
         }
         return repository.get(filter, pageable);
     }
@@ -188,7 +188,7 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentResponseDto get(String exId) {
         Long userId = null;
         if (!JwtUtil.isAdmin()){
-           userId = JwtUtil.getCurrentUser().getId();
+           userId = JwtUtil.getCurrentUserId();
         }
         return repository.get(exId, userId);
     }

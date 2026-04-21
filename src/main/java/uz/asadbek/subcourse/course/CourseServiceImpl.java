@@ -56,7 +56,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Page<CourseResponseDto> getMe(Pageable pageable, CourseFilter filter) {
-        return repository.get(pageable, filter, LangUtils.currentLang(), JwtUtil.getCurrentUser().getId());
+        return repository.get(pageable, filter, LangUtils.currentLang(), JwtUtil.getCurrentUserId());
     }
 
     @Override
@@ -71,7 +71,7 @@ public class CourseServiceImpl implements CourseService {
         dto.setStudentsCount(userCourseRepository.countByIdReferenceId(id));
 
         if (JwtUtil.isAuthenticated()) {
-            Long currentUserId = JwtUtil.getCurrentUser().getId();
+            Long currentUserId = JwtUtil.getCurrentUserId();
             boolean exists = userCourseRepository.existsByIdUserIdAndIdReferenceId(currentUserId, id);
             dto.setPurchased(exists);
         }
@@ -92,7 +92,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Boolean enroll(Long courseId) {
-        var userId = JwtUtil.getCurrentUser().getId();
+        var userId = JwtUtil.getCurrentUserId();
         validator.validateEnroll(userId, courseId, repository::existsById, "course_not_found");
         var uc = new UserCourseEntity();
         uc.setId(new UserPurchaseId(userId, courseId, LocalDateTime.now()));
@@ -107,8 +107,7 @@ public class CourseServiceImpl implements CourseService {
         var entity = mapper.toEntity(request);
 
         if (image != null && !image.isEmpty()) {
-            var url = fileStorageService.upload(image, new FileUploadOptions().setCourseImages())
-                .url();
+            var url = fileStorageService.upload(image, FileUploadOptions.COURSE_IMAGE).getUrl();
             entity.setImagePath(url);
         }
 
@@ -126,9 +125,11 @@ public class CourseServiceImpl implements CourseService {
         var entity = repository.findById(id).orElseThrow(()-> ExceptionUtil.notFoundException("course_not_found"));
         mapper.update(entity, request);
         if (image != null && !image.isEmpty()) {
-            var url = fileStorageService.upload(image, new FileUploadOptions().setCourseImages())
-                .url();
-            fileStorageService.delete(entity.getImagePath());
+            var url = fileStorageService.upload(image, FileUploadOptions.COURSE_IMAGE)
+                .getUrl();
+            if (entity.getImagePath() != null) {
+                fileStorageService.softDelete(entity.getImagePath());
+            }
             entity.setImagePath(url);
         }
         return repository.save(entity).getId();

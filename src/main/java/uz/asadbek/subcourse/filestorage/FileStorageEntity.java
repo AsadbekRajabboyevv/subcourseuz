@@ -10,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -83,7 +82,7 @@ public class FileStorageEntity extends BaseEntity {
     private Long downloadCount = 0L;
 
     @Column(name = "last_accessed_at")
-    private Instant lastAccessedAt;
+    private LocalDateTime lastAccessedAt;
 
     public boolean isActive() {
         return FileStatus.ACTIVE.equals(status);

@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public Long create(CommentRequestDto dto) {
-        var currentUserId = JwtUtil.getCurrentUser().getId();
+        var currentUserId = JwtUtil.getCurrentUserId();
         var latestComment = repository.findFirstByCreatedByOrderByCreatedAtDesc(currentUserId);
         if (latestComment.isPresent()) {
             var lastCreatedAt = latestComment.get().getCreatedAt();
