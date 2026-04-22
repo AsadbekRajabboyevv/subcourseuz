@@ -19,6 +19,21 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'top-up-requests',
+    loadComponent: () => import('./features/admin/topuprequest/list/top-up-request-list.component').then(m => m.TopUpRequestListComponent),
+    title: 'So`rovlar ro`yxati'
+  },
+  {
+    path: 'top-up',
+    loadComponent: () => import('./features/topup/create/top-up-create.component').then(m => m.TopUpCreateComponent),
+    title: 'Balansini to\'ldirish '
+  },
+  {
+    path: 'top-up-histories',
+    loadComponent: () => import('./features/topup/list/top-up-list.component').then(m => m.TopUpHistoryComponent),
+    title: 'Balansini to\'ldirish so`rovlar tarixi'
+  },
+  {
     path: 'courses-list',
     loadComponent: () => import('./features/course/list/course-list.component').then(m => m.CourseListComponent),
     title: 'Kurslar ro\'yxati'

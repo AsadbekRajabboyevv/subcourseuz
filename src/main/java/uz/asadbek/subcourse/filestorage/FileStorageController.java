@@ -18,28 +18,24 @@ import org.springframework.web.multipart.MultipartFile;
 import uz.asadbek.subcourse.filestorage.dto.*;
 
 @RestController
-@RequestMapping("/api/v1/files")
+@RequestMapping("/v1/api/files")
 @RequiredArgsConstructor
 public class FileStorageController {
 
     private final FileStorageService fileStorageService;
 
     @GetMapping("/{fileKey}")
-    public ResponseEntity<Resource> download(@PathVariable String fileKey) {
-        FileResource fr = fileStorageService.get(fileKey)
+    public ResponseEntity<Resource> getFile(@PathVariable String fileKey) {
+        var file = fileStorageService.get(fileKey)
             .orElseThrow(() -> ExceptionUtil.notFoundException("file_not_found"));
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(fr.contentType()));
-        headers.setContentLength(fr.size());
-        headers.setContentDisposition(
-            ContentDisposition.inline().filename(fr.fileName()).build());
-        if (fr.checksum() != null) {
-            headers.set("X-Content-Checksum", fr.checksum());
-        }
-
-        return ResponseEntity.ok().headers(headers).body(fr.resource());
+        return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType(file.contentType()))
+            .header(HttpHeaders.CONTENT_DISPOSITION,
+                STR."inline; filename=\"\{file.fileName()}\"")
+            .body(file.resource());
     }
+
 
     @GetMapping("/{fileKey}/metadata")
     @PreAuthorize("isAuthenticated()")

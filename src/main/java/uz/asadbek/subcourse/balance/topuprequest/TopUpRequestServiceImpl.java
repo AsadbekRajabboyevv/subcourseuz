@@ -1,6 +1,7 @@
 package uz.asadbek.subcourse.balance.topuprequest;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import uz.asadbek.subcourse.filestorage.FileStorageService;
 import uz.asadbek.subcourse.filestorage.dto.FileUploadOptions;
 import uz.asadbek.subcourse.payment.PaymentService;
 import uz.asadbek.subcourse.payment.dto.PaymentAction;
+import uz.asadbek.subcourse.payment.dto.PaymentRequestDto;
 import uz.asadbek.subcourse.payment.dto.PaymentResponseDto;
 import uz.asadbek.subcourse.util.ExceptionUtil;
 import uz.asadbek.subcourse.util.JwtUtil;
@@ -50,10 +52,10 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
     @Transactional
     public void create(TopUpBalanceRequestDto request, MultipartFile screenshot) {
 
-        if (screenshot.isEmpty() || screenshot == null) {
+        if (screenshot.isEmpty()) {
             throw ExceptionUtil.badRequestException("screenshot_required");
         }
-        if (!screenshot.getContentType().startsWith("image/")) {
+        if (!Objects.requireNonNull(screenshot.getContentType()).startsWith("image/")) {
             throw ExceptionUtil.badRequestException("invalid_screenshot_type");
         }
 
@@ -63,7 +65,11 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
         var amount = request.getAmount();
         validateAmount(amount);
 
-        balanceService.addPending(userId, amount);
+        var paymentRequest = PaymentRequestDto.builder()
+            .amount(amount)
+            .build();
+
+        var purchase = paymentService.purchase(paymentRequest, true);
 
         var entity = TopUpRequestEntity.builder()
             .userId(userId)
@@ -71,10 +77,12 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
             .status(TopUpStatus.PENDING)
             .fileKey(uploaded.getFileKey())
             .message(request.getMessage())
+            .paymentExId(purchase.getExId())
             .build();
 
         repository.save(entity);
-        log.info("TopUpRequest created: {}", entity);
+        log.info("TopUpRequest created: userId={}, amount={}, paymentExId={}",
+            userId, amount, purchase.getExId());
     }
 
     @Override
@@ -130,6 +138,8 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
             PaymentAction.SUCCESS
         );
         entity.setComment(request.getMessage());
+        entity.setPaymentExId(response.getExId());
+        entity.setPaymentId(response.getPaymentId());
         entity.setStatus(TopUpStatus.APPROVED);
         entity.setApprovedAt(LocalDateTime.now());
         log.info("TopUpRequest approved: {}", entity);

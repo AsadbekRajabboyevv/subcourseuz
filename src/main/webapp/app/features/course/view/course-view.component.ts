@@ -7,7 +7,7 @@ import {CourseService} from "../course.service";
 import {PageWrapperComponent} from "../../../shared/ui/layout/page-wrapper.component";
 import {PaymentService} from "../../payment/payment.service";
 import {PaymentModalComponent} from "../../payment/modal/payment-modal.component";
-import {PaymentRequestDto} from "../../payment/payment.model";
+import {PaymentRequest} from "../../payment/payment.model";
 import {AuthService} from "../../../common/auth/auth.service";
 
 @Component({
@@ -82,7 +82,7 @@ export class CourseViewComponent implements OnInit {
     const currentCourse = this.course();
     if (!currentCourse) return;
 
-    const request: PaymentRequestDto = {
+    const request: PaymentRequest = {
       courseId: currentCourse.id,
       amount: currentCourse.price,
       couponCode: event.couponCode

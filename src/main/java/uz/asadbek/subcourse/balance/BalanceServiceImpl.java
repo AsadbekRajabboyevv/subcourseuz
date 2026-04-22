@@ -22,7 +22,6 @@ public class BalanceServiceImpl implements BalanceService {
     private final BalanceRepository repository;
 
     @Override
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public BalanceResponseDto get(Long userId) {
         return repository.get(userId);
     }

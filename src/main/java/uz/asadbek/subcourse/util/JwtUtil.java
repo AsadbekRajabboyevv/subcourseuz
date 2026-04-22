@@ -99,8 +99,6 @@ public class JwtUtil {
         List<String> roles = userDetails.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
             .filter(Objects::nonNull)
-            .filter(a -> a.startsWith(ROLE_PREFIX))
-            .map(a -> a.substring(ROLE_PREFIX.length()))
             .toList();
 
         Map<String, Object> claims = Map.of(

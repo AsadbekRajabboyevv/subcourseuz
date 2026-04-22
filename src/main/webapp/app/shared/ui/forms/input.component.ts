@@ -15,101 +15,79 @@ import { FormsModule, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/f
     }
   ],
   template: `
-    <div class="space-y-2 w-full">
-      <label *ngIf="label"
-             class="ml-2 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">
+    <div class="space-y-2 w-full" [class.opacity-50]="disabled" [class.pointer-events-none]="disabled">
+      <label *ngIf="label" class="ml-2 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">
         {{ label }}
       </label>
 
       <div class="relative group">
-
         <ng-container *ngIf="['text', 'number', 'date'].includes(type)">
-          <input [type]="type"
-                 [value]="value"
+          <input [type]="type" [value]="value" [disabled]="disabled"
                  (input)="onValueChange($any($event.target).value)"
                  [placeholder]="placeholder"
                  class="w-full rounded-2xl border-2 border-gray-50 bg-gray-50 px-6 py-4 text-sm font-bold outline-none transition-all
-                        hover:border-emerald-500 focus:border-emerald-500 focus:bg-white
-                        dark:border-gray-800 dark:bg-gray-800 dark:text-white dark:focus:bg-gray-900 dark:focus:border-emerald-500
-                        placeholder:text-gray-400 dark:placeholder:text-gray-600">
+                    disabled:cursor-not-allowed hover:border-emerald-500 focus:border-emerald-500 ...">
         </ng-container>
 
         <ng-container *ngIf="type === 'trix'">
-          <div class="w-full rounded-[2rem] border-2 border-gray-50 bg-gray-50 overflow-hidden transition-all
-              hover:border-emerald-500 focus-within:border-emerald-500 focus-within:bg-white
-              dark:border-gray-800 dark:bg-gray-800">
-
+          <div class="w-full rounded-[2rem] border-2 border-gray-50 bg-gray-50 overflow-hidden transition-all"
+               [class.opacity-60]="disabled">
             <input [id]="label + '-trix-input'" type="hidden" [value]="value">
-
-            <trix-editor
-              [attr.input]="label + '-trix-input'"
-              class="trix-content min-h-[400px] p-6 text-sm font-bold dark:text-white outline-none"
-              (trix-change)="onTrixChange($event)"
-              [attr.placeholder]="placeholder">
+            <trix-editor [attr.input]="label + '-trix-input'"
+                         [attr.contenteditable]="!disabled"
+                         class="trix-content min-h-[400px] p-6 text-sm font-bold dark:text-white outline-none ...">
             </trix-editor>
           </div>
         </ng-container>
 
         <ng-container *ngIf="type === 'textarea'">
-          <textarea [value]="value"
-                    (input)="onValueChange($any($event.target).value)"
-                    [placeholder]="placeholder"
-                    rows="4"
-                    class="w-full rounded-2xl border-2 border-gray-50 bg-gray-50 px-6 py-4 text-sm font-bold outline-none transition-all
-                           hover:border-emerald-500 focus:border-emerald-500 focus:bg-white
-                           dark:border-gray-800 dark:bg-gray-800 dark:text-white dark:focus:bg-gray-900 resize-none"></textarea>
+      <textarea [value]="value" [disabled]="disabled"
+                (input)="onValueChange($any($event.target).value)"
+                [placeholder]="placeholder" rows="4"
+                class="w-full rounded-2xl border-2 border-gray-50 bg-gray-50 px-6 py-4 text-sm font-bold outline-none ... disabled:cursor-not-allowed"></textarea>
         </ng-container>
 
         <ng-container *ngIf="type === 'select'">
-          <select [ngModel]="value"
+          <select [ngModel]="value" [disabled]="disabled"
                   (ngModelChange)="onValueChange($event)"
-                  class="w-full appearance-none rounded-2xl border-2 border-gray-50 bg-gray-50 px-6 py-4 text-sm font-bold outline-none transition-all
-                         hover:border-emerald-500 focus:border-emerald-500
-                         dark:border-gray-800 dark:bg-gray-800 dark:text-white dark:focus:bg-gray-900">
-            <option value="" disabled class="dark:bg-gray-900">{{ placeholder }}</option>
-            <option *ngFor="let opt of options" [value]="opt.value" class="dark:bg-gray-900">{{ opt.label }}</option>
+                  class="w-full appearance-none rounded-2xl border-2 border-gray-50 bg-gray-50 px-6 py-4 text-sm font-bold outline-none ... disabled:cursor-not-allowed">
+            <option value="" disabled>{{ placeholder }}</option>
+            <option *ngFor="let opt of options" [value]="opt.value">{{ opt.label }}</option>
           </select>
-          <i class="fa-solid fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none group-hover:text-emerald-500"></i>
+          <i class="fa-solid fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-gray-400"></i>
         </ng-container>
 
-        <div *ngIf="type === 'multi-select'"
-             class="flex flex-wrap gap-2 p-4 rounded-2xl border-2 border-gray-50 bg-gray-50 dark:bg-gray-800 dark:border-gray-800 transition-all hover:border-emerald-500">
-          <button *ngFor="let opt of options"
-                  type="button"
+        <div *ngIf="type === 'multi-select'" class="flex flex-wrap gap-2 p-4 ...">
+          <button *ngFor="let opt of options" type="button"
+                  [disabled]="disabled"
                   (click)="toggleMultiSelect(opt.value)"
-                  [ngClass]="isSelected(opt.value)
-                    ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
-                    : 'bg-gray-200 text-gray-500 dark:bg-gray-700 dark:text-gray-400 hover:bg-gray-300 dark:hover:bg-gray-600'"
-                  class="px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all active:scale-95">
+                  class="px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all disabled:opacity-50 disabled:cursor-not-allowed ...">
             {{ opt.label }}
           </button>
         </div>
 
         <div *ngIf="type === 'checkbox'"
-             (click)="onValueChange(!value)"
-             class="flex items-center gap-4 cursor-pointer p-4 rounded-2xl border-2 border-gray-50 bg-gray-50 dark:bg-gray-800 dark:border-gray-800 hover:border-emerald-500 transition-all">
+             (click)="!disabled && onValueChange(!value)"
+             class="flex items-center gap-4 p-4 rounded-2xl border-2 border-gray-50 bg-gray-50 ... "
+             [class.cursor-not-allowed]="disabled">
           <div class="w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all"
-               [ngClass]="value ? 'bg-emerald-500 border-emerald-500' : 'border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-900'">
+               [ngClass]="value ? 'bg-emerald-500 border-emerald-500' : 'border-gray-300 bg-white ...'">
             <i *ngIf="value" class="fa-solid fa-check text-white text-xs"></i>
           </div>
           <span class="text-sm font-bold text-gray-600 dark:text-gray-300">{{ placeholder }}</span>
         </div>
 
         <div *ngIf="type === 'file'" class="space-y-3">
-          <div class="relative w-full rounded-2xl border-2 border-dashed border-gray-100 bg-gray-50 p-6 transition-all hover:border-emerald-500 dark:border-gray-800 dark:bg-gray-800 text-center">
-            <input type="file" (change)="handleFileUpload($event)" class="absolute inset-0 z-10 cursor-pointer opacity-0">
+          <div class="relative w-full rounded-2xl border-2 border-dashed p-6 transition-all"
+               [class.opacity-50]="disabled" [class.cursor-not-allowed]="disabled">
+            <input type="file" [disabled]="disabled" (change)="handleFileUpload($event)"
+                   class="absolute inset-0 z-10 opacity-0" [class.cursor-pointer]="!disabled">
             <div class="space-y-2">
               <i class="fa-solid fa-cloud-arrow-up text-2xl text-emerald-500"></i>
-              <p class="text-xs font-black uppercase dark:text-white">{{ fileName || placeholder || 'Faylni yuklang' }}</p>
-            </div>
-          </div>
-          <div *ngIf="uploadProgress > 0" class="px-2">
-            <div class="h-1.5 w-full rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden">
-              <div class="h-full bg-emerald-500 transition-all duration-300" [style.width.%]="uploadProgress"></div>
+              <p class="text-xs font-black uppercase dark:text-white">{{ fileName || placeholder }}</p>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   `,
@@ -182,6 +160,7 @@ export class InputComponent implements ControlValueAccessor {
   @Input() label: string = '';
   @Input() placeholder: string = 'Tanlang';
   @Input() options: { label: string, value: any }[] = [];
+  @Input() disabled: boolean = false;
 
   value: any = '';
   uploadProgress: number = 0;
@@ -199,12 +178,7 @@ export class InputComponent implements ControlValueAccessor {
       this.onTouch();
     }
   }
-  onValueChange(newValue: any) {
-    this.value = newValue;
-    this.onChange(newValue);
-  }
 
-  // --- MAVJUD METODLAR ---
   handleFileUpload(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -237,6 +211,14 @@ export class InputComponent implements ControlValueAccessor {
     if (trixElement && value) {
       (trixElement as any).editor.loadHTML(value);
     }
+  }
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+  onValueChange(newValue: any) {
+    if (this.disabled) return;
+    this.value = newValue;
+    this.onChange(newValue);
   }
   registerOnChange(fn: any): void { this.onChange = fn; }
   registerOnTouched(fn: any): void { this.onTouch = fn; }

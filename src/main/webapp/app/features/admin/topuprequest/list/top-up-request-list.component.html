@@ -1,0 +1,135 @@
+<app-container maxWidth="7xl" padding="4" class="block py-6 md:py-10">
+    <app-page-wrapper>
+        <div page-title class="flex flex-wrap items-center justify-between w-full gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-500/10 p-2 rounded-lg">
+                    <i class="fa-solid fa-layer-group text-emerald-500"></i>
+                </div>
+                <h1 class="uppercase tracking-tighter text-lg font-black dark:text-white">So'rovlar <span class="text-emerald-500">Nazorati</span></h1>
+            </div>
+
+            <div class="flex items-center gap-2 bg-gray-50 dark:bg-gray-800/50 p-1.5 rounded-xl border border-gray-100 dark:border-gray-800">
+                <button (click)="changePage(-1)" [disabled]="currentPage() === 0"
+                        class="p-2 rounded-lg hover:bg-white dark:hover:bg-gray-700 transition-all disabled:opacity-20">
+                    <i class="fa-solid fa-chevron-left text-xs"></i>
+                </button>
+                <span class="text-[10px] font-black uppercase px-2 dark:text-gray-300">Sahifa {{ currentPage() + 1 }}</span>
+                <button (click)="changePage(1)" [disabled]="(currentPage() + 1) * pageSize >= totalLength()"
+                        class="p-2 rounded-lg hover:bg-white dark:hover:bg-gray-700 transition-all disabled:opacity-20">
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </button>
+            </div>
+        </div>
+
+        <div content class="space-y-8">
+            <div class="p-6 rounded-[2rem] bg-gray-50/50 dark:bg-gray-800/20 border-2 border-gray-100 dark:border-gray-800 shadow-sm">
+                <div class="space-y-6">
+                    <app-grid [cols]="3" [gap]="4">
+                        <app-input label="Tranzaksiya ID" placeholder="TXN-..." [(ngModel)]="filterDto.transactionId"></app-input>
+                        <app-input label="Holat" type="select" [options]="statusOptions" [(ngModel)]="filterDto.status"></app-input>
+                        <app-input label="Xabar mazmuni" placeholder="Qidirish..." [(ngModel)]="filterDto.message"></app-input>
+                    </app-grid>
+
+                    <app-grid [cols]="3" [gap]="4">
+                        <div class="col-span-1 md:col-span-2">
+                            <app-grid [cols]="2" [gap]="4" [responsive]="false">
+                                <app-input label="Summa (dan)" type="number" placeholder="0" [(ngModel)]="filterDto.amountFrom"></app-input>
+                                <app-input label="Summa (gacha)" type="number" placeholder="Barchasi" [(ngModel)]="filterDto.amountTo"></app-input>
+                            </app-grid>
+                        </div>
+                        <div class="flex items-end gap-3">
+                            <button (click)="applyFilter()" class="flex-1 bg-gray-900 dark:bg-emerald-500 text-white font-black py-4 rounded-2xl text-[10px] uppercase shadow-xl hover:scale-[1.02] transition-all">
+                                Saralash
+                            </button>
+                            <button (click)="resetFilter()" class="p-4 bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl text-gray-400 hover:text-red-500 transition-colors">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </app-grid>
+                </div>
+            </div>
+
+            <app-grid [cols]="12" [gap]="6">
+                <div class="col-span-12 lg:col-span-8 order-1">
+                    <div class="overflow-x-auto rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900">
+                        <table class="w-full text-left min-w-[700px]">
+                            <thead class="bg-gray-50/50 dark:bg-gray-800/30">
+                            <tr class="text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 dark:border-gray-800">
+                                <th class="p-5">Foydalanuvchi</th>
+                                <th class="p-5">Summa</th>
+                                <th class="p-5">Status</th>
+                                <th class="p-5 text-right">Amal</th>
+                            </tr>
+                            </thead>
+                            <tbody class="text-sm font-bold">
+                            <tr *ngFor="let req of requests()" (click)="selectRequest(req)"
+                                [class.bg-emerald-500]="selectedItem()?.id === req.id"
+                            class="border-b border-gray-50 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-all cursor-pointer">
+                            <td class="p-5">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-xl bg-gray-900 text-white flex items-center justify-center text-[11px] font-black uppercase">
+                                        {{ req.userFullName.charAt(0) }}
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="dark:text-white">{{ req.userFullName }}</span>
+                                        <span class="text-[9px] text-gray-400 font-mono italic">{{ req.transactionId }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-5 text-emerald-500 whitespace-nowrap">{{ req.amount | number }} UZS</td>
+                            <td class="p-5"><span [class]="getStatusClass(req.status)">{{ req.status }}</span></td>
+                            <td class="p-5 text-right"><i class="fa-solid fa-chevron-right text-gray-300"></i></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-4 order-2">
+                    <div *ngIf="selectedItem() as item; else noSelection" class="space-y-6 sticky top-6 animate__animated animate__fadeInRight">
+
+                        <div class="rounded-3xl border-2 border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-2 shadow-xl">
+                            <div class="max-w-xs mx-auto">
+                                <div class="aspect-square rounded-2xl overflow-hidden bg-gray-50 dark:bg-gray-800 group relative shadow-inner">
+                                    <img [src]="environment.apiPath + '/v1/api/files/' + item.fileKey" class="w-full h-full object-contain p-2">
+                                    <a [href]="environment.apiPath + '/v1/api/files/' + item.fileKey" target="_blank"
+                                       class="absolute inset-0 bg-gray-900/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
+                                        <span class="text-white font-black text-[10px] uppercase border border-white/20 px-4 py-2 rounded-lg">Kattalashtirish</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="item.status === 'CREATED' || item.status === 'PENDING'" class="p-6 rounded-3xl bg-white dark:bg-gray-900 border-2 border-emerald-500/20 shadow-2xl shadow-emerald-500/10">
+                            <div class="space-y-4">
+                                <app-input label="Payment External ID" placeholder="Tranzaksiya raqami" [(ngModel)]="actionDto.paymentExId"></app-input>
+                                <app-input label="Admin Izohi" type="textarea" placeholder="Sababini yozing..." [(ngModel)]="actionDto.message"></app-input>
+
+                                <app-grid [cols]="2" [gap]="3" [responsive]="false">
+                                    <button (click)="onReject()" class="bg-gray-50 dark:bg-gray-800 text-red-500 font-black py-4 rounded-2xl text-[10px] uppercase hover:bg-red-500 hover:text-white transition-all active:scale-95">
+                                        Rad Etish
+                                    </button>
+                                    <button (click)="onAccept()" class="bg-emerald-500 text-white font-black py-4 rounded-2xl text-[10px] uppercase shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 transition-all active:scale-95">
+                                        Tasdiqlash
+                                    </button>
+                                </app-grid>
+                            </div>
+                        </div>
+
+                        <div *ngIf="item.status === 'APPROVED' || item.status === 'REJECTED'" class="p-6 rounded-3xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 text-center">
+                            <i class="fa-solid fa-circle-check text-2xl mb-2 text-gray-300"></i>
+                            <p class="text-[10px] font-black uppercase text-gray-400">Ushbu so'rov allaqachon yakunlangan</p>
+                        </div>
+                    </div>
+
+                    <ng-template #noSelection>
+                        <div class="h-64 flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-gray-100 dark:border-gray-800 text-gray-400">
+                            <i class="fa-solid fa-fingerprint text-4xl mb-4 opacity-10"></i>
+                            <p class="text-[10px] font-black uppercase tracking-widest">Ma'lumotni ko'rish uchun so'rovni tanlang</p>
+                        </div>
+                    </ng-template>
+                </div>
+            </app-grid>
+        </div>
+    </app-page-wrapper>
+</app-container>

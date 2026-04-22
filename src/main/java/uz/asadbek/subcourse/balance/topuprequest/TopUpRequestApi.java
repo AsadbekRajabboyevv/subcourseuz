@@ -4,10 +4,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 import uz.asadbek.base.dto.BaseResponseDto;
+import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpBalanceRequestDto;
 import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpRequestActionRequestDto;
 import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpRequestResponseDto;
 import uz.asadbek.subcourse.balance.topuprequest.filter.TopUpRequestFilter;
@@ -26,6 +30,10 @@ public interface TopUpRequestApi {
     @GetMapping
     BaseResponseDto<Page<TopUpRequestResponseDto>> get(TopUpRequestFilter filter,
         Pageable pageable);
+
+    @PostMapping("/create")
+    BaseResponseDto<Long> create(@RequestPart MultipartFile screenshot,
+        @RequestPart TopUpBalanceRequestDto request);
 
     @GetMapping("/{id}")
     BaseResponseDto<TopUpRequestResponseDto> get(@PathVariable Long id);
