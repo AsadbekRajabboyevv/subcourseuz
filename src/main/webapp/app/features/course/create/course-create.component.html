@@ -11,13 +11,6 @@
             <h1 class="text-2xl font-black uppercase tracking-tight text-gray-900 dark:text-white">Yangi kurs yaratish</h1>
             <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Kurs ma'lumotlarini to'ldiring</p>
         </div>
-
-        <button (click)="onSubmit()"
-                [disabled]="isLoading() || !f.valid"
-                class="active:scale-95 hover:rotate-2 hidden md:flex items-center gap-3 rounded-2xl bg-emerald-600 px-10 py-4 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-700 active:scale-95 disabled:opacity-50">
-            @if (isLoading()) { <i class="fa-solid fa-circle-notch animate-spin"></i> }
-            Kursni saqlash
-        </button>
     </div>
 
     <div content class="grid grid-cols-12 gap-8">
@@ -30,18 +23,13 @@
                         <app-input label="Kurs nomi" placeholder="Masalan: Java Backend Development"
                                    [(ngModel)]="courseForm.name" name="name" required></app-input>
 
-                        <div class="space-y-3">
-                            <label class="ml-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Kurs haqida batafsil ma'lumot</label>
-                            <div class="rounded-[2rem] overflow-hidden border border-gray-50 dark:border-gray-800">
-                                <app-input
-                                    type="trix"
-                                    label="description"
-                                    placeholder="Kurs mazmuni, nimalar o'rgatilishi haqida batafsil yozing..."
-                                    [(ngModel)]="courseForm.description"
-                                    name="description">
-                                </app-input>
-                            </div>
-                        </div>
+                        <app-input
+                            type="markdown"
+                            label="Kurs haqida batafsil ma'lumot"
+                            placeholder="Kurs mazmuni, nimalar o'rgatilishi haqida batafsil yozing..."
+                            [(ngModel)]="courseForm.description"
+                            name="description">
+                        </app-input>
                     </div>
                 </div>
             </div>

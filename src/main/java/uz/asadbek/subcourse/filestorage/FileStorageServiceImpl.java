@@ -13,7 +13,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -373,8 +372,7 @@ public class FileStorageServiceImpl implements FileStorageService {
         if (checksum == null) {
             return Optional.empty();
         }
-        return repository.findByChecksumAndStatus(checksum, FileStatus.ACTIVE)
-            .filter(e -> e.getIsPublic().equals(options.publicAccess()));
+        return repository.findByChecksumAndStatusAndFolder(checksum, FileStatus.ACTIVE, options.folder());
     }
 
     private Resource toUrlResource(Path path, String fileKey) {

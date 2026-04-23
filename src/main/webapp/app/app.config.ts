@@ -15,6 +15,7 @@ import { routes } from 'app/app.routes';
 import { CustomTitleStrategy } from 'app/common/title-strategy.injectable';
 import { authInterceptor } from './common/auth/auth.interceptor';
 import { errorInterceptor } from "./common/error/error.interceptor";
+import { provideMarkdown } from 'ngx-markdown';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -41,6 +42,8 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       BrowserAnimationsModule,
     ),
+
+    provideMarkdown(),
 
     {
       provide: TitleStrategy,

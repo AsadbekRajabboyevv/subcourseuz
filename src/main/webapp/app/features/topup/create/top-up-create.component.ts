@@ -1,10 +1,10 @@
 import {Component, inject} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
-import {InputComponent} from "../../../shared/ui/forms/input.component";
 import {TopUpRequestService} from "../top-up.service";
 import {Router} from "@angular/router";
 import {TopUpBalance} from "../top-up.model";
+import {InputComponent} from "../../../shared/ui/forms/input.component";
 
 @Component({
   selector: 'app-top-up-create',
@@ -30,7 +30,7 @@ export class TopUpCreateComponent {
 
     this.topUpService.create(this.requestDto, this.selectedFile).subscribe({
       next: (res) => {
-        this.router.navigate(['/top-up-history']);
+        this.router.navigate(['/top-up-histories']);
       },
       error: (err) => {
         alert('Xatolik yuz berdi. Qayta urinib ko\'ring.');

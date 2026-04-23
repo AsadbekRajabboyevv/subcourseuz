@@ -9,27 +9,14 @@ import {PaymentService} from "../../payment/payment.service";
 import {PaymentModalComponent} from "../../payment/modal/payment-modal.component";
 import {PaymentRequest} from "../../payment/payment.model";
 import {AuthService} from "../../../common/auth/auth.service";
+import {MarkdownComponent} from "ngx-markdown";
 
 @Component({
   selector: 'app-course-view',
   standalone: true,
-  imports: [CommonModule, RouterModule, PageWrapperComponent, PaymentModalComponent],
+  imports: [CommonModule, RouterModule, PageWrapperComponent, PaymentModalComponent, MarkdownComponent],
   templateUrl: './course-view.component.html',
-  styles: `
-    .description-container {
-      word-break: break-word !important;
-      overflow-wrap: break-word !important;
-      white-space: normal !important;
-      display: block !important;
-      max-width: 100% !important;
-    }
-
-    .description-container ::ng-deep * {
-      white-space: normal !important;
-      word-break: break-word !important;
-      max-width: 100% !important;
-    }
-  `
+  styles: ``
 })
 export class CourseViewComponent implements OnInit {
   private route = inject(ActivatedRoute);

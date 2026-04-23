@@ -43,19 +43,8 @@
 
             <div class="flex items-center gap-2 md:gap-4">
                 @if (isLoggedIn) {
-                    <div
-                        class="hidden sm:flex items-center gap-3 rounded-2xl border border-gray-100 bg-gray-50/50 py-1.5 pl-4 pr-1.5 dark:border-gray-800 dark:bg-gray-900/50">
-                        <div class="flex flex-col items-end">
-                            <span
-                                class="text-[7px] font-black uppercase tracking-widest text-gray-400">Balans</span>
-                            <span
-                                class="text-[11px] font-black text-gray-900 dark:text-white leading-none">0 <small
-                                class="text-[8px] opacity-60">UZS</small></span>
-                        </div>
-                        <button routerLink="/top-up"
-                                class="active:scale-95 hover:rotate-12 flex h-8 w-8 items-center justify-center rounded-xl bg-white text-emerald-600 shadow-sm transition-all hover:bg-emerald-600 hover:text-white active:scale-90 dark:bg-gray-800">
-                            <i class="fa-solid fa-plus text-[10px]"></i>
-                        </button>
+                    <div class="hidden sm:block">
+                        <app-balance-widget></app-balance-widget>
                     </div>
                 }
 

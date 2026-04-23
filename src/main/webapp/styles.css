@@ -20,3 +20,79 @@ html.dark body {
     transition-property: color, background-color, border-color;
     transition-duration: 200ms;
 }
+
+/* ── Markdown preview global styles (ngx-markdown renders outside component scope) ── */
+.md-preview-body a {
+  color: #0969da !important;
+  text-decoration: none;
+}
+.md-preview-body a:hover {
+  text-decoration: underline;
+}
+.dark .md-preview-body a {
+  color: #58a6ff !important;
+}
+
+.md-preview-body h1, .md-preview-body h2, .md-preview-body h3,
+.md-preview-body h4, .md-preview-body h5, .md-preview-body h6 {
+  font-weight: 600; line-height: 1.25; margin: .75em 0 .4em;
+  padding-bottom: .3em; border-bottom: 1px solid #d0d7de;
+}
+.md-preview-body h1 { font-size: 2em; }
+.md-preview-body h2 { font-size: 1.5em; }
+.md-preview-body h3 { font-size: 1.25em; border-bottom: none; }
+.md-preview-body p { margin: .5em 0; font-size: 14px; line-height: 1.6; }
+.md-preview-body ul { list-style: disc; padding-left: 2em; margin: .5em 0; }
+.md-preview-body ol { list-style: decimal; padding-left: 2em; margin: .5em 0; }
+.md-preview-body li { margin: .2em 0; font-size: 14px; }
+.md-preview-body code {
+  background: rgba(175,184,193,.2); border-radius: 6px;
+  padding: .2em .4em; font-family: ui-monospace, monospace; font-size: 85%;
+}
+.md-preview-body pre {
+  background: #f6f8fa; border-radius: 6px; padding: 16px;
+  overflow-x: auto; margin: .75em 0; font-size: 85%; line-height: 1.45;
+}
+.md-preview-body pre code { background: none; padding: 0; font-size: 100%; }
+.md-preview-body blockquote {
+  border-left: 4px solid #d0d7de; padding: 0 1em; color: #57606a; margin: .75em 0;
+}
+
+/* Table — Tailwind preflight resets borders, force them back */
+.md-preview-body table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  margin: .75em 0 !important;
+  display: table !important;
+}
+.md-preview-body thead { display: table-header-group !important; }
+.md-preview-body tbody { display: table-row-group !important; }
+.md-preview-body tr { display: table-row !important; }
+.md-preview-body th {
+  display: table-cell !important;
+  background: #f6f8fa !important;
+  font-weight: 600 !important;
+  padding: 6px 13px !important;
+  border: 1px solid #d0d7de !important;
+  text-align: left !important;
+}
+.md-preview-body td {
+  display: table-cell !important;
+  padding: 6px 13px !important;
+  border: 1px solid #d0d7de !important;
+  vertical-align: top !important;
+}
+.md-preview-body tbody tr:nth-child(even) td { background: #f6f8fa !important; }
+
+.md-preview-body hr { border: none; border-top: 1px solid #d0d7de; margin: 1em 0; }
+.md-preview-body strong { font-weight: 600; }
+.md-preview-body em { font-style: italic; }
+
+.dark .md-preview-body h1, .dark .md-preview-body h2,
+.dark .md-preview-body h3 { border-color: #21262d; color: #c9d1d9; }
+.dark .md-preview-body code { background: rgba(110,118,129,.4); }
+.dark .md-preview-body pre { background: #161b22; }
+.dark .md-preview-body blockquote { border-color: #3b434b; color: #8b949e; }
+.dark .md-preview-body th { background: #161b22 !important; border-color: #30363d !important; color: #c9d1d9 !important; }
+.dark .md-preview-body td { border-color: #30363d !important; }
+.dark .md-preview-body tbody tr:nth-child(even) td { background: #161b22 !important; }

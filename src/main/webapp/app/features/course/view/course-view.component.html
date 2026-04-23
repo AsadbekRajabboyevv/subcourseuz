@@ -28,8 +28,8 @@
                 <div class="lg:col-span-8 space-y-8">
                     <div class="rounded-[2.5rem] bg-white p-8 shadow-sm border border-gray-100 dark:bg-gray-800/50 dark:border-gray-800">
                         <h3 class="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500">Kurs haqida</h3>
-                        <div class="description-container text-gray-600 dark:text-gray-300 leading-relaxed font-medium"
-                             [innerHTML]="data.description">
+                        <div class="md-preview-body text-gray-600 dark:text-gray-300">
+                            <markdown [data]="data.description"></markdown>
                         </div>
                     </div>
 

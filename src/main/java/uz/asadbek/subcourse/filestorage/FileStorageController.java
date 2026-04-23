@@ -24,6 +24,11 @@ public class FileStorageController {
 
     private final FileStorageService fileStorageService;
 
+    @PostMapping
+    public ResponseEntity<FileUploadResponse> uploadFile(@RequestPart("file") MultipartFile file) {
+        return ResponseEntity.ok(fileStorageService.upload(file, FileUploadOptions.OTHER));
+    }
+
     @GetMapping("/{fileKey}")
     public ResponseEntity<Resource> getFile(@PathVariable String fileKey) {
         var file = fileStorageService.get(fileKey)

@@ -14,7 +14,7 @@ public interface FileStorageRepository extends JpaRepository<FileStorageEntity, 
 
     Optional<FileStorageEntity> findByFileKey(String fileKey);
 
-    Optional<FileStorageEntity> findByChecksumAndStatus(String checksum, FileStatus status);
+    Optional<FileStorageEntity> findByChecksumAndStatusAndFolder(String checksum, FileStatus status, String folder);
 
     @Query("SELECT COALESCE(SUM(f.size), 0) FROM FileStorageEntity f " +
         "WHERE f.createdBy = :ownerId AND f.status = 'ACTIVE'")

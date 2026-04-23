@@ -34,7 +34,7 @@
 
                     <div class="space-y-2" *ngIf="courseForm.description !== undefined">
                         <label class="ml-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Kurs haqida batafsil</label>
-                        <app-input type="trix" label="description" [(ngModel)]="courseForm.description"></app-input>
+                        <app-input type="markdown" [(ngModel)]="courseForm.description"></app-input>
                     </div>
                 </div>
             </div>

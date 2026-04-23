@@ -25,8 +25,8 @@
                     <app-input type="text" label="YouTube Video URL" [(ngModel)]="lessonForm.videoUrl" name="videoUrl" placeholder="https://youtube.com/watch?v=..."></app-input>
 
                     <div class="space-y-2">
-                        <label class="ml-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Dars matni (Trix)</label>
-                        <app-input type="trix" [(ngModel)]="lessonForm.textContent" name="textContent"></app-input>
+                        <label class="ml-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Dars matni</label>
+                        <app-input type="markdown" [(ngModel)]="lessonForm.textContent" name="textContent"></app-input>
                     </div>
 
                     <div class="flex items-center justify-between rounded-2xl border border-gray-100 bg-gray-50/50 p-4 dark:border-gray-800 dark:bg-gray-800/30">

@@ -391,6 +391,7 @@ public class JwtUtil {
 
     private static String buildJwt(Map<String, Object> claims, String subject) {
         Instant now = Instant.now();
+        log.info("JWT expiration in ms: {}", Date.from(now.plusMillis(ACCESS_TOKEN_EXPIRATION_MS)));
         return Jwts.builder()
             .setClaims(claims)
             .setSubject(subject)

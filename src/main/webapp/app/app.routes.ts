@@ -69,6 +69,11 @@ export const routes: Routes = [
     title: 'Mening kurslarim'
   },
   {
+    path: 'course/view/:courseName/lesson/view/:lessonName',
+    loadComponent: () => import('./features/lesson/view/lesson-view.component').then(m => m.LessonViewComponent),
+    title: 'Dars'
+  },
+  {
     path: 'home',
     component: HomeComponent,
     title: 'Asosiy sahifa'

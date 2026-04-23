@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import uz.asadbek.subcourse.course.CourseEntity;
 import uz.asadbek.subcourse.course.lesson.CourseLessonEntity;
 import uz.asadbek.subcourse.util.annotation.existindb.ExistsInDb;
 
@@ -11,7 +12,6 @@ import uz.asadbek.subcourse.util.annotation.existindb.ExistsInDb;
 public class CourseLessonRequestDto {
 
     @NotNull
-    @Max(value = 500)
     private String name;
 
     @NotNull
@@ -22,7 +22,7 @@ public class CourseLessonRequestDto {
     private String textContent;
 
     @NotNull
-    @ExistsInDb(entity = CourseLessonEntity.class)
+    @ExistsInDb(entity = CourseEntity.class)
     private Long courseId;
 
     @NotNull

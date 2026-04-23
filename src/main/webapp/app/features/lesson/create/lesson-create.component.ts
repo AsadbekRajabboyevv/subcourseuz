@@ -68,9 +68,11 @@ export class LessonCreateComponent implements OnInit {
     }
 
     this.isLoading.set(true);
+    const youtubeId = this.getYoutubeId(this.lessonForm.videoUrl);
 
     const requestDto = {
       ...this.lessonForm,
+      videoUrl: youtubeId!,
       lessonNumber: Number(this.lessonForm.lessonNumber),
       courseId: Number(this.lessonForm.courseId)
     };

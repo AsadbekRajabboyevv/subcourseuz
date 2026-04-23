@@ -59,7 +59,7 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
             throw ExceptionUtil.badRequestException("invalid_screenshot_type");
         }
 
-        var uploaded = fileStorageService.upload(screenshot, FileUploadOptions.TOP_UP_REQUEST_IMAGE);
+        var uploaded = fileStorageService.upload(screenshot, FileUploadOptions.TOP_UP_IMAGE);
 
         var userId = JwtUtil.getCurrentUserId();
         var amount = request.getAmount();
@@ -70,6 +70,7 @@ public class TopUpRequestServiceImpl implements TopUpRequestService {
             .build();
 
         var purchase = paymentService.purchase(paymentRequest, true);
+        balanceService.addPending(userId, amount);
 
         var entity = TopUpRequestEntity.builder()
             .userId(userId)
