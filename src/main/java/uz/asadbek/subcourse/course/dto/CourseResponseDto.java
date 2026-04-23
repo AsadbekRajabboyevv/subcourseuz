@@ -14,4 +14,5 @@ public class CourseResponseDto {
     private Long price;
     private String imagePath;
     private String lang;
+    private Boolean isPublished;
 }

@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import uz.asadbek.base.dto.BaseResponseDto;
+import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpBalanceRequestDto;
 import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpRequestActionRequestDto;
 import uz.asadbek.subcourse.balance.topuprequest.dto.TopUpRequestResponseDto;
 import uz.asadbek.subcourse.balance.topuprequest.filter.TopUpRequestFilter;
@@ -31,6 +33,12 @@ public class TopUpRequestController implements TopUpRequestApi {
     public BaseResponseDto<Page<TopUpRequestResponseDto>> get(TopUpRequestFilter filter,
         Pageable pageable) {
         return BaseResponseDto.ok(service.getAll(pageable, filter));
+    }
+
+    @Override
+    public BaseResponseDto<Long> create(MultipartFile screenshot, TopUpBalanceRequestDto request) {
+        service.create(request, screenshot);
+        return BaseResponseDto.ok(0L);
     }
 
     @Override

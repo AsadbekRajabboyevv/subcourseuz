@@ -3,6 +3,7 @@ package uz.asadbek.subcourse.auth;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -86,9 +87,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public AuthResponseDto refresh(HttpServletRequest request, HttpServletResponse response) {
-        String token = JwtUtil.extractRefreshTokenFromCookie(request);
+        Optional<String> token = JwtUtil.extractRefreshTokenFromCookie(request);
 
-        RefreshTokenEntity stored = refreshTokenRepository.findByToken(token)
+        RefreshTokenEntity stored = refreshTokenRepository.findByToken(token.get())
             .filter(t -> !t.isRevoked() && t.getExpiryDate().isAfter(LocalDateTime.now()))
             .orElseThrow(() -> ExceptionUtil.badRequestException("refresh_token_expired"));
 
@@ -103,14 +104,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void logout(HttpServletRequest request, HttpServletResponse response) {
-        String token = JwtUtil.extractRefreshTokenFromCookie(request);
+        Optional<String> token = JwtUtil.extractRefreshTokenFromCookie(request);
 
-        if (token != null) {
-            refreshTokenRepository.findByToken(token).ifPresent(t -> {
-                t.setRevoked(true);
-                refreshTokenRepository.save(t);
-            });
-        }
+        token.flatMap(refreshTokenRepository::findByToken).ifPresent(t -> {
+            t.setRevoked(true);
+            refreshTokenRepository.save(t);
+        });
 
         JwtUtil.clearRefreshTokenCookie(response);
     }

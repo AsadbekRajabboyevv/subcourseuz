@@ -42,7 +42,7 @@ public class PaymentEntity extends BaseEntity {
     )
     private Long id;
 
-    @Column(name = "reference_id", nullable = false)
+    @Column(name = "reference_id")
     private Long referenceId;
 
     @Column(name = "user_id", nullable = false)

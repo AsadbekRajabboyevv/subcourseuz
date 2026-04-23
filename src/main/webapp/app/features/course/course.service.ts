@@ -23,6 +23,7 @@ export class CourseService {
   private readonly SCIENCE_PATH = `${environment.apiPath}/v1/api/sciences`;
 
   courses = signal<Course[]>([]);
+  courseLength = signal(0);
   isLoading = signal<boolean>(false);
 
   get(filter: CourseFilter, page: number, size: number): Observable<Base<Page<Course>>> {
@@ -61,6 +62,12 @@ export class CourseService {
     this.courses.set(newCourses);
   }
 
+  setCourseLength(length: number) {
+    this.courseLength.set(length);
+  }
+  getCourseLength() {
+    return this.courseLength();
+  }
   resetCourses() {
     this.courses.set([]);
   }
@@ -81,11 +88,22 @@ export class CourseService {
     return this.http.post<Base<Course>>(this.PATH, formData);
   }
 
-  update(id: number, course: Partial<CourseUpdate>, image: File): Observable<Base<Course>> {
+  update(id: number, course: Partial<CourseUpdate>, image?: File | null): Observable<Base<Course>> {
     const formData = new FormData();
-    formData.append('request', new Blob([JSON.stringify(course)], {type: 'application/json'}));
-    formData.append('image', image);
-    return this.http.put<Base<Course>>(`${this.PATH}/${id}`, course);
+
+    if (course) {
+      formData.append('request', new Blob([JSON.stringify(course)], { type: 'application/json' }));
+    }
+
+    if (image) {
+      formData.append('image', image);
+    }
+
+    return this.http.put<Base<Course>>(`${this.PATH}/${id}`, formData);
+  }
+
+  getUpdateById(courseId: number): Observable<Base<CourseUpdate>> {
+      return this.http.get<Base<CourseUpdate>>(`${this.PATH}/update/${courseId}`);
   }
 
   delete(id: number): Observable<Base<void>> {
@@ -95,8 +113,8 @@ export class CourseService {
       })
     );
   }
-
 //====================Grade============================================
+
   getGrades(): Observable<Base<CourseGrade[]>> {
     return this.http.get<Base<CourseGrade[]>>(`${this.PUBLIC_PATH}/course-grades`);
   }
@@ -137,9 +155,8 @@ export class CourseService {
     return this.http.put<Base<CourseScience>>(`${this.SCIENCE_PATH}/${id}`, formData);
   }
 
+
   deleteScience(id: number): Observable<Base<void>> {
     return this.http.delete<Base<void>>(`${this.SCIENCE_PATH}/${id}`);
   }
-
-
 }

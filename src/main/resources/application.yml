@@ -1,56 +1,71 @@
 spring:
   liquibase:
     change-log: classpath:db/changelog/master.xml
+
   datasource:
     url: ${JDBC_DATABASE_URL}
     username: ${JDBC_DATABASE_USERNAME}
     password: ${JDBC_DATABASE_PASSWORD}
     hikari:
-      connection-timeout: 30000
-      maximum-pool-size: 10
+      connection-timeout: ${MAX_CONNECTION_TIMEOUT}
+      maximum-pool-size: ${MAX_POOL_SIZE}
+
   jpa:
+    open-in-view: ${OPEN_IN_VIEW}
     hibernate:
-      ddl-auto: none
-    open-in-view: false
+      ddl-auto: ${DDL_AUTO}
     properties:
       hibernate:
         jdbc:
           lob:
-            non_contextual_creation: true
+            non_contextual_creation: ${NEW_GENERATOR_MAPPINGS}
         id:
-          new_generator_mappings: true
+          new_generator_mappings: ${NEW_GENERATOR_MAPPINGS}
+
   security:
     custom:
       jwt-secret: ${JWT_SECRET_KEY}
-      jwt-expiration-in-ms: 3000000
+      jwt-expiration-in-ms: ${JWT_EXPIRATION_IN_MS}
     user:
       name: ${SECURITY_USER_NAME}
       password: ${SECURITY_USER_PASSWORD}
       roles: ${SECURITY_USER_ROLES}
+
   mail:
-    host: smtp.gmail.com
-    port: 587
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
     properties:
-      mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH}
+          starttls:
+            enable: ${MAIL_SMTP_STARTTLS_ENABLE}
+
   servlet:
     multipart:
       enabled: true
-      max-file-size: 10MB
-      max-request-size: 10MB
+      max-file-size: ${MAX_FILE_SIZE}
+      max-request-size: ${MAX_REQUEST_SIZE}
 
-error:
-  handling:
-    http-status-in-json-response: true
-    exception-logging: NO_LOGGING
-    full-stacktrace-http-statuses: 5xx
-    log-levels:
-      5xx: ERROR
-    codes:
-      UserEntityUsernameUnique: USER_ENTITY_USERNAME_UNIQUE
 springdoc:
   pathsToMatch: /v1/api/**
+
 app:
-  file-server-url: http://localhost:8080/v1/api/files/
+  file:
+    storage:
+      root: ${FILE_STORAGE_ROOT}
+      quota-bytes: ${FILE_STORAGE_QUOTA_BYTES}
+      video-chunk-size-bytes: ${FILE_STORAGE_VIDEO_CHUNK_SIZE_BYTES}
+      max-video-size-bytes: ${FILE_STORAGE_MAX_VIDEO_SIZE_BYTES}
+      max-size-bytes: ${FILE_STORAGE_MAX_SIZE_BYTES}
+    server:
+      url: http://localhost:8080/v1/api/files/
+
+telegram:
+  api-id: ${TELEGRAM_API_ID}
+  api-hash: ${TELEGRAM_API_HASH}
+  phone-number: ${TELEGRAM_PHONE_NUMBER}
+  session-name: ${TELEGRAM_SESSION_NAME}
+  session-path: ${TELEGRAM_SESSION_PATH}

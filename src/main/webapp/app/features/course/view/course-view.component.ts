@@ -7,13 +7,16 @@ import {CourseService} from "../course.service";
 import {PageWrapperComponent} from "../../../shared/ui/layout/page-wrapper.component";
 import {PaymentService} from "../../payment/payment.service";
 import {PaymentModalComponent} from "../../payment/modal/payment-modal.component";
-import {PaymentRequestDto} from "../../payment/payment.model";
+import {PaymentRequest} from "../../payment/payment.model";
+import {AuthService} from "../../../common/auth/auth.service";
+import {MarkdownComponent} from "ngx-markdown";
 
 @Component({
   selector: 'app-course-view',
   standalone: true,
-  imports: [CommonModule, RouterModule, PageWrapperComponent, PaymentModalComponent],
-  templateUrl: './course-view.component.html'
+  imports: [CommonModule, RouterModule, PageWrapperComponent, PaymentModalComponent, MarkdownComponent],
+  templateUrl: './course-view.component.html',
+  styles: ``
 })
 export class CourseViewComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -21,9 +24,9 @@ export class CourseViewComponent implements OnInit {
   private courseService = inject(CourseService);
   private paymentService = inject(PaymentService);
   showPaymentModal = signal<boolean>(false);
-
   isLoading = signal<boolean>(true);
   course = signal<CourseInfo | null>(null);
+  protected authService = inject(AuthService);
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -66,7 +69,7 @@ export class CourseViewComponent implements OnInit {
     const currentCourse = this.course();
     if (!currentCourse) return;
 
-    const request: PaymentRequestDto = {
+    const request: PaymentRequest = {
       courseId: currentCourse.id,
       amount: currentCourse.price,
       couponCode: event.couponCode
@@ -82,6 +85,7 @@ export class CourseViewComponent implements OnInit {
   closeModal() {
     this.showPaymentModal.set(false);
   }
+
   private slugify(text: string): string {
     return text.toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')

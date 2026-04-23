@@ -8,6 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,21 +22,28 @@ import uz.asadbek.base.repository.SoftDeletable;
 @Table(name = "comments")
 @EntityListeners(AuditingEntityListener.class)
 public class CommentEntity extends BaseEntity implements SoftDeletable {
+
     private static final String GENERATOR_NAME = "comments_gen";
-    private static final String SEQUENCE_NAME = "comments_seq";
+    private static final String SEQUENCE_NAME  = "comments_seq";
 
     @Id
-    @GeneratedValue(
-        strategy = GenerationType.SEQUENCE,
-        generator = GENERATOR_NAME
-    )
-    @SequenceGenerator(
-        name = GENERATOR_NAME,
-        sequenceName = SEQUENCE_NAME,
-        allocationSize = 50
-    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = GENERATOR_NAME)
+    @SequenceGenerator(name = GENERATOR_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 50)
     private Long id;
 
     @Column(name = "text", nullable = false, columnDefinition = "TEXT")
     private String text;
+
+    @Column(name = "course_id")
+    private Long courseId;
+
+    @Column(name = "lesson_id")
+    private Long lessonId;
+
+    @Column(name = "test_id")
+    private Long testId;
+
+    @Min(1) @Max(5)
+    @Column(name = "rating")
+    private Integer rating;
 }

@@ -19,14 +19,34 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'top-up-requests',
+    loadComponent: () => import('./features/admin/topuprequest/list/top-up-request-list.component').then(m => m.TopUpRequestListComponent),
+    title: 'So`rovlar ro`yxati'
+  },
+  {
+    path: 'top-up',
+    loadComponent: () => import('./features/topup/create/top-up-create.component').then(m => m.TopUpCreateComponent),
+    title: 'Balansini to\'ldirish '
+  },
+  {
+    path: 'top-up-histories',
+    loadComponent: () => import('./features/topup/list/top-up-list.component').then(m => m.TopUpHistoryComponent),
+    title: 'Balansini to\'ldirish so`rovlar tarixi'
+  },
+  {
     path: 'courses-list',
     loadComponent: () => import('./features/course/list/course-list.component').then(m => m.CourseListComponent),
     title: 'Kurslar ro\'yxati'
   },
   {
-    path: 'courses-create',
-    loadComponent: () => import('./features/course/create/course-create.component').then(m => m.CourseCreateComponent),
-    title: 'Kurs yaratish'
+    path: 'courses-lesson-add/:courseName',
+    loadComponent: () => import('./features/lesson/create/lesson-create.component').then(m => m.LessonCreateComponent),
+    title: 'Dars qo\'shish'
+  },
+  {
+    path: 'courses-lesson-edit/:lessonName',
+    loadComponent: () => import('./features/lesson/update/lesson-update.component').then(m => m.LessonUpdateComponent),
+    title: 'Dars tahrirlash'
   },
   {
     path: 'courses-view/:courseName',
@@ -34,9 +54,24 @@ export const routes: Routes = [
     title: 'Kursni ko\'rish'
   },
   {
+    path: 'courses-update/:courseName',
+    loadComponent: () => import('./features/course/update/course-update.component').then(m => m.CourseUpdateComponent),
+    title: 'Kursni tahrirlash'
+  },
+  {
+    path: 'courses-create',
+    loadComponent: () => import('./features/course/create/course-create.component').then(m => m.CourseCreateComponent),
+    title: 'Kurs yaratish'
+  },
+  {
     path: 'courses-me',
     loadComponent: () => import('./features/course/me/course-me.component').then(m => m.CourseMeComponent),
     title: 'Mening kurslarim'
+  },
+  {
+    path: 'course/view/:courseName/lesson/view/:lessonName',
+    loadComponent: () => import('./features/lesson/view/lesson-view.component').then(m => m.LessonViewComponent),
+    title: 'Dars'
   },
   {
     path: 'home',

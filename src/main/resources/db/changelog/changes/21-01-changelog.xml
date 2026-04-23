@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd"
+    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1776772026417-1" author="nitro">
+        <addColumn tableName="files">
+            <column name="checksum" type="VARCHAR(64)"/>
+            <column name="download_count" type="BIGINT"/>
+            <column name="file_type" type="VARCHAR(20)"/>
+            <column name="folder" type="VARCHAR(255)"/>
+            <column name="last_accessed_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(20)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1776772026417-3" author="nitro">
+        <addNotNullConstraint columnName="download_count" tableName="files"/>
+    </changeSet>
+    <changeSet id="1776772026417-5" author="nitro">
+        <addNotNullConstraint columnName="file_type" tableName="files"/>
+    </changeSet>
+    <changeSet id="1776772026417-9" author="nitro">
+        <addNotNullConstraint columnName="status" tableName="files"/>
+    </changeSet>
+    <changeSet id="1776772026417-10" author="nitro">
+        <createIndex indexName="idx_file_folder" tableName="files">
+            <column name="folder"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1776772026417-11" author="nitro">
+        <createIndex indexName="idx_file_status" tableName="files">
+            <column name="status"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1776772026417-12" author="nitro">
+        <createIndex indexName="idx_file_type" tableName="files">
+            <column name="file_type"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1776772026417-13" author="nitro">
+        <dropColumn columnName="path" tableName="files"/>
+    </changeSet>
+
+</databaseChangeLog>

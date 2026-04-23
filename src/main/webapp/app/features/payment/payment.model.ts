@@ -1,11 +1,11 @@
-export interface PaymentRequestDto {
+export interface PaymentRequest {
   courseId?: number;
   testId?: number;
   amount: number;
   couponCode?: string;
 }
 
-export interface PaymentResponseDto {
+export interface Payment {
   exId: string;
   status: PaymentStatus;
   transactionId: string;

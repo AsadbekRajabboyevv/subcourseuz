@@ -60,7 +60,7 @@ public class PaymentServiceImpl implements PaymentService {
         return PaymentEntity.builder()
             .type(type)
             .amount(amount)
-            .userId(JwtUtil.getCurrentUser().getId())
+            .userId(JwtUtil.getCurrentUserId())
             .referenceId(referenceId)
             .currency(currency)
             .status(PaymentStatus.PROCESSING)
@@ -75,56 +75,71 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public PaymentResponseDto purchase(PaymentRequestDto request, Boolean isTopUp) {
-        if (JwtUtil.isAuthenticated()) {
-            var courseId = request.getCourseId();
-            var testId = request.getTestId();
-            var couponCode = request.getCouponCode();
+        if (!JwtUtil.isAuthenticated()) {
+            throw ExceptionUtil.unAuthorizedException("user_not_authenticated");
+        }
 
-            validatePurchaseRequest(courseId, testId);
+        var courseId = request.getCourseId();
+        var testId = request.getTestId();
+        var couponCode = request.getCouponCode();
 
-            var balance = balanceService.get();
-            Long amount;
-            CourseResponseDto course = null;
-            TestResponseDto test = null;
+        var balance = balanceService.get();
+        Long amount;
+        CourseResponseDto course = null;
+        TestResponseDto test = null;
 
-            if (courseId != null) {
-                course = courseService.get(courseId);
-                amount = course.getPrice();
-            } else {
-                test = testService.get(testId);
-                amount = test.getPrice();
-            }
-
-            if ("free".equalsIgnoreCase(couponCode)) {
-                amount = 0L;
-            }
-
-            if (!isTopUp && amount > 0) {
-                balanceService.debit(amount);
-            } else if (amount == 0) {
-                log.info("Xarid kupon orqali tekin amalga oshirilmoqda. CourseId: {}", courseId);
-            }
-
-            var payment = buildPayment(course, test, amount, balance.getCurrency());
+        if (Boolean.TRUE.equals(isTopUp)) {
+            amount = request.getAmount();
+            var payment = buildPayment(null, null, amount, balance.getCurrency());
             var savedPayment = repository.save(payment);
-
             var transactionId = balanceTransactionService.createTransaction(savedPayment);
-
-            if (testId != null) {
-                testService.enroll(testId);
-            } else {
-                courseService.enroll(courseId);
-            }
 
             return PaymentResponseDto.builder()
                 .exId(savedPayment.getExId())
                 .amount(amount)
+                .paymentId(savedPayment.getId())
                 .transactionId(transactionId)
                 .status(savedPayment.getStatus())
                 .build();
-        } else {
-            throw ExceptionUtil.unAuthorizedException("user_not_authenticated");
         }
+
+        validatePurchaseRequest(courseId, testId);
+
+        if (courseId != null) {
+            course = courseService.get(courseId);
+            amount = course.getPrice();
+        } else {
+            test = testService.get(testId);
+            amount = test.getPrice();
+        }
+
+        if ("free".equalsIgnoreCase(couponCode)) {
+            amount = 0L;
+        }
+
+        if (amount > 0) {
+            balanceService.debit(amount);
+        } else {
+            log.info("Xarid kupon orqali tekin amalga oshirilmoqda. CourseId: {}", courseId);
+        }
+
+        var payment = buildPayment(course, test, amount, balance.getCurrency());
+        var savedPayment = repository.save(payment);
+        var transactionId = balanceTransactionService.createTransaction(savedPayment);
+
+        if (testId != null) {
+            testService.enroll(testId);
+        } else {
+            courseService.enroll(courseId);
+        }
+
+        return PaymentResponseDto.builder()
+            .exId(savedPayment.getExId())
+            .amount(amount)
+            .paymentId(savedPayment.getId())
+            .transactionId(transactionId)
+            .status(savedPayment.getStatus())
+            .build();
     }
 
     private void validatePurchaseRequest(Long courseId, Long testId) {
@@ -179,7 +194,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Page<PaymentResponseDto> get(Pageable pageable, PaymentFilter filter) {
         if (!JwtUtil.isAdmin()){
-            filter.setUserId(JwtUtil.getCurrentUser().getId());
+            filter.setUserId(JwtUtil.getCurrentUserId());
         }
         return repository.get(filter, pageable);
     }
@@ -188,7 +203,7 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentResponseDto get(String exId) {
         Long userId = null;
         if (!JwtUtil.isAdmin()){
-           userId = JwtUtil.getCurrentUser().getId();
+           userId = JwtUtil.getCurrentUserId();
         }
         return repository.get(exId, userId);
     }

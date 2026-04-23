@@ -1,0 +1,103 @@
+<app-page-wrapper>
+    <div page-title class="flex flex-col md:flex-row md:items-center justify-between gap-4 w-full">
+        <div>
+            <nav class="mb-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
+                <a routerLink="/" class="hover:text-emerald-500">Asosiy</a>
+                <i class="fa-solid fa-chevron-right text-[7px]"></i>
+                <a routerLink="/courses-list" class="hover:text-emerald-500 transition-colors">Kurslar</a>
+                <i class="fa-solid fa-chevron-right text-[7px]"></i>
+                <span class="text-emerald-500">Kursni tahrirlash</span>
+            </nav>
+            <h1 class="text-2xl font-black uppercase tracking-tight text-gray-900 dark:text-white">Kursni tahrirlash</h1>
+            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400"></p>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button routerLink="/courses-list" class="active:scale-95 hover:rotate-2 px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-gray-900 transition-colors">
+                Bekor qilish
+            </button>
+            <button (click)="onSubmit()"
+                    [disabled]="loading()"
+                    class="active:scale-95 hover:rotate-2 flex items-center gap-2 rounded-2xl bg-emerald-600 px-10 py-4 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-700 active:scale-95 disabled:opacity-50">
+                @if (loading()) { <i class="fa-solid fa-circle-notch animate-spin"></i> }
+                O'zgarishlarni saqlash
+            </button>
+        </div>
+    </div>
+
+    <div content class="grid grid-cols-12 gap-8">
+
+        <div class="col-span-12 lg:col-span-8 space-y-6">
+            <div class="rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-2xl dark:border-gray-800 dark:bg-gray-900">
+                <div class="space-y-6">
+                    <app-input type="text" label="Kurs nomi" [(ngModel)]="courseForm.name" placeholder="Kurs nomini kiriting..."></app-input>
+
+                    <div class="space-y-2" *ngIf="courseForm.description !== undefined">
+                        <label class="ml-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Kurs haqida batafsil</label>
+                        <app-input type="markdown" [(ngModel)]="courseForm.description"></app-input>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-span-12 lg:col-span-4 space-y-6">
+
+            <div class="rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-2xl dark:border-gray-800 dark:bg-gray-900">
+                <label class="mb-4 block text-[10px] font-black uppercase tracking-widest text-gray-400">Kurs muqovasi</label>
+                <div class="active:scale-95 hover:rotate-2 relative group aspect-video cursor-pointer overflow-hidden rounded-[2rem] border-2 border-dashed border-gray-200 hover:border-emerald-500 transition-all">
+                    <input type="file" (change)="onFileSelected($event)" class="absolute inset-0 z-10 opacity-0 cursor-pointer" accept="image/*">
+
+                    @if (imagePreview) {
+                        <img [src]="imagePreview" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+                            <i class="fa-solid fa-camera text-white text-xl"></i>
+                        </div>
+                    } @else {
+                        <div class="active:scale-95 hover:rotate-2 h-full flex flex-col items-center justify-center text-gray-400">
+                            <i class="fa-solid fa-image text-3xl mb-2"></i>
+                            <span class="text-[9px] font-black uppercase tracking-widest">Rasm tanlang</span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-2xl dark:border-gray-800 dark:bg-gray-900 space-y-5">
+
+                <app-input type="number" label="Narxi (UZS)" [(ngModel)]="courseForm.price"></app-input>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <app-input type="select" label="Fan" [options]="sciences()" [(ngModel)]="courseForm.scienceId"></app-input>
+                    <app-input type="select" label="Sinf" [options]="grades()" [(ngModel)]="courseForm.gradeId"></app-input>
+                </div>
+
+                <div class="flex gap-4 items-end">
+                    <app-input type="number" label="Davomiyligi" [(ngModel)]="courseForm.duration" class="flex-1"></app-input>
+                    <app-input type="select" label="Birligi" [options]="durationTypes" [(ngModel)]="courseForm.durationType" class="w-1/3"></app-input>
+                </div>
+
+                <app-input type="select" label="Kurs tili" [options]="languages" [(ngModel)]="courseForm.lang"></app-input>
+
+                <hr class="border-gray-50 dark:border-gray-800 my-2">
+
+                <div class="space-y-4">
+                    <label class="flex items-center gap-3 cursor-pointer group">
+                        <div class="relative flex items-center">
+                            <input type="checkbox" [(ngModel)]="courseForm.isVideoCourse"
+                                   class="peer h-6 w-6 rounded-lg border-2 border-gray-200 text-emerald-500 transition-all checked:border-emerald-500 focus:ring-emerald-500">
+                        </div>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 group-hover:text-emerald-500 transition-colors">Video Kurs</span>
+                    </label>
+
+                    <label class="flex items-center gap-3 cursor-pointer group">
+                        <div class="relative flex items-center">
+                            <input type="checkbox" [(ngModel)]="courseForm.isPublished"
+                                   class="peer h-6 w-6 rounded-lg border-2 border-gray-200 text-orange-500 transition-all checked:border-orange-500 focus:ring-orange-500">
+                        </div>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 group-hover:text-orange-500 transition-colors">Nashr qilish (Public)</span>
+                    </label>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</app-page-wrapper>

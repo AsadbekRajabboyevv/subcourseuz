@@ -74,12 +74,17 @@ export class CourseCreateComponent implements OnInit {
       }
     });
   }
-  onImageSelected(file: any) {
-    if (file instanceof File) {
+  imagePreview: string | null = null;
+
+  onImageSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
       this.selectedImage = file;
+      const reader = new FileReader();
+      reader.onload = () => this.imagePreview = reader.result as string;
+      reader.readAsDataURL(file);
     }
   }
-
   onSubmit() {
     if (!this.selectedImage) {
       alert("Iltimos, kurs muqovasi uchun rasm tanlang!");

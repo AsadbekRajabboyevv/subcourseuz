@@ -9,14 +9,18 @@ export interface LessonInfo extends Lesson{
   courseName: string;
   courseImagePath: string;
   textContent: string;
+  isPublished: boolean;
+  courseId: number;
+  fileUrls: string[]
 }
 
 export interface LessonCreate {
   name: string;
-  lessonNumber: string;
+  lessonNumber: number;
   videoUrl: string;
   textContent: string;
-  courseId: number;
+  courseId: number | null;
+  isPublished: boolean;
 }
 
 export interface LessonUpdate {
@@ -25,6 +29,7 @@ export interface LessonUpdate {
   videoUrl?: string | null;
   textContent?: string | null;
   courseId?: number | null;
+  isPublished?: boolean | null;
 }
 
 

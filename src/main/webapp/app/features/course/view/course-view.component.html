@@ -28,7 +28,9 @@
                 <div class="lg:col-span-8 space-y-8">
                     <div class="rounded-[2.5rem] bg-white p-8 shadow-sm border border-gray-100 dark:bg-gray-800/50 dark:border-gray-800">
                         <h3 class="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500">Kurs haqida</h3>
-                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed font-medium" [innerHTML]="data.description"></p>
+                        <div class="md-preview-body text-gray-600 dark:text-gray-300">
+                            <markdown [data]="data.description"></markdown>
+                        </div>
                     </div>
 
                     <div class="rounded-[2.5rem] bg-white p-8 shadow-sm border border-gray-100 dark:bg-gray-800/50 dark:border-gray-800">
@@ -58,6 +60,12 @@
                                     </div>
 
                                     <div class="flex items-center">
+                                        @if (authService.isAdmin()) {
+                                            <button [routerLink]="['/courses-lesson-edit',lesson.name]" [queryParams]="{id: lesson.id}"  class="mr-2 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 py-5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-amber-500/20 transition-all hover:bg-amber-600 active:scale-95">
+                                                <i class="fa-solid fa-edit text-[10px]"></i>
+                                            </button>
+                                        }
+
                                         @if (data.purchased) {
                                             <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/30">
                                                 <i class="fa-solid fa-play text-[10px]"></i>
@@ -67,6 +75,7 @@
                                                 <i class="fa-solid fa-lock text-[10px]"></i>
                                             </div>
                                         }
+
                                     </div>
                                 </div>
                             }
@@ -92,17 +101,37 @@
                                     <span class="text-3xl font-black text-emerald-500">{{ data.price | number }} <small class="text-[10px] uppercase opacity-60">uzs</small></span>
                                 </div>
 
-                                @if (!data.purchased) {
-                                    <button (click)="openBuyModal()" class="mb-6 w-full rounded-2xl bg-emerald-600 py-5 text-[11px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-emerald-500/20 transition-all hover:bg-emerald-700 active:scale-95">
-                                        Kursni sotib olish
-                                    </button>
-                                } @else {
-                                    <div class="mb-6 flex items-center justify-center gap-3 rounded-2xl bg-emerald-500/10 py-5 text-emerald-500 border border-emerald-500/20">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                        <span class="text-[10px] font-black uppercase tracking-widest">Siz a'zo bo'lgansiz</span>
-                                    </div>
-                                }
+                                <div class="mb-6 space-y-3">
 
+                                    <div class="w-full">
+                                        @if (!data.purchased) {
+                                            <button (click)="openBuyModal()"
+                                                    class="w-full rounded-2xl bg-emerald-600 py-5 text-[11px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-emerald-500/20 transition-all hover:bg-emerald-700 active:scale-95">
+                                                Kursni sotib olish
+                                            </button>
+                                        } @else {
+                                            <div class="flex items-center justify-center gap-3 rounded-2xl bg-emerald-500/10 py-5 text-emerald-500 border border-emerald-500/20">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                                <span class="text-[10px] font-black uppercase tracking-widest text-center">Siz a'zo bo'lgansiz</span>
+                                            </div>
+                                        }
+                                    </div>
+
+                                    @if (authService.isAdmin()) {
+                                        <div class="flex w-full gap-3">
+                                            <button [routerLink]="['/courses-lesson-add/', course()?.name]" [queryParams]="{ id: course()?.id}" class="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-blue-600 py-5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-700 active:scale-95">
+                                                <i class="fa-solid fa-plus text-xs"></i>
+                                                <span>Dars qo'shish</span>
+                                            </button>
+
+                                            <button [routerLink]="['/courses-update/', course()?.name]"
+                                                    [queryParams]="{ id: course()?.id}" class="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-amber-500 py-5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-amber-500/20 transition-all hover:bg-amber-600 active:scale-95">
+                                                <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                                <span>Tahrirlash</span>
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
                                 <div class="space-y-3">
                                     <div class="flex items-center justify-between rounded-2xl bg-gray-50 p-4 dark:bg-gray-800/40">
                                         <span class="text-[9px] font-black text-gray-400 uppercase">Davomiyligi</span>

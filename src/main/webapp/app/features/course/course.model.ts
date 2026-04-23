@@ -10,6 +10,7 @@ export interface Course {
   price: number;
   imagePath: string;
   lang: string;
+  isPublished: boolean;
 }
 
 export interface CourseCreate {
@@ -34,7 +35,9 @@ export interface CourseUpdate {
   gradeId?: number | null;
   price?: number | null;
   lang?: string | null;
+  isPublished?: boolean | null;
   isVideoCourse?: boolean | null;
+  imagePath?: string | null;
 }
 
 export interface CourseInfo extends Course {
@@ -46,6 +49,8 @@ export interface CourseInfo extends Course {
   purchased: boolean;
   scienceId: number;
   gradeId: number;
+  isVideoCourse: boolean;
+  isPublished: boolean;
   lessons: Lesson[];
 }
 
@@ -58,6 +63,7 @@ export interface CourseFilter extends BaseFilter {
   lang?: string;
   durationType?: DurationType;
   duration?: number;
+  isPublished: boolean;
 }
 
 export enum DurationType {

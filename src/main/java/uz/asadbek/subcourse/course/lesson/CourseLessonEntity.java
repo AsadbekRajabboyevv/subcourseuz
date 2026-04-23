@@ -8,8 +8,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uz.asadbek.base.entity.BaseEntity;
 import uz.asadbek.base.repository.SoftDeletable;
@@ -42,8 +45,13 @@ public class CourseLessonEntity extends BaseEntity implements SoftDeletable {
     @Column(name = "video_url")
     private String videoUrl;
 
-    @Column(name = "course_id")
+    @Column(name = "course_id", nullable = false)
     private Long courseId;
 
+    @Column(name = "is_published")
+    private Boolean isPublished;
 
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "file_urls", columnDefinition = "jsonb")
+    private List<String> fileUrls;
 }
