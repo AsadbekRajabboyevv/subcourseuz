@@ -63,8 +63,11 @@ public class CourseServiceImpl implements CourseService {
     public CourseInfoResponseDto getInfo(Long id) {
         CourseInfoResponseDto dto = repository.getCourseBasicInfo(id, LangUtils.currentLang())
             .orElseThrow(() -> ExceptionUtil.notFoundException("course_not_found"));
-
-        List<CourseLessonResponseDto> lessons = courseLessonRepository.findAllByCourseId(id);
+        Boolean isPublished = true;
+        if (JwtUtil.isAdmin()){
+            isPublished = null;
+        }
+        List<CourseLessonResponseDto> lessons = courseLessonRepository.findAllByCourseId(id, isPublished);
         dto.setLessons(lessons);
         dto.setLessonsCount((long) lessons.size());
 
@@ -77,12 +80,6 @@ public class CourseServiceImpl implements CourseService {
         }
 
         return dto;
-    }
-
-    private Long convertToLong(Object obj) {
-        if (obj == null) return 0L;
-        if (obj instanceof Number) return ((Number) obj).longValue();
-        return 0L;
     }
 
     @Override

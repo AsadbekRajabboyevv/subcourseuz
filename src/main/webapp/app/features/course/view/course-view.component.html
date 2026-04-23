@@ -45,15 +45,23 @@
                             @for (lesson of data.lessons; track lesson.id) {
                                 <div (click)="openLesson(lesson)"
                                      [class.cursor-pointer]="data.purchased"
+                                     [class.opacity-60]="!lesson.isPublished"
+                                     [class.border-dashed]="!lesson.isPublished"
                                      class="group relative flex items-center justify-between rounded-[1.8rem] border border-gray-50 bg-gray-50/50 p-5 transition-all hover:bg-white hover:shadow-xl hover:scale-[1.02] dark:border-gray-700/50 dark:bg-gray-900/40 dark:hover:bg-gray-800">
 
                                     <div class="flex items-center gap-5">
-                                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white font-black text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                                        <div [class.group-hover:bg-amber-500]="!lesson.isPublished"
+                                             class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white font-black text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white group-hover:bg-emerald-500 group-hover:text-white transition-colors">
                                             {{ lesson.lessonNumber }}
                                         </div>
                                         <div>
                                             <h4 class="font-black text-gray-900 dark:text-white group-hover:text-emerald-500 transition-colors">
                                                 {{ lesson.name }}
+                                                @if (!lesson.isPublished) {
+                                                    <span class="ml-2 rounded-lg bg-amber-100 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-amber-600 dark:bg-amber-500/10">
+                                Draft
+                            </span>
+                                                }
                                             </h4>
                                             <span class="text-[9px] font-bold uppercase tracking-[0.2em] text-gray-400">Video dars</span>
                                         </div>
@@ -61,21 +69,22 @@
 
                                     <div class="flex items-center">
                                         @if (authService.isAdmin()) {
-                                            <button [routerLink]="['/courses-lesson-edit',lesson.name]" [queryParams]="{id: lesson.id}"  class="mr-2 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 py-5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-amber-500/20 transition-all hover:bg-amber-600 active:scale-95">
+                                            <button [routerLink]="['/courses-lesson-edit', lesson.name]" [queryParams]="{id: lesson.id}"
+                                                    class="mr-2 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 py-5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-amber-500/20 transition-all hover:bg-amber-600 active:scale-95">
                                                 <i class="fa-solid fa-edit text-[10px]"></i>
                                             </button>
                                         }
 
                                         @if (data.purchased) {
-                                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/30">
-                                                <i class="fa-solid fa-play text-[10px]"></i>
+                                            <div [class.bg-amber-500]="!lesson.isPublished"
+                                                 class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/30">
+                                                <i class="fa-solid" [class.fa-play]="lesson.isPublished" [class.fa-eye-slash]="!lesson.isPublished"></i>
                                             </div>
                                         } @else {
                                             <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-500">
                                                 <i class="fa-solid fa-lock text-[10px]"></i>
                                             </div>
                                         }
-
                                     </div>
                                 </div>
                             }

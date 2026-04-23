@@ -2,6 +2,7 @@ export interface Lesson {
   id: number;
   name: string;
   lessonNumber: string;
+  isPublished: boolean;
 }
 
 export interface LessonInfo extends Lesson{

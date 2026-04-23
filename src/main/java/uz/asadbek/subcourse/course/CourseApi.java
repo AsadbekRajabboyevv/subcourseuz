@@ -99,7 +99,7 @@ public interface CourseApi {
     @Operation(summary = "Kursga dars qo'shish")
     BaseResponseDto<Long> saveLesson(
         @RequestPart @Valid CourseLessonRequestDto request,
-        @RequestPart List<MultipartFile> files
+        @RequestPart(required = false) List<MultipartFile> files
     );
 
     @PutMapping("/lessons/{id}")

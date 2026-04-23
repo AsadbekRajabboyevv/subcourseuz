@@ -118,7 +118,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="last_transaction_at" type="DATETIME"/>
-            <column name="currency" type="SMALLINT">
+            <column name="currency" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="version" type="BIGINT"/>
@@ -208,7 +208,7 @@
             </column>
             <column name="description" type="TEXT"/>
             <column name="duration" type="INT"/>
-            <column name="duration_type" type="SMALLINT"/>
+            <column name="duration_type" type="VARCHAR(255)"/>
             <column name="image_path" type="VARCHAR(255)"/>
             <column defaultValueBoolean="false" name="is_published" type="BOOLEAN"/>
             <column name="science_id" type="BIGINT"/>
@@ -290,16 +290,16 @@
             <column name="user_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="status" type="SMALLINT">
+            <column name="status" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="type" type="SMALLINT">
+            <column name="type" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="amount" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="currency" type="SMALLINT">
+            <column name="currency" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="ex_id" type="VARCHAR(255)">

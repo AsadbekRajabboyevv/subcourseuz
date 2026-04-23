@@ -97,10 +97,7 @@ public class CourseController implements CourseApi {
     }
 
     @Override
-    public BaseResponseDto<Long> saveLesson(
-        @RequestPart CourseLessonRequestDto request,
-        @RequestPart List<MultipartFile> files
-    ) {
+    public BaseResponseDto<Long> saveLesson(CourseLessonRequestDto request, List<MultipartFile> files) {
         return BaseResponseDto.ok(courseLessonService.create(request, files));
     }
 

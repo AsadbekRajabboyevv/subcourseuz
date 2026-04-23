@@ -9,4 +9,5 @@ public class CourseLessonResponseDto {
     private Long id;
     private String name;
     private Integer lessonNumber;
+    private Boolean isPublished;
 }

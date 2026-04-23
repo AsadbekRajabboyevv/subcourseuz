@@ -2,6 +2,7 @@ package uz.asadbek.subcourse.exception.handler;
 
 import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -57,6 +58,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PaymentException.class)
     public ResponseEntity<ErrorResponse> handlePayment(PaymentException ex) {
         return buildResponse(HttpStatus.PAYMENT_REQUIRED, "PAYMENT_ERROR", ex.getMessage());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(){
+        return buildResponse(HttpStatus.BAD_REQUEST, "BAD_REQUEST", "BAD REQUEST");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
