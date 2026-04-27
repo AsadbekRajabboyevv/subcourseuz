@@ -1,0 +1,20 @@
+{
+  "home": {
+    "title": "Бош саҳифа",
+    "platform_name": "Subcourse Platform",
+    "welcome_message": "Online таълим платформасига хуш келибсиз! Ўз келажакингизни профессионал менторлар билан қуринг.",
+    "view_courses": "Курсларни кўриш",
+    "take_test": "Тест ечиш",
+    "active_courses": "Фаол курслар",
+    "students": "Ўқувчилар",
+    "mentors": "Менторлар",
+    "tests": "Тестлар",
+    "popular_courses": "Машҳур курслар",
+    "test_solving": "Тест ечиш",
+    "test_description": "Билимингизни синанг",
+    "library": "Кутубхона",
+    "library_description": "Бепул ресурслар",
+    "forum": "Форум",
+    "forum_description": "Саволларга жавоб"
+  }
+}

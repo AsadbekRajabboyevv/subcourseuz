@@ -36,63 +36,28 @@ import uz.asadbek.subcourse.auth.CustomUserDetails;
 import uz.asadbek.subcourse.exception.InvalidTokenException;
 import uz.asadbek.subcourse.exception.TokenExpiredException;
 
-/**
- * Enterprise-grade JWT utility class.
- *
- * <p>Handles access token generation/validation, refresh token lifecycle,
- * confirmation token generation, cookie management, and security context access.
- *
- * <p><b>Thread-safety:</b> All methods are stateless or operate on volatile/static
- * fields initialized once at startup via {@link JwtUtilConfig}. Safe for concurrent use.
- */
 @Slf4j
 @UtilityClass
 public class JwtUtil {
 
-    private static final String BEARER_PREFIX           = "Bearer ";
-    private static final String AUTHORIZATION_HEADER    = "Authorization";
-
+    public static final String CLAIM_ID = "id";
+    public static final String CLAIM_ROLES = "roles";
+    public static final String CLAIM_USERNAME = "username";
+    private static final String BEARER_PREFIX = "Bearer ";
+    private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
     private static final String REFRESH_TOKEN_COOKIE_PATH = "/v1/api/auth";
-    private static final int    REFRESH_TOKEN_COOKIE_MAX_AGE = 7 * 24 * 60 * 60; // 7 days
-
-    private static final String REFRESH_TOKEN_PREFIX      = "RFR_TKN_";
+    private static final int REFRESH_TOKEN_COOKIE_MAX_AGE = 7 * 24 * 60 * 60;
+    private static final String REFRESH_TOKEN_PREFIX = "RFR_TKN_";
     private static final String CONFIRMATION_TOKEN_PREFIX = "CONF_TKN_";
-
-    private static final int REFRESH_TOKEN_LENGTH      = 32;
+    private static final int REFRESH_TOKEN_LENGTH = 32;
     private static final int CONFIRMATION_TOKEN_LENGTH = 128;
-
-    /**
-     * Claim key names inside the JWT payload.
-     *
-     * <p>Declared {@code public} so that {@code JwtAuthenticationFilter} can reference
-     * them directly, keeping token generation and claim extraction in sync through a
-     * single source of truth. No other class should hard-code these strings.
-     */
-    public static final String CLAIM_ID       = "id";
-    public static final String CLAIM_ROLES    = "roles";
-    public static final String CLAIM_LANG     = "lang";
-    public static final String CLAIM_USERNAME = "username";
-
-    /** Spring-role prefix stripped when stored in the JWT. */
     private static final String ROLE_PREFIX = "ROLE_";
-
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
-
-    // -------------------------------------------------------------------------
-    // Mutable state – set once at application startup via JwtUtilConfig
-    // -------------------------------------------------------------------------
-
-    public static volatile long   ACCESS_TOKEN_EXPIRATION_MS;
+    public static volatile long ACCESS_TOKEN_EXPIRATION_MS;
     private static volatile String secret;
-    private static volatile Key    key;
+    private static volatile Key key;
 
-    /**
-     * Generates a signed JWT access token for the given user details.
-     *
-     * @param userDetails authenticated user
-     * @return compact JWT string
-     */
     public static String generateAccessToken(CustomUserDetails userDetails) {
         Objects.requireNonNull(userDetails, "userDetails must not be null");
 
@@ -102,9 +67,8 @@ public class JwtUtil {
             .toList();
 
         Map<String, Object> claims = Map.of(
-            CLAIM_ID,       userDetails.getId(),
-            CLAIM_ROLES,    roles,
-            CLAIM_LANG,     userDetails.getLanguage(),
+            CLAIM_ID, userDetails.getId(),
+            CLAIM_ROLES, roles,
             CLAIM_USERNAME, userDetails.getUsername()
         );
 
@@ -113,36 +77,14 @@ public class JwtUtil {
         return token;
     }
 
-    /**
-     * Generates a secure opaque refresh token.
-     *
-     * @return prefixed, URL-safe Base64-encoded random token
-     */
     public static String generateRefreshToken() {
         return generateOpaqueToken(REFRESH_TOKEN_PREFIX, REFRESH_TOKEN_LENGTH);
     }
 
-    /**
-     * Generates a secure opaque confirmation / email-verification token.
-     *
-     * @return prefixed, URL-safe Base64-encoded random token
-     */
     public static String generateConfirmationToken() {
         return generateOpaqueToken(CONFIRMATION_TOKEN_PREFIX, CONFIRMATION_TOKEN_LENGTH);
     }
 
-    // =========================================================================
-    // Token Validation & Parsing
-    // =========================================================================
-
-    /**
-     * Parses and validates a JWT access token.
-     *
-     * @param token raw JWT string
-     * @return the token {@link Claims}
-     * @throws TokenExpiredException  if the token has expired
-     * @throws InvalidTokenException  if the token is malformed, unsigned incorrectly, etc.
-     */
     public static Claims parseToken(String token) {
         Objects.requireNonNull(token, "token must not be null");
         try {
@@ -198,8 +140,8 @@ public class JwtUtil {
     }
 
     /**
-     * Extracts the subject (username) from a JWT without full validation.
-     * Useful for logging; do NOT use for authorization decisions.
+     * Extracts the subject (username) from a JWT without full validation. Useful for logging; do
+     * NOT use for authorization decisions.
      *
      * @param token raw JWT string
      * @return subject claim value, or empty if unparseable
@@ -317,25 +259,34 @@ public class JwtUtil {
      */
     public static CustomUserDetails requireCurrentUser() {
         return getCurrentUser()
-            .orElseThrow(() -> new IllegalStateException("No authenticated user in security context"));
+            .orElseThrow(
+                () -> new IllegalStateException("No authenticated user in security context"));
     }
 
-    /** @return {@code true} if a user is authenticated in the current request */
+    /**
+     * @return {@code true} if a user is authenticated in the current request
+     */
     public static boolean isAuthenticated() {
         return getCurrentUser().isPresent();
     }
 
-    /** @return {@code true} if the current user has ROLE_ADMIN */
+    /**
+     * @return {@code true} if the current user has ROLE_ADMIN
+     */
     public static boolean isAdmin() {
         return hasRole("ROLE_ADMIN");
     }
 
-    /** @return {@code true} if the current user has ROLE_TEACHER */
+    /**
+     * @return {@code true} if the current user has ROLE_TEACHER
+     */
     public static boolean isTeacher() {
         return hasRole("ROLE_TEACHER");
     }
 
-    /** @return {@code true} if the current user has ROLE_STUDENT */
+    /**
+     * @return {@code true} if the current user has ROLE_STUDENT
+     */
     public static boolean isStudent() {
         return hasRole("ROLE_STUDENT");
     }
@@ -369,17 +320,6 @@ public class JwtUtil {
     }
 
     /**
-     * Returns the preferred language of the current user.
-     *
-     * @return language code, or {@code "en"} as a safe default
-     */
-    public static String getLanguage() {
-        return getCurrentUser()
-            .map(CustomUserDetails::getLanguage)
-            .orElse("en");
-    }
-
-    /**
      * Returns the ID of the currently authenticated user.
      *
      * @return user ID
@@ -408,8 +348,8 @@ public class JwtUtil {
     }
 
     /**
-     * Inner Spring {@link Component} that injects {@code @Value} properties
-     * into the enclosing {@link UtilityClass} static fields at startup.
+     * Inner Spring {@link Component} that injects {@code @Value} properties into the enclosing
+     * {@link UtilityClass} static fields at startup.
      *
      * <p>This pattern is required because {@code @UtilityClass} prevents
      * instantiation, so Spring cannot inject values directly.

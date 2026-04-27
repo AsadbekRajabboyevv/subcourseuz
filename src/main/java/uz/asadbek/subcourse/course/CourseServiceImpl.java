@@ -17,6 +17,8 @@ import uz.asadbek.subcourse.course.filter.CourseFilter;
 import uz.asadbek.subcourse.course.lesson.CourseLessonRepository;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
 import uz.asadbek.subcourse.course.usercourse.UserCourseEntity;
+import uz.asadbek.subcourse.exception.BadRequestException;
+import uz.asadbek.subcourse.exception.NotFoundException;
 import uz.asadbek.subcourse.filestorage.FileStorageService;
 import uz.asadbek.subcourse.filestorage.dto.FileUploadOptions;
 import uz.asadbek.subcourse.util.ExceptionUtil;
@@ -48,7 +50,7 @@ public class CourseServiceImpl implements CourseService {
     public Page<CourseResponseDto> getInfo(Pageable pageable, CourseFilter filter) {
         if (filter.getIsPublished()) {
             if (JwtUtil.isAuthenticated() && JwtUtil.isStudent()) {
-                throw ExceptionUtil.forbiddenException("not_allowed");
+                throw ExceptionUtil.build(BadRequestException.class, "error.course.not_allowed");
             }
         }
         return repository.get(pageable, filter, LangUtils.currentLang(), null);
@@ -61,21 +63,21 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseInfoResponseDto getInfo(Long id) {
-        CourseInfoResponseDto dto = repository.getCourseBasicInfo(id, LangUtils.currentLang())
-            .orElseThrow(() -> ExceptionUtil.notFoundException("course_not_found"));
+        var dto = repository.getCourseBasicInfo(id, LangUtils.currentLang())
+            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.not_found.course", id));
         Boolean isPublished = true;
         if (JwtUtil.isAdmin()){
             isPublished = null;
         }
-        List<CourseLessonResponseDto> lessons = courseLessonRepository.findAllByCourseId(id, isPublished);
+        var lessons = courseLessonRepository.findAllByCourseId(id, isPublished);
         dto.setLessons(lessons);
         dto.setLessonsCount((long) lessons.size());
 
         dto.setStudentsCount(userCourseRepository.countByIdReferenceId(id));
 
         if (JwtUtil.isAuthenticated()) {
-            Long currentUserId = JwtUtil.getCurrentUserId();
-            boolean exists = userCourseRepository.existsByIdUserIdAndIdReferenceId(currentUserId, id);
+            var currentUserId = JwtUtil.getCurrentUserId();
+            var exists = userCourseRepository.existsByIdUserIdAndIdReferenceId(currentUserId, id);
             dto.setPurchased(exists);
         }
 
@@ -113,13 +115,13 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseUpdateRequestDto getUpdateData(Long id) {
-        return repository.getUpdateData(id).orElseThrow(()-> ExceptionUtil.notFoundException("course_not_found"));
+        return repository.getUpdateData(id).orElseThrow(()-> ExceptionUtil.build(NotFoundException.class, "error.not_found.course", id));
     }
 
     @Override
     @Transactional
     public Long update(Long id, CourseUpdateRequestDto request, MultipartFile image) {
-        var entity = repository.findById(id).orElseThrow(()-> ExceptionUtil.notFoundException("course_not_found"));
+        var entity = findById(id);
         mapper.update(entity, request);
         if (image != null && !image.isEmpty()) {
             var url = fileStorageService.upload(image, FileUploadOptions.COURSE_IMAGE)
@@ -135,10 +137,13 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public Long delete(Long id) {
-        CourseEntity ent = repository.findById(id)
-            .orElseThrow(() -> ExceptionUtil.notFoundException("course_not_found"));
-        repository.delete(ent);
+        repository.delete(findById(id));
         return id;
+    }
+
+    private CourseEntity findById(Long id) {
+        return repository.findById(id)
+            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.not_found.course", id));
     }
 
 }

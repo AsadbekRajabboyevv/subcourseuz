@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,8 @@ import uz.asadbek.subcourse.auth.dto.AuthResponseDto;
 import uz.asadbek.subcourse.auth.refresh.RefreshTokenEntity;
 import uz.asadbek.subcourse.auth.refresh.RefreshTokenRepository;
 import uz.asadbek.subcourse.balance.BalanceService;
+import uz.asadbek.subcourse.exception.BadRequestException;
+import uz.asadbek.subcourse.exception.TokenExpiredException;
 import uz.asadbek.subcourse.user.EmailService;
 import uz.asadbek.subcourse.user.UserEntity;
 import uz.asadbek.subcourse.user.UserMapper;
@@ -33,20 +37,21 @@ public class AuthServiceImpl implements AuthService {
     private final UserService userService;
     private final RefreshTokenRepository refreshTokenRepository;
     private final BalanceService balanceService;
+    private final MessageSource messageSource;
 
     @Override
     @Transactional
     public AuthResponseDto login(AuthRequestDto dto, String language,
         HttpServletResponse response) {
         UserEntity user = userService.findByEmail(dto.getEmail())
-            .orElseThrow(() -> ExceptionUtil.badRequestException("invalid_credentials"));
+            .orElseThrow(() -> ExceptionUtil.build(BadRequestException.class, "error.auth.invalid_credentials"));
 
         if (!user.isEnabled()) {
-            throw ExceptionUtil.badRequestException("user_not_enabled");
+            throw ExceptionUtil.build(BadRequestException.class, "error.auth.user_not_enabled");
         }
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw ExceptionUtil.badRequestException("invalid_credentials");
+            throw ExceptionUtil.build(BadRequestException.class, "error.auth.invalid_credentials");
         }
 
         return issueTokens(user, language, response);
@@ -56,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public AuthResponseDto register(UserRequestDto dto, String language) {
         if (userService.emailExists(dto.getEmail())) {
-            throw ExceptionUtil.badRequestException("email_already_exists");
+            throw ExceptionUtil.build(BadRequestException.class, "error.auth.email_already_exists");
         }
 
         UserEntity user = userMapper.toEntity(dto);
@@ -91,7 +96,7 @@ public class AuthServiceImpl implements AuthService {
 
         RefreshTokenEntity stored = refreshTokenRepository.findByToken(token.get())
             .filter(t -> !t.isRevoked() && t.getExpiryDate().isAfter(LocalDateTime.now()))
-            .orElseThrow(() -> ExceptionUtil.badRequestException("refresh_token_expired"));
+            .orElseThrow(() -> ExceptionUtil.build(TokenExpiredException.class, "error.auth.refresh_token_expired"));
 
         stored.setRevoked(true);
         refreshTokenRepository.save(stored);
@@ -137,7 +142,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         if (userService.emailExists(newEmail)) {
-            throw ExceptionUtil.badRequestException("email_already_exists");
+            throw ExceptionUtil.build(BadRequestException.class, "error.auth.email_already_exists");
         }
 
         user.setEmail(newEmail);
@@ -153,7 +158,7 @@ public class AuthServiceImpl implements AuthService {
 
         emailService.sendEmail(
             newEmail,
-            "Emailni tasdiqlash",
+            messageSource.getMessage("email.confirmation_subject", null, LocaleContextHolder.getLocale()),
             buildChangeEmailTemplate(confirmationLink)
         );
     }
@@ -174,7 +179,6 @@ public class AuthServiceImpl implements AuthService {
 
         var userDetails = CustomUserDetails.builder()
             .user(user)
-            .language(language)
             .build();
 
         String accessToken = JwtUtil.generateAccessToken(userDetails);
@@ -188,34 +192,40 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private String buildEmailTemplate(String confirmationLink) {
+        var msg1 = messageSource.getMessage("email.confirmation_message1", null, LocaleContextHolder.getLocale());
+        var msg2 = messageSource.getMessage("email.confirmation_message2", null, LocaleContextHolder.getLocale());
+        var msg3 = messageSource.getMessage("email.confirmation_message3", null, LocaleContextHolder.getLocale());
+        var msg4 = messageSource.getMessage("email.confirmation_message4", null, LocaleContextHolder.getLocale());
+        var msg5 = messageSource.getMessage("email.confirmation_message5", null, LocaleContextHolder.getLocale());
+        var msg6 = messageSource.getMessage("email.confirmation_message6", null, LocaleContextHolder.getLocale());
         return """
                 <html>
                     <body style="font-family: Arial, sans-serif; background-color:#f6f6f6; padding:20px;">
                         <div style="max-width:600px;margin:auto;background:white;padding:20px;border-radius:10px;">
-                            <h2 style="color:#2c3e50;">Assalomu alaykum 👋</h2>
-                            <p>Ro‘yxatdan o‘tganingiz uchun rahmat.</p>
-                            <p>Akkauntingizni faollashtirish uchun quyidagi tugmani bosing:</p>
+                            <h2 style="color:#2c3e50;">%s</h2>
+                            <p>%s</p>
+                            <p>%s</p>
                             <div style="text-align:center;margin:30px 0;">
                                 <a href="%s"
                                    style="background:#3498db;color:white;padding:12px 24px;
                                    text-decoration:none;border-radius:6px;font-weight:bold;">
-                                    Akkauntni tasdiqlash
+                                    %s
                                 </a>
                             </div>
                             <p style="font-size:12px;color:#888;">
-                                Agar tugma ishlamasa, quyidagi linkni ishlating:
+                                %s
                             </p>
                             <p style="word-break:break-all;">
                                 <a href="%s">%s</a>
                             </p>
                             <hr>
                             <p style="font-size:12px;color:#aaa;">
-                                Bu avtomatik yuborilgan xabar.
+                                %s
                             </p>
                         </div>
                     </body>
                 </html>
-            """.formatted(confirmationLink, confirmationLink, confirmationLink);
+            """.formatted(msg1, msg2, msg3, confirmationLink, msg4, msg5, confirmationLink, confirmationLink, msg6);
     }
 
     private String buildChangeEmailTemplate(String confirmationLink) {

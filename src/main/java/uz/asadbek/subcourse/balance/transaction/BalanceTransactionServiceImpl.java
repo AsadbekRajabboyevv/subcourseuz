@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.asadbek.subcourse.balance.BalanceService;
 import uz.asadbek.subcourse.balance.dto.TransactionStatus;
 import uz.asadbek.subcourse.balance.dto.TransactionType;
+import uz.asadbek.subcourse.exception.BadRequestException;
+import uz.asadbek.subcourse.exception.NotFoundException;
 import uz.asadbek.subcourse.payment.PaymentEntity;
 import uz.asadbek.subcourse.payment.dto.PaymentType;
 import uz.asadbek.subcourse.util.ExceptionUtil;
@@ -57,7 +59,7 @@ public class BalanceTransactionServiceImpl implements BalanceTransactionService 
                 tx.setStatus(TransactionStatus.SUCCESS);
             }
 
-            default -> throw ExceptionUtil.badRequestException("unknown_payment_type");
+            default -> throw ExceptionUtil.build(BadRequestException.class, "error.balance_transaction.unknown_payment_type");
         }
 
         tx.setExternalTx(generateExternalTx());
@@ -88,9 +90,8 @@ public class BalanceTransactionServiceImpl implements BalanceTransactionService 
     }
 
     private BalanceTransactionEntity save(Long paymentId, TransactionStatus status) {
-        var transaction = balanceTransactionRepository.findByPaymentId(
-                paymentId)
-            .orElseThrow(() -> ExceptionUtil.notFoundException("transaction_not_found"));
+        var transaction = balanceTransactionRepository.findByPaymentId(paymentId)
+            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.not_found.balance_transaction", paymentId));
         transaction.setStatus(status);
         transaction.setCompletedAt(LocalDateTime.now());
        return balanceTransactionRepository.save(transaction);

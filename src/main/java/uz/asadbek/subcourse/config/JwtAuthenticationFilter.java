@@ -25,29 +25,9 @@ import uz.asadbek.subcourse.auth.CustomUserDetails;
 import uz.asadbek.subcourse.exception.InvalidTokenException;
 import uz.asadbek.subcourse.exception.TokenExpiredException;
 import uz.asadbek.subcourse.user.UserEntity;
+import uz.asadbek.subcourse.util.ExceptionUtil;
 import uz.asadbek.subcourse.util.JwtUtil;
 
-/**
- * JWT Bearer-token authentication filter.
- *
- * <p>Intercepts every HTTP request exactly once (extends {@link OncePerRequestFilter}),
- * resolves the Bearer token from the {@code Authorization} header, validates it, and populates the
- * Spring {@link SecurityContextHolder} with a fully-authenticated token.
- *
- * <p><b>Flow:</b>
- * <pre>
- *  request
- *    │
- *    ├─ no / invalid header  ──► pass-through (anonymous)
- *    │
- *    ├─ valid JWT            ──► set Authentication → pass-through
- *    │
- *    └─ expired JWT          ──► 401 UNAUTHORIZED (JSON body)
- *    └─ invalid JWT          ──► 401 UNAUTHORIZED (JSON body)
- * </pre>
- *
- * <p><b>Thread-safety:</b> Stateless – one Spring singleton is safe for concurrent use.
- */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -55,19 +35,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final ObjectMapper objectMapper;
 
-    /**
-     * Constructs a {@link CustomUserDetails} from JWT claim values.
-     *
-     * <p>Only the data embedded in the token is used – no database call is made,
-     * which is the intentional stateless design. If full entity hydration is required (e.g.
-     * account-locked checks), inject a {@code UserDetailsService} and load the user here.
-     *
-     * @param id       user primary key
-     * @param username email / login name (JWT subject)
-     * @param lang     preferred language code
-     * @param roles    role names without the {@code ROLE_} prefix
-     * @return fully constructed user details
-     */
     private static CustomUserDetails buildUserDetails(
         Long id, String username, String lang, List<String> roles
     ) {
@@ -82,12 +49,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return CustomUserDetails.builder().user(user).build();
     }
 
-    /**
-     * Resolves the real client IP, respecting common reverse-proxy headers.
-     *
-     * @param request HTTP request
-     * @return client IP string
-     */
     private static String getClientIp(HttpServletRequest request) {
         String forwarded = request.getHeader("X-Forwarded-For");
         if (StringUtils.hasText(forwarded)) {
@@ -145,22 +106,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             path.startsWith("/swagger-ui/") ||
             path.startsWith("/v3/api-docs");
     }
-    /**
-     * Parses the token, builds a {@link CustomUserDetails} principal, and sets the authentication
-     * in the {@link SecurityContextHolder}.
-     *
-     * <p>Skips population if authentication is already present (avoids
-     * overwriting a previously set authentication in the same request).
-     *
-     * @param token   raw JWT string
-     * @param request current HTTP request (used for details builder)
-     */
+
     private void authenticateFromToken(String token, HttpServletRequest request) {
         var claims = JwtUtil.parseToken(token);
 
         String username = claims.getSubject();
         if (!StringUtils.hasText(username)) {
-            throw new InvalidTokenException("JWT subject (username) is missing");
+            throw ExceptionUtil.build(TokenExpiredException.class, "error.auth.invalid_token");
         }
 
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
@@ -193,25 +145,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.debug("[JWT] Authenticated user='{}' roles={}", username, roles);
     }
 
-    /**
-     * Writes a structured JSON error body and sets the HTTP status.
-     *
-     * <p>Example response body:
-     * <pre>
-     * {
-     *   "success":   false,
-     *   "status":    401,
-     *   "errorCode": "TOKEN_EXPIRED",
-     *   "message":   "Access token has expired. Please refresh your session.",
-     *   "timestamp": "2025-04-20T10:30:00Z"
-     * }
-     * </pre>
-     *
-     * @param response  HTTP response to write to
-     * @param status    HTTP status to set
-     * @param errorCode machine-readable code for client handling
-     * @param message   human-readable description
-     */
     private void writeErrorResponse(
         HttpServletResponse response,
         HttpStatus status,
@@ -234,12 +167,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         objectMapper.writeValue(response.getWriter(), body);
     }
 
-    /**
-     * Immutable JSON payload returned on authentication failures.
-     *
-     * <p> Declared as a private record to keep the contract local to this filter.
-     * If a shared error response format is introduced project-wide, replace with the common DTO.
-     */
     private record ErrorResponse(
         boolean success,
         int status,

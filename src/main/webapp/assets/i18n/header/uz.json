@@ -1,0 +1,22 @@
+{
+  "header": {
+    "app_title": "Subcourse",
+    "online_academy": "Online Academy",
+    "courses": "Kurslar",
+    "online_test": "Online Test",
+    "blog": "Blog",
+    "my_courses": "Mening kurslarim",
+    "student": "O'quvchi",
+    "profile_settings": "Profil sozlamalari",
+    "balance_history": "Balans to'ldirish tarixi",
+    "logout": "Tizimdan chiqish",
+    "login": "Kirish",
+    "your_balance": "Sizning balansingiz",
+    "top_up": "To'ldirish",
+    "courses_catalog": "Kurslar katalogi",
+    "online_tests": "Online Testlar",
+    "blog_news": "Blog & Yangiliklar",
+    "sign_in": "Tizimga kirish",
+    "exit": "Chiqish"
+  }
+}

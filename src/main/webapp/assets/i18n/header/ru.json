@@ -1,0 +1,22 @@
+{
+  "header": {
+    "app_title": "Subcourse",
+    "online_academy": "Online Academy",
+    "courses": "Курсы",
+    "online_test": "Онлайн Тест",
+    "blog": "Блог",
+    "my_courses": "Мои курсы",
+    "student": "Студент",
+    "profile_settings": "Настройки профиля",
+    "balance_history": "История пополнения баланса",
+    "logout": "Выйти из системы",
+    "login": "Войти",
+    "your_balance": "Ваш баланс",
+    "top_up": "Пополнить",
+    "courses_catalog": "Каталог курсов",
+    "online_tests": "Онлайн тесты",
+    "blog_news": "Блог & Новости",
+    "sign_in": "Войти в систему",
+    "exit": "Выход"
+  }
+}

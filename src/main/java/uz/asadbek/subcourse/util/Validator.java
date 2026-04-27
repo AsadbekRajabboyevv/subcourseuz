@@ -1,5 +1,7 @@
 package uz.asadbek.subcourse.util;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
@@ -26,66 +28,111 @@ public class Validator {
     private final UserTestRepository userTestRepository;
 
     public void validateTest(TestRequestDto dto) {
-        validateExists(dto.getScienceId(), scienceRepository::existsById, "science_not_found");
-        validateExists(dto.getGradeId(), gradeRepository::existsById, "grade_not_found");
+        Map<String, String> errors = new LinkedHashMap<>();
+
+        validateExists(dto.getScienceId(), scienceRepository::existsById,
+            "scienceId", "error.not_found.science", errors);
+
+        validateExists(dto.getGradeId(), gradeRepository::existsById,
+            "gradeId", "error.not_found.grade", errors);
 
         validateRelation(dto.getCourseId(), dto.getScienceId(),
-            courseRepository::existsByIdAndScienceId, "invalid_course");
+            courseRepository::existsByIdAndScienceId,
+            "courseId", "error.invalid.course", errors);
 
-        validateLesson(dto.getLessonId(), dto.getCourseId());
+        validateLesson(dto.getLessonId(), dto.getCourseId(), errors);
+
+        throwIfErrors(errors);
     }
 
     public void validateCourse(CourseRequestDto dto) {
-        validateExists(dto.getScienceId(), scienceRepository::existsById, "science_not_found");
-        validateExists(dto.getGradeId(), gradeRepository::existsById, "grade_not_found");
+        Map<String, String> errors = new LinkedHashMap<>();
+
+        validateExists(dto.getScienceId(), scienceRepository::existsById,
+            "scienceId", "error.not_found.science", errors);
+
+        validateExists(dto.getGradeId(), gradeRepository::existsById,
+            "gradeId", "error.not_found.grade", errors);
+
+        throwIfErrors(errors);
     }
 
     public void validateTestForUpdate(TestEntity test) {
+        Map<String, String> errors = new LinkedHashMap<>();
+
         validateRelation(test.getCourseId(), test.getScienceId(),
-            courseRepository::existsByIdAndScienceId, "invalid_course");
+            courseRepository::existsByIdAndScienceId,
+            "courseId", "error.invalid.course", errors);
 
-        validateLesson(test.getLessonId(), test.getCourseId());
+        validateLesson(test.getLessonId(), test.getCourseId(), errors);
+
+        throwIfErrors(errors);
     }
 
-    public void validateEnroll(Long userId, Long referenceId, Function<Long, Boolean> existsChecker,
+    public void validateEnroll(Long userId, Long referenceId,
+        Function<Long, Boolean> existsChecker,
         String notFoundMessage) {
-        validateExists(userId, userRepository::existsById, "user_not_found");
-        validateExists(referenceId, existsChecker, notFoundMessage);
 
-        if (userTestRepository.existsByIdUserIdAndIdReferenceId(userId, referenceId)) {
-            throw ExceptionUtil.badRequestException("user_already_enrolled");
+        Map<String, String> errors = new LinkedHashMap<>();
+
+        validateExists(userId, userRepository::existsById,
+            "userId", "error.not_found.user", errors);
+
+        validateExists(referenceId, existsChecker,
+            "referenceId", notFoundMessage, errors);
+
+        if (userId != null && referenceId != null &&
+            userTestRepository.existsByIdUserIdAndIdReferenceId(userId, referenceId)) {
+            errors.put("enroll", ExceptionUtil.resolveMessage("error.user.already_enrolled"));
         }
+
+        throwIfErrors(errors);
     }
 
-    private void validateExists(Long id, Function<Long, Boolean> existsChecker,
-        String errorMessage) {
-        if (!existsChecker.apply(id)) {
-            throw ExceptionUtil.badRequestException(errorMessage);
+    private void validateExists(Long id,
+        Function<Long, Boolean> existsChecker,
+        String field,
+        String errorKey,
+        Map<String, String> errors) {
+
+        if (id == null || !existsChecker.apply(id)) {
+            errors.put(field, ExceptionUtil.resolveMessage(errorKey));
         }
     }
 
     private void validateRelation(Long childId, Long parentId,
-        BiFunction<Long, Long, Boolean> relationChecker, String errorMessage) {
-        if (childId == null) {
-            return;
-        }
+        BiFunction<Long, Long, Boolean> relationChecker,
+        String field,
+        String errorKey,
+        Map<String, String> errors) {
+
+        if (childId == null) return;
 
         if (!relationChecker.apply(childId, parentId)) {
-            throw ExceptionUtil.badRequestException(errorMessage);
+            errors.put(field, ExceptionUtil.resolveMessage(errorKey));
         }
     }
 
-    private void validateLesson(Long lessonId, Long courseId) {
-        if (lessonId == null) {
+    private void validateLesson(Long lessonId, Long courseId,
+        Map<String, String> errors) {
+
+        if (lessonId == null) return;
+
+        if (courseId == null) {
+            errors.put("courseId",
+                ExceptionUtil.resolveMessage("error.course.required_for_lesson"));
             return;
         }
 
-        if (courseId == null) {
-            throw ExceptionUtil.badRequestException("course_required_for_lesson");
-        }
-
         if (!lessonRepository.existsByIdAndCourseId(lessonId, courseId)) {
-            throw ExceptionUtil.badRequestException("invalid_lesson");
+            errors.put("lessonId",
+                ExceptionUtil.resolveMessage("error.invalid.lesson"));
+        }
+    }
+
+    private void throwIfErrors(Map<String, String> errors) {
+        if (!errors.isEmpty()) {
+            throw ExceptionUtil.validationException("error.validation", errors);
         }
     }
 }

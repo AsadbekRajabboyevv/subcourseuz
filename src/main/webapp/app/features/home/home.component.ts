@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PageWrapperComponent } from '../../shared/ui/layout/page-wrapper.component';
+import {TranslatePipe, TranslateModule} from "@ngx-translate/core";
 
 interface Course {
   id: number;
@@ -15,7 +16,7 @@ interface Course {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, PageWrapperComponent],
+  imports: [CommonModule, PageWrapperComponent, TranslatePipe, TranslateModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })

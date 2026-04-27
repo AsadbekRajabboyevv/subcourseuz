@@ -1,6 +1,10 @@
 spring:
   liquibase:
     change-log: classpath:db/changelog/master.xml
+  messages:
+    basename: messages/messages
+    encoding: UTF-8
+    fallback-to-system-locale: false
 
   datasource:
     url: ${JDBC_DATABASE_URL}
@@ -11,16 +15,16 @@ spring:
       maximum-pool-size: ${MAX_POOL_SIZE}
 
   jpa:
-    open-in-view: ${OPEN_IN_VIEW}
+    open-in-view: false
     hibernate:
-      ddl-auto: ${DDL_AUTO}
+      ddl-auto: none
     properties:
       hibernate:
         jdbc:
           lob:
-            non_contextual_creation: ${NEW_GENERATOR_MAPPINGS}
+            non_contextual_creation: true
         id:
-          new_generator_mappings: ${NEW_GENERATOR_MAPPINGS}
+          new_generator_mappings: true
 
   security:
     custom:

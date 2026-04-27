@@ -3,12 +3,15 @@ package uz.asadbek.subcourse.auth;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.web.bind.annotation.RestController;
 import uz.asadbek.base.dto.BaseResponseDto;
 import uz.asadbek.subcourse.auth.dto.AuthRequestDto;
 import uz.asadbek.subcourse.auth.dto.AuthResponseDto;
 import uz.asadbek.subcourse.user.dto.UserRequestDto;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class AuthController implements AuthApi {
@@ -27,10 +30,18 @@ public class AuthController implements AuthApi {
     }
 
     @Override
-    public BaseResponseDto<Boolean> confirm(String token) {
-        return BaseResponseDto.ok(authService.confirmUser(token));
+    public void confirm(String token, HttpServletResponse response){
+        boolean success = authService.confirmUser(token);
+        try {
+            if (success) {
+                response.sendRedirect("http://localhost:4200/auth/confirm-success");
+            } else {
+                response.sendRedirect("http://loaclhost:4200/auth/confirm-error");
+            }
+        } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+        }
     }
-
     @Override
     public BaseResponseDto<AuthResponseDto> refresh(HttpServletRequest request,
         HttpServletResponse response) {

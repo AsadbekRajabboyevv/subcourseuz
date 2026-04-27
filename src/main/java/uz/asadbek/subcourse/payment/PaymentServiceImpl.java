@@ -1,6 +1,9 @@
 package uz.asadbek.subcourse.payment;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +15,9 @@ import uz.asadbek.subcourse.balance.transaction.BalanceTransactionEntity;
 import uz.asadbek.subcourse.balance.transaction.BalanceTransactionService;
 import uz.asadbek.subcourse.course.CourseService;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
+import uz.asadbek.subcourse.exception.NotFoundException;
+import uz.asadbek.subcourse.exception.PaymentException;
+import uz.asadbek.subcourse.exception.UnAuthorizedException;
 import uz.asadbek.subcourse.payment.dto.PaymentAction;
 import uz.asadbek.subcourse.payment.dto.PaymentRequestDto;
 import uz.asadbek.subcourse.payment.dto.PaymentResponseDto;
@@ -25,6 +31,7 @@ import uz.asadbek.subcourse.util.JwtUtil;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
     private final CourseService courseService;
@@ -32,16 +39,6 @@ public class PaymentServiceImpl implements PaymentService {
     private final BalanceTransactionService balanceTransactionService;
     private final PaymentRepository repository;
     private final BalanceService balanceService;
-
-    public PaymentServiceImpl(CourseService courseService, TestService testService,
-        BalanceTransactionService balanceTransactionService, PaymentRepository repository,
-        BalanceService balanceService) {
-        this.courseService = courseService;
-        this.testService = testService;
-        this.balanceTransactionService = balanceTransactionService;
-        this.repository = repository;
-        this.balanceService = balanceService;
-    }
 
     private static PaymentEntity buildPayment(CourseResponseDto course, TestResponseDto test,
         Long amount, CurrencyEnum currency) {
@@ -76,7 +73,8 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public PaymentResponseDto purchase(PaymentRequestDto request, Boolean isTopUp) {
         if (!JwtUtil.isAuthenticated()) {
-            throw ExceptionUtil.unAuthorizedException("user_not_authenticated");
+            log.error("[PaymentServiceImpl] User not authenticated");
+            throw ExceptionUtil.build(UnAuthorizedException.class, "error.auth.user_not_authenticated");
         }
 
         var courseId = request.getCourseId();
@@ -103,7 +101,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .build();
         }
 
-        validatePurchaseRequest(courseId, testId);
+        PaymentValidator.validatePurchaseRequest(courseId, testId);
 
         if (courseId != null) {
             course = courseService.get(courseId);
@@ -120,7 +118,7 @@ public class PaymentServiceImpl implements PaymentService {
         if (amount > 0) {
             balanceService.debit(amount);
         } else {
-            log.info("Xarid kupon orqali tekin amalga oshirilmoqda. CourseId: {}", courseId);
+            log.info("[PaymentServiceImpl] Xarid kupon orqali tekin amalga oshirilmoqda. CourseId: {}", courseId);
         }
 
         var payment = buildPayment(course, test, amount, balance.getCurrency());
@@ -142,32 +140,26 @@ public class PaymentServiceImpl implements PaymentService {
             .build();
     }
 
-    private void validatePurchaseRequest(Long courseId, Long testId) {
-        if (courseId != null && testId != null) {
-            throw ExceptionUtil.paymentException("only_one_product_allowed");
-        }
-        if (courseId == null && testId == null) {
-            throw ExceptionUtil.paymentException("product_required");
-        }
-    }
+
 
     @Transactional
     public PaymentResponseDto process(String exId, PaymentAction action) {
 
         var payment = repository.findByExId(exId)
-            .orElseThrow(() -> ExceptionUtil.notFoundException("payment_not_found"));
+            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.not_found.payment", exId));
 
         if (payment.getStatus() == PaymentStatus.SUCCESS) {
             if (action == PaymentAction.CANCEL) {
-                throw ExceptionUtil.paymentException("payment_already_success");
+                log.error("[PaymentServiceImpl] Payment already success");
+                throw ExceptionUtil.build(PaymentException.class, "error.payment.already_success");
             }
             return buildResponse(payment, null);
         }
 
         if (payment.getStatus() != PaymentStatus.PROCESSING &&
             payment.getStatus() != PaymentStatus.CREATED) {
-
-            throw ExceptionUtil.paymentException("invalid_payment_status");
+            log.error("[PaymentServiceImpl] Invalid payment status: {}", payment.getStatus());
+            throw ExceptionUtil.build(PaymentException.class, "error.payment.invalid_payment_status");
         }
 
         payment.setCompletedAt(LocalDateTime.now());

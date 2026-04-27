@@ -2,18 +2,18 @@
     <div page-title class="flex flex-col md:flex-row md:items-center justify-between gap-6 w-full px-2 md:px-0">
         <div class="space-y-1">
             <nav class="mb-2 flex items-center gap-2 text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
-                <a routerLink="/" class="hover:text-emerald-500">Asosiy</a>
+                <a routerLink="/" class="hover:text-emerald-500">{{ 'course.home' | translate }}</a>
                 <i class="fa-solid fa-chevron-right text-[7px]"></i>
-                <a routerLink="/courses-list" class="text-emerald-500">Kurslar</a>
+                <a routerLink="/courses-list" class="text-emerald-500">{{ 'course.title' | translate }}</a>
             </nav>
-            <h1 class="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-white uppercase">Kurslar katalogi</h1>
+            <h1 class="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-white uppercase">{{ 'course.course_list' | translate }}</h1>
         </div>
 
         @if (authService.isAdmin()) {
             <button routerLink="/courses-create"
                     class="group flex items-center justify-center gap-2 rounded-2xl bg-gray-900 px-6 py-3.5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl transition-all hover:bg-emerald-600 active:scale-95 dark:bg-emerald-600">
                 <i class="fa-solid fa-plus text-xs"></i>
-                <span>Yangi kurs qo'shish</span>
+                <span>{{ 'course.create_course' | translate }}</span>
             </button>
         }
     </div>
@@ -29,7 +29,7 @@
                         <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10">
                             <i class="fa-solid fa-sliders text-xs"></i>
                         </div>
-                        <span class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">Filtrlash</span>
+                        <span class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">{{ 'course.filter' | translate }}</span>
                     </div>
                     <i class="fa-solid transition-transform duration-300 text-gray-400"
                        [class.rotate-180]="isFilterVisible"
@@ -38,34 +38,34 @@
 
                 <div [class.hidden]="!isFilterVisible" class="lg:block p-4 lg:p-0 space-y-5">
                     <div class="hidden lg:flex items-center justify-between mb-2">
-                        <h3 class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">Filtrlash</h3>
-                        <button (click)="resetFilters()" class="text-[9px] font-bold uppercase text-gray-400 hover:text-red-500">Tozalash</button>
+                        <h3 class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">{{ 'course.filter' | translate }}</h3>
+                        <button (click)="resetFilters()" class="text-[9px] font-bold uppercase text-gray-400 hover:text-red-500">{{ 'course.clear' | translate }}</button>
                     </div>
 
                     <div class="space-y-4">
-                        <app-input type="text" label="Qidiruv" placeholder="Nomi bo'yicha..." [(ngModel)]="filter.search"></app-input>
+                        <app-input type="text" label="{{ 'course.search_courses' | translate }}" placeholder="{{ 'course.search_by_name' | translate }}" [(ngModel)]="filter.search"></app-input>
 
                         <div class="grid grid-cols-2 gap-3">
-                            <app-input type="number" label="Narxdan" placeholder="0" [(ngModel)]="filter.priceFrom"></app-input>
-                            <app-input type="number" label="Gacha" placeholder="Max" [(ngModel)]="filter.priceTo"></app-input>
+                            <app-input type="number" label="{{ 'course.price_from' | translate }}" placeholder="0" [(ngModel)]="filter.priceFrom"></app-input>
+                            <app-input type="number" label="{{ 'course.price_to' | translate }}" placeholder="Max" [(ngModel)]="filter.priceTo"></app-input>
                         </div>
 
-                        <app-input type="select" label="Til" [options]="languages" [(ngModel)]="filter.lang"></app-input>
+                        <app-input type="select" label="{{ 'course.language' | translate }}" [options]="languages" [(ngModel)]="filter.lang"></app-input>
 
                         <div class="rounded-2xl bg-gray-50/50 p-4 dark:bg-gray-800/30 space-y-2 border border-gray-100 dark:border-gray-800">
-                            <p class="text-[8px] font-black uppercase text-gray-400 tracking-widest">Davomiyligi</p>
+                            <p class="text-[8px] font-black uppercase text-gray-400 tracking-widest">{{ 'course.duration' | translate }}</p>
                             <div class="flex gap-2">
-                                <app-input type="number" placeholder="Qiymat" [(ngModel)]="filter.duration" class="w-2/3"></app-input>
+                                <app-input type="number" placeholder="{{ 'course.value' | translate }}" [(ngModel)]="filter.duration" class="w-2/3"></app-input>
                                 <app-input type="select" [options]="durationTypes" [(ngModel)]="filter.durationType" class="w-1/3"></app-input>
                             </div>
                         </div>
 
                         <button (click)="applyFilters(); isFilterVisible = false"
                                 class="w-full rounded-2xl bg-emerald-600 py-4 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-emerald-500/20 active:scale-95 transition-all">
-                            Natijalarni ko'rish
+                            {{ 'course.view_results' | translate }}
                         </button>
 
-                        <button (click)="resetFilters()" class="w-full lg:hidden text-[9px] font-black uppercase text-gray-400 py-2">Tozalash</button>
+                        <button (click)="resetFilters()" class="w-full lg:hidden text-[9px] font-black uppercase text-gray-400 py-2">{{ 'course.clear' | translate }}</button>
                     </div>
                 </div>
             </div>
@@ -78,12 +78,12 @@
                     <button (click)="changeTab(true)"
                             [class]="filter.isPublished ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-400'"
                             class="whitespace-nowrap border-b-2 px-4 py-4 text-[10px] font-black uppercase tracking-widest transition-all">
-                        <i class="fa-solid fa-circle-check mr-2"></i> Nashr qilingan
+                        <i class="fa-solid fa-circle-check mr-2"></i> {{ 'course.published' | translate }}
                     </button>
                     <button (click)="changeTab(false)"
                             [class]="!filter.isPublished ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-400'"
                             class="whitespace-nowrap border-b-2 px-4 py-4 text-[10px] font-black uppercase tracking-widest transition-all">
-                        <i class="fa-solid fa-clock-rotate-left mr-2"></i> Qoralamalar
+                        <i class="fa-solid fa-clock-rotate-left mr-2"></i> {{ 'course.drafts' | translate }}
                     </button>
                 </div>
             }
@@ -101,7 +101,7 @@
 
                         @if (!course.isPublished) {
                             <div class="absolute top-5 right-5 z-20 rounded-full bg-orange-500 px-2 py-0.5 text-[7px] font-black text-white uppercase shadow-lg">
-                                Qoralama
+                                {{ 'course.draft' | translate }}
                             </div>
                         }
 
@@ -116,7 +116,7 @@
                         <div class="mt-4 md:mt-5 px-1 flex-1 flex flex-col">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-[8px] font-black uppercase text-emerald-500 tracking-tighter truncate max-w-[100px]">{{ course.ownerName }}</span>
-                                <span class="text-[8px] font-bold text-gray-400">{{ course.lessonsCount }} dars</span>
+                                <span class="text-[8px] font-bold text-gray-400">{{ course.lessonsCount }} {{ 'course.lessons' | translate }}</span>
                             </div>
                             <h3 class="text-md md:text-lg font-black tracking-tight text-gray-900 dark:text-white line-clamp-2 leading-tight">
                                 {{ course.name }}
@@ -124,7 +124,7 @@
 
                             <div class="mt-auto pt-4 md:pt-5 flex items-center justify-between">
                                 <div>
-                                    <p class="text-[7px] font-bold uppercase text-gray-400">Narxi</p>
+                                    <p class="text-[7px] font-bold uppercase text-gray-400">{{ 'course.price' | translate }}</p>
                                     <p class="text-sm md:text-md font-black text-gray-900 dark:text-emerald-400">
                                         {{ course.price | number }} <small class="text-[8px]">UZS</small>
                                     </p>
@@ -159,7 +159,7 @@
             @if (!courseService.isLoading() && courseService.courses().length === 0) {
                 <div class="py-20 text-center opacity-30">
                     <i class="fa-solid fa-box-open text-5xl mb-4 text-gray-300"></i>
-                    <p class="font-black uppercase tracking-widest text-xs">Kurslar topilmadi</p>
+                    <p class="font-black uppercase tracking-widest text-xs">{{ 'course.no_courses_found' | translate }}</p>
                 </div>
             }
         </main>

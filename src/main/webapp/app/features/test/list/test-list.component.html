@@ -2,18 +2,18 @@
     <div page-title class="flex flex-col md:flex-row md:items-center justify-between gap-6 w-full px-2 md:px-0">
         <div class="space-y-1">
             <nav class="mb-2 flex items-center gap-2 text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
-                <a routerLink="/" class="hover:text-emerald-500">Asosiy</a>
+                <a routerLink="/" class="hover:text-emerald-500">{{ 'test.home' | translate }}</a>
                 <i class="fa-solid fa-chevron-right text-[7px]"></i>
-                <a routerLink="/tests" class="text-emerald-500">Online Testlar</a>
+                <a routerLink="/tests" class="text-emerald-500">{{ 'test.online_tests' | translate }}</a>
             </nav>
-            <h1 class="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-white uppercase">Testlar katalogi</h1>
+            <h1 class="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-white uppercase">{{ 'test.test_list' | translate }}</h1>
         </div>
 
         @if (authService.isAdmin()) {
             <button routerLink="/tests-create"
                     class="group flex items-center justify-center gap-2 rounded-2xl bg-gray-900 px-6 py-3.5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl transition-all hover:bg-emerald-600 active:scale-95 dark:bg-emerald-600">
                 <i class="fa-solid fa-plus text-xs"></i>
-                <span>Yangi test yaratish</span>
+                <span>{{ 'test.create_test' | translate }}</span>
             </button>
         }
     </div>
@@ -27,7 +27,7 @@
                         <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-500/10">
                             <i class="fa-solid fa-filter text-xs"></i>
                         </div>
-                        <span class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">Filtrlash</span>
+                        <span class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">{{ 'test.filter' | translate }}</span>
                     </div>
                     <i class="fa-solid transition-transform duration-300 text-gray-400"
                        [class.rotate-180]="isFilterVisible"
@@ -35,12 +35,12 @@
                 </button>
 
                 <div [class.hidden]="!isFilterVisible" class="lg:block p-4 lg:p-0 space-y-5">
-                    <app-input type="text" label="Qidiruv" placeholder="Test nomi..." [(ngModel)]="filter.search"></app-input>
-                    <app-input type="select" label="Til" [options]="languages" [(ngModel)]="filter.lang"></app-input>
+                    <app-input type="text" label="{{ 'test.search' | translate }}" placeholder="{{ 'test.search_placeholder' | translate }}" [(ngModel)]="filter.search"></app-input>
+                    <app-input type="select" label="{{ 'test.language' | translate }}" [options]="languages" [(ngModel)]="filter.lang"></app-input>
 
                     <button (click)="applyFilters()"
                             class="w-full rounded-2xl bg-blue-600 py-4 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-blue-500/20 active:scale-95 transition-all">
-                        Filtrlash
+                        {{ 'test.apply_filter' | translate }}
                     </button>
                 </div>
             </div>
@@ -52,12 +52,12 @@
                     <button (click)="changeTab(true)"
                             [class]="filter.isPublished ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-400'"
                             class="whitespace-nowrap border-b-2 px-4 py-4 text-[10px] font-black uppercase tracking-widest transition-all">
-                        <i class="fa-solid fa-check-double mr-2"></i> Faol testlar
+                        <i class="fa-solid fa-check-double mr-2"></i> {{ 'test.published_tests' | translate }}
                     </button>
                     <button (click)="changeTab(false)"
                             [class]="!filter.isPublished ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-400'"
                             class="whitespace-nowrap border-b-2 px-4 py-4 text-[10px] font-black uppercase tracking-widest transition-all">
-                        <i class="fa-solid fa-file-pen mr-2"></i> Qoralamalar
+                        <i class="fa-solid fa-file-pen mr-2"></i> {{ 'test.drafts' | translate }}
                     </button>
                 </div>
             }
@@ -68,7 +68,7 @@
 
                         @if (!test.isPublished) {
                             <div class="absolute top-5 right-5 z-20 rounded-full bg-orange-500 px-2 py-0.5 text-[7px] font-black text-white uppercase shadow-lg">
-                                Qoralama
+                                {{ 'test.draft' | translate }}
                             </div>
                         }
 
@@ -77,7 +77,7 @@
                                  class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110">
                             <div class="absolute bottom-3 left-3 flex gap-2">
                                 <div class="rounded-lg bg-white/90 backdrop-blur-md px-2 py-1 text-[8px] font-black text-blue-600 uppercase">
-                                    <i class="fa-solid fa-clock mr-1"></i> {{ test.duration }} daqiqa
+                                    <i class="fa-solid fa-clock mr-1"></i> {{ test.duration }} {{ 'test.minutes' | translate }}
                                 </div>
                             </div>
                         </div>
@@ -93,12 +93,12 @@
                             </h3>
 
                             <p class="mt-2 text-[10px] text-gray-500 dark:text-gray-400 line-clamp-2 italic">
-                                {{ test.description || 'Ushbu test bo\'yicha qo\'shimcha ma\'lumot berilmagan.' }}
+                                {{ test.description || ('test.description_missing' | translate) }}
                             </p>
 
                             <div class="mt-auto pt-4 md:pt-5 flex items-center justify-between">
                                 <div>
-                                    <p class="text-[7px] font-bold uppercase text-gray-400">Kirish narxi</p>
+                                    <p class="text-[7px] font-bold uppercase text-gray-400">{{ 'test.price' | translate }}</p>
                                     <p class="text-sm md:text-md font-black text-gray-900 dark:text-blue-400">
                                         {{ test.price | number }} <small class="text-[8px]">UZS</small>
                                     </p>
@@ -133,7 +133,7 @@
             @if (!isLoading() && tests().length === 0) {
                 <div class="py-20 text-center opacity-30">
                     <i class="fa-solid fa-vial-circle-check text-5xl mb-4 text-gray-300"></i>
-                    <p class="font-black uppercase tracking-widest text-xs">Hozircha testlar mavjud emas</p>
+                    <p class="font-black uppercase tracking-widest text-xs">{{ 'test.no_tests_available' | translate }}</p>
                 </div>
             }
         </main>

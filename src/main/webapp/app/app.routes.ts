@@ -16,6 +16,16 @@ export const routes: Routes = [
         loadComponent: ()=> import('./common/auth/component/register.component').then(m => m.RegisterComponent),
         title: 'Registratsiya'
       },
+      {
+        path: 'confirm-success',
+        loadComponent: () => import('./features/confirm/email-confirm.component').then(m => m.EmailConfirmComponent),
+        title: 'Email tasdiqlash'
+      },
+      {
+        path: 'confirm-error',
+        loadComponent: () => import('./features/confirm/email-confirm.component').then(m => m.EmailConfirmComponent),
+        title: 'Email tasdiqlash'
+      }
     ]
   },
   {

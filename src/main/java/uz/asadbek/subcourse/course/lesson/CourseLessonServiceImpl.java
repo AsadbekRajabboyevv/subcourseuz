@@ -11,6 +11,7 @@ import uz.asadbek.subcourse.course.lesson.dto.CourseLessonInfoResponseDto;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonRequestDto;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonUpdateRequestDto;
+import uz.asadbek.subcourse.exception.NotFoundException;
 import uz.asadbek.subcourse.filestorage.FileStorageService;
 import uz.asadbek.subcourse.filestorage.dto.FileUploadOptions;
 import uz.asadbek.subcourse.util.ExceptionUtil;
@@ -81,7 +82,7 @@ public class CourseLessonServiceImpl implements CourseLessonService {
 
     private CourseLessonEntity findById(Long id) {
         return repository.findById(id)
-            .orElseThrow(() -> ExceptionUtil.notFoundException("course_lesson_not_found"));
+            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.not_found.course_lesson", id));
     }
 
     @Override

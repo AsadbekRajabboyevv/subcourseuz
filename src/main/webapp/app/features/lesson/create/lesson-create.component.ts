@@ -7,6 +7,7 @@ import { PageWrapperComponent } from "../../../shared/ui/layout/page-wrapper.com
 import { LessonCreate } from "../lesson.model";
 import { SafeUrlPipe } from "../../../common/safeurl/safe-url.pipe";
 import { LessonService } from "../lesson.service";
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-lesson-create',
@@ -17,7 +18,8 @@ import { LessonService } from "../lesson.service";
     FormsModule,
     PageWrapperComponent,
     RouterLink,
-    SafeUrlPipe
+    SafeUrlPipe,
+    TranslateModule
   ],
   templateUrl: './lesson-create.component.html'
 })

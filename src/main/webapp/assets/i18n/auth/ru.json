@@ -1,0 +1,22 @@
+{
+  "auth": {
+    "login_title": "Вход в систему",
+    "welcome_msg": "Добро пожаловать на платформу Subcourse",
+    "email_label": "Электронная почта",
+    "password_label": "Пароль",
+    "login_btn": "Войти",
+    "no_account": "Нет аккаунта?",
+    "register_link": "Зарегистрироваться",
+    "email_placeholder": "example@mail.com",
+    "password_placeholder": "••••••••",
+    "remember_me": "Запомнить меня",
+    "forgot_password": "Забыли пароль?",
+    "login_error": "Произошла ошибка при входе",
+    "invalid_credentials": "Неверный email или пароль",
+    "account_disabled": "Ваш аккаунт не активен",
+    "email_required": "Email адрес обязателен",
+    "password_required": "Пароль обязателен",
+    "invalid_email": "Неверный формат email",
+    "password_min_length": "Пароль должен содержать минимум 6 символов"
+  }
+}

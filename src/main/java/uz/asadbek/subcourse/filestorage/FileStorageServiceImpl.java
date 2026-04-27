@@ -13,6 +13,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -20,6 +21,8 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import uz.asadbek.subcourse.exception.BadRequestException;
+import uz.asadbek.subcourse.exception.NotFoundException;
 import uz.asadbek.subcourse.filestorage.dto.*;
 import uz.asadbek.subcourse.util.ExceptionUtil;
 import uz.asadbek.subcourse.util.JwtUtil;
@@ -76,7 +79,7 @@ public class FileStorageServiceImpl implements FileStorageService {
         var checksum = computeChecksum(file);
         var deduped = findDuplicate(checksum, options);
         if (deduped.isPresent()) {
-            log.debug("Dedup hit: checksum={}", checksum);
+            log.info("[FileStorageServiceImpl] Dedup hit: checksum={}", checksum);
             return buildResponse(deduped.get());
         }
 
@@ -89,7 +92,8 @@ public class FileStorageServiceImpl implements FileStorageService {
             Files.createDirectories(target.getParent());
             Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            throw ExceptionUtil.badRequestException("file_upload_error");
+            log.error("[FileStorageServiceImpl] Failed to write file: {}", ExceptionUtils.getStackTrace(e));
+            throw ExceptionUtil.build(BadRequestException.class, "error.file_upload");
         }
 
         var entity = FileStorageEntity.builder()
@@ -119,7 +123,8 @@ public class FileStorageServiceImpl implements FileStorageService {
                 var resource = toUrlResource(physicalPath, fileKey);
 
                 if (!resource.exists()) {
-                    throw ExceptionUtil.notFoundException("file_not_found");
+                    log.error("[FileStorageServiceImpl] File not found: key={}, path={}", fileKey, physicalPath);
+                    throw ExceptionUtil.build(NotFoundException.class, "error.not_found.file");
                 }
 
                 repository.incrementDownloadCount(fileKey);
@@ -152,10 +157,14 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Override
     @Transactional
     public void hardDelete(String fileKey) {
-        var entity = repository.findByFileKey(fileKey)
-            .orElseThrow(() -> ExceptionUtil.notFoundException("file_not_found"));
+        var entity = findByFileKey(fileKey);
         deletePhysicalFile(entity);
         repository.delete(entity);
+    }
+
+    private FileStorageEntity findByFileKey(String fileKey) {
+        return repository.findByFileKey(fileKey)
+            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.not_found.file"));
     }
 
     @Override
@@ -163,7 +172,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     public void restore(String fileKey) {
         var entity = repository.findByFileKey(fileKey)
             .filter(e -> FileStatus.DELETED.equals(e.getStatus()))
-            .orElseThrow(() -> ExceptionUtil.notFoundException("file_not_found_or_active"));
+            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.not_found.file"));
         entity.restore();
         repository.save(entity);
     }
@@ -175,7 +184,8 @@ public class FileStorageServiceImpl implements FileStorageService {
         }
         long used = repository.sumSizeByOwner(ownerId);
         if (used + incomingBytes > defaultQuotaBytes) {
-            throw ExceptionUtil.badRequestException("storage_quota_exceeded");
+            log.error("[FileStorageServiceImpl] Quota exceeded for ownerId={}: used={}, incoming={}", ownerId, used, incomingBytes);
+            throw ExceptionUtil.build(BadRequestException.class, "error.storage.quota_exceeded");
         }
     }
 
@@ -192,7 +202,8 @@ public class FileStorageServiceImpl implements FileStorageService {
         try {
             Files.createDirectories(tempRoot.resolve(sessionId));
         } catch (IOException e) {
-            throw ExceptionUtil.badRequestException("video_session_init_error");
+            log.error("[FileStorageServiceImpl] Failed to create temp dir: {}", ExceptionUtils.getStackTrace(e));
+            throw ExceptionUtil.build(BadRequestException.class, "error.file_upload");
         }
 
         var session = VideoUploadSession.builder()
@@ -216,21 +227,24 @@ public class FileStorageServiceImpl implements FileStorageService {
         var session = requireSession(sessionId);
 
         if (chunkIndex < 0 || chunkIndex >= session.totalChunks()) {
-            throw ExceptionUtil.badRequestException("chunk_index_out_of_range");
+            log.error("[FileStorageServiceImpl] Invalid chunk index: {}", chunkIndex);
+            throw ExceptionUtil.build(BadRequestException.class, "error.file_upload");
         }
 
         if (chunk == null || chunk.isEmpty()) {
-            throw ExceptionUtil.badRequestException("chunk_empty");
+            log.error("[FileStorageServiceImpl] Chunk is null or chunk is empty");
+            throw ExceptionUtil.build(BadRequestException.class, "error.file_upload");
         }
 
         var chunkPath = tempRoot.resolve(sessionId).resolve(CHUNK_PREFIX + chunkIndex);
         try {
             Files.copy(chunk.getInputStream(), chunkPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            throw ExceptionUtil.badRequestException("chunk_write_error");
+            log.error("[FileStorageServiceImpl] Failed to write chunk: {}", ExceptionUtils.getStackTrace(e));
+            throw ExceptionUtil.build(BadRequestException.class, "error.file_upload");
         }
 
-        log.debug("Chunk received: session={}, index={}/{}", sessionId, chunkIndex,
+        log.debug("[FileStorageServiceImpl] Chunk received: session={}, index={}/{}", sessionId, chunkIndex,
             session.totalChunks());
     }
 
@@ -242,7 +256,8 @@ public class FileStorageServiceImpl implements FileStorageService {
 
         for (int i = 0; i < session.totalChunks(); i++) {
             if (!Files.exists(tmpDir.resolve(CHUNK_PREFIX + i))) {
-                throw ExceptionUtil.badRequestException("chunk_missing_" + i);
+                log.error("[FileStorageServiceImpl] Chunk {} is missing", i);
+                throw ExceptionUtil.build(BadRequestException.class,"error.file_upload");
             }
         }
 
@@ -259,7 +274,8 @@ public class FileStorageServiceImpl implements FileStorageService {
             finalSize = mergeChunks(tmpDir, session.totalChunks(), finalPath);
             checksum = computeChecksumFromPath(finalPath);
         } catch (IOException e) {
-            throw ExceptionUtil.badRequestException("video_merge_error");
+            log.error("Failed to merge chunks: {}", ExceptionUtils.getStackTrace(e));
+            throw ExceptionUtil.build(BadRequestException.class, "error.file_upload");
         } finally {
             cleanupTempDir(tmpDir);
             sessionStore.remove(sessionId);
@@ -295,14 +311,16 @@ public class FileStorageServiceImpl implements FileStorageService {
         var entity = requireActive(fileKey);
 
         if (!FileType.VIDEO.equals(entity.getFileType())) {
-            throw ExceptionUtil.badRequestException("not_a_video");
+            log.error("[FileStorageServiceImpl] Invalid file type: {}", entity.getFileType());
+            throw ExceptionUtil.validationException("fileType", "error.video.not_video");
         }
 
         var filePath = resolveStoragePath(entity.getFolder(), entity.getStoredName());
         long fileSize = entity.getSize();
 
         if (!Files.exists(filePath)) {
-            throw ExceptionUtil.notFoundException("file_not_found");
+            log.error("[FileStorageServiceImpl] File not found: key={}, path={}", fileKey, filePath);
+            throw ExceptionUtil.build(NotFoundException.class,"error.not_found.file");
         }
 
         repository.incrementDownloadCount(fileKey);
@@ -338,7 +356,8 @@ public class FileStorageServiceImpl implements FileStorageService {
                 .partial(true)
                 .build();
         } catch (IOException e) {
-            throw ExceptionUtil.badRequestException("video_stream_error");
+            log.error("[FileStorageServiceImpl] Failed to stream video: {}", ExceptionUtils.getStackTrace(e));
+            throw ExceptionUtil.build(BadRequestException.class, "error.video.stream_error");
         }
     }
 
@@ -351,13 +370,14 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     private FileStorageEntity requireActive(String fileKey) {
         return repository.findByFileKeyAndStatus(fileKey, FileStatus.ACTIVE)
-            .orElseThrow(() -> ExceptionUtil.notFoundException("file_not_found"));
+            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.not_found.file"));
     }
 
     private VideoUploadSession requireSession(String sessionId) {
         var session = sessionStore.get(sessionId);
         if (session == null) {
-            throw ExceptionUtil.notFoundException("upload_session_not_found");
+            log.error("Video upload session not found: sessionId={}", sessionId);
+            throw ExceptionUtil.build(NotFoundException.class,"error.video.upload_session.not_found");
         }
         return session;
     }
@@ -379,7 +399,8 @@ public class FileStorageServiceImpl implements FileStorageService {
         try {
             return new UrlResource(path.toUri());
         } catch (MalformedURLException e) {
-            throw ExceptionUtil.badRequestException("file_read_error");
+            log.error("[FileStorageServiceImpl] Failed to create URL resource: {}", ExceptionUtils.getStackTrace(e));
+            throw ExceptionUtil.build(BadRequestException.class, "error.file_read");
         }
     }
 
@@ -387,10 +408,11 @@ public class FileStorageServiceImpl implements FileStorageService {
         try {
             Path path = resolveStoragePath(entity.getFolder(), entity.getStoredName());
             if (!Files.deleteIfExists(path)) {
-                log.warn("Physical file already absent: key={}", entity.getFileKey());
+                log.warn("[FileStorageServiceImpl] Physical file already absent: key={}", entity.getFileKey());
             }
         } catch (IOException e) {
-            throw ExceptionUtil.badRequestException("file_delete_error");
+            log.error("[FileStorageServiceImpl] File delete error: {}", ExceptionUtils.getStackTrace(e));
+            throw ExceptionUtil.build(BadRequestException.class, "error.file_delete");
         }
     }
 
@@ -422,13 +444,13 @@ public class FileStorageServiceImpl implements FileStorageService {
                             try {
                                 Files.deleteIfExists(p);
                             } catch (IOException ex) {
-                                log.warn("Could not delete temp: {}", p);
+                                log.error("[FileStorageServiceImpl] Could not delete temp: {}", p);
                             }
                         });
                 }
             }
         } catch (IOException e) {
-            log.warn("Failed to cleanup temp dir: {}", dir);
+            log.error("[FileStorageServiceImpl] Failed to cleanup temp dir: {}", dir);
         }
     }
 
@@ -442,11 +464,13 @@ public class FileStorageServiceImpl implements FileStorageService {
                 : Math.min(start + videoChunkSizeBytes - 1, fileSize - 1);
             end = Math.min(end, fileSize - 1);
             if (start > end || start < 0) {
-                throw ExceptionUtil.badRequestException("invalid_range_header");
+                log.error("[FileStorageServiceImpl] Invalid range header: {}", rangeHeader);
+                throw ExceptionUtil.build(BadRequestException.class, "invalid_range_header");
             }
             return new long[]{start, end};
         } catch (NumberFormatException e) {
-            throw ExceptionUtil.badRequestException("invalid_range_header");
+            log.error("[FileStorageServiceImpl] Invalid range header: {}", rangeHeader);
+            throw ExceptionUtil.build(BadRequestException.class, "invalid_range_header");
         }
     }
 
@@ -458,7 +482,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             }
             return HexFormat.of().formatHex(digest.digest());
         } catch (NoSuchAlgorithmException | IOException e) {
-            log.warn("Checksum failed for upload, continuing", e);
+            log.error("[FileStorageServiceImpl] Checksum failed for upload, continuing", e);
             return null;
         }
     }

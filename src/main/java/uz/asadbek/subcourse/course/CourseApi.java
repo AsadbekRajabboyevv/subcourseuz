@@ -31,7 +31,7 @@ import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonUpdateRequestDto;
 
 @RequestMapping("/v1/api/courses")
-@Tag(name = "Kurslar API")
+@Tag(name = "Kurslar", description = "Kurslar")
 public interface CourseApi {
 
     /// Course grade

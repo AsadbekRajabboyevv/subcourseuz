@@ -6,11 +6,12 @@ import { CourseService } from '../course.service';
 import { PageWrapperComponent } from '../../../shared/ui/layout/page-wrapper.component';
 import { InputComponent } from '../../../shared/ui/forms/input.component';
 import {CourseGrade} from "../course.model";
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-course-create',
   standalone: true,
-  imports: [CommonModule, FormsModule, PageWrapperComponent, InputComponent, RouterLink],
+  imports: [CommonModule, FormsModule, PageWrapperComponent, InputComponent, RouterLink, TranslateModule],
   templateUrl: './course-create.component.html'
 })
 export class CourseCreateComponent implements OnInit {

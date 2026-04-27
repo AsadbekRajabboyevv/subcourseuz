@@ -8,12 +8,12 @@ import { PaymentService } from "../../payment/payment.service";
 import { PaymentModalComponent } from "../../payment/modal/payment-modal.component";
 import { AuthService } from "../../../common/auth/auth.service";
 import { TestService } from "../test.service"; // TestService bor deb hisoblaymiz
-import { TestResponseDto } from "../test.model";
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-test-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputComponent, PageWrapperComponent, RouterLink, PaymentModalComponent],
+  imports: [CommonModule, FormsModule, InputComponent, PageWrapperComponent, RouterLink, PaymentModalComponent, TranslateModule],
   templateUrl: './test-list.component.html'
 })
 export class TestListComponent implements OnInit {

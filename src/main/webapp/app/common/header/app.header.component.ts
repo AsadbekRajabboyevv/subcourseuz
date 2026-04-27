@@ -4,11 +4,13 @@ import { RouterModule } from '@angular/router';
 import { AuthService } from "../auth/auth.service";
 import {ThemeSwitchComponent} from "../../shared/ui/menu/theme-switch.component";
 import {BalanceWidgetComponent} from "../balance/balance-widget.component";
+import {LangSwitcherComponent} from "../../shared/ui/menu/lang-switcher.component";
+import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, ThemeSwitchComponent, BalanceWidgetComponent],
+  imports: [CommonModule, RouterModule, ThemeSwitchComponent, BalanceWidgetComponent, LangSwitcherComponent, TranslatePipe],
 
   templateUrl: './app.header.component.html'
 })

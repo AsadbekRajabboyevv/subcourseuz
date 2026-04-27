@@ -7,11 +7,12 @@ import { PageWrapperComponent } from "../../../shared/ui/layout/page-wrapper.com
 import { LessonUpdate, LessonInfo } from "../lesson.model";
 import { SafeUrlPipe } from "../../../common/safeurl/safe-url.pipe";
 import { LessonService } from "../lesson.service";
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-lesson-update',
   standalone: true,
-  imports: [CommonModule, InputComponent, FormsModule, PageWrapperComponent, SafeUrlPipe],
+  imports: [CommonModule, InputComponent, FormsModule, PageWrapperComponent, SafeUrlPipe, TranslateModule],
   templateUrl: './lesson-update.component.html'
 })
 export class LessonUpdateComponent implements OnInit {

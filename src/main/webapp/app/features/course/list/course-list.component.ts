@@ -9,11 +9,12 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { PaymentService } from "../../payment/payment.service";
 import { PaymentModalComponent } from "../../payment/modal/payment-modal.component";
 import { AuthService } from "../../../common/auth/auth.service";
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-course-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputComponent, PageWrapperComponent, RouterLink, PaymentModalComponent],
+  imports: [CommonModule, FormsModule, InputComponent, PageWrapperComponent, RouterLink, PaymentModalComponent, TranslateModule],
   templateUrl: './course-list.component.html'
 })
 export class CourseListComponent implements OnInit {

@@ -6,11 +6,12 @@ import { CourseService } from '../course.service';
 import { CourseUpdate } from '../course.model';
 import { InputComponent } from '../../../shared/ui/forms/input.component';
 import { PageWrapperComponent } from '../../../shared/ui/layout/page-wrapper.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-course-update',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputComponent, PageWrapperComponent, RouterLink],
+  imports: [CommonModule, FormsModule, InputComponent, PageWrapperComponent, RouterLink, TranslateModule],
   templateUrl: './course-update.component.html'
 })
 export class CourseUpdateComponent implements OnInit {

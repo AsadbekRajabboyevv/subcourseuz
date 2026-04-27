@@ -1,5 +1,6 @@
 package uz.asadbek.subcourse.balance.topuprequest;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import uz.asadbek.subcourse.balance.topuprequest.filter.TopUpRequestFilter;
 import uz.asadbek.subcourse.payment.dto.PaymentResponseDto;
 
 @RequestMapping("/v1/api/top-up-request")
+@Tag(name = "Top Up Request", description = "Top Up Request")
 public interface TopUpRequestApi {
 
     @GetMapping("/my")

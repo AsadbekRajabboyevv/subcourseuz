@@ -30,10 +30,8 @@ export class RegisterComponent {
   onRegister() {
     this.authService.register(this.regData).subscribe({
       next: () => {
-        alert('Muvaffaqiyatli ro\'yxatdan o\'tdingiz!');
         this.router.navigate(['/auth/login']);
-      },
-      error: (err) => console.error('Xatolik:', err)
+      }
     });
   }
 }

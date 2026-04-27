@@ -10,11 +10,12 @@ import {PaymentModalComponent} from "../../payment/modal/payment-modal.component
 import {PaymentRequest} from "../../payment/payment.model";
 import {AuthService} from "../../../common/auth/auth.service";
 import {MarkdownComponent} from "ngx-markdown";
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-course-view',
   standalone: true,
-  imports: [CommonModule, RouterModule, PageWrapperComponent, PaymentModalComponent, MarkdownComponent],
+  imports: [CommonModule, RouterModule, PageWrapperComponent, PaymentModalComponent, MarkdownComponent, TranslateModule],
   templateUrl: './course-view.component.html',
   styles: ``
 })

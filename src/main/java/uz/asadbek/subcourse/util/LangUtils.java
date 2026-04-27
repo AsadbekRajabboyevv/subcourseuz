@@ -1,9 +1,13 @@
 package uz.asadbek.subcourse.util;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import uz.asadbek.subcourse.auth.CustomUserDetails;
 import uz.asadbek.subcourse.util.embedded.DescriptionEmbedded;
 import uz.asadbek.subcourse.util.embedded.NameEmbedded;
@@ -12,7 +16,7 @@ public final class LangUtils {
 
     public static final String DEFAULT_LANG = "uz";
     private static final Map<String, String> MAP = new LinkedHashMap<>();
-
+    private static final String LANG_HEADER = "Accept-Language";
     static {
         MAP.put("sh", "ш");
         MAP.put("ch", "ч");
@@ -78,14 +82,7 @@ public final class LangUtils {
     }
 
     public static String currentLang() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null
-            || !(authentication.getPrincipal() instanceof CustomUserDetails user)) {
-            return DEFAULT_LANG;
-        }
-
-        String lang = user.getLanguage();
+        String lang = LocaleContextHolder.getLocale().getLanguage();
         return normalize(lang);
     }
 

@@ -1,5 +1,6 @@
 package uz.asadbek.subcourse.publicui;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import uz.asadbek.subcourse.test.dto.TestResponseDto;
 import uz.asadbek.subcourse.test.filter.TestFilter;
 
 @RequestMapping("/v1/api/public")
+@Tag(name = "Public", description = "Public")
 public interface PublicApi {
 
     @GetMapping("/home")

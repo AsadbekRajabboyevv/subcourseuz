@@ -12,6 +12,8 @@ import uz.asadbek.subcourse.comment.dto.CommentInfoResponseDto;
 import uz.asadbek.subcourse.comment.dto.CommentRequestDto;
 import uz.asadbek.subcourse.comment.dto.CommentResponseDto;
 import uz.asadbek.subcourse.comment.filter.CommentFilter;
+import uz.asadbek.subcourse.exception.BadRequestException;
+import uz.asadbek.subcourse.exception.NotFoundException;
 import uz.asadbek.subcourse.util.ExceptionUtil;
 import uz.asadbek.subcourse.util.JwtUtil;
 
@@ -47,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
 
             if (lastCreatedAt.isAfter(limitTime)) {
                 log.info("User {} exceeded comment limit", currentUserId);
-                throw ExceptionUtil.badRequestException("comment_limit_exceeded");
+                throw ExceptionUtil.build(BadRequestException.class, "error.comment.limit_exceeded");
             }
         }
         var entity = mapper.toEntity(dto);
@@ -57,7 +59,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public Long update(Long id, CommentRequestDto dto) {
-        var entity = repository.findById(id).orElseThrow(()-> ExceptionUtil.notFoundException("comment_not_found"));
+        var entity = repository.findById(id).orElseThrow(()-> ExceptionUtil.build(NotFoundException.class, "error.not_found.comment", id));
         mapper.update(entity, dto);
         return repository.save(entity).getId();
     }
@@ -66,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Long delete(Long id) {
-        var entity = repository.findById(id).orElseThrow(()-> ExceptionUtil.notFoundException("comment_not_found"));
+        var entity = repository.findById(id).orElseThrow(()-> ExceptionUtil.build(NotFoundException.class, "error.not_found.comment", id));
         repository.delete(entity);
         return id;
     }

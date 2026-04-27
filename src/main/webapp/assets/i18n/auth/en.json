@@ -1,0 +1,22 @@
+{
+  "auth": {
+    "login_title": "Login",
+    "welcome_msg": "Welcome to the Subcourse platform",
+    "email_label": "Email address",
+    "password_label": "Password",
+    "login_btn": "Login",
+    "no_account": "Don't have an account?",
+    "register_link": "Sign up",
+    "email_placeholder": "example@mail.com",
+    "password_placeholder": "••••••••",
+    "remember_me": "Remember me",
+    "forgot_password": "Forgot password?",
+    "login_error": "An error occurred during login",
+    "invalid_credentials": "Invalid email or password",
+    "account_disabled": "Your account is not active",
+    "email_required": "Email address is required",
+    "password_required": "Password is required",
+    "invalid_email": "Invalid email format",
+    "password_min_length": "Password must be at least 6 characters long"
+  }
+}

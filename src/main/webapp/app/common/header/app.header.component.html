@@ -21,21 +21,22 @@
 
                 <nav class="hidden lg:flex items-center space-x-1">
                     @for (link of [
-                        {path: '/courses-list', label: 'Kurslar'},
-                        {path: '/tests', label: 'Online Test'},
-                        {path: '/blog', label: 'Blog'}
+                        { path: '/courses-list', label: 'header.courses' },
+                        { path: '/tests', label: 'header.online_test' },
+                        { path: '/blog', label: 'header.blog' }
                     ]; track link.path) {
                         <a [routerLink]="link.path"
                            routerLinkActive="bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
                            class="rounded-xl px-4 py-2 text-[10px] font-black uppercase tracking-widest text-gray-500 transition-all hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white">
-                            {{ link.label }}
+                            {{ link.label | translate }}
                         </a>
                     }
+
                     @if (isLoggedIn && userRole === 'ROLE_USER') {
                         <a routerLink="/courses-me"
                            routerLinkActive="bg-emerald-50 text-emerald-600"
                            class="rounded-xl px-4 py-2 text-[10px] font-black uppercase tracking-widest text-gray-500 transition-all hover:bg-gray-50 dark:text-gray-400">
-                            Mening kurslarim
+                            {{ 'header.my_courses' | translate }}
                         </a>
                     }
                 </nav>
@@ -76,30 +77,31 @@
                                         {{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}
                                     </p>
                                     <p class="text-[9px] font-bold uppercase tracking-widest text-emerald-500 mt-1">
-                                        O'quvchi</p>
+                                        {{ 'header.student' | translate }}</p>
                                 </div>
 
                                 <div class="p-1 space-y-1">
                                     <button routerLink="/profile"
                                             class="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-[10px] font-black uppercase tracking-widest text-gray-600 transition-all hover:bg-emerald-50 hover:text-emerald-600 dark:text-gray-300 dark:hover:bg-gray-800/50">
                                         <i class="fa-solid fa-user-gear text-sm opacity-60"></i>
-                                        Profil sozlamalari
+                                        {{ 'header.profile_settings' | translate }}
                                     </button>
                                     <button routerLink="/top-up-histories"
                                             class="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-[10px] font-black uppercase tracking-widest text-gray-600 transition-all hover:bg-emerald-50 hover:text-emerald-600 dark:text-gray-300 dark:hover:bg-gray-800/50">
                                         <i class="fa-solid fa-history text-sm opacity-60"></i>
-                                        Balans to'ldirish tarixi
+                                        {{ 'header.balance_history' | translate }}
                                     </button>
 
                                     <button (click)="logout()"
                                             class="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-[10px] font-black uppercase tracking-widest text-red-500 transition-all hover:bg-red-50">
                                         <i class="fa-solid fa-power-off text-sm opacity-60"></i>
-                                        Tizimdan chiqish
+                                        {{ 'header.logout' | translate }}
                                     </button>
 
                                     <div
                                         class="p-2 border-t border-gray-50 dark:border-gray-800/50 mt-1"
                                         (click)="$event.stopPropagation()">
+                                        <app-lang-switcher></app-lang-switcher>
                                         <app-theme-switch></app-theme-switch>
                                     </div>
                                 </div>
@@ -109,7 +111,7 @@
                 } @else {
                     <button routerLink="/auth/login"
                             class="hidden sm:block rounded-xl bg-gray-900 px-6 py-3 text-[10px] font-black uppercase tracking-widest text-white shadow-lg transition-all hover:bg-emerald-600 active:scale-95 dark:bg-white dark:text-gray-900 dark:hover:bg-emerald-500 dark:hover:text-white">
-                        Kirish
+                        {{ 'header.login' | translate }}
                     </button>
                 }
 
@@ -130,13 +132,13 @@
                     <div
                         class="flex flex-col gap-2 rounded-3xl bg-emerald-50 p-6 dark:bg-emerald-500/10">
                         <span
-                            class="text-[9px] font-black uppercase tracking-widest text-emerald-600">Sizning balansingiz</span>
+                            class="text-[9px] font-black uppercase tracking-widest text-emerald-600">{{ 'header.your_balance' | translate }}</span>
                         <div class="flex items-center justify-between">
                             <span class="text-2xl font-black text-gray-900 dark:text-white">0 <small
                                 class="text-xs">UZS</small></span>
                             <button routerLink="/top-up" (click)="isMenuOpen = false"
                                     class="rounded-xl bg-emerald-600 px-4 py-2 text-[9px] font-black uppercase text-white">
-                                To'ldirish
+                                {{ 'header.top_up' | translate }}
                             </button>
                         </div>
                     </div>
@@ -146,19 +148,19 @@
                     <a routerLink="/courses-list" (click)="isMenuOpen = false"
                        class="flex items-center justify-between rounded-2xl bg-gray-50 px-6 py-5 dark:bg-gray-900">
                         <span
-                            class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">Kurslar katalogi</span>
+                            class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">{{ 'header.courses_catalog' | translate }}</span>
                         <i class="fa-solid fa-chevron-right text-[10px] text-emerald-500"></i>
                     </a>
                     <a routerLink="/tests" (click)="isMenuOpen = false"
                        class="flex items-center justify-between rounded-2xl bg-gray-50 px-6 py-5 dark:bg-gray-900">
                         <span
-                            class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">Online Testlar</span>
+                            class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">{{ 'header.online_tests' | translate }}</span>
                         <i class="fa-solid fa-chevron-right text-[10px] text-emerald-500"></i>
                     </a>
                     <a routerLink="/blog" (click)="isMenuOpen = false"
                        class="flex items-center justify-between rounded-2xl bg-gray-50 px-6 py-5 dark:bg-gray-900">
                         <span
-                            class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">Blog & Yangiliklar</span>
+                            class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">{{ 'header.blog_news' | translate }}</span>
                         <i class="fa-solid fa-chevron-right text-[10px] text-emerald-500"></i>
                     </a>
                 </nav>
@@ -166,16 +168,17 @@
                 @if (!isLoggedIn) {
                     <button routerLink="/auth/login" (click)="isMenuOpen = false"
                             class="w-full rounded-2xl bg-emerald-600 py-5 text-[11px] font-black uppercase tracking-widest text-white shadow-xl shadow-emerald-500/20">
-                        Tizimga kirish
+                        {{ 'header.sign_in' | translate }}
                     </button>
                 } @else {
                     <button (click)="logout(); isMenuOpen = false"
                             class="w-full rounded-2xl border border-red-100 py-5 text-[11px] font-black uppercase tracking-widest text-red-500">
-                        Chiqish
+                        {{ 'header.exit' | translate }}
                     </button>
                 }
 
                 <div class="flex justify-center gap-8 pt-6">
+                    <app-lang-switcher></app-lang-switcher>
                     <app-theme-switch></app-theme-switch>
                 </div>
             </div>

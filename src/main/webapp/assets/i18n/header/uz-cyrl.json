@@ -1,0 +1,22 @@
+{
+  "header": {
+    "app_title": "Subcourse",
+    "online_academy": "Online Academy",
+    "courses": "Курслар",
+    "online_test": "Online Тест",
+    "blog": "Блог",
+    "my_courses": "Менинг курсларим",
+    "student": "Ўқувчи",
+    "profile_settings": "Прfil созламалари",
+    "balance_history": "Баланс тўлдириш тарихи",
+    "logout": "Тизимдан чиқиш",
+    "login": "Кириш",
+    "your_balance": "Сизнинг балансингиз",
+    "top_up": "Тўлдириш",
+    "courses_catalog": "Курслар каталоги",
+    "online_tests": "Online Тестлар",
+    "blog_news": "Блог & Янгиликлар",
+    "sign_in": "Тизимга кириш",
+    "exit": "Чиқиш"
+  }
+}

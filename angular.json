@@ -24,14 +24,14 @@
             "index": "src/main/webapp/index.html",
             "browser": "src/main/webapp/main.ts",
             "polyfills": [
-              "@angular/localize/init",
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "css",
             "assets": [
               "src/main/webapp/favicon.ico",
-              {"glob": "**/*", "input": "src/main/webapp/public"}
+              {"glob": "**/*", "input": "src/main/webapp/public"},
+              {"glob": "**/*", "input": "src/main/webapp/assets", "output": "/assets"}
             ],
             "styles": [
               "src/main/webapp/styles.css"
@@ -107,7 +107,8 @@
             "inlineStyleLanguage": "css",
             "assets": [
               "src/main/webapp/favicon.ico",
-              {"glob": "**/*", "input": "src/main/webapp/public"}
+              {"glob": "**/*", "input": "src/main/webapp/public"},
+              {"glob": "**/*", "input": "src/main/webapp/assets", "output": "/assets"}
             ],
             "styles": [
               "src/main/webapp/styles.css"

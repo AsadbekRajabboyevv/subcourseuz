@@ -6,11 +6,12 @@ import { InputComponent } from "../../../shared/ui/forms/input.component";
 import { PageWrapperComponent } from "../../../shared/ui/layout/page-wrapper.component";
 import { CourseFilter, DurationType } from "../course.model";
 import { RouterLink } from "@angular/router";
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-course-me',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputComponent, PageWrapperComponent, RouterLink],
+  imports: [CommonModule, FormsModule, InputComponent, PageWrapperComponent, RouterLink, TranslateModule],
   templateUrl: './course-me.component.html'
 })
 export class CourseMeComponent implements OnInit {
