@@ -92,8 +92,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Boolean enroll(Long courseId) {
+    public Boolean enroll(String courseSlug) {
         var userId = JwtUtil.getCurrentUserId();
+        var courseId = findBySlug(courseSlug).getId();
         validator.validateEnroll(userId, courseId, repository::existsById, "course_not_found");
         var uc = new UserCourseEntity();
         uc.setId(new UserPurchaseId(userId, courseId, LocalDateTime.now()));

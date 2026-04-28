@@ -23,7 +23,7 @@ public interface CourseService {
 
     CourseResponseDto get(String slug);
 
-    Boolean enroll(Long courseId);
+    Boolean enroll(String courseSlug);
 
     String delete(String slug);
 
