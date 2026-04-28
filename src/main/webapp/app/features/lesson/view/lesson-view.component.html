@@ -4,7 +4,7 @@
       <nav class="mb-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
         <a routerLink="/courses-list" class="hover:text-emerald-500" i18n="@@course.title">Kurslar</a>
         <i class="fa-solid fa-chevron-right text-[7px]"></i>
-        <a [routerLink]="['/courses-view', data.courseName]" [queryParams]="{id: data.courseId}" class="hover:text-emerald-500">{{ data.courseName }}</a>
+        <a [routerLink]="['/courses-view/', data.courseSlug]" class="hover:text-emerald-500">{{ data.courseName }}</a>
         <i class="fa-solid fa-chevron-right text-[7px]"></i>
         <span class="text-emerald-500">{{ data.name }}</span>
       </nav>

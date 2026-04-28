@@ -51,8 +51,9 @@ public class CourseLessonServiceImpl implements CourseLessonService {
                 }
             }
         }
-        courseService.getIdBySlug(request.getSlug());
+
         var entity = mapper.toEntity(request);
+        entity.setCourseId(courseService.getIdBySlug(request.getCourseSlug()));
         entity.setFileUrls(urls);
 
         return repository.save(entity).getId();

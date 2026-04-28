@@ -4,6 +4,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.Path;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @Component
 public class ExistInDbValidator implements ConstraintValidator<ExistsInDb, Object> {
@@ -43,13 +45,7 @@ public class ExistInDbValidator implements ConstraintValidator<ExistsInDb, Objec
             return false;
         }
 
-        boolean exists;
-
-        if ("id".equals(field) && value instanceof Long id) {
-            exists = ((JpaRepository<?, Long>) cachedRepository).existsById(id);
-        } else {
-            exists = existsByField(value);
-        }
+        boolean exists = existsByField(value);
 
         if (!exists) {
             if (setNull) {
@@ -63,13 +59,39 @@ public class ExistInDbValidator implements ConstraintValidator<ExistsInDb, Objec
 
     private boolean existsByField(Object value) {
         try {
-            var methodName = STR."existsBy\{capitalize(field)}";
-            var method = cachedRepository.getClass().getMethod(methodName, value.getClass());
-            var result = method.invoke(cachedRepository, value);
+            String methodName = "id".equalsIgnoreCase(field)
+                ? "existsById"
+                : "existsBy" + capitalize(field);
+            System.out.println(value.toString());
+            Method method = findMethodInInterfaces(cachedRepository.getClass(), methodName);
+            if (method == null) {
+                throw new NoSuchMethodException("Method not found: " + methodName);
+            }
+
+            Object result = method.invoke(cachedRepository, value);
             return result instanceof Boolean b && b;
         } catch (Exception e) {
+            System.err.println("Validation Error: " + e.getMessage());
             return false;
         }
+    }
+
+    private Method findMethodInInterfaces(Class<?> clazz, String methodName) {
+        for (Class<?> iface : clazz.getInterfaces()) {
+            for (Method m : iface.getMethods()) {
+                if (m.getName().equals(methodName)) {
+                    return m;
+                }
+            }
+
+            Method found = findMethodInInterfaces(iface, methodName);
+            if (found != null) return found;
+        }
+
+        return Stream.of(clazz.getMethods())
+            .filter(m -> m.getName().equals(methodName))
+            .findFirst()
+            .orElse(null);
     }
 
     private boolean trySetFieldToNull(ConstraintValidatorContext context) {
@@ -115,7 +137,8 @@ public class ExistInDbValidator implements ConstraintValidator<ExistsInDb, Objec
     private JpaRepository<?, ?> getRepositoryByEntity(Class<?> entityClass) {
         return repositories.values().stream()
             .filter(repo -> {
-                var types = GenericTypeResolver.resolveTypeArguments(repo.getClass(), JpaRepository.class);
+                Class<?> targetClass = AopUtils.getTargetClass(repo);
+                var types = GenericTypeResolver.resolveTypeArguments(targetClass, JpaRepository.class);
                 return types != null && types.length > 0 && types[0].equals(entityClass);
             })
             .findFirst()

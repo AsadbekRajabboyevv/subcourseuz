@@ -5,13 +5,13 @@ export interface Lesson {
   isPublished: boolean;
 }
 
-export interface LessonInfo extends Lesson{
+export interface LessonInfo extends Lesson {
   videoUrl: string;
   courseName: string;
   courseImagePath: string;
   textContent: string;
   isPublished: boolean;
-  courseId: number;
+  courseSlug: string;
   fileUrls: string[]
 }
 
@@ -20,7 +20,7 @@ export interface LessonCreate {
   lessonNumber: number;
   videoUrl: string;
   textContent: string;
-  courseId: number | null;
+  courseSlug: string | null;
   isPublished: boolean;
 }
 
@@ -29,7 +29,6 @@ export interface LessonUpdate {
   lessonNumber?: string | null;
   videoUrl?: string | null;
   textContent?: string | null;
-  courseId?: number | null;
   isPublished?: boolean | null;
 }
 

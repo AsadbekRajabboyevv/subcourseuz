@@ -16,5 +16,5 @@ public class CourseFilter extends BaseFilter {
     private String lang;
     private DurationType durationType;
     private Integer duration;
-    private Boolean isPublished;
+    private Boolean isPublished = true;
 }

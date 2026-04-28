@@ -10,6 +10,9 @@ import uz.asadbek.base.dto.BaseResponseDto;
 import uz.asadbek.subcourse.auth.dto.AuthRequestDto;
 import uz.asadbek.subcourse.auth.dto.AuthResponseDto;
 import uz.asadbek.subcourse.user.dto.UserRequestDto;
+import uz.asadbek.subcourse.util.LangUtils;
+
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -30,16 +33,20 @@ public class AuthController implements AuthApi {
     }
 
     @Override
-    public void confirm(String token, HttpServletResponse response){
+    public void confirm(String token, HttpServletResponse response) {
         boolean success = authService.confirmUser(token);
+        String baseUrl = "http://localhost:8080";
+        String lang = LangUtils.currentLang();
+
         try {
             if (success) {
-                response.sendRedirect("http://localhost:4200/auth/confirm-success");
+                response.sendRedirect("%s/%s/auth/confirm-success".formatted(baseUrl, lang));
             } else {
-                response.sendRedirect("http://loaclhost:4200/auth/confirm-error");
+                response.sendRedirect("%s/%s/auth/confirm-error".formatted(baseUrl, lang));
             }
-        } catch (Exception e) {
-            log.error(ExceptionUtils.getStackTrace(e));
+        } catch (IOException e) {
+            log.error("Redirect failed for token {}: {}", token, ExceptionUtils.getStackTrace(e));
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
     @Override

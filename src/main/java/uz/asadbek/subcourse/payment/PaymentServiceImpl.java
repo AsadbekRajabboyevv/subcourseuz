@@ -82,11 +82,12 @@ public class PaymentServiceImpl implements PaymentService {
         var testId = request.getTestId();
         var couponCode = request.getCouponCode();
         var balance = balanceService.get();
-        Long amount;
+        Long amount = 0L;
         if (courseSlug != null) {
+            log.info("COURSE SLUG: {}", courseSlug);
             course = courseService.get(courseSlug);
             amount = course.getPrice();
-        } else {
+        } else if (testId != null) {
             test = testService.get(testId);
             amount = test.getPrice();
         }

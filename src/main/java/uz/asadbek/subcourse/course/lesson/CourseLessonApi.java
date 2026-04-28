@@ -3,12 +3,8 @@ package uz.asadbek.subcourse.course.lesson;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestPart;
+
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.asadbek.base.dto.BaseResponseDto;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonInfoResponseDto;
@@ -16,6 +12,7 @@ import uz.asadbek.subcourse.course.lesson.dto.CourseLessonRequestDto;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonUpdateRequestDto;
 
+@RequestMapping("/v1/api/lessons")
 public interface CourseLessonApi {
     @PostMapping
     @Operation(summary = "Kursga dars qo'shish")

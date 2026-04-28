@@ -9,6 +9,8 @@ import uz.asadbek.base.repository.BaseRepository;
 import uz.asadbek.subcourse.test.dto.TestResponseDto;
 import uz.asadbek.subcourse.test.filter.TestFilter;
 
+import java.util.Optional;
+
 @Repository
 public interface TestRepository extends BaseRepository<TestEntity, Long> {
 
@@ -100,5 +102,5 @@ public interface TestRepository extends BaseRepository<TestEntity, Long> {
             WHERE t.deletedAt IS NULL
             AND t.id = :id
         """)
-    TestResponseDto get(Long id);
+    Optional<TestResponseDto> get(Long id);
 }

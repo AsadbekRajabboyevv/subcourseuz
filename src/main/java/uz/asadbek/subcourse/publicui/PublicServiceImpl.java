@@ -16,6 +16,8 @@ import uz.asadbek.subcourse.course.lesson.CourseLessonService;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
 import uz.asadbek.subcourse.publicui.dto.HomePageResponseDto;
 import uz.asadbek.subcourse.publicui.dto.StatsDto;
+import uz.asadbek.subcourse.science.ScienceService;
+import uz.asadbek.subcourse.science.dto.ScienceResponseDto;
 import uz.asadbek.subcourse.test.TestService;
 import uz.asadbek.subcourse.user.UserService;
 
@@ -29,6 +31,7 @@ public class PublicServiceImpl implements PublicService {
     private final UserService userService;
     private final CourseLessonService courseLessonService;
     private final CourseGradeService courseGradeService;
+    private final ScienceService scienceService;
 
     @Override
     public HomePageResponseDto getHomePage() {
@@ -60,5 +63,10 @@ public class PublicServiceImpl implements PublicService {
     @Override
     public List<CourseGradeResponseDto> getCourseGrades() {
         return courseGradeService.get();
+    }
+
+    @Override
+    public List<ScienceResponseDto> getSciences() {
+        return scienceService.get();
     }
 }

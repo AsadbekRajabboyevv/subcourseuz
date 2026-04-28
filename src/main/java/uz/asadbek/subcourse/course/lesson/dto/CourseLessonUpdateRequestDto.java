@@ -8,6 +8,5 @@ public class CourseLessonUpdateRequestDto {
     private Integer lessonNumber;
     private String videoUrl;
     private String textContent;
-    private Long courseId;
     private Boolean isPublished;
 }

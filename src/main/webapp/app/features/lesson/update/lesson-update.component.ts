@@ -40,7 +40,6 @@ export class LessonUpdateComponent implements OnInit {
     lessonNumber: '',
     videoUrl: '',
     textContent: '',
-    courseId: null,
     isPublished: true
   };
 
@@ -58,23 +57,17 @@ export class LessonUpdateComponent implements OnInit {
     this.isLoading.set(true);
     this.lessonService.getLesson(id).subscribe({
       next: (res: any) => {
-        // Backenddan LessonInfo formatida keladi
         const data: LessonInfo = res.data ? res.data : res;
-
-        // 1. Formaga faqat kerakli qismlarni o'zlashtiramiz
         this.lessonForm = {
           name: data.name,
           lessonNumber: data.lessonNumber?.toString(),
           videoUrl: data.videoUrl,
           textContent: data.textContent,
-          courseId: data.courseId,
           isPublished: data.isPublished
         };
 
-        // 2. Fayllarni alohida massivga olamiz
         this.existingFileUrls = data.fileUrls || [];
 
-        // 3. Preview uchun
         this.coursePreview.name = data.courseName;
         this.coursePreview.imagePath = data.courseImagePath;
 
@@ -106,8 +99,6 @@ export class LessonUpdateComponent implements OnInit {
   onSubmit() {
     if (!this.lessonId) return;
     this.isLoading.set(true);
-
-    // request (LessonUpdate), files (File[]), deletedFileUrls (string[])
     this.lessonService.updateLesson(
       this.lessonId,
       this.lessonForm,

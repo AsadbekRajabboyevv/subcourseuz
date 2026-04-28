@@ -28,22 +28,22 @@ export class LessonCreateComponent implements OnInit {
 
   isLoading = signal<boolean>(false);
   selectedFiles: File[] = [];
+  slug: string | null = null;
 
   lessonForm: LessonCreate = {
     name: '',
     lessonNumber: 1,
     videoUrl: '',
     textContent: '',
-    courseId: 0,
+    courseSlug: null,
     isPublished: true
   };
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      const cId = params['courseId'] || params['id'];
-      if (cId) {
-        this.lessonForm.courseId = Number(cId);
-        console.log('Kurs ID yuklandi:', this.lessonForm.courseId);
+      this.slug = this.route.snapshot.paramMap.get('slug');
+      if (this.slug) {
+        this.lessonForm.courseSlug = this.slug;
       }
     });
   }
@@ -62,11 +62,6 @@ export class LessonCreateComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.lessonForm.name || !this.lessonForm.courseId) {
-      alert('Iltimos, dars nomi va kurs ID mavjudligini tekshiring!');
-      return;
-    }
-
     this.isLoading.set(true);
     const youtubeId = this.getYoutubeId(this.lessonForm.videoUrl);
 
@@ -74,15 +69,12 @@ export class LessonCreateComponent implements OnInit {
       ...this.lessonForm,
       videoUrl: youtubeId!,
       lessonNumber: Number(this.lessonForm.lessonNumber),
-      courseId: Number(this.lessonForm.courseId)
+      courseSlug: this.lessonForm.courseSlug
     };
 
     this.lessonService.saveLesson(requestDto, this.selectedFiles).subscribe({
       next: (res) => {
-        console.log('Muvaffaqiyatli saqlandi:', res);
-        this.router.navigate(['/courses-view', requestDto.courseId], {
-          queryParams: { id: requestDto.courseId }
-        });
+        this.router.navigate(['/courses-view/', requestDto.courseSlug]);
         this.isLoading.set(false);
       },
       error: (err) => {

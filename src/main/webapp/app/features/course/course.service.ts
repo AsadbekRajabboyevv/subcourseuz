@@ -62,14 +62,6 @@ export class CourseService {
     this.courseLength.set(length);
   }
 
-  getCourseLength() {
-    return this.courseLength();
-  }
-
-  resetCourses() {
-    this.courses.set([]);
-  }
-
   appendCourses(newCourses: Course[]) {
     this.courses.update(prev => [...prev, ...newCourses]);
   }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd"
+    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1777390332349-15" author="asadbek">
+        <addColumn tableName="courses">
+            <column name="slug" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1777390332349-16" author="asadbek">
+        <addNotNullConstraint columnName="slug" tableName="courses"/>
+    </changeSet>
+    <changeSet id="1777390332349-19" author="asadbek">
+        <addUniqueConstraint columnNames="slug" constraintName="uc_courses_slug" tableName="courses"/>
+    </changeSet>
+    <changeSet id="1777390332349-20" author="asadbek">
+        <addUniqueConstraint columnNames="slug, owner_id" constraintName="uk_course_slug_and_owner_id"
+                             tableName="courses"/>
+    </changeSet>
+    <changeSet id="1777390332349-21" author="asadbek">
+        <createIndex indexName="courses_slug_idx" tableName="courses" unique="true">
+            <column name="slug"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

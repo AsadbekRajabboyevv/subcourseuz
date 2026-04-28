@@ -15,11 +15,12 @@ import {
 export class ScienceService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
-  private readonly PATH = `${environment.apiPath}/v1/api/courses`;
+  private readonly PATH = `${environment.apiPath}/v1/api/sciences`;
+  private readonly PUBLIC_PATH = `${environment.apiPath}/v1/api/public`;
 
 
   get(): Observable<Base<CourseScience[]>> {
-    return this.http.get<Base<CourseScience[]>>(`${this.PATH}`);
+    return this.http.get<Base<CourseScience[]>>(`${this.PUBLIC_PATH}/sciences`);
   }
 
   getScienceById(id: number): Observable<Base<OneCourseScience>> {

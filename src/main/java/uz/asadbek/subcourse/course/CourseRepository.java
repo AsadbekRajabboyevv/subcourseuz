@@ -1,6 +1,7 @@
 package uz.asadbek.subcourse.course;
 
 import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -72,10 +73,12 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
                 u.lastName,
                 c.price,
                 c.imagePath,
-                c.lang
+                c.lang,
+                c.isPublished,
+                c.slug
         """)
     Page<CourseResponseDto> get(Pageable pageable,
-        CourseFilter filter, String lang, Long currentUserId);
+                                CourseFilter filter, String lang, Long currentUserId);
 
     @Query("""
             select new uz.asadbek.subcourse.course.dto.CourseResponseDto(
@@ -94,41 +97,42 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
             left join UserEntity u on c.ownerId = u.id
             left join CourseLessonEntity l on l.courseId = c.id
             left join UserCourseEntity sc on sc.id.referenceId = c.id
-            where c.deletedAt is null and c.slug = :slug
+            where c.slug = :slug and c.deletedAt is null
             group by c.id, c.name, u.firstName, u.lastName, c.price, c.imagePath, c.lang
         """)
     CourseResponseDto get(String slug);
+
     @Query("""
-    SELECT new uz.asadbek.subcourse.course.dto.CourseInfoResponseDto(
-      c.id,
-      c.name,
-      c.description,
-      CASE
-        WHEN :lang = 'uz' THEN g.name.nameUz
-        WHEN :lang = 'ru' THEN g.name.nameRu
-        ELSE g.name.nameUz
-      END,
-      CASE
-        WHEN :lang = 'uz' THEN s.name.nameUz
-        WHEN :lang = 'ru' THEN s.name.nameRu
-        ELSE s.name.nameUz
-      END,
-      c.duration,
-      c.durationType,
-      CONCAT(COALESCE(u.firstName, ''), ' ', COALESCE(u.lastName, '')),
-      c.price,
-      c.imagePath,
-      c.lang,
-      c.scienceId,
-      c.gradeId,
-      c.slug
-    )
-    FROM CourseEntity c
-    LEFT JOIN CourseGradeEntity g ON c.gradeId = g.id
-    LEFT JOIN ScienceEntity s ON c.scienceId = s.id
-    LEFT JOIN UserEntity u ON c.ownerId = u.id
-    WHERE c.slug = :slug AND c.deletedAt IS NULL
-""")
+            SELECT new uz.asadbek.subcourse.course.dto.CourseInfoResponseDto(
+              c.id,
+              c.name,
+              c.description,
+              CASE
+                WHEN :lang = 'uz' THEN g.name.nameUz
+                WHEN :lang = 'ru' THEN g.name.nameRu
+                ELSE g.name.nameUz
+              END,
+              CASE
+                WHEN :lang = 'uz' THEN s.name.nameUz
+                WHEN :lang = 'ru' THEN s.name.nameRu
+                ELSE s.name.nameUz
+              END,
+              c.duration,
+              c.durationType,
+              CONCAT(COALESCE(u.firstName, ''), ' ', COALESCE(u.lastName, '')),
+              c.price,
+              c.imagePath,
+              c.lang,
+              c.scienceId,
+              c.gradeId,
+              c.slug
+            )
+            FROM CourseEntity c
+            LEFT JOIN CourseGradeEntity g ON c.gradeId = g.id
+            LEFT JOIN ScienceEntity s ON c.scienceId = s.id
+            LEFT JOIN UserEntity u ON c.ownerId = u.id
+            WHERE c.slug = :slug AND c.deletedAt IS NULL
+        """)
     Optional<CourseInfoResponseDto> getCourseBasicInfo(String slug, String lang);
 
     boolean existsByIdAndScienceId(Long id, Long scienceId);
@@ -152,9 +156,10 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
         """)
     Optional<CourseUpdateRequestDto> getUpdateData(String slug);
 
-  boolean existsBySlug(String slug);
+    boolean existsBySlug(String slug);
 
-   Optional<Long> findIdBySlug(String slug);
+    @Query("SELECT id FROM CourseEntity where slug = :slug")
+    Optional<Long> findIdBySlug(String slug);
 
-   Optional<CourseEntity> findBySlug(String slug);
+    Optional<CourseEntity> findBySlug(String slug);
 }

@@ -14,6 +14,7 @@ import uz.asadbek.subcourse.course.filter.CourseFilter;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeResponseDto;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
 import uz.asadbek.subcourse.publicui.dto.HomePageResponseDto;
+import uz.asadbek.subcourse.science.dto.ScienceResponseDto;
 import uz.asadbek.subcourse.test.dto.TestResponseDto;
 import uz.asadbek.subcourse.test.filter.TestFilter;
 
@@ -32,6 +33,9 @@ public interface PublicApi {
 
     @GetMapping("/course-grades")
     BaseResponseDto<List<CourseGradeResponseDto>> getCourseGrades();
+
+    @GetMapping("/sciences")
+    BaseResponseDto<List<ScienceResponseDto>> getSciences();
 
     @GetMapping("/courses/{slug}/lessons")
     BaseResponseDto<List<CourseLessonResponseDto>> getCourseLessons(@PathVariable String slug);

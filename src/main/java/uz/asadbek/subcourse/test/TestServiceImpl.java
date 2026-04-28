@@ -65,7 +65,7 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public TestResponseDto get(Long id) {
-        var test = repository.get(id);
+        var test = repository.get(id).orElseThrow(()-> ExceptionUtil.build(NotFoundException.class, "error.not_found.test", id));
         var questions = testQuestionRepository.getByTestId(id);
         if (questions.isEmpty()) {
             test.setQuestions(List.of());

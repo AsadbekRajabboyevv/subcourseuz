@@ -88,6 +88,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseResponseDto get(String slug) {
+        log.info(slug);
         return repository.get(slug);
     }
 
