@@ -4,99 +4,106 @@
             <i class="fa-solid fa-home text-xl"></i>
             <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-gray-950"></span>
         </button>
-        <span class="text-gray-900 dark:text-gray-100 font-black text-2xl tracking-tight uppercase">{{ 'home.title' | translate }}</span>
+        <span i18n="@@HOME" class="text-gray-900 dark:text-gray-100 font-black text-2xl tracking-tight uppercase">
+            Bosh sahifa
+        </span>
     </div>
 
     <div content class="space-y-10 pb-10">
+
+        <!-- HERO -->
         <div class="rounded-[2.5rem] bg-gradient-to-br from-indigo-600 via-blue-600 to-emerald-500 p-8 md:p-12 text-white shadow-2xl relative overflow-hidden group">
             <div class="relative z-10 max-w-2xl">
-                <h1 class="mb-4 text-3xl md:text-5xl font-black tracking-tighter">{{ 'home.platform_name' | translate }}</h1>
-                <p class="mb-8 text-base md:text-lg opacity-90 font-medium">{{ 'home.welcome_message' | translate }}</p>
+                <h1 class="mb-4 text-3xl md:text-5xl font-black tracking-tighter" i18n="@@home.hero.title">
+                    Ta'lim platformasi
+                </h1>
+                <p class="mb-8 text-base md:text-lg opacity-90 font-medium" i18n="@@home.hero.description">
+                    Platformamizga xush kelibsiz. Bu yerda siz kurslar o'rganishingiz va test ishlashingiz mumkin.
+                </p>
+
                 <div class="flex flex-wrap gap-4">
                     <button class="flex items-center gap-3 rounded-2xl bg-white text-indigo-700 px-8 py-4 font-black text-xs uppercase active:scale-95 hover:rotate-2 transition-transform">
-                        <i class="fa-solid fa-play"></i> {{ 'home.view_courses' | translate }}
+                        <i class="fa-solid fa-play"></i> <span i18n="@@home.hero.view_courses">Kurslarni ko'rish</span>
                     </button>
                     <button class="flex items-center gap-3 rounded-2xl bg-white text-indigo-700 px-8 py-4 font-black text-xs uppercase active:scale-95 hover:rotate-2 transition-transform">
-                        <i class="fa-solid fa-play"></i> {{ 'home.take_test' | translate }}
+                        <i class="fa-solid fa-play"></i> <span i18n="@@home.hero.take_tests">Test ishlash</span>
                     </button>
                 </div>
             </div>
             <i class="fa-solid fa-graduation-cap absolute -right-10 -bottom-10 text-[15rem] text-white/10"></i>
         </div>
 
+        <!-- STAT -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div *ngFor="let stat of [
-        { l: 'home.active_courses', v: '24', i: 'fa-book-open', c: 'emerald', bh: 'hover:border-emerald-500' },
-        { l: 'home.students', v: '1,234', i: 'fa-users', c: 'blue', bh: 'hover:border-blue-500' },
-        { l: 'home.mentors', v: '45', i: 'fa-chalkboard-user', c: 'purple', bh: 'hover:border-purple-500' },
-        { l: 'home.tests', v: '156', i: 'fa-vial', c: 'orange', bh: 'hover:border-orange-500' }
-    ]"
+                { l: 'Faol kurslar', v: '24', i: 'fa-book-open', c: 'emerald', bh: 'hover:border-emerald-500' },
+                { l: 'Talabalar', v: '1,234', i: 'fa-users', c: 'blue', bh: 'hover:border-blue-500' },
+                { l: 'Mentorlar', v: '45', i: 'fa-chalkboard-user', c: 'purple', bh: 'hover:border-purple-500' },
+                { l: 'Testlar', v: '156', i: 'fa-vial', c: 'orange', bh: 'hover:border-orange-500' }
+            ]"
                  [ngClass]="stat.bh"
                  class="group rounded-3xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 dark:border-gray-800 dark:bg-gray-900 hover:shadow-md active:scale-95 hover:rotate-2">
 
-                <div class="text-sm text-gray-500">
-                    {{ stat.l | translate }}
-                </div>
-
-                <div class="text-2xl font-semibold">
-                    {{ stat.v }}
-                </div>
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{{stat.l}}</p>
-                        <p class="text-3xl font-black text-gray-900 dark:text-white transition-colors group-hover:text-gray-700 dark:group-hover:text-gray-100">
-                            {{stat.v}}
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+                            {{ stat.l }}
+                        </p>
+                        <p class="text-3xl font-black text-gray-900 dark:text-white">
+                            {{ stat.v }}
                         </p>
                     </div>
 
-                    <div class="rounded-2xl p-4 transition-all duration-300 group-hover:scale-110"
+                    <div class="rounded-2xl p-4"
                          [ngClass]="'bg-' + stat.c + '-100 text-' + stat.c + '-600 dark:bg-' + stat.c + '-900/30 dark:text-' + stat.c + '-400'">
                         <i class="fa-solid {{stat.i}} text-xl"></i>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- POPULAR COURSES -->
         <div>
             <div class="mb-6 flex items-center justify-between px-2">
-                <h2 class="text-xl font-black text-gray-900 dark:text-white uppercase">{{ 'home.popular_courses' | translate }}</h2>
+                <h2 class="text-xl font-black text-gray-900 dark:text-white uppercase" i18n="@@home.popular_courses.title">
+                    Mashhur kurslar
+                </h2>
                 <div class="hidden md:flex gap-3">
-                    <button (click)="prevSlide()" class="w-10 h-10 rounded-xl bg-white shadow-md hover:bg-indigo-600 hover:text-white transition-all dark:bg-gray-800">
+                    <button (click)="prevSlide()" class="w-10 h-10 rounded-xl bg-white shadow-md hover:bg-indigo-600 hover:text-white dark:bg-gray-800">
                         <i class="fa-solid fa-chevron-left"></i>
                     </button>
-                    <button (click)="nextSlide()" class="w-10 h-10 rounded-xl bg-white shadow-md hover:bg-indigo-600 hover:text-white transition-all dark:bg-gray-800">
+                    <button (click)="nextSlide()" class="w-10 h-10 rounded-xl bg-white shadow-md hover:bg-indigo-600 hover:text-white dark:bg-gray-800">
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>
                 </div>
             </div>
 
-            <div class="slider-container overflow-hidden cursor-grab active:cursor-grabbing"
-                 (touchstart)="onTouchStart($event)"
-                 (touchend)="onTouchEnd($event)">
-                <div class="slider-track flex transition-transform duration-500 ease-in-out"
+            <div class="slider-container overflow-hidden cursor-grab active:cursor-grabbing">
+                <div class="slider-track flex transition-transform duration-500"
                      [style.transform]="'translateX(-' + (currentSlideIndex * (100 / 6)) + '%)'">
 
                     @for (course of courses; track course.id) {
                         <div class="px-3" style="flex: 0 0 16.666%; min-width: 280px;">
-                            <div class="group h-full rounded-[2rem] border border-gray-100 bg-white shadow-sm hover:shadow-2xl hover:border-indigo-500 transition-all duration-300 dark:border-gray-800 dark:bg-gray-900">
+                            <div class="group h-full rounded-[2rem] border border-gray-100 bg-white shadow-sm hover:shadow-2xl hover:border-indigo-500 dark:border-gray-800 dark:bg-gray-900">
 
                                 <div class="relative h-40 overflow-hidden rounded-t-[2rem]">
-                                    <img [src]="course.image" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                                    <span class="absolute top-4 left-4 rounded-xl bg-white/20 backdrop-blur-md px-3 py-1 text-[9px] font-black text-white uppercase tracking-widest border border-white/20">
-                            {{course.category}}
-                        </span>
+                                    <img [src]="course.image" class="h-full w-full object-cover">
+                                    <span class="absolute top-4 left-4 rounded-xl bg-white/20 px-3 py-1 text-[9px] font-black text-white uppercase">
+                                        {{course.category}}
+                                    </span>
                                 </div>
 
                                 <div class="p-6">
-                                    <h3 class="mb-2 text-sm font-black text-gray-900 dark:text-white line-clamp-1 group-hover:text-indigo-600 transition-colors duration-300">
+                                    <h3 class="mb-2 text-sm font-black text-gray-900 dark:text-white">
                                         {{course.title}}
                                     </h3>
 
-                                    <div class="flex items-center justify-between border-t border-gray-50 pt-4 dark:border-gray-800">
-                            <span class="text-sm font-black text-indigo-600 dark:text-indigo-400">
-                                {{ (course.price/1000).toFixed(0) }}k UZS
-                            </span>
+                                    <div class="flex items-center justify-between border-t pt-4">
+                                        <span class="text-sm font-black text-indigo-600">
+                                            {{ (course.price/1000).toFixed(0) }}k UZS
+                                        </span>
 
-                                        <button class="w-8 h-8 rounded-lg bg-gray-50 text-gray-400 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300 dark:bg-gray-800">
+                                        <button class="w-8 h-8 rounded-lg bg-gray-50 text-gray-400 hover:bg-indigo-600 hover:text-white">
                                             <i class="fa-solid fa-arrow-right text-xs"></i>
                                         </button>
                                     </div>
@@ -107,29 +114,32 @@
                 </div>
             </div>
         </div>
+
+        <!-- ACTIONS -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <button *ngFor="let act of [
-        { t: 'home.test_solving', d: 'home.test_description', i: 'fa-puzzle-piece', c: 'emerald', borderH: 'hover:border-emerald-500' },
-        { t: 'home.library', d: 'home.library_description', i: 'fa-book', c: 'blue', borderH: 'hover:border-blue-500' },
-        { t: 'home.forum', d: 'home.forum_description', i: 'fa-comments', c: 'purple', borderH: 'hover:border-purple-500' }
-    ]"
+                { t: 'Test ishlash', d: 'Testlarni yechib bilimingizni sinab ko`ring', i: 'fa-puzzle-piece', c: 'emerald', borderH: 'hover:border-emerald-500' },
+                { t: 'Kutubxona', d: 'Kerakli materiallarni o`qing', i: 'fa-book', c: 'blue', borderH: 'hover:border-blue-500' },
+                { t: 'Forum', d: 'Boshqalar bilan fikr almashing', i: 'fa-comments', c: 'purple', borderH: 'hover:border-purple-500' }
+            ]"
                     [ngClass]="act.borderH"
-                    class="group flex items-center gap-5 rounded-[2rem] border border-gray-100 bg-white p-6 shadow-sm hover:shadow-xl transition-all duration-300 dark:border-gray-800 dark:bg-gray-900 active:scale-95 hover:rotate-2">
+                    class="group flex items-center gap-5 rounded-[2rem] border border-gray-100 bg-white p-6 shadow-sm hover:shadow-xl dark:border-gray-800 dark:bg-gray-900">
 
-                <div class="rounded-2xl p-4 transition-transform duration-300 group-hover:scale-110 shadow-inner"
+                <div class="rounded-2xl p-4"
                      [ngClass]="'bg-' + act.c + '-100 text-' + act.c + '-600 dark:bg-' + act.c + '-900/30 dark:text-' + act.c + '-400'">
                     <i class="fa-solid {{act.i}} text-xl"></i>
                 </div>
 
                 <div class="text-left">
-                    <h4 class="font-black text-sm text-gray-900 dark:text-white uppercase tracking-tight group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors">
-                        {{ act.t | translate }}
+                    <h4 class="font-black text-sm text-gray-900 dark:text-white uppercase">
+                        {{ act.t }}
                     </h4>
-                    <p class="text-xs text-gray-400 font-medium">
-                        {{ act.d | translate }}
+                    <p class="text-xs text-gray-400">
+                        {{ act.d }}
                     </p>
                 </div>
             </button>
         </div>
+
     </div>
 </app-page-wrapper>

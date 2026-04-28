@@ -2,7 +2,7 @@
   <div page-title>
     @if (lesson(); as data) {
       <nav class="mb-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
-        <a routerLink="/courses-list" class="hover:text-emerald-500">Kurslar</a>
+        <a routerLink="/courses-list" class="hover:text-emerald-500" i18n="@@course.title">Kurslar</a>
         <i class="fa-solid fa-chevron-right text-[7px]"></i>
         <a [routerLink]="['/courses-view', data.courseName]" [queryParams]="{id: data.courseId}" class="hover:text-emerald-500">{{ data.courseName }}</a>
         <i class="fa-solid fa-chevron-right text-[7px]"></i>
@@ -22,11 +22,8 @@
     } @else if (lesson(); as data) {
       <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
 
-        <!-- Main content -->
         <div class="lg:col-span-8 space-y-6">
-
-          <!-- Video -->
-          @if (getYoutubeId(data.videoUrl)) {
+            @if (getYoutubeId(data.videoUrl)) {
             <div class="overflow-hidden rounded-[2.5rem] bg-black aspect-video shadow-2xl border border-gray-100 dark:border-gray-800">
               <iframe
                 [src]="'https://www.youtube-nocookie.com/embed/' + getYoutubeId(data.videoUrl)"
@@ -38,20 +35,18 @@
             </div>
           }
 
-          <!-- Text content — markdown rendered -->
           @if (data.textContent) {
             <div class="rounded-[2.5rem] bg-white p-8 shadow-sm border border-gray-100 dark:bg-gray-800/50 dark:border-gray-800">
-              <h3 class="mb-6 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500">Dars matni</h3>
+              <h3 class="mb-6 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500" i18n="@@lesson.content_label">Dars matni</h3>
               <div class="md-preview-body">
                 <markdown [data]="data.textContent"></markdown>
               </div>
             </div>
           }
 
-          <!-- Files -->
-          @if (data.fileUrls?.length) {
+          @if (data.fileUrls.length) {
             <div class="rounded-[2.5rem] bg-white p-8 shadow-sm border border-gray-100 dark:bg-gray-800/50 dark:border-gray-800">
-              <h3 class="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500">Qo'shimcha fayllar</h3>
+              <h3 class="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500" i18n="@@lesson.additional_files">Qo'shimcha fayllar</h3>
               <div class="space-y-2">
                 @for (url of data.fileUrls; track url) {
                   <a [href]="url" target="_blank" rel="noopener"
@@ -66,37 +61,32 @@
 
         </div>
 
-        <!-- Sidebar -->
         <div class="lg:col-span-4">
           <div class="sticky top-28 space-y-6">
-
-            <!-- Course card -->
-            <div class="overflow-hidden rounded-[2.5rem] bg-white shadow-xl border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
+              <div class="overflow-hidden rounded-[2.5rem] bg-white shadow-xl border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
               <div class="relative h-40 overflow-hidden">
                 <img [src]="data.courseImagePath" class="h-full w-full object-cover">
                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-transparent to-transparent"></div>
                 <div class="absolute bottom-4 left-5">
-                  <span class="text-[9px] font-black uppercase tracking-widest text-white/70">Kurs:</span>
+                  <span class="text-[9px] font-black uppercase tracking-widest text-white/70" i18n="@@course.title">Kurs:</span>
                   <p class="text-sm font-black text-white leading-tight">{{ data.courseName }}</p>
                 </div>
               </div>
               <div class="p-6 space-y-3">
                 <div class="flex items-center justify-between rounded-2xl bg-gray-50 p-3 dark:bg-gray-800/40">
-                  <span class="text-[9px] font-black text-gray-400 uppercase">Dars raqami</span>
-                  <span class="text-[11px] font-black dark:text-white">#{{ data.lessonNumber }}</span>
+                  <span class="text-[9px] font-black text-gray-400 uppercase" i18n="@@lesson.lesson_number">Dars raqami</span>
+                  <span class="text-[11px] font-black dark:text-white" i18n="@@lesson.lesson_number_value">#{{ data.lessonNumber }}</span>
                 </div>
                 <div class="flex items-center justify-between rounded-2xl bg-gray-50 p-3 dark:bg-gray-800/40">
-                  <span class="text-[9px] font-black text-gray-400 uppercase">Holat</span>
-                  <span class="text-[9px] font-black uppercase"
-                        [class]="data.isPublished ? 'text-emerald-500' : 'text-amber-500'">
-                    {{ data.isPublished ? 'Nashr qilingan' : 'Qoralama' }}
-                  </span>
+                  <span class="text-[9px] font-black text-gray-400 uppercase" i18n="@@lesson.status_label">Holat</span>
+                  <span class="text-[11px] font-black uppercase" i18n="@@lesson.status_published" *ngIf="data.isPublished">Nashr qilingan</span>
+                  <span class="text-[11px] font-black uppercase" i18n="@@lesson.status_draft" *ngIf="!data.isPublished">Qoralama</span>
                 </div>
                 @if (authService.isAdmin()) {
                   <a [routerLink]="['/courses-lesson-edit', data.name]" [queryParams]="{id: data.id}"
                      class="flex items-center justify-center gap-2 w-full rounded-2xl bg-amber-500 py-4 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-amber-500/20 hover:bg-amber-600 transition-all active:scale-95">
                     <i class="fa-solid fa-pen-to-square text-xs"></i>
-                    Darsni tahrirlash
+                    <span i18n="@@lesson.update_button">Darsni tahrirlash</span>
                   </a>
                 }
               </div>

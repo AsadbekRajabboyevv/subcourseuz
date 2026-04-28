@@ -117,7 +117,7 @@ public class PaymentServiceImpl implements PaymentService {
         if (amount > 0) {
             balanceService.debit(amount);
         } else {
-            log.info("[PaymentServiceImpl] Xarid kupon orqali tekin amalga oshirilmoqda. CourseId: {}", courseId);
+            log.info("[PaymentServiceImpl] Xarid kupon orqali tekin amalga oshirilmoqda. CourseId: {}", courseSlug);
         }
 
         var payment = buildPayment(course, test, amount, balance.getCurrency());
@@ -127,7 +127,7 @@ public class PaymentServiceImpl implements PaymentService {
         if (testId != null) {
             testService.enroll(testId);
         } else {
-            courseService.enroll(courseId);
+            courseService.enroll(courseSlug);
         }
 
         return PaymentResponseDto.builder()

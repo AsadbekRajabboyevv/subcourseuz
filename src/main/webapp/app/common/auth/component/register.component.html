@@ -2,27 +2,27 @@
       <div class="w-full max-w-2xl rounded-[3rem] border border-gray-100 bg-white p-8 shadow-2xl hover:border-emerald-500 transition-all duration-500 dark:border-gray-800 dark:bg-gray-900 md:p-16">
 
           <div class="mb-12 text-center">
-              <h2 class="text-4xl font-black tracking-tighter text-gray-900 dark:text-white uppercase">Ro'yxatdan o'tish</h2>
-              <p class="mt-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">Professional hamjamiyatga qo'shiling</p>
+              <h2 class="text-4xl font-black tracking-tighter text-gray-900 dark:text-white uppercase" i18n="@@auth.register.title">Ro'yxatdan o'tish</h2>
+              <p class="mt-2 text-[10px] font-bold uppercase tracking-widest text-gray-400" i18n="@@auth.register.subtitle">Professional hamjamiyatga qo'shiling</p>
           </div>
 
             <form (submit)="onRegister()" class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                 <div class="md:col-span-2">
-                    <app-input type="text" label="Email" placeholder="asadbek@example.com" [(ngModel)]="regData.email" name="email"></app-input>
+                    <app-input type="text" label="Email" i18n-label="@@auth.register.email_label" placeholder="asadbek@example.com" i18n-placeholder="@@auth.register.email_placeholder" [(ngModel)]="regData.email" name="email"></app-input>
                 </div>
 
-                <app-input type="text" label="Ism" placeholder="Asadbek" [(ngModel)]="regData.firstName" name="firstName"></app-input>
-                <app-input type="text" label="Familiya" placeholder="Rajabboyev" [(ngModel)]="regData.lastName" name="lastName"></app-input>
+                <app-input type="text" label="Ism" i18n-label="@@auth.register.first_name_label" placeholder="Asadbek" i18n-placeholder="@@auth.register.first_name_placeholder" [(ngModel)]="regData.firstName" name="firstName"></app-input>
+                <app-input type="text" label="Familiya" i18n-label="@@auth.register.last_name_label" placeholder="Rajabboyev" i18n-placeholder="@@auth.register.last_name_placeholder" [(ngModel)]="regData.lastName" name="lastName"></app-input>
 
                 <div class="md:col-span-2">
-                    <app-input type="text" label="Parol" placeholder="Kamida 8 ta belgi" [(ngModel)]="regData.password" name="password"></app-input>
+                    <app-input type="text" label="Parol" i18n-label="@@auth.register.password_label" placeholder="Kamida 8 ta belgi" i18n-placeholder="@@auth.register.password_placeholder" [(ngModel)]="regData.password" name="password"></app-input>
                 </div>
 
-                <app-input type="text" label="Telefon" placeholder="+998 90 123 45 67" [(ngModel)]="regData.phone" name="phone"></app-input>
-                <app-input type="date" label="Tug'ilgan sana" [(ngModel)]="regData.birthDate" name="birthDate"></app-input>
+                <app-input type="text" label="Telefon" i18n-label="@@auth.register.phone_label" placeholder="+998 90 123 45 67" i18n-placeholder="@@auth.register.phone_placeholder" [(ngModel)]="regData.phone" name="phone"></app-input>
+                <app-input type="date" label="Tug'ilgan sana" i18n-label="@@auth.register.birth_date_label" [(ngModel)]="regData.birthDate" name="birthDate"></app-input>
                 <div class="md:col-span-2">
-                    <app-input type="select" label="Lavozimingiz (Position)"
+                    <app-input type="select" label="Lavozimingiz (Position)" i18n-label="@@auth.register.position_label"
                         [options]="[
               {label: 'O`qituvchi', value: 'OQITUVCHI'},
               {label: 'Talaba', value: 'TALABA'},
@@ -35,21 +35,21 @@
                 </div>
 
                 <div class="md:col-span-2">
-                    <app-input type="text" label="O'zingiz haqingizda (Bio)" placeholder="Tajribangiz haqida qisqacha..." [(ngModel)]="regData.bio" name="bio"></app-input>
+                    <app-input type="text" label="O'zingiz haqingizda (Bio)" i18n-label="@@auth.register.bio_label" placeholder="Tajribangiz haqida qisqacha..." i18n-placeholder="@@auth.register.bio_placeholder" [(ngModel)]="regData.bio" name="bio"></app-input>
                 </div>
 
                 <div class="md:col-span-2 mt-4">
                     <button type="submit"
                             class="w-full rounded-[1.5rem] bg-emerald-600 py-6 text-xs font-black uppercase tracking-[0.2em] text-white shadow-xl hover:bg-emerald-700 hover:scale-[1.01] transition-all active:scale-95">
-                        Ro'yxatdan o'tish
+                        <span i18n="@@auth.register.button">Ro'yxatdan o'tish</span>
                   </button>
               </div>
           </form>
 
           <div class="mt-10 text-center">
               <p class="text-[10px] font-black uppercase tracking-widest text-gray-400">
-                  Akkauntingiz bormi?
-                  <a routerLink="/auth/login" class="ml-1 text-emerald-600 hover:underline">Tizimga kirish</a>
+                  <span i18n="@@auth.register.has_account">Akkauntingiz bormi?</span>
+                  <a routerLink="/auth/login" class="ml-1 text-emerald-600 hover:underline"><span i18n="@@auth.register.login_link">Tizimga kirish</span></a>
               </p>
           </div>
       </div>

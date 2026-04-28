@@ -29,7 +29,7 @@ export interface UploadingFile {
     multi: true
   }],
   templateUrl: './markdown-editor.component.html',
-  styleUrls: ['./markdown-editor.component.css']
+  styleUrls: ['./markdown-editor.component.scss']
 })
 export class MarkdownEditorComponent implements ControlValueAccessor, AfterViewInit, OnDestroy {
   @Input() placeholder = 'Leave a comment';

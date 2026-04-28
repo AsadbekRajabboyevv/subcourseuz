@@ -27,7 +27,7 @@ export class LangSwitcherComponent {
 
   languages = [
     { code: 'uz', name: "O'zbek", flag: '🇺🇿' },
-    { code: 'uz-cyrl', name: 'Ўзбекча', flag: '🇺🇿' },
+    { code: 'uz-Cyrl', name: 'Ўзбекча', flag: '🇺🇿' },
     { code: 'ru', name: 'Русский', flag: '🇷🇺' },
     { code: 'en', name: 'English', flag: '🇺🇸' }
   ];

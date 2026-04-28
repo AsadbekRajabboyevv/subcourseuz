@@ -2,14 +2,14 @@
     <div page-title class="flex flex-col md:flex-row md:items-center justify-between gap-4 w-full">
         <div>
             <nav class="mb-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
-                <a routerLink="/" class="hover:text-emerald-500">Asosiy</a>
+                <a routerLink="/" class="hover:text-emerald-500" i18n="@@common.home">Asosiy</a>
                 <i class="fa-solid fa-chevron-right text-[7px]"></i>
-                <a routerLink="/courses-list" class="hover:text-emerald-500 transition-colors">Kurslar</a>
+                <a routerLink="/courses-list" class="hover:text-emerald-500 transition-colors" i18n="@@course.title">Kurslar</a>
                 <i class="fa-solid fa-chevron-right text-[7px]"></i>
-                <span class="text-emerald-500">Yangi kurs yaratish</span>
+                <span class="text-emerald-500" i18n="@@course.create.title">Yangi kurs yaratish</span>
             </nav>
-            <h1 class="text-2xl font-black uppercase tracking-tight text-gray-900 dark:text-white">Yangi kurs yaratish</h1>
-            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Kurs ma'lumotlarini to'ldiring</p>
+            <h1 class="text-2xl font-black uppercase tracking-tight text-gray-900 dark:text-white" i18n="@@course.create.title">Yangi kurs yaratish</h1>
+            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400" i18n="@@course.create.subtitle">Kurs ma'lumotlarini to'ldiring</p>
         </div>
     </div>
 
@@ -20,13 +20,13 @@
             <div class="col-span-12 lg:col-span-8 space-y-6">
                 <div class="rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-2xl dark:border-gray-800 dark:bg-gray-900">
                     <div class="space-y-6">
-                        <app-input label="Kurs nomi" placeholder="Masalan: Java Backend Development"
+                        <app-input label="Kurs nomi" i18n-label="@@course.name_label" placeholder="Masalan: Java Backend Development" i18n-placeholder="@@course.name_placeholder"
                                    [(ngModel)]="courseForm.name" name="name" required></app-input>
 
                         <app-input
                             type="markdown"
-                            label="Kurs haqida batafsil ma'lumot"
-                            placeholder="Kurs mazmuni, nimalar o'rgatilishi haqida batafsil yozing..."
+                            label="Kurs haqida batafsil ma'lumot" i18n-label="@@course.description_label"
+                            placeholder="Kurs mazmuni, nimalar o'rgatilishi haqida batafsil yozing..." i18n-placeholder="@@course.description_placeholder"
                             [(ngModel)]="courseForm.description"
                             name="description">
                         </app-input>
@@ -37,7 +37,7 @@
             <div class="col-span-12 lg:col-span-4 space-y-6">
 
                 <div class="rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-2xl dark:border-gray-800 dark:bg-gray-900">
-                    <label class="mb-4 block text-[10px] font-black uppercase tracking-widest text-gray-400">Kurs muqovasi</label>
+                    <label class="mb-4 block text-[10px] font-black uppercase tracking-widest text-gray-400" i18n="@@course.cover_image">Kurs muqovasi</label>
                     <div class="active:scale-95 hover:rotate-2 relative group aspect-video cursor-pointer overflow-hidden rounded-[2rem] border-2 border-dashed border-gray-200 hover:border-emerald-500 transition-all bg-gray-50 dark:bg-gray-800/50">
                         <input type="file"
                                (change)="onImageSelected($event)"
@@ -52,8 +52,8 @@
                         } @else {
                             <div class="h-full flex flex-col items-center justify-center text-gray-400 text-center p-4">
                                 <i class="fa-solid fa-cloud-arrow-up text-3xl mb-2 group-hover:text-emerald-500 transition-colors"></i>
-                                <span class="text-[9px] font-black uppercase tracking-widest">Rasm tanlang</span>
-                                <p class="text-[8px] mt-1 font-medium italic opacity-60">(JPG, PNG max 2MB)</p>
+                                <span class="text-[9px] font-black uppercase tracking-widest" i18n="@@course.select_image">Rasm tanlang</span>
+                                <p class="text-[8px] mt-1 font-medium italic opacity-60" i18n="@@course.image_requirements">(JPG, PNG max 2MB)</p>
                             </div>
                         }
                     </div>
@@ -66,19 +66,19 @@
 
                 <div class="rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-2xl dark:border-gray-800 dark:bg-gray-900 space-y-5">
 
-                    <app-input type="number" label="Kurs narxi (UZS)" placeholder="500 000" [(ngModel)]="courseForm.price" name="price"></app-input>
+                    <app-input type="number" label="Kurs narxi (UZS)" i18n-label="@@course.price_label" placeholder="500 000" i18n-placeholder="@@course.price_placeholder" [(ngModel)]="courseForm.price" name="price"></app-input>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <app-input type="select" label="Fan" [options]="sciences()" [(ngModel)]="courseForm.scienceId" name="scienceId" required></app-input>
-                        <app-input type="select" label="Sinf" [options]="grades()" [(ngModel)]="courseForm.gradeId" name="gradeId" required></app-input>
+                        <app-input type="select" label="Fan" i18n-label="@@course.science_label" [options]="sciences()" [(ngModel)]="courseForm.scienceId" name="scienceId" required></app-input>
+                        <app-input type="select" label="Sinf" i18n-label="@@course.grade_label" [options]="grades()" [(ngModel)]="courseForm.gradeId" name="gradeId" required></app-input>
                     </div>
 
                     <div class="flex gap-4 items-end">
-                        <app-input type="number" label="Davomiyligi" placeholder="12" [(ngModel)]="courseForm.duration" name="duration" required class="flex-1"></app-input>
-                        <app-input type="select" label="Birligi" [options]="durationTypes" [(ngModel)]="courseForm.durationType" name="durationType" required class="w-1/3"></app-input>
+                        <app-input type="number" label="Davomiyligi" i18n-label="@@course.duration_label" placeholder="12" [(ngModel)]="courseForm.duration" name="duration" required class="flex-1"></app-input>
+                        <app-input type="select" label="Birligi" i18n-label="@@course.duration_type_label" [options]="durationTypes" [(ngModel)]="courseForm.durationType" name="durationType" required class="w-1/3"></app-input>
                     </div>
 
-                    <app-input type="select" label="Kurs tili" [options]="languages" [(ngModel)]="courseForm.lang" name="lang"></app-input>
+                    <app-input type="select" label="Kurs tili" i18n-label="@@course.language_label" [options]="languages" [(ngModel)]="courseForm.lang" name="lang"></app-input>
 
                     <hr class="border-gray-50 dark:border-gray-800 my-2">
 
@@ -88,7 +88,7 @@
                                 <input type="checkbox" [(ngModel)]="courseForm.isVideoCourse" name="isVideoCourse"
                                        class="peer h-6 w-6 rounded-lg border-2 border-gray-200 text-emerald-500 transition-all checked:border-emerald-500 focus:ring-emerald-500">
                             </div>
-                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 group-hover:text-emerald-500 transition-colors">Video Kurs</span>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 group-hover:text-emerald-500 transition-colors" i18n="@@course.video_course">Video Kurs</span>
                         </label>
 
                         <label class="flex items-center gap-3 cursor-pointer group">
@@ -96,7 +96,7 @@
                                 <input type="checkbox" [(ngModel)]="courseForm.isPublished" name="isPublished"
                                        class="peer h-6 w-6 rounded-lg border-2 border-gray-200 text-orange-500 transition-all checked:border-orange-500 focus:ring-orange-500">
                             </div>
-                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 group-hover:text-orange-500 transition-colors">Hoziroq nashr qilish</span>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 group-hover:text-orange-500 transition-colors" i18n="@@course.publish_course">Hoziroq nashr qilish</span>
                         </label>
                     </div>
                 </div>
@@ -107,10 +107,10 @@
                     @if (isLoading()) {
                         <span class="flex items-center justify-center gap-2">
                             <i class="fa-solid fa-circle-notch animate-spin text-lg"></i>
-                            Saqlanmoqda...
+                            <span i18n="@@course.saving">Saqlanmoqda...</span>
                         </span>
                     } @else {
-                        <span>Yaratishni yakunlash</span>
+                        <span i18n="@@course.create_button">Yaratishni yakunash</span>
                     }
                 </button>
             </div>

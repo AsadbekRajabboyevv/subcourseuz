@@ -2,18 +2,20 @@
     <div page-title class="flex flex-col md:flex-row md:items-center justify-between gap-6 w-full px-2 md:px-0">
         <div class="space-y-1">
             <nav class="mb-2 flex items-center gap-2 text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
-                <a routerLink="/" class="hover:text-emerald-500">{{ 'course.home' | translate }}</a>
+                <a routerLink="/" class="hover:text-emerald-500" i18n="@@common.home">Bosh sahifa</a>
                 <i class="fa-solid fa-chevron-right text-[7px]"></i>
-                <a routerLink="/courses-list" class="text-emerald-500">{{ 'course.title' | translate }}</a>
+                <a routerLink="/courses-list" class="text-emerald-500" i18n="@@course.title">Kurslar</a>
             </nav>
-            <h1 class="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-white uppercase">{{ 'course.course_list' | translate }}</h1>
+            <h1 class="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-white uppercase" i18n="@@course.list.title">
+                Kurslar ro'yxati
+            </h1>
         </div>
 
         @if (authService.isAdmin()) {
             <button routerLink="/courses-create"
                     class="group flex items-center justify-center gap-2 rounded-2xl bg-gray-900 px-6 py-3.5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl transition-all hover:bg-emerald-600 active:scale-95 dark:bg-emerald-600">
                 <i class="fa-solid fa-plus text-xs"></i>
-                <span>{{ 'course.create_course' | translate }}</span>
+                <span i18n="@@course.create.button">Kurs yaratish</span>
             </button>
         }
     </div>
@@ -29,7 +31,9 @@
                         <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10">
                             <i class="fa-solid fa-sliders text-xs"></i>
                         </div>
-                        <span class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">{{ 'course.filter' | translate }}</span>
+                        <span class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white" i18n="@@common.filter">
+                            Filtr
+                        </span>
                     </div>
                     <i class="fa-solid transition-transform duration-300 text-gray-400"
                        [class.rotate-180]="isFilterVisible"
@@ -38,34 +42,40 @@
 
                 <div [class.hidden]="!isFilterVisible" class="lg:block p-4 lg:p-0 space-y-5">
                     <div class="hidden lg:flex items-center justify-between mb-2">
-                        <h3 class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">{{ 'course.filter' | translate }}</h3>
-                        <button (click)="resetFilters()" class="text-[9px] font-bold uppercase text-gray-400 hover:text-red-500">{{ 'course.clear' | translate }}</button>
+                        <h3 class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white" i18n="@@common.filter">
+                            Filtr
+                        </h3>
+                        <button (click)="resetFilters()" class="text-[9px] font-bold uppercase text-gray-400 hover:text-red-500" i18n="@@common.clear">
+                            Tozalash
+                        </button>
                     </div>
 
                     <div class="space-y-4">
-                        <app-input type="text" label="{{ 'course.search_courses' | translate }}" placeholder="{{ 'course.search_by_name' | translate }}" [(ngModel)]="filter.search"></app-input>
+                        <app-input type="text" label="Qidirish" i18n-label="@@common.search" placeholder="nom orqali qidirish" i18n-placeholder="@@course.search_placeholder" [(ngModel)]="filter.search"></app-input>
 
                         <div class="grid grid-cols-2 gap-3">
-                            <app-input type="number" label="{{ 'course.price_from' | translate }}" placeholder="0" [(ngModel)]="filter.priceFrom"></app-input>
-                            <app-input type="number" label="{{ 'course.price_to' | translate }}" placeholder="Max" [(ngModel)]="filter.priceTo"></app-input>
+                            <app-input type="number" label="dan" i18n-label="@@common.from" placeholder="0" [(ngModel)]="filter.priceFrom"></app-input>
+                            <app-input type="number" label="gacha" i18n-label="@@common.to" placeholder="Max" [(ngModel)]="filter.priceTo"></app-input>
                         </div>
 
-                        <app-input type="select" label="{{ 'course.language' | translate }}" [options]="languages" [(ngModel)]="filter.lang"></app-input>
+                        <app-input type="select" label="Til" i18n-label="@@common.language" [options]="languages" [(ngModel)]="filter.lang"></app-input>
 
                         <div class="rounded-2xl bg-gray-50/50 p-4 dark:bg-gray-800/30 space-y-2 border border-gray-100 dark:border-gray-800">
-                            <p class="text-[8px] font-black uppercase text-gray-400 tracking-widest">{{ 'course.duration' | translate }}</p>
+                            <p class="text-[8px] font-black uppercase text-gray-400 tracking-widest" i18n="@@common.time">Vaqt</p>
                             <div class="flex gap-2">
-                                <app-input type="number" placeholder="{{ 'course.value' | translate }}" [(ngModel)]="filter.duration" class="w-2/3"></app-input>
+                                <app-input type="number" [(ngModel)]="filter.duration" class="w-2/3"></app-input>
                                 <app-input type="select" [options]="durationTypes" [(ngModel)]="filter.durationType" class="w-1/3"></app-input>
                             </div>
                         </div>
 
                         <button (click)="applyFilters(); isFilterVisible = false"
                                 class="w-full rounded-2xl bg-emerald-600 py-4 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-emerald-500/20 active:scale-95 transition-all">
-                            {{ 'course.view_results' | translate }}
+                            <span i18n="@@course.apply_filter">Natijani ko'rsatish</span>
                         </button>
 
-                        <button (click)="resetFilters()" class="w-full lg:hidden text-[9px] font-black uppercase text-gray-400 py-2">{{ 'course.clear' | translate }}</button>
+                        <button (click)="resetFilters()" class="w-full lg:hidden text-[9px] font-black uppercase text-gray-400 py-2">
+                            <span i18n="@@common.clear">Tozalash</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -78,12 +88,12 @@
                     <button (click)="changeTab(true)"
                             [class]="filter.isPublished ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-400'"
                             class="whitespace-nowrap border-b-2 px-4 py-4 text-[10px] font-black uppercase tracking-widest transition-all">
-                        <i class="fa-solid fa-circle-check mr-2"></i> {{ 'course.published' | translate }}
+                        <i class="fa-solid fa-circle-check mr-2"></i> <span i18n="@@course.published">Yuklanganlar</span>
                     </button>
                     <button (click)="changeTab(false)"
                             [class]="!filter.isPublished ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-400'"
                             class="whitespace-nowrap border-b-2 px-4 py-4 text-[10px] font-black uppercase tracking-widest transition-all">
-                        <i class="fa-solid fa-clock-rotate-left mr-2"></i> {{ 'course.drafts' | translate }}
+                        <i class="fa-solid fa-clock-rotate-left mr-2"></i> <span i18n="@@course.drafts">Qoralamalar</span>
                     </button>
                 </div>
             }
@@ -96,12 +106,12 @@
                     }
                 }
 
-                @for (course of courseService.courses(); track course.id) {
+                @for (course of courseService.courses(); track course.slug) {
                     <div class="active:scale-[0.98] hover:rotate-2 group relative flex flex-col rounded-[2.5rem] border border-gray-100 bg-white p-3 md:p-4 transition-all hover:border-emerald-500 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900">
 
                         @if (!course.isPublished) {
                             <div class="absolute top-5 right-5 z-20 rounded-full bg-orange-500 px-2 py-0.5 text-[7px] font-black text-white uppercase shadow-lg">
-                                {{ 'course.draft' | translate }}
+                                <span i18n="@@course.draft">Qoralama</span>
                             </div>
                         }
 
@@ -115,23 +125,28 @@
 
                         <div class="mt-4 md:mt-5 px-1 flex-1 flex flex-col">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-[8px] font-black uppercase text-emerald-500 tracking-tighter truncate max-w-[100px]">{{ course.ownerName }}</span>
-                                <span class="text-[8px] font-bold text-gray-400">{{ course.lessonsCount }} {{ 'course.lessons' | translate }}</span>
+                                <span class="text-[8px] font-black uppercase text-emerald-500 tracking-tighter truncate max-w-[100px]">
+                                    {{ course.ownerName }}
+                                </span>
+                                <span class="text-[8px] font-bold text-gray-400">
+                                    <span i18n="@@course.lessons_count">Darslar soni</span>: {{ course.lessonsCount }}
+                                </span>
                             </div>
+
                             <h3 class="text-md md:text-lg font-black tracking-tight text-gray-900 dark:text-white line-clamp-2 leading-tight">
                                 {{ course.name }}
                             </h3>
 
                             <div class="mt-auto pt-4 md:pt-5 flex items-center justify-between">
                                 <div>
-                                    <p class="text-[7px] font-bold uppercase text-gray-400">{{ 'course.price' | translate }}</p>
+                                    <p class="text-[7px] font-bold uppercase text-gray-400" i18n="@@course.price">Narx</p>
                                     <p class="text-sm md:text-md font-black text-gray-900 dark:text-emerald-400">
                                         {{ course.price | number }} <small class="text-[8px]">UZS</small>
                                     </p>
                                 </div>
+
                                 <div class="flex items-center gap-1.5 md:gap-2">
-                                    <button [routerLink]="['/courses-view/', course.name]"
-                                            [queryParams]="{ id: course.id }"
+                                    <button [routerLink]="['/courses-view/', course.slug]"
                                             class="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-xl bg-gray-900 text-white transition-all hover:bg-emerald-600 dark:bg-white dark:text-gray-900 active:scale-95">
                                         <i class="fa-solid fa-eye text-[10px]"></i>
                                     </button>
@@ -142,9 +157,9 @@
                                             <i class="fa-solid fa-cart-shopping text-[10px]"></i>
                                         </button>
                                     }
+
                                     @if (authService.isAdmin()) {
-                                        <button [routerLink]="['/courses-update/', course.name]"
-                                                [queryParams]="{ id: course.id}"
+                                        <button [routerLink]="['/courses-update/', course.slug]"
                                                 class="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-xl bg-orange-500 text-white active:scale-95">
                                             <i class="fa-solid fa-pen-to-square text-[10px]"></i>
                                         </button>
@@ -159,12 +174,15 @@
             @if (!courseService.isLoading() && courseService.courses().length === 0) {
                 <div class="py-20 text-center opacity-30">
                     <i class="fa-solid fa-box-open text-5xl mb-4 text-gray-300"></i>
-                    <p class="font-black uppercase tracking-widest text-xs">{{ 'course.no_courses_found' | translate }}</p>
+                    <p class="font-black uppercase tracking-widest text-xs">
+                        <span i18n="@@course.no_courses">Kurslar topilmadi</span>
+                    </p>
                 </div>
             }
         </main>
     </div>
 </app-page-wrapper>
+
 @if (showPaymentModal && selectedItem) {
     <app-payment-modal
         [item]="selectedItem"

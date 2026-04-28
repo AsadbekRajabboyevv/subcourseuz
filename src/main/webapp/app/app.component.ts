@@ -4,17 +4,21 @@ import { NavigationStart, NavigationEnd, Router, RouterOutlet } from '@angular/r
 import { HeaderComponent } from "./common/header/app.header.component";
 import { FooterComponent } from "./common/footer/app.footer.component";
 import {ErrorModalComponent} from "./common/error/error-modal.component";
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, ErrorModalComponent, TranslateModule],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    HeaderComponent,
+    FooterComponent,
+    ErrorModalComponent,
+  ],
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
   private router = inject(Router);
-  private translateService = inject(TranslateService);
 
   isAuthPage = false;
   msgSuccess: string | null = null;
@@ -23,11 +27,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     // Translate service ni initialize qilish
-    this.translateService.setDefaultLang('uz');
-    
+
     // LocalStorage dan tilni olish
     const savedLang = localStorage.getItem('selectedLanguage') || 'uz';
-    this.translateService.use(savedLang);
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {

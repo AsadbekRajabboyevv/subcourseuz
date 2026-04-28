@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, HostListener, signal } from '@angular/core';
+import { Component, OnInit, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { InputComponent } from "../../../shared/ui/forms/input.component";
@@ -7,13 +7,12 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { PaymentService } from "../../payment/payment.service";
 import { PaymentModalComponent } from "../../payment/modal/payment-modal.component";
 import { AuthService } from "../../../common/auth/auth.service";
-import { TestService } from "../test.service"; // TestService bor deb hisoblaymiz
-import { TranslateModule } from '@ngx-translate/core';
+import { TestService } from "../test.service";
 
 @Component({
   selector: 'app-test-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputComponent, PageWrapperComponent, RouterLink, PaymentModalComponent, TranslateModule],
+  imports: [CommonModule, FormsModule, InputComponent, PageWrapperComponent, RouterLink, PaymentModalComponent],
   templateUrl: './test-list.component.html'
 })
 export class TestListComponent implements OnInit {
@@ -32,7 +31,6 @@ export class TestListComponent implements OnInit {
   selectedItem: any = null;
   paymentType: 'COURSE' | 'TEST' = 'TEST';
 
-  // Test uchun filterlar
   filter = {
     search: '',
     isPublished: true,
@@ -41,7 +39,7 @@ export class TestListComponent implements OnInit {
   };
 
   languages = [
-    { label: 'O\'zbekcha', value: 'UZ' },
+    { label: 'O‘zbekcha', value: 'UZ' },
     { label: 'Ruscha', value: 'RU' },
     { label: 'Inglizcha', value: 'EN' }
   ];
@@ -49,49 +47,43 @@ export class TestListComponent implements OnInit {
   ngOnInit() {
     this.applyFilters();
 
-    // Login'dan keyin avtomatik modal ochish (Test uchun)
     this.route.queryParams.subscribe(params => {
-      const buyNow = params['buyNow'];
-      const testId = params['id'];
-      if (buyNow === 'true' && testId) {
-        this.handleAutoOpenAfterLogin(Number(testId));
+      if (params['buyNow'] === 'true' && params['id']) {
+        this.handleAutoOpenAfterLogin(Number(params['id']));
       }
     });
   }
 
-  @HostListener('window:scroll', ['$event'])
+  @HostListener('window:scroll')
   onScroll() {
-    const pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
+    const pos = window.scrollY + window.innerHeight;
     const max = document.documentElement.scrollHeight;
 
-    if (pos >= max - 300) {
-      if (!this.loading && this.hasMore) {
-        this.loadData();
-      }
+    if (pos >= max - 300 && !this.loading && this.hasMore) {
+      this.loadData();
     }
   }
 
   loadData() {
     if (this.loading || !this.hasMore) return;
+
     this.loading = true;
 
     this.testService.get(this.page, this.size, this.filter).subscribe({
       next: (res) => {
-        const newData = res.data.content;
+        const data = res.data.content;
 
-        if (this.page === 0) {
-          this.testService.setTests(newData);
-        } else {
-          this.testService.appendTests(newData);
-        }
+        this.page === 0
+          ? this.testService.setTests(data)
+          : this.testService.appendTests(data);
 
         this.hasMore = !res.data.last;
         this.page++;
+
         this.loading = false;
         this.checkIfNeedMoreContent();
       },
-      error: (err) => {
-        console.error("Testlarni yuklashda xato:", err);
+      error: () => {
         this.loading = false;
       }
     });
@@ -102,7 +94,7 @@ export class TestListComponent implements OnInit {
       if (document.documentElement.scrollHeight <= window.innerHeight && this.hasMore) {
         this.loadData();
       }
-    }, 500);
+    }, 300);
   }
 
   applyFilters() {
@@ -125,9 +117,10 @@ export class TestListComponent implements OnInit {
   onBuy(item: any) {
     if (!this.authService.isLoggedIn()) {
       const returnUrl = `${this.router.url.split('?')[0]}?id=${item.id}&buyNow=true`;
-      this.router.navigate(['/auth/login'], { queryParams: { returnUrl } });
+      void this.router.navigate(['/auth/login'], { queryParams: { returnUrl } });
       return;
     }
+
     this.selectedItem = item;
     this.paymentType = 'TEST';
     this.showPaymentModal = true;
@@ -135,14 +128,12 @@ export class TestListComponent implements OnInit {
 
   handlePayment(event: { couponCode: string }) {
     if (!this.selectedItem) return;
-    const request = {
+
+    this.paymentService.purchase({
       testId: this.selectedItem.id,
       amount: this.selectedItem.price,
       couponCode: event.couponCode
-    };
-    this.paymentService.purchase(request).subscribe({
-      next: () => this.closeModal()
-    });
+    }).subscribe(() => this.closeModal());
   }
 
   closeModal() {
@@ -152,22 +143,27 @@ export class TestListComponent implements OnInit {
 
   changeTab(published: boolean) {
     if (this.filter.isPublished === published) return;
+
     this.filter.isPublished = published;
     this.applyFilters();
   }
 
   private handleAutoOpenAfterLogin(testId: number) {
-    const checkInterval = setInterval(() => {
+    const interval = setInterval(() => {
       const test = this.testService.tests().find(t => t.id === testId);
+
       if (test) {
         this.onBuy(test);
-        this.router.navigate([], {
+
+        void this.router.navigate([], {
           queryParams: { buyNow: null, id: null },
           queryParamsHandling: 'merge'
         });
-        clearInterval(checkInterval);
+
+        clearInterval(interval);
       }
     }, 200);
-    setTimeout(() => clearInterval(checkInterval), 4000);
+
+    setTimeout(() => clearInterval(interval), 4000);
   }
 }

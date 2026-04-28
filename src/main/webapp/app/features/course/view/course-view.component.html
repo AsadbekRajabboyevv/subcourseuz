@@ -1,43 +1,53 @@
 <app-page-wrapper>
     <div page-title>
         @if (course(); as data) {
-            <nav class="mb-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
-                <a routerLink="/" class="hover:text-emerald-500">Asosiy</a>
+            <nav
+                class="mb-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
+                <a routerLink="/" class="hover:text-emerald-500" i18n="@@common.home">Asosiy</a>
                 <i class="fa-solid fa-chevron-right text-[7px]"></i>
-                <a routerLink="/courses-list" class="hover:text-emerald-500">Kurslar</a>
+                <a routerLink="/courses-list" class="hover:text-emerald-500" i18n="@@course.title">Kurslar</a>
                 <i class="fa-solid fa-chevron-right text-[7px]"></i>
                 <span class="text-emerald-500">{{ data.scienceName }}</span>
             </nav>
-            <span class="text-xl md:text-2xl font-black uppercase tracking-tighter text-gray-900 dark:text-white">
+            <span
+                class="text-xl md:text-2xl font-black uppercase tracking-tighter text-gray-900 dark:text-white">
                 {{ data.name }}
             </span>
         } @else {
-            <span class="animate-pulse bg-gray-200 h-6 w-48 rounded-lg block dark:bg-gray-800"></span>
+            <span
+                class="animate-pulse bg-gray-200 h-6 w-48 rounded-lg block dark:bg-gray-800"></span>
         }
     </div>
 
     <div content class="mt-4">
         @if (isLoading()) {
             <div class="flex h-[50vh] items-center justify-center">
-                <div class="h-12 w-12 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent shadow-2xl"></div>
+                <div
+                    class="h-12 w-12 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent shadow-2xl"></div>
             </div>
         } @else if (course(); as data) {
 
             <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
 
                 <div class="lg:col-span-8 space-y-8">
-                    <div class="rounded-[2.5rem] bg-white p-8 shadow-sm border border-gray-100 dark:bg-gray-800/50 dark:border-gray-800">
-                        <h3 class="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500">Kurs haqida</h3>
+                    <div
+                        class="rounded-[2.5rem] bg-white p-8 shadow-sm border border-gray-100 dark:bg-gray-800/50 dark:border-gray-800">
+                        <h3 class="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500"
+                            i18n="@@course.about_title">Kurs haqida</h3>
                         <div class="md-preview-body text-gray-600 dark:text-gray-300">
                             <markdown [data]="data.description"></markdown>
                         </div>
                     </div>
 
-                    <div class="rounded-[2.5rem] bg-white p-8 shadow-sm border border-gray-100 dark:bg-gray-800/50 dark:border-gray-800">
+                    <div
+                        class="rounded-[2.5rem] bg-white p-8 shadow-sm border border-gray-100 dark:bg-gray-800/50 dark:border-gray-800">
                         <div class="mb-8 flex items-center justify-between">
-                            <h2 class="text-xl font-black uppercase tracking-tight text-gray-900 dark:text-white">Mundarija</h2>
-                            <div class="rounded-xl bg-emerald-50 px-4 py-2 dark:bg-emerald-500/10 text-[10px] font-black text-emerald-600 uppercase tracking-widest">
-                                {{ data.lessons.length }} Dars
+                            <h2 class="text-xl font-black uppercase tracking-tight text-gray-900 dark:text-white"
+                                i18n="@@course.lessons_title">Mundarija</h2>
+                            <div
+                                class="rounded-xl bg-emerald-50 px-4 py-2 dark:bg-emerald-500/10 text-[10px] font-black text-emerald-600 uppercase tracking-widest">
+                                {{ data.lessons.length }} <span
+                                i18n="@@course.lessons_count">Dars</span>
                             </div>
                         </div>
 
@@ -49,43 +59,46 @@
                                      [class.border-dashed]="!lesson.isPublished"
                                      class="group relative flex items-center justify-between rounded-[1.8rem] border border-gray-50 bg-gray-50/50 p-5 transition-all hover:bg-white hover:shadow-xl hover:scale-[1.02] dark:border-gray-700/50 dark:bg-gray-900/40 dark:hover:bg-gray-800">
 
-                                    <div class="flex items-center gap-5">
-                                        <div [class.group-hover:bg-amber-500]="!lesson.isPublished"
-                                             class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white font-black text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white group-hover:bg-emerald-500 group-hover:text-white transition-colors">
-                                            {{ lesson.lessonNumber }}
-                                        </div>
-                                        <div>
-                                            <h4 class="font-black text-gray-900 dark:text-white group-hover:text-emerald-500 transition-colors">
-                                                {{ lesson.name }}
-                                                @if (!lesson.isPublished) {
-                                                    <span class="ml-2 rounded-lg bg-amber-100 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-amber-600 dark:bg-amber-500/10">
-                                Draft
-                            </span>
-                                                }
-                                            </h4>
-                                            <span class="text-[9px] font-bold uppercase tracking-[0.2em] text-gray-400">Video dars</span>
-                                        </div>
+                                <div class="flex items-center gap-5">
+                                    <div [class.group-hover:bg-amber-500]="!lesson.isPublished"
+                                         class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white font-black text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                                        {{ lesson.lessonNumber }}
                                     </div>
-
-                                    <div class="flex items-center">
-                                        @if (authService.isAdmin()) {
-                                            <button [routerLink]="['/courses-lesson-edit', lesson.name]" [queryParams]="{id: lesson.id}"
-                                                    class="mr-2 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 py-5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-amber-500/20 transition-all hover:bg-amber-600 active:scale-95">
-                                                <i class="fa-solid fa-edit text-[10px]"></i>
-                                            </button>
-                                        }
-
-                                        @if (data.purchased) {
-                                            <div [class.bg-amber-500]="!lesson.isPublished"
-                                                 class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/30">
-                                                <i class="fa-solid" [class.fa-play]="lesson.isPublished" [class.fa-eye-slash]="!lesson.isPublished"></i>
-                                            </div>
-                                        } @else {
-                                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-500">
-                                                <i class="fa-solid fa-lock text-[10px]"></i>
-                                            </div>
-                                        }
+                                    <div>
+                                        <h4 class="font-black text-gray-900 dark:text-white group-hover:text-emerald-500 transition-colors">
+                                            {{ lesson.name }}
+                                            @if (!lesson.isPublished) {
+                                                <span class="ml-2 rounded-lg bg-amber-100 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-amber-600 dark:bg-amber-500/10">
+                                                    <span i18n="@@course.draft">Draft</span>
+                                                </span>
+                                            }
+                                        </h4>
+                                        <span class="text-[9px] font-bold uppercase text-gray-400" i18n="@@course.lesson_number">{{ lesson.lessonNumber }}-dars</span>
                                     </div>
+                                </div>
+
+                                <div class="flex items-center">
+                                    @if (authService.isAdmin()) {
+                                        <button [routerLink]="['/courses-lesson-edit', lesson.name]"
+                                                [queryParams]="{id: lesson.id}"
+                                                class="mr-2 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 py-5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-amber-500/20 transition-all hover:bg-amber-600 active:scale-95">
+                                            <i class="fa-solid fa-edit text-[10px]"></i>
+                                        </button>
+                                    }
+
+                                    @if (data.purchased) {
+                                        <div [class.bg-amber-500]="!lesson.isPublished"
+                                             class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/30">
+                                            <i class="fa-solid" [class.fa-play]="lesson.isPublished"
+                                               [class.fa-eye-slash]="!lesson.isPublished"></i>
+                                        </div>
+                                    } @else {
+                                        <div
+                                            class="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-500">
+                                            <i class="fa-solid fa-lock text-[10px]"></i>
+                                        </div>
+                                    }
+                                </div>
                                 </div>
                             }
                         </div>
@@ -95,19 +108,28 @@
                 <div class="lg:col-span-4">
                     <div class="sticky top-28 space-y-6">
 
-                        <div class="overflow-hidden rounded-[2.5rem] bg-white shadow-2xl border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
+                        <div
+                            class="overflow-hidden rounded-[2.5rem] bg-white shadow-2xl border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
                             <div class="relative h-52 overflow-hidden">
-                                <img [src]="data.imagePath" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                                <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent"></div>
+                                <img [src]="data.imagePath"
+                                     class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent"></div>
                                 <div class="absolute bottom-5 left-5">
-                                    <span class="rounded-lg bg-emerald-500 px-3 py-1 text-[9px] font-black uppercase text-white shadow-lg">Premium</span>
+                                    <span
+                                        class="rounded-lg bg-emerald-500 px-3 py-1 text-[9px] font-black uppercase text-white shadow-lg"
+                                        i18n="@@common.premium">Premium</span>
                                 </div>
                             </div>
 
                             <div class="p-8">
                                 <div class="mb-6 flex items-baseline justify-between">
-                                    <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Narxi:</span>
-                                    <span class="text-3xl font-black text-emerald-500">{{ data.price | number }} <small class="text-[10px] uppercase opacity-60">uzs</small></span>
+                                    <span
+                                        class="text-[10px] font-black uppercase tracking-widest text-gray-400"
+                                        i18n="@@course.price_label">Narxi:</span>
+                                    <span
+                                        class="text-3xl font-black text-emerald-500">{{ data.price | number }}
+                                        <small class="text-[10px] uppercase opacity-60">uzs</small></span>
                                 </div>
 
                                 <div class="mb-6 space-y-3">
@@ -116,57 +138,80 @@
                                         @if (!data.purchased) {
                                             <button (click)="openBuyModal()"
                                                     class="w-full rounded-2xl bg-emerald-600 py-5 text-[11px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-emerald-500/20 transition-all hover:bg-emerald-700 active:scale-95">
-                                                Kursni sotib olish
+                                                <span
+                                                    i18n="@@course.buy_button">Kursni sotib olish</span>
                                             </button>
                                         } @else {
-                                            <div class="flex items-center justify-center gap-3 rounded-2xl bg-emerald-500/10 py-5 text-emerald-500 border border-emerald-500/20">
+                                            <div
+                                                class="flex items-center justify-center gap-3 rounded-2xl bg-emerald-500/10 py-5 text-emerald-500 border border-emerald-500/20">
                                                 <i class="fa-solid fa-circle-check"></i>
-                                                <span class="text-[10px] font-black uppercase tracking-widest text-center">Siz a'zo bo'lgansiz</span>
+                                                <span
+                                                    class="text-[10px] font-black uppercase tracking-widest text-center"
+                                                    i18n="@@course.purchased">Siz a'zo bo'lgansiz</span>
                                             </div>
                                         }
                                     </div>
 
                                     @if (authService.isAdmin()) {
                                         <div class="flex w-full gap-3">
-                                            <button [routerLink]="['/courses-lesson-add/', course()?.name]" [queryParams]="{ id: course()?.id}" class="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-blue-600 py-5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-700 active:scale-95">
+                                            <button
+                                                [routerLink]="['/courses-lesson-add/', course()?.slug]"
+                                                class="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-blue-600 py-5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-700 active:scale-95">
                                                 <i class="fa-solid fa-plus text-xs"></i>
-                                                <span>Dars qo'shish</span>
+                                                <span
+                                                    i18n="@@course.add_lesson">Dars qo'shish</span>
                                             </button>
 
-                                            <button [routerLink]="['/courses-update/', course()?.name]"
-                                                    [queryParams]="{ id: course()?.id}" class="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-amber-500 py-5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-amber-500/20 transition-all hover:bg-amber-600 active:scale-95">
+                                            <button
+                                                [routerLink]="['/courses-update/', course()?.slug]"
+                                                class="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-amber-500 py-5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-amber-500/20 transition-all hover:bg-amber-600 active:scale-95">
                                                 <i class="fa-solid fa-pen-to-square text-xs"></i>
-                                                <span>Tahrirlash</span>
+                                                <span
+                                                    i18n="@@course.update_button">Tahrirlash</span>
                                             </button>
                                         </div>
                                     }
                                 </div>
                                 <div class="space-y-3">
-                                    <div class="flex items-center justify-between rounded-2xl bg-gray-50 p-4 dark:bg-gray-800/40">
-                                        <span class="text-[9px] font-black text-gray-400 uppercase">Davomiyligi</span>
-                                        <span class="text-[11px] font-black dark:text-white uppercase">{{ data.duration }} {{ data.durationType }}</span>
+                                    <div
+                                        class="flex items-center justify-between rounded-2xl bg-gray-50 p-4 dark:bg-gray-800/40">
+                                        <span class="text-[9px] font-black text-gray-400 uppercase"
+                                              i18n="@@course.duration_label">Davomiyligi</span>
+                                        <span
+                                            class="text-[11px] font-black dark:text-white uppercase">{{ data.duration }} {{ data.durationType }}</span>
                                     </div>
-                                    <div class="flex items-center justify-between rounded-2xl bg-gray-50 p-4 dark:bg-gray-800/40">
-                                        <span class="text-[9px] font-black text-gray-400 uppercase">O'quvchilar</span>
-                                        <span class="text-[11px] font-black dark:text-white">{{ data.studentsCount }}+</span>
+                                    <div
+                                        class="flex items-center justify-between rounded-2xl bg-gray-50 p-4 dark:bg-gray-800/40">
+                                        <span class="text-[9px] font-black text-gray-400 uppercase"
+                                              i18n="@@course.students_label">O'quvchilar</span>
+                                        <span
+                                            class="text-[11px] font-black dark:text-white">{{ data.studentsCount }}
+                                            +</span>
                                     </div>
-                                    <div class="flex items-center justify-between rounded-2xl bg-gray-50 p-4 dark:bg-gray-800/40">
-                                        <span class="text-[9px] font-black text-gray-400 uppercase">Til</span>
-                                        <span class="text-[11px] font-black dark:text-white uppercase">{{ data.lang }}</span>
+                                    <div
+                                        class="flex items-center justify-between rounded-2xl bg-gray-50 p-4 dark:bg-gray-800/40">
+                                        <span class="text-[9px] font-black text-gray-400 uppercase"
+                                              i18n="@@course.language_label">Til</span>
+                                        <span
+                                            class="text-[11px] font-black dark:text-white uppercase">{{ data.lang }}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="rounded-[2rem] bg-gray-900 p-6 text-white shadow-xl dark:bg-emerald-600 group">
-                            <h4 class="mb-3 font-black uppercase tracking-widest text-[9px] opacity-60">Kurs muallifi</h4>
+                        <div
+                            class="rounded-[2rem] bg-gray-900 p-6 text-white shadow-xl dark:bg-emerald-600 group">
+                            <h4 class="mb-3 font-black uppercase tracking-widest text-[9px] opacity-60"
+                                i18n="@@course.instructor">Kurs muallifi</h4>
                             <div class="flex items-center gap-4">
-                                <div class="h-12 w-12 rounded-2xl bg-white/10 flex items-center justify-center border border-white/10 group-hover:rotate-12 transition-transform">
+                                <div
+                                    class="h-12 w-12 rounded-2xl bg-white/10 flex items-center justify-center border border-white/10 group-hover:rotate-12 transition-transform">
                                     <i class="fa-solid fa-user-tie text-xl"></i>
                                 </div>
                                 <div class="flex flex-col">
                                     <span class="text-sm font-black">{{ data.ownerName }}</span>
-                                    <span class="text-[9px] uppercase tracking-widest opacity-50">Katta o'qituvchi</span>
+                                    <span class="text-[9px] uppercase tracking-widest opacity-50"
+                                          i18n="@@course.senior_instructor">Katta o'qituvchi</span>
                                 </div>
                             </div>
                         </div>

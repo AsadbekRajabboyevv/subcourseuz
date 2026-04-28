@@ -4,10 +4,10 @@
         <div class="space-y-8 animate__animated animate__fadeInLeft">
             <div>
                 <h1 class="text-5xl font-black tracking-tighter text-gray-900 dark:text-white uppercase mb-4">
-                    Hisobni <br> <span class="text-emerald-500">To'ldirish</span>
+                    <span i18n="@@topup.title">Hisobni <br> <span class="text-emerald-500">To'ldirish</span></span>
                 </h1>
                 <p class="text-gray-500 dark:text-gray-400 font-bold max-w-md">
-                    To'lovni amalga oshiring va chek skrinshotini forma orqali yuboring. Adminlar tez orada so'rovingizni tasdiqlashadi.
+                    <span i18n="@@topup.description">To'lovni amalga oshiring va chek skrinshotini forma orqali yuboring. Adminlar tez orada so'rovingizni tasdiqlashadi.</span>
                 </p>
             </div>
 
@@ -15,7 +15,7 @@
                 <div class="p-6 bg-white dark:bg-gray-900 rounded-[2rem] border-2 border-emerald-500/10 shadow-xl shadow-emerald-500/5 relative group overflow-hidden">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full -mr-8 -mt-8"></div>
 
-                    <span class="text-[10px] font-black text-emerald-500 uppercase tracking-widest block mb-2">Humo Card</span>
+                    <span class="text-[10px] font-black text-emerald-500 uppercase tracking-widest block mb-2" i18n="@@payment.humo_card">Humo Card</span>
 
                     <h3 class="text-2xl font-black dark:text-white mb-1">9860 1234 5678 9012</h3>
 
@@ -24,12 +24,12 @@
                     <button
                         (click)="copyToClipboard('9860123456789012')"
                         class="mt-4 flex items-center gap-2 text-emerald-500 font-black text-[10px] uppercase tracking-wider hover:text-emerald-600 transition-all active:scale-95">
-                        <i class="fa-solid fa-copy text-sm"></i> Nusxa olish
+                        <i class="fa-solid fa-copy text-sm"></i> <span i18n="@@common.copy">Nusxa olish</span>
                     </button>
                 </div>
 
                 <div class="p-6 bg-white dark:bg-gray-900 rounded-[2rem] border-2 border-gray-100 dark:border-gray-800 shadow-sm relative overflow-hidden">
-                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Uzcard</span>
+                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2" i18n="@@payment.uzcard">Uzcard</span>
                     <h3 class="text-2xl font-black dark:text-white mb-1">8600 5566 7788 1122</h3>
                     <p class="text-sm font-bold text-gray-400 uppercase">Asadbek Rajabboyev</p>
                 </div>
@@ -38,15 +38,15 @@
             <div class="flex gap-4">
                 <div class="flex-1 p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10">
                     <span class="text-xl mb-2 block">1️⃣</span>
-                    <p class="text-[10px] font-black uppercase text-gray-500">To'lovni amalga oshiring</p>
+                    <p class="text-[10px] font-black uppercase text-gray-500" i18n="@@common.make_payment">To'lovni amalga oshiring</p>
                 </div>
                 <div class="flex-1 p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10">
                     <span class="text-xl mb-2 block">2️⃣</span>
-                    <p class="text-[10px] font-black uppercase text-gray-500">Chekni rasmga oling</p>
+                    <p class="text-[10px] font-black uppercase text-gray-500" i18n="@@payment.upload_check">Chekni rasmga oling</p>
                 </div>
                 <div class="flex-1 p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10">
                     <span class="text-xl mb-2 block">3️⃣</span>
-                    <p class="text-[10px] font-black uppercase text-gray-500">Formani to'ldiring</p>
+                    <p class="text-[10px] font-black uppercase text-gray-500" i18n="@@payment.fill_form">Formani to'ldiring</p>
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
             <div class="space-y-6">
 
                 <app-input
-                    label="To'lov miqdori (UZS)"
+                    label="To'lov miqdori (UZS)" i18n-label="@@topup.amount_label"
                     type="number"
                     placeholder="0.00"
                     [(ngModel)]="requestDto.amount">
@@ -63,16 +63,16 @@
 
                 <app-input
                     name="message"
-                    label="Izoh (Masalan: Payme orqali)"
+                    label="Izoh (Masalan: Payme orqali)" i18n-label="@@topup.note_label"
                     type="text"
-                    placeholder="Qisqacha izoh qoldiring..."
+                    placeholder="Qisqacha izoh qoldiring..." i18n-placeholder="@@topup.note_placeholder"
                     [(ngModel)]="requestDto.message">
                 </app-input>
 
                 <app-input
-                    label="To'lov skrinshoti"
+                    label="To'lov skrinshoti" i18n-label="@@topup.screenshot_label"
                     type="file"
-                    placeholder="Chek rasmini tanlang"
+                    placeholder="Chek rasmini tanlang" i18n-placeholder="@@topup.screenshot_placeholder"
                     [(ngModel)]="selectedFile"
                     (ngModelChange)="onFileSelected($event)">
                 </app-input>
@@ -81,7 +81,7 @@
                     <button (click)="submitRequest()"
                             [disabled]="!selectedFile || requestDto.amount <= 0"
                             class="w-full bg-emerald-500 hover:bg-emerald-600 disabled:opacity-30 disabled:cursor-not-allowed text-white font-black py-5 rounded-2xl shadow-xl shadow-emerald-500/20 transition-all active:scale-95 flex items-center justify-center gap-3">
-                        <span>SO'ROVNI YUBORISH</span>
+                        <span i18n="@@topup.submit_button">SO'ROVNI YUBORISH</span>
                         <i class="fa-solid fa-paper-plane text-sm"></i>
                     </button>
                 </div>

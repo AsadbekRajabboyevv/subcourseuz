@@ -7,12 +7,17 @@ import { PageWrapperComponent } from "../../../shared/ui/layout/page-wrapper.com
 import { LessonUpdate, LessonInfo } from "../lesson.model";
 import { SafeUrlPipe } from "../../../common/safeurl/safe-url.pipe";
 import { LessonService } from "../lesson.service";
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-lesson-update',
   standalone: true,
-  imports: [CommonModule, InputComponent, FormsModule, PageWrapperComponent, SafeUrlPipe, TranslateModule],
+  imports: [
+    CommonModule,
+    InputComponent,
+    FormsModule,
+    PageWrapperComponent,
+    SafeUrlPipe
+  ],
   templateUrl: './lesson-update.component.html'
 })
 export class LessonUpdateComponent implements OnInit {
@@ -24,15 +29,12 @@ export class LessonUpdateComponent implements OnInit {
   isLoading = signal<boolean>(false);
   isDataLoaded = signal<boolean>(false);
 
-  // Fayllar uchun alohida saqlagichlar
   selectedFiles: File[] = [];
   deletedFileUrls: string[] = [];
   existingFileUrls: string[] = []; // UI'da ko'rsatish uchun
 
-  // Preview ma'lumotlari
   coursePreview = { name: '', imagePath: '' };
 
-  // Faqat LessonUpdate modeliga mos maydonlar
   lessonForm: LessonUpdate = {
     name: '',
     lessonNumber: '',

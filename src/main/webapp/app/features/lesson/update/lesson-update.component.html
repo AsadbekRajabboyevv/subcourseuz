@@ -1,8 +1,12 @@
 <app-page-wrapper>
     <div page-title class="mb-8">
         <div class="flex items-center gap-4">
-            <h1 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white uppercase">{{ 'lesson.update_lesson' | translate }}</h1>
-            <span class="rounded-full bg-blue-500/10 px-3 py-1 text-[10px] font-black text-blue-600">ID: #{{ lessonId }}</span>
+            <h1 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white uppercase">
+                <span i18n="@@lesson.update.title">Darsni tahrirlash</span>
+            </h1>
+            <span class="rounded-full bg-blue-500/10 px-3 py-1 text-[10px] font-black text-blue-600">
+                <span i18n="@@lesson.lesson_id">ID:</span> #{{ lessonId }}
+            </span>
         </div>
     </div>
 
@@ -14,23 +18,29 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div class="md:col-span-3">
-                                <app-input label="{{ 'lesson.lesson_name' | translate }}" [(ngModel)]="lessonForm.name" name="name" required></app-input>
+                                <app-input label="Dars nomi" i18n-label="@@lesson.name_label" [(ngModel)]="lessonForm.name" name="name" required></app-input>
                             </div>
                             <div class="md:col-span-1">
-                                <app-input label="{{ 'lesson.lesson_number' | translate }}" [(ngModel)]="lessonForm.lessonNumber" name="lessonNumber" type="number"></app-input>
+                                <app-input label="Dars raqami" i18n-label="@@lesson.lesson_number" [(ngModel)]="lessonForm.lessonNumber" name="lessonNumber" type="number"></app-input>
                             </div>
                         </div>
 
-                        <app-input label="{{ 'lesson.youtube_url' | translate }}" [(ngModel)]="lessonForm.videoUrl" name="videoUrl"></app-input>
+                        <app-input label="YouTube video link" i18n-label="@@lesson.youtube_url" [(ngModel)]="lessonForm.videoUrl" name="videoUrl"></app-input>
 
                         <div class="space-y-2">
-                            <label class="ml-4 text-[10px] font-black uppercase tracking-widest text-gray-400">{{ 'lesson.lesson_content' | translate }}</label>
+                            <label class="ml-4 text-[10px] font-black uppercase tracking-widest text-gray-400" i18n="@@lesson.content_label">
+                                Dars matni
+                            </label>
                             <app-input type="markdown" [(ngModel)]="lessonForm.textContent" name="textContent"></app-input>
                         </div>
 
                         <div class="flex items-center justify-between rounded-2xl border border-gray-100 bg-gray-50/50 p-4 dark:border-gray-800 dark:bg-gray-800/30">
-                            <p class="text-[10px] font-black uppercase text-gray-700">{{ 'lesson.video' | translate }} {{ 'common.details' | translate }}</p>
-                            <span class="text-[10px] font-black uppercase text-gray-700 dark:text-gray-300">{{ 'lesson.published' | translate }}</span>
+                            <p class="text-[10px] font-black uppercase text-gray-700">
+                                <span i18n="@@lesson.video_details">Video tafsilotlari</span>
+                            </p>
+                            <span class="text-[10px] font-black uppercase text-gray-700 dark:text-gray-300">
+                                <span i18n="@@lesson.publish_course">Nashr qilish (Public)</span>
+                            </span>
                             <label class="relative inline-flex cursor-pointer items-center">
                                 <input type="checkbox" name="isPublished" [(ngModel)]="lessonForm.isPublished" class="peer sr-only">
                                 <div class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:bg-blue-600 peer-checked:after:translate-x-full dark:bg-gray-700"></div>
@@ -39,11 +49,15 @@
 
                         @if (existingFileUrls.length > 0) {
                             <div class="space-y-2">
-                                <label class="ml-4 text-[10px] font-black uppercase tracking-widest text-gray-400">{{ 'lesson.current_files' | translate }}</label>
+                                <label class="ml-4 text-[10px] font-black uppercase tracking-widest text-gray-400">
+                                    <span i18n="@@lesson.existing_files">Mavjud fayllar</span>
+                                </label>
                                 <div class="space-y-2">
                                     @for (url of existingFileUrls; track url) {
                                         <div class="flex items-center justify-between rounded-xl border border-gray-100 bg-gray-50 p-3 dark:border-gray-800 dark:bg-gray-800/50">
-                                            <span class="truncate text-[10px] font-bold text-gray-600 dark:text-gray-300">{{ url.split('/').pop() }}</span>
+                                            <span class="truncate text-[10px] font-bold text-gray-600 dark:text-gray-300">
+                                                {{ url.split('/').pop() }}
+                                            </span>
                                             <button type="button" (click)="removeFile(url)" class="text-gray-400 hover:text-red-500 transition-colors">
                                                 <i class="fa-solid fa-trash-can text-xs"></i>
                                             </button>
@@ -57,11 +71,15 @@
                             <div class="relative group cursor-pointer rounded-2xl border-2 border-dashed border-gray-200 p-8 text-center hover:border-blue-500 transition-all dark:border-gray-800">
                                 <input type="file" (change)="onFileSelected($event)" multiple class="absolute inset-0 z-10 cursor-pointer opacity-0">
                                 <i class="fa-solid fa-cloud-arrow-up mb-3 text-3xl text-gray-300 group-hover:text-blue-500"></i>
-                                <p class="text-[10px] font-bold text-gray-400 uppercase">{{ 'lesson.upload_new_files' | translate }}</p>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase">
+                                    <span i18n="@@lesson.upload_new_files">Yangi fayllarni yuklash</span>
+                                </p>
                                 @if (selectedFiles.length > 0) {
                                     <div class="mt-4 flex flex-wrap justify-center gap-2">
                                         @for (file of selectedFiles; track $index) {
-                                            <span class="rounded-lg bg-blue-50 px-3 py-1 text-[9px] font-bold text-blue-600 dark:bg-blue-500/10">{{ file.name }}</span>
+                                            <span class="rounded-lg bg-blue-50 px-3 py-1 text-[9px] font-bold text-blue-600 dark:bg-blue-500/10">
+                                                {{ file.name }}
+                                            </span>
                                         }
                                     </div>
                                 }
@@ -70,8 +88,10 @@
 
                         <button type="submit" [disabled]="isLoading() || !f.valid"
                                 class="w-full rounded-2xl bg-blue-600 py-5 text-[11px] font-black uppercase tracking-widest text-white shadow-xl shadow-blue-500/20 active:scale-95 transition-all">
-                            @if (isLoading()) { <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> }
-                            {{ 'lesson.save_lesson' | translate }}
+                            @if (isLoading()) {
+                                <i class="fa-solid fa-circle-notch fa-spin mr-2"></i>
+                            }
+                            <span i18n="@@lesson.save_button">Saqlash</span>
                         </button>
                     </form>
                 </div>
@@ -94,7 +114,9 @@
                             allowfullscreen>
                         </iframe>
                     } @else {
-                        <div class="flex h-full w-full flex-col items-center justify-center bg-gray-900 text-[10px] font-black uppercase text-gray-700">Video Preview</div>
+                        <div class="flex h-full w-full flex-col items-center justify-center bg-gray-900 text-[10px] font-black uppercase text-gray-700">
+                            <span i18n="@@lesson.no_video">Video ko'rinishi</span>
+                        </div>
                     }
                 </div>
 
@@ -102,8 +124,10 @@
                     <div class="relative aspect-video rounded-[2rem] overflow-hidden">
                         <img [src]="coursePreview.imagePath" class="h-full w-full object-cover opacity-50">
                         <div class="absolute bottom-6 left-6 right-6">
-                            <span class="text-[9px] font-black uppercase text-blue-400">Kurs:</span>
-                            <h3 class="text-lg font-black text-white uppercase mt-1 leading-tight">{{ coursePreview.name }}</h3>
+                            <span class="text-[9px] font-black uppercase text-blue-400" i18n="@@course.title">Kurs:</span>
+                            <h3 class="text-lg font-black text-white uppercase mt-1 leading-tight">
+                                {{ coursePreview.name }}
+                            </h3>
                         </div>
                     </div>
                 </div>

@@ -4,12 +4,16 @@ import {FormsModule} from '@angular/forms';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {AuthService} from "../auth.service";
 import {InputComponent} from "../../../shared/ui/forms/input.component";
-import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [TranslateModule, CommonModule, FormsModule, RouterLink, InputComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    InputComponent
+  ],
   templateUrl: './login.component.html'
 })
 export class LoginComponent {

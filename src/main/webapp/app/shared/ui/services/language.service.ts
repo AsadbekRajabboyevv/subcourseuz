@@ -1,26 +1,29 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LangService {
 
-  private lang$ = new BehaviorSubject<string>(
-    localStorage.getItem('lang') || 'uz-cyrl'
-  );
-
+  constructor(@Inject(LOCALE_ID) public currentLocale: string) {
+    localStorage.setItem('lang', currentLocale);
+  }
 
   setLang(lang: string) {
+    if (lang === this.currentLocale) return;
+
     localStorage.setItem('lang', lang);
-    this.lang$.next(lang);
+    const currentPath = window.location.pathname;
+    const newPath = currentPath.replace(`/${this.currentLocale}/`, `/${lang}/`);
+
+    if (newPath === currentPath) {
+      window.location.href = `/${lang}${currentPath}`;
+    } else {
+      window.location.href = newPath;
+    }
   }
 
   getLang(): string {
-    return this.lang$.value;
-  }
-
-  langChanges$() {
-    return this.lang$.asObservable();
+    return this.currentLocale;
   }
 }

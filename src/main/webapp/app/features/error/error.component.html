@@ -8,7 +8,7 @@
 
     <div class="max-w-md space-y-4 mt-4">
         <h2 class="text-2xl md:text-3xl font-black text-gray-900 dark:text-white uppercase tracking-tight">
-            Sahifa topilmadi
+            <span i18n="@@error.page_not_found">Sahifa topilmadi</span>
         </h2>
         <p class="text-gray-500 dark:text-gray-400 font-medium" i18n="@@ERROR_MESSAGE">
             Siz izlayotgan sahifa hozirda mavjud emas.
@@ -19,13 +19,13 @@
         <button routerLink="/"
                 class="flex items-center gap-3 rounded-2xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-4 font-black text-xs uppercase shadow-2xl border-2  hover:border-indigo-500">
             <i class="fa-solid fa-house"></i>
-            Bosh sahifaga qaytish
+            <span i18n="@@common.go_home">Bosh sahifaga qaytish</span>
         </button>
 
         <button (click)="goBack()"
                 class="flex items-center gap-3 rounded-2xl border-2 border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-900 dark:text-white px-8 py-4 font-black text-xs uppercase tracking-widest hover:border-indigo-500">
             <i class="fa-solid fa-arrow-left"></i>
-            Ortga qaytish
+            <span i18n="@@common.go_back">Ortga qaytish</span>
         </button>
     </div>
 </div>

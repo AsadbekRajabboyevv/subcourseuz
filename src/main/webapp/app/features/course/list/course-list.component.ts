@@ -9,12 +9,18 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { PaymentService } from "../../payment/payment.service";
 import { PaymentModalComponent } from "../../payment/modal/payment-modal.component";
 import { AuthService } from "../../../common/auth/auth.service";
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-course-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputComponent, PageWrapperComponent, RouterLink, PaymentModalComponent, TranslateModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    InputComponent,
+    PageWrapperComponent,
+    RouterLink,
+    PaymentModalComponent,
+    ],
   templateUrl: './course-list.component.html'
 })
 export class CourseListComponent implements OnInit {
@@ -61,9 +67,9 @@ export class CourseListComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
       const buyNow = params['buyNow'];
-      const courseId = params['id'];
-      if (buyNow === 'true' && courseId) {
-        this.handleAutoOpenAfterLogin(Number(courseId));
+      const slug = params['slug'];
+      if (buyNow === 'true' && slug) {
+        this.handleAutoOpenAfterLogin(slug);
       }
     });
   }
@@ -172,9 +178,9 @@ export class CourseListComponent implements OnInit {
   }
 
 
-  private handleAutoOpenAfterLogin(courseId: number) {
+  private handleAutoOpenAfterLogin(slug: string) {
     const checkInterval = setInterval(() => {
-      const course = this.courseService.courses().find(c => c.id === courseId);
+      const course = this.courseService.courses().find(c => c.slug === slug);
       if (course) {
         this.selectedItem = course;
         this.paymentType = 'COURSE';

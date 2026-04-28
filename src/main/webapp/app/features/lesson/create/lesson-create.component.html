@@ -1,11 +1,13 @@
 <app-page-wrapper>
     <div page-title class="mb-8">
         <nav class="mb-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-gray-400">
-            <a [routerLink]="['/courses-list']" class="hover:text-emerald-500">{{ 'lesson.course' | translate }}</a>
+            <a [routerLink]="['/courses-list']" class="hover:text-emerald-500" i18n="@@course.title">Kurs</a>
             <i class="fa-solid fa-chevron-right text-[7px]"></i>
-            <span class="text-emerald-500">{{ 'lesson.add_lesson' | translate }}</span>
+            <span class="text-emerald-500" i18n="@@lesson.create.title">Dars qo'shish</span>
         </nav>
-        <h1 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white uppercase">{{ 'lesson.create_lesson' | translate }}</h1>
+        <h1 class="text-2xl font-black tracking-tight text-gray-900 dark:text-white uppercase" i18n="@@lesson.create.title">
+            Dars yaratish
+        </h1>
     </div>
 
     <div content class="grid grid-cols-12 gap-8">
@@ -15,41 +17,54 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div class="md:col-span-3">
-                            <app-input type="text" label="{{ 'lesson.lesson_name' | translate }}" [(ngModel)]="lessonForm.name" name="name" placeholder="Mavzu sarlavhasi..." required></app-input>
+                            <app-input type="text" label="Dars nomi" i18n-label="@@lesson.name_label" [(ngModel)]="lessonForm.name" name="name" placeholder="Mavzu sarlavhasi..." i18n-placeholder="@@lesson.name_placeholder" required></app-input>
                         </div>
                         <div class="md:col-span-1">
-                            <app-input type="number" label="{{ 'lesson.lesson_number' | translate }}" [(ngModel)]="lessonForm.lessonNumber" name="lessonNumber"></app-input>
+                            <app-input type="number" label="Dars raqami" i18n-label="@@lesson.lesson_number" [(ngModel)]="lessonForm.lessonNumber" name="lessonNumber"></app-input>
                         </div>
                     </div>
 
-                    <app-input type="text" label="{{ 'lesson.youtube_url' | translate }}" [(ngModel)]="lessonForm.videoUrl" name="videoUrl" placeholder="https://youtube.com/watch?v=..."></app-input>
+                    <app-input type="text" label="YouTube link" i18n-label="@@lesson.youtube_url" [(ngModel)]="lessonForm.videoUrl" name="videoUrl" placeholder="https://youtube.com/watch?v=..."></app-input>
 
                     <div class="space-y-2">
-                        <label class="ml-4 text-[10px] font-black uppercase tracking-widest text-gray-400">{{ 'lesson.lesson_content' | translate }}</label>
+                        <label class="ml-4 text-[10px] font-black uppercase tracking-widest text-gray-400" i18n="@@lesson.content_label">
+                            Dars matni
+                        </label>
                         <app-input type="markdown" [(ngModel)]="lessonForm.textContent" name="textContent"></app-input>
                     </div>
 
                     <div class="flex items-center justify-between rounded-2xl border border-gray-100 bg-gray-50/50 p-4 dark:border-gray-800 dark:bg-gray-800/30">
                         <div class="flex flex-col gap-1">
-                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-700 dark:text-gray-300">{{ 'lesson.lesson_status' | translate }}</span>
-                            <span class="text-[9px] text-gray-400">{{ 'lesson.available_for_all' | translate }}</span>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-700 dark:text-gray-300" i18n="@@lesson.status_label">
+                                Dars holati
+                            </span>
+                            <span class="text-[9px] text-gray-400" i18n="@@lesson.available_to_all">
+                                Barchaga ochiq
+                            </span>
                         </div>
                         <label class="relative inline-flex cursor-pointer items-center">
                             <input type="checkbox" name="isPublished" [(ngModel)]="lessonForm.isPublished" class="peer sr-only">
-                            <div class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-emerald-500 peer-checked:after:translate-x-full peer-checked:after:border-white dark:bg-gray-700"></div>
+                            <div class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all peer-checked:bg-emerald-500 peer-checked:after:translate-x-full dark:bg-gray-700"></div>
                         </label>
                     </div>
 
                     <div class="space-y-2">
-                        <label class="ml-4 text-[10px] font-black uppercase tracking-widest text-gray-400">{{ 'lesson.additional_files' | translate }}</label>
-                        <div class="relative group cursor-pointer rounded-2xl border-2 border-dashed border-gray-200 p-8 text-center transition-all hover:border-emerald-500 dark:border-gray-800">
+                        <label class="ml-4 text-[10px] font-black uppercase tracking-widest text-gray-400" i18n="@@lesson.additional_files">
+                            Qo'shimcha fayllar
+                        </label>
+                        <div class="relative group cursor-pointer rounded-2xl border-2 border-dashed border-gray-200 p-8 text-center hover:border-emerald-500 dark:border-gray-800">
                             <input type="file" (change)="onFileSelected($event)" multiple class="absolute inset-0 z-10 cursor-pointer opacity-0">
                             <i class="fa-solid fa-cloud-arrow-up mb-3 text-3xl text-gray-300 group-hover:text-emerald-500"></i>
-                            <p class="text-[10px] font-bold text-gray-400 uppercase leading-relaxed">{{ 'lesson.upload_files' | translate }}</p>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase" i18n="@@lesson.upload_files">
+                                Fayllarni yuklash
+                            </p>
+
                             @if (selectedFiles.length > 0) {
                                 <div class="mt-4 flex flex-wrap justify-center gap-2">
                                     @for (file of selectedFiles; track $index) {
-                                        <span class="rounded-lg bg-emerald-50 px-3 py-1 text-[9px] font-bold text-emerald-600 dark:bg-emerald-500/10">{{ file.name }}</span>
+                                        <span class="rounded-lg bg-emerald-50 px-3 py-1 text-[9px] font-bold text-emerald-600 dark:bg-emerald-500/10">
+                                            {{ file.name }}
+                                        </span>
                                     }
                                 </div>
                             }
@@ -57,55 +72,67 @@
                     </div>
 
                     <button type="submit" [disabled]="isLoading() || !f.valid"
-                            class="w-full rounded-2xl bg-emerald-600 py-5 text-[11px] font-black uppercase tracking-widest text-white shadow-xl shadow-emerald-500/20 transition-all hover:bg-emerald-700 active:scale-95 disabled:opacity-50">
+                            class="w-full rounded-2xl bg-emerald-600 py-5 text-[11px] font-black uppercase tracking-widest text-white shadow-xl shadow-emerald-500/20 hover:bg-emerald-700 active:scale-95 disabled:opacity-50">
                         @if (isLoading()) {
-                            <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> {{ 'lesson.saving' | translate }}
+                            <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> <span i18n="@@lesson.saving">Saqlanmoqda</span>
                         } @else {
-                            {{ 'lesson.save_lesson' | translate }}
+                            <span i18n="@@lesson.save_button">Saqlash</span>
                         }
                     </button>
+
                 </form>
             </div>
         </div>
 
         <div class="col-span-12 lg:col-span-5 space-y-6">
             <div class="sticky top-24 space-y-6">
+
                 <div class="overflow-hidden rounded-[2.5rem] border border-gray-100 bg-black shadow-2xl dark:border-gray-800 aspect-video">
                     @if (getYoutubeId(lessonForm.videoUrl)) {
                         <iframe
                             [src]="'https://www.youtube-nocookie.com/embed/' + getYoutubeId(lessonForm.videoUrl) | safeUrl"
                             class="h-full w-full"
                             frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen>
                         </iframe>
                     } @else {
-                        <div class="flex h-full w-full flex-col items-center justify-center bg-gray-900 text-center">
+                        <div class="flex h-full w-full flex-col items-center justify-center bg-gray-900">
                             <i class="fa-brands fa-youtube mb-4 text-5xl text-gray-800"></i>
-                            <p class="text-[10px] font-black uppercase tracking-widest text-gray-700">{{ 'lesson.no_lessons' | translate }}</p>
+                            <p class="text-[10px] font-black uppercase text-gray-700" i18n="@@lesson.no_video">
+                                Video yo'q
+                            </p>
                         </div>
                     }
                 </div>
 
                 <div class="rounded-[2rem] bg-emerald-50 p-6 dark:bg-emerald-500/5 border border-emerald-100 dark:border-emerald-500/10">
-                    <h4 class="text-[10px] font-black uppercase tracking-widest text-emerald-600 mb-4">{{ 'common.details' | translate }}</h4>
+                    <h4 class="text-[10px] font-black uppercase tracking-widest text-emerald-600 mb-4" i18n="@@common.details">
+                        Tafsilotlar
+                    </h4>
+                    <h4 class="text-[10px] font-black uppercase tracking-widest text-emerald-600 mb-4">
+                        <span i18n="@@common.details">Tafsilotlar</span>
+                    </h4>
+
                     <div class="space-y-3">
                         <div class="flex items-center justify-between text-[10px] font-bold text-gray-500">
-                            <span>{{ 'lesson.course' | translate }} ID:</span>
+                            <span i18n="@@course.course_id">Kurs ID:</span>
                             <span class="text-emerald-600">#{{ lessonForm.courseId }}</span>
                         </div>
+
                         <div class="flex items-center justify-between text-[10px] font-bold text-gray-500">
-                            <span>{{ 'lesson.lesson_number' | translate }}:</span>
+                            <span i18n="@@lesson.lesson_number">Dars raqami:</span>
                             <span class="text-emerald-600">{{ lessonForm.lessonNumber }}</span>
                         </div>
+
                         <div class="flex items-center justify-between text-[10px] font-bold text-gray-500">
-                            <span>{{ 'lesson.lesson_status' | translate }}:</span>
+                            <span i18n="@@lesson.status_label">Holati:</span>
                             <span [class]="lessonForm.isPublished ? 'text-emerald-600' : 'text-amber-500'">
-                {{ lessonForm.isPublished ? ('lesson.published' | translate) : ('lesson.draft' | translate) }}
-              </span>
+                                {{ lessonForm.isPublished ? 'Nashr qilingan' : 'Qoralama' }}
+                            </span>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

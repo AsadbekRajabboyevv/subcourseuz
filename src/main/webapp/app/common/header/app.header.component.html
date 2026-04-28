@@ -1,66 +1,59 @@
-<header
-    class="sticky top-0 z-[100] w-full border-b border-gray-100/50 bg-white/70 backdrop-blur-xl transition-all duration-500 dark:border-gray-800/50 dark:bg-gray-950/70">
+<header class="sticky top-0 z-[100] w-full border-b border-gray-200/50 bg-white/80 backdrop-blur-md dark:border-gray-800/50 dark:bg-gray-950/80 transition-all duration-300">
     <div class="container mx-auto px-4 md:px-6">
         <div class="flex h-16 md:h-20 items-center justify-between">
 
-            <div class="flex items-center gap-4 lg:gap-12">
-                <a routerLink="/home" class="group flex items-center">
-                    <div
-                        class="mr-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-lg shadow-emerald-500/30 transition-all group-hover:rotate-12 group-hover:scale-110 md:h-11 md:w-11">
-                        <i class="fa-solid fa-graduation-cap text-lg md:text-xl"></i>
+            <div class="flex items-center gap-4 lg:gap-10">
+                <a routerLink="/home" class="group flex items-center gap-3 transition-transform hover:scale-105">
+                    <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-lg shadow-emerald-500/20 ring-2 ring-emerald-500/10 transition-all group-hover:shadow-emerald-500/40">
+                        <i class="fa-solid fa-graduation-cap text-lg"></i>
                     </div>
                     <div class="flex flex-col">
-                        <span
-                            class="text-sm font-black uppercase tracking-tighter text-gray-900 dark:text-white md:text-lg">
+                        <span class="text-sm font-extrabold tracking-tight text-gray-900 dark:text-white md:text-xl">
                             {{ appTitle }}
                         </span>
-                        <span
-                            class="text-[7px] font-bold uppercase tracking-[0.2em] text-emerald-500 leading-none">Online Academy</span>
+                        <span class="text-[8px] font-bold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">
+                            <span i18n="@@common.academy">Online Academy</span>
+                        </span>
                     </div>
                 </a>
 
-                <nav class="hidden lg:flex items-center space-x-1">
-                    @for (link of [
-                        { path: '/courses-list', label: 'header.courses' },
-                        { path: '/tests', label: 'header.online_test' },
-                        { path: '/blog', label: 'header.blog' }
-                    ]; track link.path) {
-                        <a [routerLink]="link.path"
-                           routerLinkActive="bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
-                           class="rounded-xl px-4 py-2 text-[10px] font-black uppercase tracking-widest text-gray-500 transition-all hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white">
-                            {{ link.label | translate }}
-                        </a>
-                    }
+                <nav class="hidden lg:flex items-center gap-1">
+                    <a routerLink="/courses-list" routerLinkActive="bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400"
+                       class="rounded-xl px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-gray-600 hover:bg-gray-50 hover:text-emerald-600 dark:text-gray-400 dark:hover:bg-gray-800 transition-all" i18n="@@course.title">
+                        Kurslar
+                    </a>
+                    <a routerLink="/tests" routerLinkActive="bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10"
+                       class="rounded-xl px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-gray-600 hover:bg-gray-50 hover:text-emerald-600 dark:text-gray-400 dark:hover:bg-gray-800 transition-all" i18n="@@test.title">
+                        Testlar
+                    </a>
+                    <a routerLink="/blog" routerLinkActive="bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10"
+                       class="rounded-xl px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-gray-600 hover:bg-gray-50 hover:text-emerald-600 dark:text-gray-400 dark:hover:bg-gray-800 transition-all" i18n="@@common.blog">
+                        Blog
+                    </a>
 
                     @if (isLoggedIn && userRole === 'ROLE_USER') {
-                        <a routerLink="/courses-me"
-                           routerLinkActive="bg-emerald-50 text-emerald-600"
-                           class="rounded-xl px-4 py-2 text-[10px] font-black uppercase tracking-widest text-gray-500 transition-all hover:bg-gray-50 dark:text-gray-400">
-                            {{ 'header.my_courses' | translate }}
+                        <a routerLink="/courses-me" routerLinkActive="bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10"
+                           class="rounded-xl px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-gray-600 hover:bg-gray-50 hover:text-emerald-600 dark:text-gray-400 dark:hover:bg-gray-800 transition-all" i18n="@@profile.my_courses">
+                            Mening kurslarim
                         </a>
                     }
                 </nav>
             </div>
 
-            <div class="flex items-center gap-2 md:gap-4">
+            <div class="flex items-center gap-3">
                 @if (isLoggedIn) {
-                    <div class="hidden sm:block">
+                    <div class="hidden sm:block mr-2">
                         <app-balance-widget></app-balance-widget>
                     </div>
-                }
 
-                @if (isLoggedIn) {
                     <div class="relative">
                         <button (click)="toggleProfile($event)"
-                                class="group flex items-center focus:outline-none">
-                            <div
-                                class="h-10 w-10 overflow-hidden rounded-xl border-2 border-transparent transition-all group-hover:border-emerald-500 group-hover:shadow-lg group-hover:shadow-emerald-500/20 md:h-11 md:w-11">
+                                class="flex items-center p-0.5 rounded-2xl ring-2 ring-transparent hover:ring-emerald-500/30 transition-all">
+                            <div class="h-11 w-11 overflow-hidden rounded-[14px] border-2 border-white dark:border-gray-800 shadow-sm">
                                 @if (authService.currentUser()?.imagePath) {
-                                    <img [src]="authService.currentUser()?.imagePath"
-                                         class="h-full w-full object-cover">
+                                    <img [src]="authService.currentUser()?.imagePath" class="h-full w-full object-cover">
                                 } @else {
-                                    <div
-                                        class="active:scale-95 hover:rotate-12 flex h-full w-full items-center justify-center bg-gray-100 text-sm font-black uppercase text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                                    <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 text-sm font-black text-emerald-600">
                                         {{ authService.currentUser()?.firstName?.charAt(0) }}
                                     </div>
                                 }
@@ -68,39 +61,35 @@
                         </button>
 
                         @if (isProfileOpen) {
-                            <div (click)="isProfileOpen = false"
-                                 class="absolute right-0 mt-4 w-64 origin-top-right rounded-[2rem] border border-gray-100 bg-white p-2 shadow-2xl animate-in zoom-in-95 duration-200 dark:border-gray-800 dark:bg-gray-900 z-[110]">
-
-                                <div
-                                    class="px-5 py-4 border-b border-gray-50 dark:border-gray-800/50">
-                                    <p class="text-[13px] font-black text-gray-900 dark:text-white truncate">
+                            <div class="absolute right-0 mt-4 w-72 origin-top-right rounded-3xl bg-white p-3 shadow-2xl shadow-black/10 ring-1 ring-black/5 dark:bg-gray-900 dark:ring-white/10 animate-in fade-in zoom-in duration-200">
+                                <div class="px-5 py-4 border-b border-gray-50 dark:border-gray-800 mb-2">
+                                    <p class="text-sm font-bold text-gray-900 dark:text-white">
                                         {{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}
                                     </p>
-                                    <p class="text-[9px] font-bold uppercase tracking-widest text-emerald-500 mt-1">
-                                        {{ 'header.student' | translate }}</p>
+                                    <p class="text-[10px] font-bold uppercase text-emerald-500 mt-0.5 tracking-wider">
+                                        <span i18n="@@profile.instructor">Foydalanuvchi</span>
+                                    </p>
                                 </div>
 
-                                <div class="p-1 space-y-1">
-                                    <button routerLink="/profile"
-                                            class="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-[10px] font-black uppercase tracking-widest text-gray-600 transition-all hover:bg-emerald-50 hover:text-emerald-600 dark:text-gray-300 dark:hover:bg-gray-800/50">
-                                        <i class="fa-solid fa-user-gear text-sm opacity-60"></i>
-                                        {{ 'header.profile_settings' | translate }}
-                                    </button>
-                                    <button routerLink="/top-up-histories"
-                                            class="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-[10px] font-black uppercase tracking-widest text-gray-600 transition-all hover:bg-emerald-50 hover:text-emerald-600 dark:text-gray-300 dark:hover:bg-gray-800/50">
-                                        <i class="fa-solid fa-history text-sm opacity-60"></i>
-                                        {{ 'header.balance_history' | translate }}
+                                <div class="space-y-1">
+                                    <button routerLink="/profile" class="group flex w-full items-center rounded-2xl px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-gray-300 dark:hover:bg-emerald-500/10 transition-all">
+                                        <i class="fa-solid fa-user-gear mr-3 opacity-50 group-hover:opacity-100"></i>
+                                        <span i18n="@@profile.settings">Profil sozlamalari</span>
                                     </button>
 
-                                    <button (click)="logout()"
-                                            class="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-[10px] font-black uppercase tracking-widest text-red-500 transition-all hover:bg-red-50">
-                                        <i class="fa-solid fa-power-off text-sm opacity-60"></i>
-                                        {{ 'header.logout' | translate }}
+                                    <button routerLink="/top-up-histories" class="group flex w-full items-center rounded-2xl px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-gray-300 dark:hover:bg-emerald-500/10 transition-all">
+                                        <i class="fa-solid fa-wallet mr-3 opacity-50 group-hover:opacity-100"></i>
+                                        <span i18n="@@profile.balance_history">Balans tarixi</span>
                                     </button>
 
-                                    <div
-                                        class="p-2 border-t border-gray-50 dark:border-gray-800/50 mt-1"
-                                        (click)="$event.stopPropagation()">
+                                    <div class="h-px bg-gray-50 dark:bg-gray-800 my-1 mx-2"></div>
+
+                                    <button (click)="logout()" class="group flex w-full items-center rounded-2xl px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all">
+                                        <i class="fa-solid fa-right-from-bracket mr-3 opacity-70"></i>
+                                        <span i18n="@@common.logout">Chiqish</span>
+                                    </button>
+
+                                    <div class="p-3 border-t border-gray-50 dark:border-gray-800 mt-2 flex items-center justify-between">
                                         <app-lang-switcher></app-lang-switcher>
                                         <app-theme-switch></app-theme-switch>
                                     </div>
@@ -110,75 +99,63 @@
                     </div>
                 } @else {
                     <button routerLink="/auth/login"
-                            class="hidden sm:block rounded-xl bg-gray-900 px-6 py-3 text-[10px] font-black uppercase tracking-widest text-white shadow-lg transition-all hover:bg-emerald-600 active:scale-95 dark:bg-white dark:text-gray-900 dark:hover:bg-emerald-500 dark:hover:text-white">
-                        {{ 'header.login' | translate }}
+                            class="hidden sm:inline-flex items-center justify-center rounded-2xl bg-gray-900 px-6 py-3 text-[11px] font-bold uppercase tracking-widest text-white shadow-lg shadow-gray-900/20 hover:bg-gray-800 hover:-translate-y-0.5 active:translate-y-0 transition-all dark:bg-emerald-600 dark:hover:bg-emerald-500 dark:shadow-emerald-500/20">
+                        Kirish
                     </button>
                 }
 
                 <button (click)="toggleMobileMenu()"
-                        class="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-50 text-gray-600 transition-all active:scale-90 dark:bg-gray-800 dark:text-gray-300 lg:hidden">
-                    <i class="fa-solid" [class]="isMenuOpen ? 'fa-xmark' : 'fa-bars-staggered'"></i>
+                        class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gray-50 text-gray-600 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 lg:hidden transition-all">
+                    <i class="fa-solid text-lg" [class]="isMenuOpen ? 'fa-xmark' : 'fa-bars-staggered'"></i>
                 </button>
             </div>
         </div>
     </div>
 
     @if (isMenuOpen) {
-        <div
-            class="fixed inset-x-0 top-[64px] h-[calc(100vh-64px)] w-full overflow-y-auto bg-white p-6 animate-in slide-in-from-right duration-500 dark:bg-gray-950 lg:hidden z-[90]">
-            <div class="space-y-6">
+        <div class="fixed inset-0 top-[64px] z-[90] h-[calc(100vh-64px)] w-full overflow-y-auto bg-white/95 backdrop-blur-xl dark:bg-gray-950/95 lg:hidden animate-in slide-in-from-top duration-300">
+            <div class="container mx-auto p-6 space-y-8">
 
                 @if (isLoggedIn) {
-                    <div
-                        class="flex flex-col gap-2 rounded-3xl bg-emerald-50 p-6 dark:bg-emerald-500/10">
-                        <span
-                            class="text-[9px] font-black uppercase tracking-widest text-emerald-600">{{ 'header.your_balance' | translate }}</span>
-                        <div class="flex items-center justify-between">
-                            <span class="text-2xl font-black text-gray-900 dark:text-white">0 <small
-                                class="text-xs">UZS</small></span>
+                    <div class="rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-6 text-white shadow-xl shadow-emerald-500/20">
+                        <span class="text-[10px] font-bold uppercase tracking-widest opacity-80" i18n="@@profile.balance">Balans</span>
+                        <div class="mt-2 flex items-center justify-between">
+                            <span class="text-3xl font-black italic">0 UZS</span>
                             <button routerLink="/top-up" (click)="isMenuOpen = false"
-                                    class="rounded-xl bg-emerald-600 px-4 py-2 text-[9px] font-black uppercase text-white">
-                                {{ 'header.top_up' | translate }}
+                                    class="rounded-xl bg-white/20 px-4 py-2 text-xs font-bold uppercase backdrop-blur-md hover:bg-white/30 transition-all">
+                                <span i18n="@@profile.top_up">To'ldirish</span>
                             </button>
                         </div>
                     </div>
                 }
 
-                <nav class="grid gap-2">
-                    <a routerLink="/courses-list" (click)="isMenuOpen = false"
-                       class="flex items-center justify-between rounded-2xl bg-gray-50 px-6 py-5 dark:bg-gray-900">
-                        <span
-                            class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">{{ 'header.courses_catalog' | translate }}</span>
-                        <i class="fa-solid fa-chevron-right text-[10px] text-emerald-500"></i>
+                <nav class="flex flex-col gap-2">
+                    <a routerLink="/courses-list" (click)="isMenuOpen = false" class="flex items-center justify-between rounded-2xl bg-gray-50 px-6 py-5 text-sm font-bold text-gray-900 dark:bg-gray-900 dark:text-white active:scale-95 transition-all">
+                        Kurslar <i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>
                     </a>
-                    <a routerLink="/tests" (click)="isMenuOpen = false"
-                       class="flex items-center justify-between rounded-2xl bg-gray-50 px-6 py-5 dark:bg-gray-900">
-                        <span
-                            class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">{{ 'header.online_tests' | translate }}</span>
-                        <i class="fa-solid fa-chevron-right text-[10px] text-emerald-500"></i>
+                    <a routerLink="/tests" (click)="isMenuOpen = false" class="flex items-center justify-between rounded-2xl bg-gray-50 px-6 py-5 text-sm font-bold text-gray-900 dark:bg-gray-900 dark:text-white active:scale-95 transition-all">
+                        Testlar <i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>
                     </a>
-                    <a routerLink="/blog" (click)="isMenuOpen = false"
-                       class="flex items-center justify-between rounded-2xl bg-gray-50 px-6 py-5 dark:bg-gray-900">
-                        <span
-                            class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">{{ 'header.blog_news' | translate }}</span>
-                        <i class="fa-solid fa-chevron-right text-[10px] text-emerald-500"></i>
+                    <a routerLink="/blog" (click)="isMenuOpen = false" class="flex items-center justify-between rounded-2xl bg-gray-50 px-6 py-5 text-sm font-bold text-gray-900 dark:bg-gray-900 dark:text-white active:scale-95 transition-all">
+                        Blog <i class="fa-solid fa-chevron-right text-[10px] opacity-30"></i>
                     </a>
                 </nav>
 
                 @if (!isLoggedIn) {
                     <button routerLink="/auth/login" (click)="isMenuOpen = false"
-                            class="w-full rounded-2xl bg-emerald-600 py-5 text-[11px] font-black uppercase tracking-widest text-white shadow-xl shadow-emerald-500/20">
-                        {{ 'header.sign_in' | translate }}
+                            class="w-full rounded-2xl bg-emerald-600 py-5 text-sm font-bold uppercase tracking-widest text-white shadow-lg shadow-emerald-600/20">
+                        Kirish
                     </button>
                 } @else {
                     <button (click)="logout(); isMenuOpen = false"
-                            class="w-full rounded-2xl border border-red-100 py-5 text-[11px] font-black uppercase tracking-widest text-red-500">
-                        {{ 'header.exit' | translate }}
+                            class="w-full rounded-2xl border-2 border-red-50 py-5 text-sm font-bold uppercase tracking-widest text-red-500 dark:border-red-500/10">
+                        Chiqish
                     </button>
                 }
 
-                <div class="flex justify-center gap-8 pt-6">
+                <div class="flex justify-center items-center gap-10 pt-6">
                     <app-lang-switcher></app-lang-switcher>
+                    <div class="w-px h-8 bg-gray-100 dark:bg-gray-800"></div>
                     <app-theme-switch></app-theme-switch>
                 </div>
             </div>

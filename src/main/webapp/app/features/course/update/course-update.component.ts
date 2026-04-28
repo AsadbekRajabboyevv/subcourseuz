@@ -1,25 +1,36 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {Component, inject, OnInit, signal} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import { CourseService } from '../course.service';
-import { CourseUpdate } from '../course.model';
-import { InputComponent } from '../../../shared/ui/forms/input.component';
-import { PageWrapperComponent } from '../../../shared/ui/layout/page-wrapper.component';
-import { TranslateModule } from '@ngx-translate/core';
+import {CourseService} from '../course.service';
+import {CourseUpdate} from '../course.model';
+import {InputComponent} from '../../../shared/ui/forms/input.component';
+import {PageWrapperComponent} from '../../../shared/ui/layout/page-wrapper.component';
+import {ScienceService} from "../../science/science.service";
+import {GradeService} from "../../grade/grade.service";
+import {finalize} from "rxjs";
+
 
 @Component({
   selector: 'app-course-update',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputComponent, PageWrapperComponent, RouterLink, TranslateModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    InputComponent,
+    PageWrapperComponent,
+    RouterLink,
+  ],
   templateUrl: './course-update.component.html'
 })
 export class CourseUpdateComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private courseService = inject(CourseService);
+  private scienceService = inject(ScienceService);
+  private gradeService = inject(GradeService);
 
-  courseId!: number;
+  slug: string | null = null;
   loading = signal(false);
 
   selectedFile: File | null = null;
@@ -42,56 +53,56 @@ export class CourseUpdateComponent implements OnInit {
   };
 
   languages = [
-    { label: "O'zbekcha", value: 'UZ' },
-    { label: "Ruscha", value: 'RU' },
-    { label: "Inglizcha", value: 'EN' }
+    {label: "O'zbekcha", value: 'UZ'},
+    {label: "Ruscha", value: 'RU'},
+    {label: "Inglizcha", value: 'EN'}
   ];
 
   durationTypes = [
-    { label: 'Soat', value: 'SOAT' },
-    { label: 'Kun', value: 'KUN' },
-    { label: 'Oy', value: 'OY' }
+    {label: 'Soat', value: 'SOAT'},
+    {label: 'Kun', value: 'KUN'},
+    {label: 'Oy', value: 'OY'}
   ];
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.courseId = params['id'];
-    });
+    this.slug = this.route.snapshot.paramMap.get('slug');
     this.loadInitialData();
     this.loadCourse();
   }
 
   loadInitialData() {
-    this.courseService.getSciences().subscribe(res => {
-      this.sciences.set(res.data.map((i: any) => ({ label: i.name, value: i.id })));
+    this.scienceService.get().subscribe(res => {
+      this.sciences.set(res.data.map((i: any) => ({label: i.name, value: i.id})));
     });
-    this.courseService.getGrades().subscribe(res => {
-      this.grades.set(res.data.map((i: any) => ({ label: i.name, value: i.id })));
+    this.gradeService.get().subscribe(res => {
+      this.grades.set(res.data.map((i: any) => ({label: i.name, value: i.id})));
     });
   }
 
   loadCourse() {
     this.loading.set(true);
-    this.courseService.getUpdateById(this.courseId).subscribe({
-      next: (res: any) => {
-        const data = res.data;
-        this.courseForm = {
-          name: data.name,
-          description: data.description,
-          duration: data.duration,
-          durationType: data.durationType,
-          scienceId: data.scienceId,
-          gradeId: data.gradeId,
-          price: data.price,
-          lang: data.lang,
-          isVideoCourse: data.isVideoCourse,
-          isPublished: data.isPublished
-        };
-        this.imagePreview = data.imagePath;
-        this.loading.set(false);
-      },
-      error: () => this.loading.set(false)
-    });
+    if (this.slug != null) {
+      this.courseService.getUpdateBySlug(this.slug).subscribe({
+        next: (res: any) => {
+          const data = res.data;
+          this.courseForm = {
+            name: data.name,
+            description: data.description,
+            duration: data.duration,
+            durationType: data.durationType,
+            scienceId: data.scienceId,
+            gradeId: data.gradeId,
+            price: data.price,
+            lang: data.lang,
+            isVideoCourse: data.isVideoCourse,
+            isPublished: data.isPublished
+          };
+          this.imagePreview = data.imagePath;
+          this.loading.set(false);
+        },
+        error: () => this.loading.set(false)
+      });
+    }
   }
 
   onFileSelected(event: any) {
@@ -105,16 +116,13 @@ export class CourseUpdateComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.loading()) return;
+    if (this.loading() || !this.slug) return;
     this.loading.set(true);
-    this.courseService.update(this.courseId, this.courseForm, this.selectedFile).subscribe({
+    this.courseService.update(this.slug, this.courseForm, this.selectedFile)
+    .pipe(finalize(() => this.loading.set(false)))
+    .subscribe({
       next: () => {
-        this.loading.set(false);
-        this.router.navigate(['/courses-list']);
-      },
-      error: (err) => {
-        console.error("Update error:", err);
-        this.loading.set(false);
+        void this.router.navigate(['/courses-list']);
       }
     });
   }

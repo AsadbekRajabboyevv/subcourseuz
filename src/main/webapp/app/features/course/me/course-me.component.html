@@ -1,12 +1,12 @@
 <app-page-wrapper>
     <div page-title class="w-full px-2 md:px-0">
         <nav class="mb-3 flex items-center gap-2 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-            <a routerLink="/" class="hover:text-emerald-500 transition-colors">Asosiy</a>
+            <a routerLink="/" class="hover:text-emerald-500 transition-colors" i18n="@@common.home">Asosiy</a>
             <i class="fa-solid fa-chevron-right text-[7px] opacity-50"></i>
-            <span class="text-emerald-500">Mening kurslarim</span>
+            <span class="text-emerald-500" i18n="@@profile.my_courses">Mening kurslarim</span>
         </nav>
         <h1 class="text-xl md:text-3xl font-black tracking-tight text-gray-900 dark:text-white uppercase">
-            O'quv jarayoni
+            <span i18n="@@profile.my_courses_title">O'quv jarayoni</span>
         </h1>
     </div>
 
@@ -21,7 +21,7 @@
                         <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10">
                             <i class="fa-solid fa-magnifying-glass text-xs"></i>
                         </div>
-                        <span class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">Kursni qidirish</span>
+                        <span class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white" i18n="@@course.search">Kursni qidirish</span>
                     </div>
                     <i class="fa-solid transition-transform duration-300 text-gray-400"
                        [class.rotate-180]="isFilterVisible"
@@ -30,16 +30,16 @@
 
                 <div [class.hidden]="!isFilterVisible" class="lg:block p-4 lg:p-0 space-y-5 animate-in fade-in slide-in-from-top-2 duration-300">
                     <div class="hidden lg:flex items-center justify-between mb-2 px-1">
-                        <h3 class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">Filtrlash</h3>
-                        <button (click)="resetFilters()" class="text-[9px] font-bold uppercase text-gray-400 hover:text-red-500 transition-colors">Tozalash</button>
+                        <h3 class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white" i18n="@@common.filter">Filtrlash</h3>
+                        <button (click)="resetFilters()" class="text-[9px] font-bold uppercase text-gray-400 hover:text-red-500 transition-colors" i18n="@@common.clear">Tozalash</button>
                     </div>
 
                     <div class="space-y-4">
-                        <app-input type="text" label="Qidiruv" placeholder="Kurs nomi..." [(ngModel)]="filter.search"></app-input>
+                        <app-input type="text" label="Qidiruv" i18n-label="@@common.search" placeholder="Kurs nomi..." [(ngModel)]="filter.search"></app-input>
 
                         <button (click)="applyFilters(); isFilterVisible = false"
                                 class="w-full rounded-2xl bg-emerald-600 py-4 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-emerald-500/20 active:scale-95 transition-all hover:bg-emerald-700">
-                            Natijalarni ko'rish
+                            <span i18n="@@common.apply_filter">Natijalarni ko'rish</span>
                         </button>
 
                         <button (click)="resetFilters()" class="w-full lg:hidden text-[9px] font-black uppercase text-gray-400 py-2">Tozalash</button>
@@ -57,7 +57,7 @@
                     }
                 }
 
-                @for (course of courseService.courses(); track course.id) {
+                @for (course of courseService.courses(); track course.slug) {
                     <div class="active:scale-95 hover:rotate-2 group relative flex flex-col rounded-[2.5rem] border border-gray-100 bg-white p-3 md:p-4 transition-all hover:border-emerald-500 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900 active:scale-[0.98]">
 
                         <div class="relative h-44 overflow-hidden rounded-[1.8rem]">
@@ -67,7 +67,7 @@
                                 {{ course.lang }}
                             </div>
                             <div class="absolute bottom-3 right-3 rounded-full bg-emerald-500 px-3 py-1 text-[9px] font-black text-white shadow-lg">
-                                Sotib olingan
+                                <span i18n="@@course.purchased">Sotib olingan</span>
                             </div>
                         </div>
 
@@ -78,7 +78,7 @@
                                 </span>
                                 <div class="flex items-center gap-1.5 text-gray-400">
                                     <i class="fa-solid fa-layer-group text-[8px]"></i>
-                                    <span class="text-[9px] font-bold">{{ course.lessonsCount }} dars</span>
+                                    <span class="text-[9px] font-bold">{{ course.lessonsCount }} <span i18n="@@course.lessons_count">dars</span></span>
                                 </div>
                             </div>
 
@@ -87,11 +87,10 @@
                             </h3>
 
                             <div class="mt-auto pt-5">
-                                <button [routerLink]="['/courses-view/', course.name]"
-                                        [queryParams]="{ id: course.id }"
+                                <button [routerLink]="['/courses-view/', course.slug]"
                                         class="flex w-full items-center justify-center gap-3 rounded-2xl bg-gray-900 py-4 text-[10px] font-black uppercase tracking-[0.1em] text-white transition-all hover:bg-emerald-600 dark:bg-white dark:text-gray-900 active:scale-95 shadow-xl hover:shadow-emerald-500/20">
                                     <i class="fa-solid fa-circle-play text-xs"></i>
-                                    <span>O'qishni davom ettirish</span>
+                                    <span i18n="@@course.continue_learning">O'qishni davom ettirish</span>
                                 </button>
                             </div>
                         </div>
@@ -104,8 +103,8 @@
                     <div class="inline-flex h-20 w-20 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 mb-6">
                         <i class="fa-solid fa-book-open-reader text-3xl text-gray-200"></i>
                     </div>
-                    <p class="font-black uppercase tracking-[0.2em] text-[10px] text-gray-400">Sizda hali kurslar mavjud emas</p>
-                    <button routerLink="/courses-list" class="mt-6 text-[10px] font-black uppercase text-emerald-500 hover:underline">Kurslar katalogiga o'tish</button>
+                    <p class="font-black uppercase tracking-[0.2em] text-[10px] text-gray-400" i18n="@@course.no_courses">Sizda hali kurslar mavjud emas</p>
+                    <button routerLink="/courses-list" class="mt-6 text-[10px] font-black uppercase text-emerald-500 hover:underline" i18n="@@course.go_to_catalog">Kurslar katalogiga o'tish</button>
                 </div>
             }
 

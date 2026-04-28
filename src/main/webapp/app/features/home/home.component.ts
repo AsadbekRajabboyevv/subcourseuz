@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PageWrapperComponent } from '../../shared/ui/layout/page-wrapper.component';
-import {TranslatePipe, TranslateModule} from "@ngx-translate/core";
 
 interface Course {
   id: number;
@@ -16,14 +15,15 @@ interface Course {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, PageWrapperComponent, TranslatePipe, TranslateModule],
+  imports: [
+    CommonModule,
+    PageWrapperComponent
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
   currentSlideIndex = 0;
-  private touchStartX = 0;
-  private touchEndX = 0;
 
   courses: Course[] = [
     { id: 1, title: 'Java Backend Pro', category: 'Backend', image: 'https://picsum.photos/400/250?random=1', mentor: 'Asadbek R.', mentorImage: 'https://i.pravatar.cc/150?u=1', price: 1200000 },
@@ -61,13 +61,6 @@ export class HomeComponent implements OnInit {
     } else {
       this.currentSlideIndex--;
     }
-  }
-
-  onTouchStart(e: TouchEvent) { this.touchStartX = e.changedTouches[0].screenX; }
-  onTouchEnd(e: TouchEvent) {
-    this.touchEndX = e.changedTouches[0].screenX;
-    if (this.touchStartX - this.touchEndX > 50) this.nextSlide();
-    if (this.touchEndX - this.touchStartX > 50) this.prevSlide();
   }
 
 }

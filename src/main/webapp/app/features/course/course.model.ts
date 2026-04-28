@@ -2,7 +2,7 @@ import {BaseFilter, Description, Name} from "../../common/model/base";
 import {Lesson} from "../lesson/lesson.model";
 
 export interface Course {
-  id: number;
+  slug: string;
   name: string;
   lessonsCount: number;
   studentsCount: number;
@@ -71,49 +71,4 @@ export enum DurationType {
   YIL = "YIL",
   KUN = "KUN",
   SOAT = "SOAT",
-}
-//=========================Grades========================
-
-export interface CourseGrade {
-  id: number;
-  name: string;
-}
-export interface OneCourseGrade {
-  id: number;
-  name: Name;
-  description: Description;
-}
-export interface CourseGradeCreate {
-  name: Name;
-  description: Description;
-}
-
-export interface CourseGradeUpdate {
-  name?: Name | null;
-  description?: Description | null;
-}
-
-//=========================Science========================
-
-export interface CourseScience {
-  id: number;
-  name: string;
-  imagePath: string;
-}
-
-export interface OneCourseScience {
-  id: number;
-  name: Name;
-  description: Description;
-  imagePath: string;
-}
-
-export interface CourseScienceCreate {
-  name: Name;
-  description: Description;
-}
-
-export interface CourseScienceUpdate {
-  name?: Name | null;
-  description?: Description | null;
 }

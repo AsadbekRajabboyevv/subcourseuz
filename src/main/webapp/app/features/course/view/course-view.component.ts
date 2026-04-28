@@ -10,12 +10,17 @@ import {PaymentModalComponent} from "../../payment/modal/payment-modal.component
 import {PaymentRequest} from "../../payment/payment.model";
 import {AuthService} from "../../../common/auth/auth.service";
 import {MarkdownComponent} from "ngx-markdown";
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-course-view',
   standalone: true,
-  imports: [CommonModule, RouterModule, PageWrapperComponent, PaymentModalComponent, MarkdownComponent, TranslateModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    PageWrapperComponent,
+    PaymentModalComponent,
+    MarkdownComponent
+  ],
   templateUrl: './course-view.component.html',
   styles: ``
 })
@@ -38,9 +43,9 @@ export class CourseViewComponent implements OnInit {
     });
   }
 
-  loadCourse(id: number) {
+  loadCourse(slug: string) {
     this.isLoading.set(true);
-    this.courseService.getById(id).subscribe({
+    this.courseService.getById(slug).subscribe({
       next: (res) => {
         this.course.set(res.data);
         this.isLoading.set(false);
@@ -59,7 +64,7 @@ export class CourseViewComponent implements OnInit {
     const lessonSlug = this.slugify(lesson.name);
 
     this.router.navigate([`/course/view/${courseSlug}/lesson/view/${lessonSlug}`], {
-      queryParams: { cId: currentCourse.id, lId: lesson.id }
+      queryParams: { cId: currentCourse.slug, lId: lesson.id }
     });
   }
   openBuyModal() {
@@ -71,14 +76,14 @@ export class CourseViewComponent implements OnInit {
     if (!currentCourse) return;
 
     const request: PaymentRequest = {
-      courseId: currentCourse.id,
+      courseSlug: currentCourse.slug,
       amount: currentCourse.price,
       couponCode: event.couponCode
     };
 
     this.paymentService.purchase(request).subscribe({
       next: (res) => {
-        this.loadCourse(currentCourse.id);
+        this.loadCourse(currentCourse.slug);
         this.closeModal();
       }
     });

@@ -1,5 +1,5 @@
 export interface PaymentRequest {
-  courseId?: number;
+  courseSlug?: string;
   testId?: number;
   amount: number;
   couponCode?: string;
