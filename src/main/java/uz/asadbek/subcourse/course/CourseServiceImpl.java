@@ -1,7 +1,6 @@
 package uz.asadbek.subcourse.course;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -15,7 +14,6 @@ import uz.asadbek.subcourse.course.dto.CourseResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseUpdateRequestDto;
 import uz.asadbek.subcourse.course.filter.CourseFilter;
 import uz.asadbek.subcourse.course.lesson.CourseLessonRepository;
-import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
 import uz.asadbek.subcourse.course.usercourse.UserCourseEntity;
 import uz.asadbek.subcourse.exception.BadRequestException;
 import uz.asadbek.subcourse.exception.NotFoundException;
@@ -23,6 +21,7 @@ import uz.asadbek.subcourse.filestorage.FileStorageService;
 import uz.asadbek.subcourse.filestorage.dto.FileUploadOptions;
 import uz.asadbek.subcourse.util.ExceptionUtil;
 import uz.asadbek.subcourse.util.JwtUtil;
+import uz.asadbek.subcourse.util.SlugUtil;
 import uz.asadbek.subcourse.util.Validator;
 import uz.asadbek.subcourse.util.embedded.UserPurchaseId;
 import uz.asadbek.subcourse.course.usercourse.UserCourseRepository;
@@ -58,26 +57,29 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Page<CourseResponseDto> getMe(Pageable pageable, CourseFilter filter) {
-        return repository.get(pageable, filter, LangUtils.currentLang(), JwtUtil.getCurrentUserId());
+        return repository.get(pageable, filter, LangUtils.currentLang(),
+            JwtUtil.getCurrentUserId());
     }
 
     @Override
-    public CourseInfoResponseDto getInfo(Long id) {
-        var dto = repository.getCourseBasicInfo(id, LangUtils.currentLang())
-            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.not_found.course", id));
+    public CourseInfoResponseDto getInfo(String slug) {
+        var dto = repository.getCourseBasicInfo(slug, LangUtils.currentLang())
+            .orElseThrow(
+                () -> ExceptionUtil.build(NotFoundException.class, "error.not_found.course", slug));
         Boolean isPublished = true;
-        if (JwtUtil.isAdmin()){
+        if (JwtUtil.isAdmin()) {
             isPublished = null;
         }
-        var lessons = courseLessonRepository.findAllByCourseId(id, isPublished);
+        var lessons = courseLessonRepository.findAllByCourseId(dto.getId(), isPublished);
         dto.setLessons(lessons);
         dto.setLessonsCount((long) lessons.size());
 
-        dto.setStudentsCount(userCourseRepository.countByIdReferenceId(id));
+        dto.setStudentsCount(userCourseRepository.countByIdReferenceId(dto.getId()));
 
         if (JwtUtil.isAuthenticated()) {
             var currentUserId = JwtUtil.getCurrentUserId();
-            var exists = userCourseRepository.existsByIdUserIdAndIdReferenceId(currentUserId, id);
+            var exists = userCourseRepository.existsByIdUserIdAndIdReferenceId(currentUserId,
+                dto.getId());
             dto.setPurchased(exists);
         }
 
@@ -85,8 +87,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public CourseResponseDto get(Long id) {
-        return repository.get(id);
+    public CourseResponseDto get(String slug) {
+        return repository.get(slug);
     }
 
     @Override
@@ -102,7 +104,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public Long create(MultipartFile image, CourseRequestDto request) {
+    public String create(MultipartFile image, CourseRequestDto request) {
         var entity = mapper.toEntity(request);
 
         if (image != null && !image.isEmpty()) {
@@ -110,18 +112,35 @@ public class CourseServiceImpl implements CourseService {
             entity.setImagePath(url);
         }
 
-        return repository.save(entity).getId();
+        String base = SlugUtil.generateSlug(request.getName());
+        String slug = base;
+        int i = 1;
+
+        while (repository.existsBySlug(slug)) {
+            slug = STR."\{base}-\{i++}";
+        }
+
+        entity.setSlug(slug);
+        return repository.save(entity).getSlug();
     }
 
     @Override
-    public CourseUpdateRequestDto getUpdateData(Long id) {
-        return repository.getUpdateData(id).orElseThrow(()-> ExceptionUtil.build(NotFoundException.class, "error.not_found.course", id));
+    public CourseUpdateRequestDto getUpdateData(String slug) {
+        return repository.getUpdateData(slug).orElseThrow(
+            () -> ExceptionUtil.build(NotFoundException.class, "error.not_found.course",
+                slug));
+    }
+
+    @Override
+    public Long getIdBySlug(String slug) {
+        return repository.findIdBySlug(slug).orElseThrow(
+            () -> ExceptionUtil.build(NotFoundException.class, "error.not_found.course", slug));
     }
 
     @Override
     @Transactional
-    public Long update(Long id, CourseUpdateRequestDto request, MultipartFile image) {
-        var entity = findById(id);
+    public String update(String slug, CourseUpdateRequestDto request, MultipartFile image) {
+        var entity = findBySlug(slug);
         mapper.update(entity, request);
         if (image != null && !image.isEmpty()) {
             var url = fileStorageService.upload(image, FileUploadOptions.COURSE_IMAGE)
@@ -131,19 +150,20 @@ public class CourseServiceImpl implements CourseService {
             }
             entity.setImagePath(url);
         }
-        return repository.save(entity).getId();
+        return repository.save(entity).getSlug();
     }
 
     @Override
     @Transactional
-    public Long delete(Long id) {
-        repository.delete(findById(id));
-        return id;
+    public String delete(String slug) {
+        repository.delete(findBySlug(slug));
+        return slug;
     }
 
-    private CourseEntity findById(Long id) {
-        return repository.findById(id)
-            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.not_found.course", id));
+    private CourseEntity findBySlug(String slug) {
+        return repository.findBySlug(slug)
+            .orElseThrow(
+                () -> ExceptionUtil.build(NotFoundException.class, "error.not_found.course", slug));
     }
 
 }

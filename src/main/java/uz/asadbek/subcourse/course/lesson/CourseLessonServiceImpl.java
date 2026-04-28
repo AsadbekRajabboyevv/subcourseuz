@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import uz.asadbek.subcourse.course.CourseService;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonInfoResponseDto;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonRequestDto;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
@@ -25,6 +26,7 @@ public class CourseLessonServiceImpl implements CourseLessonService {
     private final CourseLessonRepository repository;
     private final CourseLessonMapper mapper;
     private final FileStorageService fileStorageService;
+    private final CourseService courseService;
 
     @Override
     public List<CourseLessonResponseDto> getByCourseId(Long courseId) {
@@ -49,14 +51,17 @@ public class CourseLessonServiceImpl implements CourseLessonService {
                 }
             }
         }
+        courseService.getIdBySlug(request.getSlug());
         var entity = mapper.toEntity(request);
         entity.setFileUrls(urls);
 
         return repository.save(entity).getId();
     }
+
     @Override
     @Transactional
-    public Long update(Long id, CourseLessonUpdateRequestDto dto, List<MultipartFile> files, List<String> deletedFileUrls) {
+    public Long update(Long id, CourseLessonUpdateRequestDto dto, List<MultipartFile> files,
+        List<String> deletedFileUrls) {
         var entity = findById(id);
         mapper.update(entity, dto);
 
@@ -82,7 +87,9 @@ public class CourseLessonServiceImpl implements CourseLessonService {
 
     private CourseLessonEntity findById(Long id) {
         return repository.findById(id)
-            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.not_found.course_lesson", id));
+            .orElseThrow(
+                () -> ExceptionUtil.build(NotFoundException.class, "error.not_found.course_lesson",
+                    id));
     }
 
     @Override

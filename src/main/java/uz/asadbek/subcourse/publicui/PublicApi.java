@@ -27,14 +27,14 @@ public interface PublicApi {
     @GetMapping("/courses")
     BaseResponseDto<Page<CourseResponseDto>> getCourses(CourseFilter filter, Pageable pageable);
 
-    @GetMapping("/courses/{id}")
-    BaseResponseDto<CourseInfoResponseDto> getCourse(@PathVariable Long id);
+    @GetMapping("/courses/{slug}")
+    BaseResponseDto<CourseInfoResponseDto> getCourse(@PathVariable String slug);
 
     @GetMapping("/course-grades")
     BaseResponseDto<List<CourseGradeResponseDto>> getCourseGrades();
 
-    @GetMapping("/courses/{id}/lessons")
-    BaseResponseDto<List<CourseLessonResponseDto>> getCourseLessons(@PathVariable Long id);
+    @GetMapping("/courses/{slug}/lessons")
+    BaseResponseDto<List<CourseLessonResponseDto>> getCourseLessons(@PathVariable String slug);
 
     @GetMapping("/tests")
     BaseResponseDto<List<TestResponseDto>> getTests(TestFilter filter, Pageable pageable);

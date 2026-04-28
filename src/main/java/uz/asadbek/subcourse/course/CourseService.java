@@ -1,5 +1,6 @@
 package uz.asadbek.subcourse.course;
 
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,17 +19,19 @@ public interface CourseService {
 
     Page<CourseResponseDto> getMe(Pageable pageable, CourseFilter filter);
 
-    CourseInfoResponseDto getInfo(Long id);
+    CourseInfoResponseDto getInfo(String slug);
 
-    CourseResponseDto get(Long id);
+    CourseResponseDto get(String slug);
 
     Boolean enroll(Long courseId);
 
-    Long delete(Long id);
+    String delete(String slug);
 
-    Long update(Long id, CourseUpdateRequestDto request, MultipartFile image);
+    String update(String slug, CourseUpdateRequestDto request, MultipartFile image);
 
-    Long create(MultipartFile image, CourseRequestDto request);
+    String create(MultipartFile image, CourseRequestDto request);
 
-    CourseUpdateRequestDto getUpdateData(Long id);
+    CourseUpdateRequestDto getUpdateData(String slug);
+
+    Long getIdBySlug(@NotNull String slug);
 }

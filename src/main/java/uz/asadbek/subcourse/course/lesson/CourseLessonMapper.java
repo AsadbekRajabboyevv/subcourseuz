@@ -13,6 +13,7 @@ import uz.asadbek.subcourse.course.lesson.dto.CourseLessonUpdateRequestDto;
 public interface CourseLessonMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "courseId", ignore = true)
     CourseLessonEntity toEntity(CourseLessonRequestDto dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

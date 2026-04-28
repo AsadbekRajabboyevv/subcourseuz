@@ -22,8 +22,11 @@ public class CourseLessonRequestDto {
     private String textContent;
 
     @NotNull
-    @ExistsInDb(entity = CourseEntity.class)
-    private Long courseId;
+    @ExistsInDb(
+        entity = CourseEntity.class,
+        field = "slug"
+    )
+    private String slug;
 
     @NotNull
     private Boolean isPublished;

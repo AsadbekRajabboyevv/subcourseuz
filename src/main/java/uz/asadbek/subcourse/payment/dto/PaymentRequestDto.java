@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentRequestDto {
-    private Long courseId;
+    private String courseSlug;
     private Long testId;
     private Long amount;
     private String couponCode;

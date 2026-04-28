@@ -76,16 +76,20 @@ public class PaymentServiceImpl implements PaymentService {
             log.error("[PaymentServiceImpl] User not authenticated");
             throw ExceptionUtil.build(UnAuthorizedException.class, "error.auth.user_not_authenticated");
         }
-
-        var courseId = request.getCourseId();
-        var testId = request.getTestId();
-        var couponCode = request.getCouponCode();
-
-        var balance = balanceService.get();
-        Long amount;
         CourseResponseDto course = null;
         TestResponseDto test = null;
-
+        var courseSlug = request.getCourseSlug();
+        var testId = request.getTestId();
+        var couponCode = request.getCouponCode();
+        var balance = balanceService.get();
+        Long amount;
+        if (courseSlug != null) {
+            course = courseService.get(courseSlug);
+            amount = course.getPrice();
+        } else {
+            test = testService.get(testId);
+            amount = test.getPrice();
+        }
         if (Boolean.TRUE.equals(isTopUp)) {
             amount = request.getAmount();
             var payment = buildPayment(null, null, amount, balance.getCurrency());
@@ -101,15 +105,10 @@ public class PaymentServiceImpl implements PaymentService {
                 .build();
         }
 
-        PaymentValidator.validatePurchaseRequest(courseId, testId);
 
-        if (courseId != null) {
-            course = courseService.get(courseId);
-            amount = course.getPrice();
-        } else {
-            test = testService.get(testId);
-            amount = test.getPrice();
-        }
+
+        PaymentValidator.validatePurchaseRequest(course.getId(), testId);
+
 
         if ("free".equalsIgnoreCase(couponCode)) {
             amount = 0L;

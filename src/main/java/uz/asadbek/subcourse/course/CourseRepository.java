@@ -25,7 +25,8 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
                 c.price,
                 c.imagePath,
                 c.lang,
-                c.isPublished
+                c.isPublished,
+                c.slug
             )
             from CourseEntity c
             left join UserEntity u on c.ownerId = u.id
@@ -86,16 +87,17 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
                 c.price,
                 c.imagePath,
                 c.lang,
-                c.isPublished
+                c.isPublished,
+                c.slug
             )
             from CourseEntity c
             left join UserEntity u on c.ownerId = u.id
             left join CourseLessonEntity l on l.courseId = c.id
             left join UserCourseEntity sc on sc.id.referenceId = c.id
-            where c.deletedAt is null and c.id = :id
+            where c.deletedAt is null and c.slug = :slug
             group by c.id, c.name, u.firstName, u.lastName, c.price, c.imagePath, c.lang
         """)
-    CourseResponseDto get(Long id);
+    CourseResponseDto get(String slug);
     @Query("""
     SELECT new uz.asadbek.subcourse.course.dto.CourseInfoResponseDto(
       c.id,
@@ -118,15 +120,16 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
       c.imagePath,
       c.lang,
       c.scienceId,
-      c.gradeId
+      c.gradeId,
+      c.slug
     )
     FROM CourseEntity c
     LEFT JOIN CourseGradeEntity g ON c.gradeId = g.id
     LEFT JOIN ScienceEntity s ON c.scienceId = s.id
     LEFT JOIN UserEntity u ON c.ownerId = u.id
-    WHERE c.id = :id AND c.deletedAt IS NULL
+    WHERE c.slug = :slug AND c.deletedAt IS NULL
 """)
-    Optional<CourseInfoResponseDto> getCourseBasicInfo(@Param("id") Long id, @Param("lang") String lang);
+    Optional<CourseInfoResponseDto> getCourseBasicInfo(String slug, String lang);
 
     boolean existsByIdAndScienceId(Long id, Long scienceId);
 
@@ -145,7 +148,13 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
               c.imagePath
             )
             FROM CourseEntity c
-            WHERE c.deletedAt is null and c.id = :id
+            WHERE c.deletedAt is null and c.slug = :slug
         """)
-    Optional<CourseUpdateRequestDto> getUpdateData(Long id);
+    Optional<CourseUpdateRequestDto> getUpdateData(String slug);
+
+  boolean existsBySlug(String slug);
+
+   Optional<Long> findIdBySlug(String slug);
+
+   Optional<CourseEntity> findBySlug(String slug);
 }
