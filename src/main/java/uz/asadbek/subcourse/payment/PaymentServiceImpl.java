@@ -1,6 +1,9 @@
 package uz.asadbek.subcourse.payment;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +15,9 @@ import uz.asadbek.subcourse.balance.transaction.BalanceTransactionEntity;
 import uz.asadbek.subcourse.balance.transaction.BalanceTransactionService;
 import uz.asadbek.subcourse.course.CourseService;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
+import uz.asadbek.subcourse.exception.NotFoundException;
+import uz.asadbek.subcourse.exception.PaymentException;
+import uz.asadbek.subcourse.exception.UnAuthorizedException;
 import uz.asadbek.subcourse.payment.dto.PaymentAction;
 import uz.asadbek.subcourse.payment.dto.PaymentRequestDto;
 import uz.asadbek.subcourse.payment.dto.PaymentResponseDto;
@@ -25,6 +31,7 @@ import uz.asadbek.subcourse.util.JwtUtil;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
     private final CourseService courseService;
@@ -32,16 +39,6 @@ public class PaymentServiceImpl implements PaymentService {
     private final BalanceTransactionService balanceTransactionService;
     private final PaymentRepository repository;
     private final BalanceService balanceService;
-
-    public PaymentServiceImpl(CourseService courseService, TestService testService,
-        BalanceTransactionService balanceTransactionService, PaymentRepository repository,
-        BalanceService balanceService) {
-        this.courseService = courseService;
-        this.testService = testService;
-        this.balanceTransactionService = balanceTransactionService;
-        this.repository = repository;
-        this.balanceService = balanceService;
-    }
 
     private static PaymentEntity buildPayment(CourseResponseDto course, TestResponseDto test,
         Long amount, CurrencyEnum currency) {
@@ -60,7 +57,7 @@ public class PaymentServiceImpl implements PaymentService {
         return PaymentEntity.builder()
             .type(type)
             .amount(amount)
-            .userId(JwtUtil.getCurrentUser().getId())
+            .userId(JwtUtil.getCurrentUserId())
             .referenceId(referenceId)
             .currency(currency)
             .status(PaymentStatus.PROCESSING)
@@ -75,84 +72,93 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public PaymentResponseDto purchase(PaymentRequestDto request, Boolean isTopUp) {
-        if (JwtUtil.isAuthenticated()) {
-            var courseId = request.getCourseId();
-            var testId = request.getTestId();
-            var couponCode = request.getCouponCode();
-
-            validatePurchaseRequest(courseId, testId);
-
-            var balance = balanceService.get();
-            Long amount;
-            CourseResponseDto course = null;
-            TestResponseDto test = null;
-
-            if (courseId != null) {
-                course = courseService.get(courseId);
-                amount = course.getPrice();
-            } else {
-                test = testService.get(testId);
-                amount = test.getPrice();
-            }
-
-            if ("free".equalsIgnoreCase(couponCode)) {
-                amount = 0L;
-            }
-
-            if (!isTopUp && amount > 0) {
-                balanceService.debit(amount);
-            } else if (amount == 0) {
-                log.info("Xarid kupon orqali tekin amalga oshirilmoqda. CourseId: {}", courseId);
-            }
-
-            var payment = buildPayment(course, test, amount, balance.getCurrency());
+        if (!JwtUtil.isAuthenticated()) {
+            log.error("[PaymentServiceImpl] User not authenticated");
+            throw ExceptionUtil.build(UnAuthorizedException.class, "error.auth.user_not_authenticated");
+        }
+        CourseResponseDto course = null;
+        TestResponseDto test = null;
+        var courseSlug = request.getCourseSlug();
+        var testId = request.getTestId();
+        var couponCode = request.getCouponCode();
+        var balance = balanceService.get();
+        Long amount;
+        if (courseSlug != null) {
+            course = courseService.get(courseSlug);
+            amount = course.getPrice();
+        } else {
+            test = testService.get(testId);
+            amount = test.getPrice();
+        }
+        if (Boolean.TRUE.equals(isTopUp)) {
+            amount = request.getAmount();
+            var payment = buildPayment(null, null, amount, balance.getCurrency());
             var savedPayment = repository.save(payment);
-
             var transactionId = balanceTransactionService.createTransaction(savedPayment);
-
-            if (testId != null) {
-                testService.enroll(testId);
-            } else {
-                courseService.enroll(courseId);
-            }
 
             return PaymentResponseDto.builder()
                 .exId(savedPayment.getExId())
                 .amount(amount)
+                .paymentId(savedPayment.getId())
                 .transactionId(transactionId)
                 .status(savedPayment.getStatus())
                 .build();
-        } else {
-            throw ExceptionUtil.unAuthorizedException("user_not_authenticated");
         }
+
+
+
+        PaymentValidator.validatePurchaseRequest(course.getId(), testId);
+
+
+        if ("free".equalsIgnoreCase(couponCode)) {
+            amount = 0L;
+        }
+
+        if (amount > 0) {
+            balanceService.debit(amount);
+        } else {
+            log.info("[PaymentServiceImpl] Xarid kupon orqali tekin amalga oshirilmoqda. CourseId: {}", courseSlug);
+        }
+
+        var payment = buildPayment(course, test, amount, balance.getCurrency());
+        var savedPayment = repository.save(payment);
+        var transactionId = balanceTransactionService.createTransaction(savedPayment);
+
+        if (testId != null) {
+            testService.enroll(testId);
+        } else {
+            courseService.enroll(courseSlug);
+        }
+
+        return PaymentResponseDto.builder()
+            .exId(savedPayment.getExId())
+            .amount(amount)
+            .paymentId(savedPayment.getId())
+            .transactionId(transactionId)
+            .status(savedPayment.getStatus())
+            .build();
     }
 
-    private void validatePurchaseRequest(Long courseId, Long testId) {
-        if (courseId != null && testId != null) {
-            throw ExceptionUtil.paymentException("only_one_product_allowed");
-        }
-        if (courseId == null && testId == null) {
-            throw ExceptionUtil.paymentException("product_required");
-        }
-    }
+
 
     @Transactional
     public PaymentResponseDto process(String exId, PaymentAction action) {
 
         var payment = repository.findByExId(exId)
-            .orElseThrow(() -> ExceptionUtil.notFoundException("payment_not_found"));
+            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.not_found.payment", exId));
 
         if (payment.getStatus() == PaymentStatus.SUCCESS) {
             if (action == PaymentAction.CANCEL) {
-                throw ExceptionUtil.paymentException("payment_already_success");
+                log.error("[PaymentServiceImpl] Payment already success");
+                throw ExceptionUtil.build(PaymentException.class, "error.payment.already_success");
             }
             return buildResponse(payment, null);
         }
 
         if (payment.getStatus() != PaymentStatus.PROCESSING &&
             payment.getStatus() != PaymentStatus.CREATED) {
-
-            throw ExceptionUtil.paymentException("invalid_payment_status");
+            log.error("[PaymentServiceImpl] Invalid payment status: {}", payment.getStatus());
+            throw ExceptionUtil.build(PaymentException.class, "error.payment.invalid_payment_status");
         }
 
         payment.setCompletedAt(LocalDateTime.now());
@@ -179,7 +185,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Page<PaymentResponseDto> get(Pageable pageable, PaymentFilter filter) {
         if (!JwtUtil.isAdmin()){
-            filter.setUserId(JwtUtil.getCurrentUser().getId());
+            filter.setUserId(JwtUtil.getCurrentUserId());
         }
         return repository.get(filter, pageable);
     }
@@ -188,7 +194,7 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentResponseDto get(String exId) {
         Long userId = null;
         if (!JwtUtil.isAdmin()){
-           userId = JwtUtil.getCurrentUser().getId();
+           userId = JwtUtil.getCurrentUserId();
         }
         return repository.get(exId, userId);
     }

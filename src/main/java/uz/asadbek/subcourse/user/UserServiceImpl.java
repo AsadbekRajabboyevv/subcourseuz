@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.asadbek.subcourse.exception.NotFoundException;
 import uz.asadbek.subcourse.user.dto.UserRequestDto;
 import uz.asadbek.subcourse.user.dto.UserResponseDto;
 import uz.asadbek.subcourse.user.dto.UserRoles;
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
             user = userRepository.save(user);
         } catch (Exception e) {
             log.error("Email already exists: {}", dto.getEmail());
-            throw ExceptionUtil.badRequestException("email_already_exists");
+            throw ExceptionUtil.validationException("email", "error.auth.email_already_exists");
         }
 
         return userMapper.toDto(user);
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto update(Long id, UserRequestDto dto) {
 
         var user = userRepository.findById(id)
-            .orElseThrow(() -> ExceptionUtil.notFoundException("user_not_found"));
+            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.not_found.user"));
 
         userMapper.partialUpdate(user, dto);
 
@@ -98,13 +99,13 @@ public class UserServiceImpl implements UserService {
             getContext().getAuthentication().getName();
         return userRepository.findByEmail(username)
             .orElseThrow(() -> ExceptionUtil
-                .notFoundException("user_not_found"));
+                .build(NotFoundException.class, "error.auth.user_not_found", username));
     }
 
     @Override
     public UserEntity findById(Long userId) {
         return userRepository.findById(userId)
-            .orElseThrow(() -> ExceptionUtil.notFoundException("user_not_found"));
+            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.not_found.user"));
     }
 
     @Override

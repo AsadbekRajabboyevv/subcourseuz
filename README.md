@@ -1,3 +1,17 @@
+# Subcourse
+
+This app was created with Bootify.io - tips on working with the code [can be found here](https://bootify.io/next-steps/).
+
+## Development
+
+Update your local database connection in `application.yml` or create your own `application-local.yml` file to override settings for development. 
+
+During development it is recommended to use the profile `local`. In IntelliJ `-Dspring.profiles.active=local` can be added in the VM options of the Run Configuration after enabling this property in "Modify options".
+
+Lombok must be supported by your IDE. For IntelliJ install the Lombok plugin and enable annotation processing - [learn more](https://bootify.io/next-steps/spring-boot-with-lombok.html).
+
+In addition to the Spring Boot application, the development server must also be started - for this [Node.js](https://nodejs.org/) version 24 is required. Angular CLI and required dependencies must be installed once:
+
 # 🚀 Subcourse - Online Academy Platform
 
 Subcourse is a comprehensive online learning solution. The project features a robust **Spring Boot** backend integrated with a modern **Angular** frontend, compiled into a single executable artifact for seamless deployment.

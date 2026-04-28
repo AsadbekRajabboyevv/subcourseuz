@@ -1,5 +1,7 @@
 package uz.asadbek.subcourse.exception.handler;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -12,16 +14,20 @@ import org.springframework.security.core.AuthenticationException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import uz.asadbek.subcourse.util.ExceptionUtil;
+import uz.asadbek.subcourse.util.JwtUtil;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex) {
-        return buildResponse(HttpStatus.UNAUTHORIZED, "UN_AUTHORIZED", "Siz tizimga kirmagansiz yoki ruxsatnomangiz (token) yaroqsiz!");
+        return buildResponse(HttpStatus.UNAUTHORIZED, "UN_AUTHORIZED", ExceptionUtil.resolveMessage("error.auth.invalid_token"));
     }
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex) {
-        return buildResponse(HttpStatus.FORBIDDEN, "FORBIDDEN", "Sizda ushbu amalni bajarish uchun yetarli huquq mavjud emas!");
+        JwtUtil.getCurrentUserRoles().forEach(role -> log.info("Role: {}", role));
+        return buildResponse(HttpStatus.FORBIDDEN, "FORBIDDEN", ExceptionUtil.resolveMessage("error.auth.insufficient_privileges"));
     }
 
     @ExceptionHandler(BadRequestException.class)
@@ -54,6 +60,11 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.PAYMENT_REQUIRED, "PAYMENT_ERROR", ex.getMessage());
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(){
+        return buildResponse(HttpStatus.BAD_REQUEST, "BAD_REQUEST", "BAD REQUEST");
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -66,7 +77,7 @@ public class GlobalExceptionHandler {
         ErrorResponse response = ErrorResponse.builder()
             .timestamp(LocalDateTime.now())
             .errorCode("VALIDATION_FAILED")
-            .errorMessage("Input validation failed")
+            .errorMessage(ExceptionUtil.resolveMessage("error.validation"))
             .fieldErrorMessage(errors)
             .build();
 

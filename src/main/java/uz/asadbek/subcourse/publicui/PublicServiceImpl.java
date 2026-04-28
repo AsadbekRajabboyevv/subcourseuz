@@ -48,8 +48,8 @@ public class PublicServiceImpl implements PublicService {
     }
 
     @Override
-    public CourseInfoResponseDto getCourse(Long id) {
-        return courseService.getInfo(id);
+    public CourseInfoResponseDto getCourse(String slug) {
+        return courseService.getInfo(slug);
     }
 
     @Override

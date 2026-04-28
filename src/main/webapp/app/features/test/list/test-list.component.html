@@ -1,0 +1,158 @@
+<app-page-wrapper>
+    <div page-title class="flex flex-col md:flex-row md:items-center justify-between gap-6 w-full px-2 md:px-0">
+        <div class="space-y-1">
+            <nav class="mb-2 flex items-center gap-2 text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
+                <a routerLink="/" class="hover:text-emerald-500" i18n="@@common.home">Bosh sahifa</a>
+                <i class="fa-solid fa-chevron-right text-[7px]"></i>
+                <a routerLink="/tests" class="text-emerald-500" i18n="@@test.title">Onlayn testlar</a>
+            </nav>
+            <h1 class="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-white uppercase" i18n="@@test.list.title">
+                Testlar ro'yxati
+            </h1>
+        </div>
+
+        @if (authService.isAdmin()) {
+            <button routerLink="/tests-create"
+                    class="group flex items-center justify-center gap-2 rounded-2xl bg-gray-900 px-6 py-3.5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl transition-all hover:bg-emerald-600 active:scale-95 dark:bg-emerald-600">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span i18n="@@test.create.button">Test yaratish</span>
+            </button>
+        }
+    </div>
+
+    <div content class="grid grid-cols-12 gap-4 md:gap-8">
+        <aside class="col-span-12 lg:col-span-3 lg:order-1 order-1">
+            <div class="lg:sticky lg:top-24 rounded-[2rem] border border-gray-100 bg-white p-2 dark:border-gray-800 dark:bg-gray-900 shadow-xl lg:p-7">
+
+                <button (click)="isFilterVisible = !isFilterVisible"
+                        class="flex w-full items-center justify-between p-4 lg:hidden">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-500/10">
+                            <i class="fa-solid fa-filter text-xs"></i>
+                        </div>
+                        <span class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white" i18n="@@common.filter">
+                            Filtr
+                        </span>
+                    </div>
+                    <i class="fa-solid text-gray-400"
+                       [class.rotate-180]="isFilterVisible"
+                       [class]="isFilterVisible ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                </button>
+
+                <div [class.hidden]="!isFilterVisible" class="lg:block p-4 lg:p-0 space-y-5">
+                    <app-input type="text" label="Qidirish" i18n-label="@@common.search" placeholder="Test nomi..." i18n-placeholder="@@test.search_placeholder" [(ngModel)]="filter.search"></app-input>
+
+                    <app-input type="select" label="Til" i18n-label="@@common.language" [options]="languages" [(ngModel)]="filter.lang"></app-input>
+
+                    <button (click)="applyFilters()"
+                            class="w-full rounded-2xl bg-blue-600 py-4 text-[10px] font-black uppercase tracking-widest text-white shadow-lg active:scale-95">
+                        <span i18n="@@common.apply_filter">Filtrlash</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <main class="col-span-12 lg:col-span-9 lg:order-2 order-2">
+
+            @if (authService.isAdmin()) {
+                <div class="mb-6 flex items-center gap-4 border-b border-gray-100 dark:border-gray-800">
+                    <button (click)="changeTab(true)"
+                            [class]="filter.isPublished ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-400'"
+                            class="border-b-2 px-4 py-4 text-[10px] font-black uppercase tracking-widest">
+                        <i class="fa-solid fa-check-double mr-2"></i> <span i18n="@@test.published_tests">Faol testlar</span>
+                    </button>
+
+                    <button (click)="changeTab(false)"
+                            [class]="!filter.isPublished ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-400'"
+                            class="border-b-2 px-4 py-4 text-[10px] font-black uppercase tracking-widest">
+                        <i class="fa-solid fa-file-pen mr-2"></i> <span i18n="@@test.drafts">Qoralamalar</span>
+                    </button>
+                </div>
+            }
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
+                @for (test of testService.tests(); track test.id) {
+                    <div class="group relative flex flex-col rounded-[2.5rem] border border-gray-100 bg-white p-3 md:p-4 hover:border-blue-500 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900">
+
+                        @if (!test.isPublished) {
+                            <div class="absolute top-5 right-5 rounded-full bg-orange-500 px-2 py-0.5 text-[7px] font-black text-white uppercase">
+                                <span i18n="@@test.draft">Qoralama</span>
+                            </div>
+                        }
+
+                        <div class="relative h-40 md:h-44 overflow-hidden rounded-[1.8rem] bg-gray-50">
+                            <img [src]="test.imagePath || 'assets/img/test-placeholder.png'"
+                                 class="h-full w-full object-cover">
+
+                            <div class="absolute bottom-3 left-3 flex gap-2">
+                                <div class="rounded-lg bg-white/90 px-2 py-1 text-[8px] font-black text-blue-600 uppercase">
+                                    <i class="fa-solid fa-clock mr-1"></i> {{ test.duration }} <span i18n="@@test.duration_minutes">daqiqa</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 md:mt-5 px-1 flex-1 flex flex-col">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[8px] font-black uppercase text-blue-500">
+                                    ID: #{{ test.id }}
+                                </span>
+                                <span class="text-[8px] font-bold text-gray-400 uppercase">
+                                    {{ test.lang }}
+                                </span>
+                            </div>
+
+                            <h3 class="text-md md:text-lg font-black text-gray-900 dark:text-white line-clamp-2">
+                                {{ test.name }}
+                            </h3>
+
+                            <p class="mt-2 text-[10px] text-gray-500 dark:text-gray-400 line-clamp-2 italic">
+                                {{ test.description || 'Tavsif mavjud emas' }}
+                            </p>
+
+                            <div class="mt-auto pt-4 flex items-center justify-between">
+                                <div>
+                                    <p class="text-[7px] font-bold uppercase text-gray-400" i18n="@@test.price_label">
+                                        Narx
+                                    </p>
+                                    <p class="text-sm font-black text-gray-900 dark:text-blue-400">
+                                        {{ test.price | number }} UZS
+                                    </p>
+                                </div>
+
+                                <div class="flex items-center gap-2">
+                                    <button [routerLink]="['/tests-view/', test.id]"
+                                            class="flex h-9 w-9 items-center justify-center rounded-xl bg-gray-900 text-white hover:bg-blue-600">
+                                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                                    </button>
+
+                                    @if (test.isPublished) {
+                                        <button (click)="onBuy(test)"
+                                                class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600 text-white">
+                                            <i class="fa-solid fa-cart-plus text-[10px]"></i>
+                                        </button>
+                                    }
+
+                                    @if (authService.isAdmin()) {
+                                        <button [routerLink]="['/tests-update/', test.id]"
+                                                class="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-500 text-white">
+                                            <i class="fa-solid fa-gear text-[10px]"></i>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (testService.tests().length === 0) {
+                <div class="py-20 text-center opacity-30">
+                    <i class="fa-solid fa-vial-circle-check text-5xl mb-4 text-gray-300"></i>
+                    <p class="font-black uppercase text-xs">
+                        <span i18n="@@test.no_tests">Testlar topilmadi</span>
+                    </p>
+                </div>
+            }
+        </main>
+    </div>
+</app-page-wrapper>

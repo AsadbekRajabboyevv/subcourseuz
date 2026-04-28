@@ -14,7 +14,7 @@ public interface PublicService {
 
     HomePageResponseDto getHomePage();
     Page<CourseResponseDto> getCourses(CourseFilter filter, Pageable pageable);
-    CourseInfoResponseDto getCourse(Long id);
+    CourseInfoResponseDto getCourse(String slug);
     List<CourseLessonResponseDto> getCourseLessons();
     List<CourseGradeResponseDto> getCourseGrades();
 

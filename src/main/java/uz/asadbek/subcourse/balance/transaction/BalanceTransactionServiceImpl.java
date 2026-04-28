@@ -9,7 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.asadbek.subcourse.balance.BalanceService;
 import uz.asadbek.subcourse.balance.dto.TransactionStatus;
 import uz.asadbek.subcourse.balance.dto.TransactionType;
+import uz.asadbek.subcourse.exception.BadRequestException;
+import uz.asadbek.subcourse.exception.NotFoundException;
 import uz.asadbek.subcourse.payment.PaymentEntity;
+import uz.asadbek.subcourse.payment.dto.PaymentType;
 import uz.asadbek.subcourse.util.ExceptionUtil;
 
 @Service
@@ -38,33 +41,25 @@ public class BalanceTransactionServiceImpl implements BalanceTransactionService 
             return existing.get().getExternalTx();
         }
         BalanceTransactionEntity tx = new BalanceTransactionEntity();
-        Long balanceAfter = balanceService.get(userId).getBalance();
-        Long balanceBefore;
+        Long balanceBefore = balanceService.get(userId).getBalance();
+        Long balanceAfter;
 
         TransactionType transactionType;
 
-        // 🔥 TYPE bo‘yicha ajratamiz
         switch (payment.getType()) {
-
             case TOP_UP -> {
                 transactionType = TransactionType.TOP_UP;
-                balanceBefore = balanceAfter - amount;
+                balanceAfter = balanceBefore + amount;
                 tx.setStatus(TransactionStatus.PENDING);
             }
-
-            case COURSE -> {
-                transactionType = TransactionType.COURSE_PURCHASE;
-                balanceBefore = balanceAfter + amount;
+            case COURSE, TEST -> {
+                transactionType = (payment.getType() == PaymentType.COURSE) ?
+                    TransactionType.COURSE_PURCHASE : TransactionType.TEST_PURCHASE;
+                balanceAfter = balanceBefore - amount;
                 tx.setStatus(TransactionStatus.SUCCESS);
             }
 
-            case TEST -> {
-                transactionType = TransactionType.TEST_PURCHASE;
-                balanceBefore = balanceAfter + amount;
-                tx.setStatus(TransactionStatus.SUCCESS);
-            }
-
-            default -> throw ExceptionUtil.badRequestException("unknown_payment_type");
+            default -> throw ExceptionUtil.build(BadRequestException.class, "error.balance_transaction.unknown_payment_type");
         }
 
         tx.setExternalTx(generateExternalTx());
@@ -95,9 +90,8 @@ public class BalanceTransactionServiceImpl implements BalanceTransactionService 
     }
 
     private BalanceTransactionEntity save(Long paymentId, TransactionStatus status) {
-        var transaction = balanceTransactionRepository.findByPaymentId(
-                paymentId)
-            .orElseThrow(() -> ExceptionUtil.notFoundException("transaction_not_found"));
+        var transaction = balanceTransactionRepository.findByPaymentId(paymentId)
+            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.not_found.balance_transaction", paymentId));
         transaction.setStatus(status);
         transaction.setCompletedAt(LocalDateTime.now());
        return balanceTransactionRepository.save(transaction);

@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import uz.asadbek.subcourse.exception.BadRequestException;
+import uz.asadbek.subcourse.exception.NotFoundException;
 import uz.asadbek.subcourse.filestorage.FileStorageService;
 import uz.asadbek.subcourse.filestorage.dto.FileUploadOptions;
 import uz.asadbek.subcourse.test.dto.TestRequestDto;
@@ -88,8 +90,8 @@ public class TestServiceImpl implements TestService {
         String testImage = null;
         if (image != null && !image.isEmpty()) {
             testImage = fileStorageService
-                .upload(image, new FileUploadOptions().setTestImages())
-                .getFileKey();
+                .upload(image, FileUploadOptions.TEST_IMAGE)
+                .getUrl();
         }
 
         var test = testMapper.toEntity(request);
@@ -101,8 +103,8 @@ public class TestServiceImpl implements TestService {
             String questionImage = null;
             if (questionDto.getImage() != null && !questionDto.getImage().isEmpty()) {
                 questionImage = fileStorageService
-                    .upload(questionDto.getImage(), new FileUploadOptions().setTestQuestions())
-                    .getFileKey();
+                    .upload(questionDto.getImage(), FileUploadOptions.QUESTION_IMAGE)
+                    .getUrl();
             }
 
             TestQuestionEntity question = new TestQuestionEntity();
@@ -120,8 +122,8 @@ public class TestServiceImpl implements TestService {
                 if (optionDto.getImage() != null && !optionDto.getImage().isEmpty()) {
                     optionImage = fileStorageService
                         .upload(optionDto.getImage(),
-                            new FileUploadOptions().setTestOptionsImages())
-                        .getFileKey();
+                            FileUploadOptions.OPTION_IMAGE)
+                        .getUrl();
                 }
 
                 TestOptionEntity option = new TestOptionEntity();
@@ -149,16 +151,16 @@ public class TestServiceImpl implements TestService {
     public Long updateTest(Long id, TestUpdateRequestDto request) {
 
         var test = repository.findById(id)
-            .orElseThrow(() -> ExceptionUtil.notFoundException("test_not_found"));
+            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.not_found.test", id));
 
         testMapper.update(test, request);
 
         if (request.getImage() != null && !request.getImage().isEmpty()) {
             var uploaded = fileStorageService.upload(
                 request.getImage(),
-                new FileUploadOptions().setTestImages()
+                FileUploadOptions.TEST_IMAGE
             );
-            test.setImagePath(uploaded.getFileKey());
+            test.setImagePath(uploaded.getUrl());
         }
 
         validator.validateTestForUpdate(test);
@@ -176,7 +178,7 @@ public class TestServiceImpl implements TestService {
                 } else {
                     question = questionMap.get(qDto.getId());
                     if (question == null) {
-                        throw ExceptionUtil.badRequestException("question_not_found");
+                        throw ExceptionUtil.build(NotFoundException.class, "error.not_found.question");
                     }
                     requestQuestionIds.add(question.getId());
                 }
@@ -186,9 +188,9 @@ public class TestServiceImpl implements TestService {
                 if (qDto.getImage() != null && !qDto.getImage().isEmpty()) {
                     var uploaded = fileStorageService.upload(
                         qDto.getImage(),
-                        new FileUploadOptions().setTestQuestions()
+                        FileUploadOptions.QUESTION_IMAGE
                     );
-                    question.setImagePath(uploaded.getFileKey());
+                    question.setImagePath(uploaded.getUrl());
                 }
 
                 testQuestionRepository.save(question);
@@ -212,7 +214,7 @@ public class TestServiceImpl implements TestService {
                         } else {
                             option = optionMap.get(oDto.getId());
                             if (option == null) {
-                                throw ExceptionUtil.badRequestException("option_not_found");
+                                throw ExceptionUtil.build(NotFoundException.class, "error.not_found.option");
                             }
                             requestOptionIds.add(option.getId());
                         }
@@ -222,9 +224,9 @@ public class TestServiceImpl implements TestService {
                         if (oDto.getImage() != null && !oDto.getImage().isEmpty()) {
                             var uploaded = fileStorageService.upload(
                                 oDto.getImage(),
-                                new FileUploadOptions().setTestOptionsImages()
+                                FileUploadOptions.OPTION_IMAGE
                             );
-                            option.setImagePath(uploaded.getFileKey());
+                            option.setImagePath(uploaded.getUrl());
                         }
 
                         savedOptions.add(option);
@@ -241,7 +243,8 @@ public class TestServiceImpl implements TestService {
                     if (qDto.getCorrectOptionIndex() != null) {
                         int idx = qDto.getCorrectOptionIndex();
                         if (idx >= savedOptions.size()) {
-                            throw ExceptionUtil.badRequestException("invalid_correct_option_index");
+                            throw ExceptionUtil.build(BadRequestException.class,
+                                "error.test.question.invalid_correct_option_index");
                         }
                         question.setCorrectOptionId(savedOptions.get(idx).getId());
                         testQuestionRepository.save(question);
@@ -262,8 +265,8 @@ public class TestServiceImpl implements TestService {
     @Override
     @Transactional
     public void enroll(Long testId) {
-        var userId =  JwtUtil.getCurrentUser().getId();
-        validator.validateEnroll(userId, testId, repository::existsById, "test_not_found");
+        var userId =  JwtUtil.getCurrentUserId();
+        validator.validateEnroll(userId, testId, repository::existsById, "error.not_found.test");
         var uc = new UserTestEntity();
         uc.setId(new UserPurchaseId(userId, testId, LocalDateTime.now()));
     }
@@ -273,7 +276,7 @@ public class TestServiceImpl implements TestService {
     public Long publish(Long id) {
         int updated = repository.publish(id);
         if (updated == 0) {
-            throw ExceptionUtil.notFoundException("test_not_found");
+            throw ExceptionUtil.build(NotFoundException.class, "error.not_found.test");
         }
         return id;
     }
@@ -283,7 +286,7 @@ public class TestServiceImpl implements TestService {
     public Long unpublishTest(Long id) {
         int updated = repository.unpublish(id);
         if (updated == 0) {
-            throw ExceptionUtil.notFoundException("test_not_found");
+            throw ExceptionUtil.build(NotFoundException.class, "error.not_found.test");
         }
 
         return id;

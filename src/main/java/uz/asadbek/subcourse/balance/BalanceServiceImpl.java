@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.asadbek.subcourse.balance.dto.BalanceResponseDto;
 import uz.asadbek.subcourse.balance.dto.CurrencyEnum;
 import uz.asadbek.subcourse.balance.filter.BalanceFilter;
+import uz.asadbek.subcourse.exception.BadRequestException;
+import uz.asadbek.subcourse.exception.InsufficientBalanceException;
 import uz.asadbek.subcourse.user.UserEntity;
 import uz.asadbek.subcourse.util.ExceptionUtil;
 import uz.asadbek.subcourse.util.JwtUtil;
@@ -22,14 +24,13 @@ public class BalanceServiceImpl implements BalanceService {
     private final BalanceRepository repository;
 
     @Override
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public BalanceResponseDto get(Long userId) {
         return repository.get(userId);
     }
 
     @Override
     public BalanceResponseDto get() {
-        Long currentUser = JwtUtil.getCurrentUser().getId();
+        Long currentUser = JwtUtil.getCurrentUserId();
         return repository.get(currentUser);
     }
 
@@ -42,13 +43,13 @@ public class BalanceServiceImpl implements BalanceService {
     @Override
     @Transactional
     public void debit(Long amount) {
-        var userId = JwtUtil.getCurrentUser().getId();
+        var userId = JwtUtil.getCurrentUserId();
         validate(userId, amount);
 
         int updated = repository.decrease(userId, amount);
 
         if (updated == 0) {
-            throw ExceptionUtil.insufficientBalanceException("hold_not_found_or_insufficient");
+            throw ExceptionUtil.build(InsufficientBalanceException.class,"error.balance.insufficient_balance");
         }
     }
 
@@ -62,7 +63,8 @@ public class BalanceServiceImpl implements BalanceService {
         int updated = repository.confirmPending(userId, amount);
 
         if (updated == 0) {
-            throw ExceptionUtil.badRequestException("pending_not_found");
+            log.error("Pending balance not found for user: {}", userId);
+            throw ExceptionUtil.build(BadRequestException.class, "error.balance.pending_not_found");
         }
     }
 
@@ -96,7 +98,7 @@ public class BalanceServiceImpl implements BalanceService {
     private void validate(Long userId, Long amount) {
         if (userId == null || amount == null || amount <= 0) {
             log.error("Invalid user or amount: userId={}, amount={}", userId, amount);
-            throw ExceptionUtil.insufficientBalanceException("invalid_amount");
+            throw ExceptionUtil.build(InsufficientBalanceException.class, "error.balance.invalid_amount");
         }
     }
 

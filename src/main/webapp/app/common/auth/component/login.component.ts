@@ -8,7 +8,12 @@ import {InputComponent} from "../../../shared/ui/forms/input.component";
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, InputComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    InputComponent
+  ],
   templateUrl: './login.component.html'
 })
 export class LoginComponent {
@@ -29,8 +34,7 @@ export class LoginComponent {
         }
 
         this.router.navigateByUrl(returnUrl);
-      },
-      error: (err) => alert('Login yoki parol xato!')
+      }
     });
   }
 }

@@ -8,7 +8,13 @@ import {ErrorModalComponent} from "./common/error/error-modal.component";
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, ErrorModalComponent],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    HeaderComponent,
+    FooterComponent,
+    ErrorModalComponent,
+  ],
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
@@ -20,6 +26,11 @@ export class AppComponent implements OnInit {
   msgError: string | null = null;
 
   ngOnInit() {
+    // Translate service ni initialize qilish
+
+    // LocalStorage dan tilni olish
+    const savedLang = localStorage.getItem('selectedLanguage') || 'uz';
+
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.isAuthPage = event.url.startsWith('/auth');

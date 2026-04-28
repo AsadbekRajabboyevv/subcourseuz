@@ -13,14 +13,15 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 @Component
-public class ExistInDbValidator implements ConstraintValidator<ExistsInDb, Long> {
+public class ExistInDbValidator implements ConstraintValidator<ExistsInDb, Object> {
 
-    private final Map<String, JpaRepository<?, Long>> repositories;
-    private JpaRepository<?, Long> cachedRepository;
+    private final Map<String, JpaRepository<?, ?>> repositories;
+    private JpaRepository<?, ?> cachedRepository;
     private boolean setNull;
     private boolean optional;
+    private String field;
 
-    public ExistInDbValidator(Map<String, JpaRepository<?, Long>> repositories) {
+    public ExistInDbValidator(Map<String, JpaRepository<?, ?>> repositories) {
         this.repositories = repositories;
     }
 
@@ -28,11 +29,12 @@ public class ExistInDbValidator implements ConstraintValidator<ExistsInDb, Long>
     public void initialize(ExistsInDb annotation) {
         this.setNull = annotation.setNull();
         this.optional = annotation.optional();
+        this.field = annotation.field();
         this.cachedRepository = getRepositoryByEntity(annotation.entity());
     }
 
     @Override
-    public boolean isValid(Long value, ConstraintValidatorContext context) {
+    public boolean isValid(Object value, ConstraintValidatorContext context) {
         if (value == null) {
             return optional;
         }
@@ -41,7 +43,13 @@ public class ExistInDbValidator implements ConstraintValidator<ExistsInDb, Long>
             return false;
         }
 
-        boolean exists = cachedRepository.existsById(value);
+        boolean exists;
+
+        if ("id".equals(field) && value instanceof Long id) {
+            exists = ((JpaRepository<?, Long>) cachedRepository).existsById(id);
+        } else {
+            exists = existsByField(value);
+        }
 
         if (!exists) {
             if (setNull) {
@@ -53,37 +61,47 @@ public class ExistInDbValidator implements ConstraintValidator<ExistsInDb, Long>
         return true;
     }
 
+    private boolean existsByField(Object value) {
+        try {
+            var methodName = STR."existsBy\{capitalize(field)}";
+            var method = cachedRepository.getClass().getMethod(methodName, value.getClass());
+            var result = method.invoke(cachedRepository, value);
+            return result instanceof Boolean b && b;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     private boolean trySetFieldToNull(ConstraintValidatorContext context) {
         try {
-            ConstraintValidatorContextImpl hibernateContext = context.unwrap(ConstraintValidatorContextImpl.class);
+            var ctx = context.unwrap(ConstraintValidatorContextImpl.class);
 
-            Method getRootBeanMethod = ConstraintValidatorContextImpl.class.getDeclaredMethod("getRootBean");
+            var getRootBeanMethod = ConstraintValidatorContextImpl.class.getDeclaredMethod("getRootBean");
             getRootBeanMethod.setAccessible(true);
-            Object rootBean = getRootBeanMethod.invoke(hibernateContext);
+            var rootBean = getRootBeanMethod.invoke(ctx);
 
-            Method getPropertyPathMethod = ConstraintValidatorContextImpl.class.getDeclaredMethod("getPropertyPath");
+            var getPropertyPathMethod = ConstraintValidatorContextImpl.class.getDeclaredMethod("getPropertyPath");
             getPropertyPathMethod.setAccessible(true);
-            Path path = (Path) getPropertyPathMethod.invoke(hibernateContext);
+            var path = (Path) getPropertyPathMethod.invoke(ctx);
 
-            String fieldName = path.toString();
+            var fieldName = path.toString();
 
             if (rootBean != null && fieldName != null) {
-                Field field = findField(rootBean.getClass(), fieldName);
+                var field = findField(rootBean.getClass(), fieldName);
                 if (field != null) {
                     field.setAccessible(true);
                     field.set(rootBean, null);
                     return true;
                 }
             }
-        } catch (Exception e) {
-            // Loglash tavsiya etiladi
+        } catch (Exception ignored) {
             return false;
         }
         return false;
     }
 
     private Field findField(Class<?> clazz, String fieldName) {
-        Class<?> current = clazz;
+        var current = clazz;
         while (current != null) {
             try {
                 return current.getDeclaredField(fieldName);
@@ -94,14 +112,19 @@ public class ExistInDbValidator implements ConstraintValidator<ExistsInDb, Long>
         return null;
     }
 
-    private JpaRepository<?, Long> getRepositoryByEntity(Class<?> entityClass) {
+    private JpaRepository<?, ?> getRepositoryByEntity(Class<?> entityClass) {
         return repositories.values().stream()
             .filter(repo -> {
-                Class<?>[] typeArguments = GenericTypeResolver.resolveTypeArguments(repo.getClass(), JpaRepository.class);
-
-                return typeArguments != null && typeArguments.length > 0 && typeArguments[0].equals(entityClass);
+                var types = GenericTypeResolver.resolveTypeArguments(repo.getClass(), JpaRepository.class);
+                return types != null && types.length > 0 && types[0].equals(entityClass);
             })
             .findFirst()
             .orElse(null);
+    }
+
+    private String capitalize(String str) {
+        return (str == null || str.isBlank())
+            ? str
+            : str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 }

@@ -1,55 +1,104 @@
 <app-page-wrapper>
-    <div page-title>
-            <nav class="mb-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
-                <a routerLink="/" class="hover:text-emerald-500">Asosiy</a>
+    <div page-title class="flex flex-col md:flex-row md:items-center justify-between gap-6 w-full px-2 md:px-0">
+        <div class="space-y-1">
+            <nav class="mb-2 flex items-center gap-2 text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
+                <a routerLink="/" class="hover:text-emerald-500" i18n="@@common.home">Bosh sahifa</a>
                 <i class="fa-solid fa-chevron-right text-[7px]"></i>
-                <a routerLink="/courses-list" class="text-emerald-500">Kurslar</a>
-                <i class="fa-solid fa-chevron-right text-[7px]"></i>
+                <a routerLink="/courses-list" class="text-emerald-500" i18n="@@course.title">Kurslar</a>
             </nav>
+            <h1 class="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-white uppercase" i18n="@@course.list.title">
+                Kurslar ro'yxati
+            </h1>
+        </div>
+
         @if (authService.isAdmin()) {
             <button routerLink="/courses-create"
-                    class="group flex items-center gap-2 rounded-2xl bg-gray-900 px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-white transition-all hover:bg-emerald-600 active:scale-95 dark:bg-emerald-600 dark:hover:bg-emerald-700">
-                <i class="fa-solid fa-plus text-xs transition-transform group-hover:rotate-90"></i>
-                <span>Yangi kurs</span>
+                    class="group flex items-center justify-center gap-2 rounded-2xl bg-gray-900 px-6 py-3.5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl transition-all hover:bg-emerald-600 active:scale-95 dark:bg-emerald-600">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span i18n="@@course.create.button">Kurs yaratish</span>
             </button>
         }
     </div>
-    <div content class="grid grid-cols-12 gap-8">
-        <aside class="col-span-12 lg:col-span-3">
-            <div class="sticky top-24 space-y-5 rounded-[2.5rem] border border-gray-100 bg-white p-7 shadow-2xl dark:border-gray-800 dark:bg-gray-900 transition-all">
-                <div class="flex items-center justify-between px-1">
-                    <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-sliders text-emerald-500 text-xs"></i>
-                        <h3 class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">Filtrlash</h3>
-                    </div>
-                    <button (click)="resetFilters()" class="active:scale-95 hover:rotate-2 text-[9px] font-bold uppercase text-gray-400 hover:text-red-500 transition-colors">
-                        Tozalash
-                    </button>
-                </div>
 
-                <div class="space-y-4">
-                    <app-input type="text" label="Qidiruv" placeholder="Nomi..." [(ngModel)]="filter.search"></app-input>
-                    <div class="grid grid-cols-2 gap-2">
-                        <app-input type="number" label="Narxdan" placeholder="0" [(ngModel)]="filter.priceFrom"></app-input>
-                        <app-input type="number" label="Gacha" placeholder="Max" [(ngModel)]="filter.priceTo"></app-input>
-                    </div>
-                    <app-input type="select" label="Til" [options]="languages" [(ngModel)]="filter.lang"></app-input>
-                    <div class="rounded-2xl bg-gray-50/50 p-4 dark:bg-gray-800/30 space-y-2 border border-gray-100 dark:border-gray-800">
-                        <p class="text-[8px] font-black uppercase text-gray-400 tracking-widest">Davomiyligi</p>
-                        <div class="flex gap-2">
-                            <app-input type="number" placeholder="Qiymat" [(ngModel)]="filter.duration" class="w-2/3"></app-input>
-                            <app-input type="select" [options]="durationTypes" [(ngModel)]="filter.durationType" class="w-1/3"></app-input>
+    <div content class="grid grid-cols-12 gap-4 md:gap-8">
+
+        <aside class="col-span-12 lg:col-span-3 lg:order-1 order-1">
+            <div class="lg:sticky lg:top-24 rounded-[2rem] border border-gray-100 bg-white p-2 dark:border-gray-800 dark:bg-gray-900 shadow-xl lg:p-7 transition-all">
+
+                <button (click)="isFilterVisible = !isFilterVisible"
+                        class="flex w-full items-center justify-between p-4 lg:hidden focus:outline-none">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10">
+                            <i class="fa-solid fa-sliders text-xs"></i>
                         </div>
+                        <span class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white" i18n="@@common.filter">
+                            Filtr
+                        </span>
                     </div>
-                    <button (click)="applyFilters()" class="w-full rounded-2xl bg-emerald-600 py-4 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-emerald-500/20 hover:bg-emerald-700 transition-all active:scale-95 hover:rotate-2">
-                        Natijalarni ko'rish
-                    </button>
+                    <i class="fa-solid transition-transform duration-300 text-gray-400"
+                       [class.rotate-180]="isFilterVisible"
+                       [class]="isFilterVisible ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                </button>
+
+                <div [class.hidden]="!isFilterVisible" class="lg:block p-4 lg:p-0 space-y-5">
+                    <div class="hidden lg:flex items-center justify-between mb-2">
+                        <h3 class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white" i18n="@@common.filter">
+                            Filtr
+                        </h3>
+                        <button (click)="resetFilters()" class="text-[9px] font-bold uppercase text-gray-400 hover:text-red-500" i18n="@@common.clear">
+                            Tozalash
+                        </button>
+                    </div>
+
+                    <div class="space-y-4">
+                        <app-input type="text" label="Qidirish" i18n-label="@@common.search" placeholder="nom orqali qidirish" i18n-placeholder="@@course.search_placeholder" [(ngModel)]="filter.search"></app-input>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <app-input type="number" label="dan" i18n-label="@@common.from" placeholder="0" [(ngModel)]="filter.priceFrom"></app-input>
+                            <app-input type="number" label="gacha" i18n-label="@@common.to" placeholder="Max" [(ngModel)]="filter.priceTo"></app-input>
+                        </div>
+
+                        <app-input type="select" label="Til" i18n-label="@@common.language" [options]="languages" [(ngModel)]="filter.lang"></app-input>
+
+                        <div class="rounded-2xl bg-gray-50/50 p-4 dark:bg-gray-800/30 space-y-2 border border-gray-100 dark:border-gray-800">
+                            <p class="text-[8px] font-black uppercase text-gray-400 tracking-widest" i18n="@@common.time">Vaqt</p>
+                            <div class="flex gap-2">
+                                <app-input type="number" [(ngModel)]="filter.duration" class="w-2/3"></app-input>
+                                <app-input type="select" [options]="durationTypes" [(ngModel)]="filter.durationType" class="w-1/3"></app-input>
+                            </div>
+                        </div>
+
+                        <button (click)="applyFilters(); isFilterVisible = false"
+                                class="w-full rounded-2xl bg-emerald-600 py-4 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-emerald-500/20 active:scale-95 transition-all">
+                            <span i18n="@@course.apply_filter">Natijani ko'rsatish</span>
+                        </button>
+
+                        <button (click)="resetFilters()" class="w-full lg:hidden text-[9px] font-black uppercase text-gray-400 py-2">
+                            <span i18n="@@common.clear">Tozalash</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </aside>
 
-        <main class="col-span-12 lg:col-span-9">
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <main class="col-span-12 lg:col-span-9 lg:order-2 order-2">
+
+            @if (authService.isAdmin()) {
+                <div class="mb-6 flex items-center gap-4 border-b border-gray-100 dark:border-gray-800 overflow-x-auto no-scrollbar scroll-smooth">
+                    <button (click)="changeTab(true)"
+                            [class]="filter.isPublished ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-400'"
+                            class="whitespace-nowrap border-b-2 px-4 py-4 text-[10px] font-black uppercase tracking-widest transition-all">
+                        <i class="fa-solid fa-circle-check mr-2"></i> <span i18n="@@course.published">Yuklanganlar</span>
+                    </button>
+                    <button (click)="changeTab(false)"
+                            [class]="!filter.isPublished ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-400'"
+                            class="whitespace-nowrap border-b-2 px-4 py-4 text-[10px] font-black uppercase tracking-widest transition-all">
+                        <i class="fa-solid fa-clock-rotate-left mr-2"></i> <span i18n="@@course.drafts">Qoralamalar</span>
+                    </button>
+                </div>
+            }
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
 
                 @if (courseService.isLoading() && courseService.courses().length === 0) {
                     @for (i of [1,2,3,4,5,6]; track i) {
@@ -57,34 +106,64 @@
                     }
                 }
 
-                @for (course of courseService.courses(); track course.id) {
-                    <div class="active:scale-95 hover:rotate-2 group relative flex flex-col rounded-[2.5rem] border border-gray-100 bg-white p-4 transition-all hover:border-emerald-500 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900">
-                        <div class="relative h-44 overflow-hidden rounded-[1.8rem]">
-                            <img [src]="course.imagePath || 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png'" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                            <div class="absolute top-3 left-3 rounded-lg bg-black/40 backdrop-blur-md px-2 py-1 text-[9px] font-black text-white uppercase">{{ course.lang }}</div>
+                @for (course of courseService.courses(); track course.slug) {
+                    <div class="active:scale-[0.98] hover:rotate-2 group relative flex flex-col rounded-[2.5rem] border border-gray-100 bg-white p-3 md:p-4 transition-all hover:border-emerald-500 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900">
+
+                        @if (!course.isPublished) {
+                            <div class="absolute top-5 right-5 z-20 rounded-full bg-orange-500 px-2 py-0.5 text-[7px] font-black text-white uppercase shadow-lg">
+                                <span i18n="@@course.draft">Qoralama</span>
+                            </div>
+                        }
+
+                        <div class="relative h-40 md:h-44 overflow-hidden rounded-[1.8rem]">
+                            <img [src]="course.imagePath || 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png'"
+                                 class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute top-3 left-3 rounded-lg bg-black/40 backdrop-blur-md px-2 py-1 text-[8px] font-black text-white uppercase">
+                                {{ course.lang }}
+                            </div>
                         </div>
 
-                        <div class="mt-5 px-1 flex-1 flex flex-col">
+                        <div class="mt-4 md:mt-5 px-1 flex-1 flex flex-col">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-[9px] font-black uppercase text-emerald-500 tracking-tighter">{{ course.ownerName }}</span>
-                                <span class="text-[9px] font-bold text-gray-400">{{ course.lessonsCount }} dars</span>
+                                <span class="text-[8px] font-black uppercase text-emerald-500 tracking-tighter truncate max-w-[100px]">
+                                    {{ course.ownerName }}
+                                </span>
+                                <span class="text-[8px] font-bold text-gray-400">
+                                    <span i18n="@@course.lessons_count">Darslar soni</span>: {{ course.lessonsCount }}
+                                </span>
                             </div>
-                            <h3 class="text-lg font-black tracking-tight text-gray-900 dark:text-white line-clamp-2 leading-tight">{{ course.name }}</h3>
 
-                            <div class="mt-auto pt-5 flex items-center justify-between">
+                            <h3 class="text-md md:text-lg font-black tracking-tight text-gray-900 dark:text-white line-clamp-2 leading-tight">
+                                {{ course.name }}
+                            </h3>
+
+                            <div class="mt-auto pt-4 md:pt-5 flex items-center justify-between">
                                 <div>
-                                    <p class="text-[8px] font-bold uppercase text-gray-400">Narxi</p>
-                                    <p class="text-md font-black text-gray-900 dark:text-emerald-400">{{ course.price | number }} <small class="text-[9px]">UZS</small></p>
+                                    <p class="text-[7px] font-bold uppercase text-gray-400" i18n="@@course.price">Narx</p>
+                                    <p class="text-sm md:text-md font-black text-gray-900 dark:text-emerald-400">
+                                        {{ course.price | number }} <small class="text-[8px]">UZS</small>
+                                    </p>
                                 </div>
-                                <div class="flex items-center gap-2">
-                                    <button [routerLink]="['/courses-view/', course.name]"
-                                            [queryParams]="{ id: course.id }"
-                                            class="flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-[10px] font-black uppercase text-white transition-all hover:bg-emerald-600 dark:bg-white dark:text-gray-900 active:scale-95 hover:rotate-12">
-                                        <i class="fa-solid fa-eye text-xs"></i>
+
+                                <div class="flex items-center gap-1.5 md:gap-2">
+                                    <button [routerLink]="['/courses-view/', course.slug]"
+                                            class="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-xl bg-gray-900 text-white transition-all hover:bg-emerald-600 dark:bg-white dark:text-gray-900 active:scale-95">
+                                        <i class="fa-solid fa-eye text-[10px]"></i>
                                     </button>
-                                    <button (click)="onBuy(course, 'COURSE')" title="Sotib olish" class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-white transition-all hover:bg-emerald-700 hover:rotate-12 active:scale-90 shadow-lg shadow-emerald-500/20">
-                                        <i class="fa-solid fa-cart-shopping text-sm"></i>
-                                    </button>
+
+                                    @if (course.isPublished) {
+                                        <button (click)="onBuy(course, 'COURSE')"
+                                                class="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-lg shadow-emerald-500/10 active:scale-95">
+                                            <i class="fa-solid fa-cart-shopping text-[10px]"></i>
+                                        </button>
+                                    }
+
+                                    @if (authService.isAdmin()) {
+                                        <button [routerLink]="['/courses-update/', course.slug]"
+                                                class="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-xl bg-orange-500 text-white active:scale-95">
+                                            <i class="fa-solid fa-pen-to-square text-[10px]"></i>
+                                        </button>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -92,20 +171,12 @@
                 }
             </div>
 
-            @if (courseService.isLoading() && courseService.courses().length > 0) {
-                <div class="flex justify-center py-10">
-                    <div class="flex items-center gap-2">
-                        <div class="h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-500"></div>
-                        <div class="h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-500 [animation-delay:-0.3s]"></div>
-                        <div class="h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-500 [animation-delay:-0.5s]"></div>
-                    </div>
-                </div>
-            }
-
             @if (!courseService.isLoading() && courseService.courses().length === 0) {
                 <div class="py-20 text-center opacity-30">
                     <i class="fa-solid fa-box-open text-5xl mb-4 text-gray-300"></i>
-                    <p class="font-black uppercase tracking-widest text-xs">Kurslar topilmadi</p>
+                    <p class="font-black uppercase tracking-widest text-xs">
+                        <span i18n="@@course.no_courses">Kurslar topilmadi</span>
+                    </p>
                 </div>
             }
         </main>

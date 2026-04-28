@@ -19,6 +19,13 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
     </properties>
     <repositories>
+        <!-- Add the following repository -->
+        <repository>
+            <id>mchv</id>
+            <name>MCHV Apache Maven Packages</name>
+            <url>https://mvn.mchv.eu/repository/mchv/</url>
+        </repository>
+
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
@@ -115,12 +122,12 @@
             <version>0.0.5</version>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+
                 <configuration>
                     <profiles>
                         <profile>local</profile>

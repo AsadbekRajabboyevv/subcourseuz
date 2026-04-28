@@ -1,11 +1,15 @@
 package uz.asadbek.subcourse.course;
 
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import uz.asadbek.base.repository.BaseRepository;
+import uz.asadbek.subcourse.course.dto.CourseInfoResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
+import uz.asadbek.subcourse.course.dto.CourseUpdateRequestDto;
 import uz.asadbek.subcourse.course.filter.CourseFilter;
 
 @Repository
@@ -20,7 +24,9 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
                 concat(coalesce(u.firstName, ''), ' ', coalesce(u.lastName, '')),
                 c.price,
                 c.imagePath,
-                c.lang
+                c.lang,
+                c.isPublished,
+                c.slug
             )
             from CourseEntity c
             left join UserEntity u on c.ownerId = u.id
@@ -35,6 +41,7 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
             and (:#{#filter.updatedAtFrom} is null or c.updatedAt >= :#{#filter.updatedAtFrom})
             and (:#{#filter.updatedAtTo} is null or c.updatedAt <= :#{#filter.updatedAtTo})
             and (:#{#filter.gradeId} is null or c.gradeId = :#{#filter.gradeId})
+            and (:#{#filter.isPublished} is null or c.isPublished = :#{#filter.isPublished})
             and (:#{#filter.scienceId} is null or c.scienceId = :#{#filter.scienceId})
             and (:#{#filter.priceFrom} is null or c.price >= :#{#filter.priceFrom})
             and (:#{#filter.priceTo} is null or c.price <= :#{#filter.priceTo})
@@ -79,81 +86,75 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
                 concat(coalesce(u.firstName, ''), ' ', coalesce(u.lastName, '')),
                 c.price,
                 c.imagePath,
-                c.lang
+                c.lang,
+                c.isPublished,
+                c.slug
             )
             from CourseEntity c
             left join UserEntity u on c.ownerId = u.id
             left join CourseLessonEntity l on l.courseId = c.id
             left join UserCourseEntity sc on sc.id.referenceId = c.id
-            where c.deletedAt is null and c.id = :id
+            where c.deletedAt is null and c.slug = :slug
             group by c.id, c.name, u.firstName, u.lastName, c.price, c.imagePath, c.lang
         """)
-    CourseResponseDto get(Long id);
-
-    @Query(value = """
-        SELECT
-            c.id,
-            c.name,
-            c.description,
-
-            CASE
-                WHEN :lang = 'uz' THEN g.name_uz
-                WHEN :lang = 'ru' THEN g.name_ru
-                WHEN :lang = 'en' THEN g.name_en
-                WHEN :lang = 'crl' THEN g.name_crl
-                ELSE g.name_uz
-            END AS grade_name,
-
-            CASE
-                WHEN :lang = 'uz' THEN s.name_uz
-                WHEN :lang = 'ru' THEN s.name_ru
-                WHEN :lang = 'en' THEN s.name_en
-                WHEN :lang = 'crl' THEN s.name_crl
-                ELSE s.name_uz
-            END AS science_name,
-            c.duration,
-            c.duration_type,
-
-            COUNT(DISTINCT l.id) AS lessons_count,
-            COUNT(DISTINCT sc.user_id) AS students_count,
-
-            CONCAT(COALESCE(u.first_name, ''), ' ', COALESCE(u.last_name, '')) AS owner_name,
-
-            c.price,
-            c.image_path,
-            c.lang,
-            (
-                SELECT (:currentUserId IS NOT NULL) AND EXISTS (
-                SELECT 1 FROM user_courses sc2
-                WHERE sc2.reference_id = c.id
-                  AND sc2.user_id = :currentUserId
-            )) AS purchased,
-
-            COALESCE(
-                JSON_AGG(
-                    JSON_BUILD_OBJECT(
-                        'id', l.id,
-                        'name', l.name,
-                        'lessonNumber',lesson_number
-                    )
-                ) FILTER (WHERE l.id IS NOT NULL),
-                '[]'
-            ) AS lessons,
-            c.science_id,
-            c.grade_id
-        FROM courses c
-        LEFT JOIN users u ON c.owner_id = u.id
-        LEFT JOIN course_lessons l ON l.course_id = c.id
-        LEFT JOIN user_courses sc ON sc.reference_id = c.id
-        LEFT JOIN course_grades g ON c.grade_id = g.id
-        LEFT JOIN sciences s ON c.science_id = s.id
-
-        WHERE c.deleted_at IS NULL
-          AND c.id = :id
-
-        GROUP BY c.id, g.id, s.id, u.id
-        """, nativeQuery = true)
-    Object[] get(Long id, String lang, Long currentUserId);
+    CourseResponseDto get(String slug);
+    @Query("""
+    SELECT new uz.asadbek.subcourse.course.dto.CourseInfoResponseDto(
+      c.id,
+      c.name,
+      c.description,
+      CASE
+        WHEN :lang = 'uz' THEN g.name.nameUz
+        WHEN :lang = 'ru' THEN g.name.nameRu
+        ELSE g.name.nameUz
+      END,
+      CASE
+        WHEN :lang = 'uz' THEN s.name.nameUz
+        WHEN :lang = 'ru' THEN s.name.nameRu
+        ELSE s.name.nameUz
+      END,
+      c.duration,
+      c.durationType,
+      CONCAT(COALESCE(u.firstName, ''), ' ', COALESCE(u.lastName, '')),
+      c.price,
+      c.imagePath,
+      c.lang,
+      c.scienceId,
+      c.gradeId,
+      c.slug
+    )
+    FROM CourseEntity c
+    LEFT JOIN CourseGradeEntity g ON c.gradeId = g.id
+    LEFT JOIN ScienceEntity s ON c.scienceId = s.id
+    LEFT JOIN UserEntity u ON c.ownerId = u.id
+    WHERE c.slug = :slug AND c.deletedAt IS NULL
+""")
+    Optional<CourseInfoResponseDto> getCourseBasicInfo(String slug, String lang);
 
     boolean existsByIdAndScienceId(Long id, Long scienceId);
+
+    @Query("""
+            SELECT new uz.asadbek.subcourse.course.dto.CourseUpdateRequestDto(
+              c.name,
+              c.description,
+              c.duration,
+              c.durationType,
+              c.scienceId,
+              c.gradeId,
+              c.price,
+              c.lang,
+              c.isPublished,
+              c.isVideoCourse,
+              c.imagePath
+            )
+            FROM CourseEntity c
+            WHERE c.deletedAt is null and c.slug = :slug
+        """)
+    Optional<CourseUpdateRequestDto> getUpdateData(String slug);
+
+  boolean existsBySlug(String slug);
+
+   Optional<Long> findIdBySlug(String slug);
+
+   Optional<CourseEntity> findBySlug(String slug);
 }

@@ -1,5 +1,6 @@
 package uz.asadbek.subcourse.test;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ import uz.asadbek.subcourse.test.filter.TestFilter;
 
 
 @RequestMapping("/v1/api/tests")
+@Tag(name = "Testlar", description = "Testlar")
 public interface TestApi {
 
     @PostMapping

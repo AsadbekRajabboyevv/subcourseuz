@@ -20,7 +20,6 @@ import uz.asadbek.subcourse.user.UserEntity;
 public class CustomUserDetails implements UserDetails {
 
     private final UserEntity user;
-    private final String language;
     private final Long id;
 
     @Override
@@ -45,9 +44,6 @@ public class CustomUserDetails implements UserDetails {
         return this.user.getEmail();
     }
 
-    public String getLanguage() {
-        return this.language == null ? "uz" : this.language;
-    }
     public Long getId() {
         return this.id == null ? user.getId() : this.id;
     }

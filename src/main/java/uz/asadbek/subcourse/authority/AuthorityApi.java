@@ -1,5 +1,6 @@
 package uz.asadbek.subcourse.authority;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import uz.asadbek.subcourse.authority.dto.AuthorityResponseDto;
 import uz.asadbek.subcourse.authority.filter.AuthorityFilter;
 
 @RequestMapping("/v1/api/authorities")
+@Tag(name = "Authority", description = "Authority")
 public interface AuthorityApi {
 
     @GetMapping

@@ -9,4 +9,5 @@ public class CourseLessonUpdateRequestDto {
     private String videoUrl;
     private String textContent;
     private Long courseId;
+    private Boolean isPublished;
 }

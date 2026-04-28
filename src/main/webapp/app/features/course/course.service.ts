@@ -4,12 +4,10 @@ import {Observable, tap} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {Base, Page} from "app/common/model/base";
 import {
-  Course, CourseFilter,
-  CourseGrade, CourseInfo,
-  CourseScience, CourseScienceCreate, CourseScienceUpdate,
-  CourseUpdate,
-  OneCourseGrade,
-  OneCourseScience
+  Course,
+  CourseFilter,
+  CourseInfo,
+  CourseUpdate
 } from "./course.model";
 import {catchError} from "rxjs/operators";
 import {AuthService} from "../../common/auth/auth.service";
@@ -20,9 +18,9 @@ export class CourseService {
   private readonly authService = inject(AuthService);
   private readonly PATH = `${environment.apiPath}/v1/api/courses`;
   private readonly PUBLIC_PATH = `${environment.apiPath}/v1/api/public`;
-  private readonly SCIENCE_PATH = `${environment.apiPath}/v1/api/sciences`;
 
   courses = signal<Course[]>([]);
+  courseLength = signal(0);
   isLoading = signal<boolean>(false);
 
   get(filter: CourseFilter, page: number, size: number): Observable<Base<Page<Course>>> {
@@ -33,7 +31,6 @@ export class CourseService {
   getMe(filter: CourseFilter, page: number, size: number): Observable<Base<Page<Course>>> {
     return this.fetchCourses(`${this.PATH}/me`, filter, page, size);
   }
-
 
   private fetchCourses(url: string, filter: CourseFilter, page: number, size: number): Observable<Base<Page<Course>>> {
     this.isLoading.set(true);
@@ -48,7 +45,7 @@ export class CourseService {
       }
     });
 
-    return this.http.get<Base<Page<Course>>>(url, { params }).pipe(
+    return this.http.get<Base<Page<Course>>>(url, {params}).pipe(
       tap(() => this.isLoading.set(false)),
       catchError((err) => {
         this.isLoading.set(false);
@@ -61,6 +58,14 @@ export class CourseService {
     this.courses.set(newCourses);
   }
 
+  setCourseLength(length: number) {
+    this.courseLength.set(length);
+  }
+
+  getCourseLength() {
+    return this.courseLength();
+  }
+
   resetCourses() {
     this.courses.set([]);
   }
@@ -69,9 +74,9 @@ export class CourseService {
     this.courses.update(prev => [...prev, ...newCourses]);
   }
 
-  getById(id: number): Observable<Base<CourseInfo>> {
+  getById(slug: string): Observable<Base<CourseInfo>> {
     const path = !this.authService.isLoggedIn() ? `${this.PUBLIC_PATH}/courses` : this.PATH;
-    return this.http.get<Base<CourseInfo>>(`${path}/${id}`);
+    return this.http.get<Base<CourseInfo>>(`${path}/${slug}`);
   }
 
   create(course: Partial<Course>, image: File): Observable<Base<Course>> {
@@ -81,65 +86,30 @@ export class CourseService {
     return this.http.post<Base<Course>>(this.PATH, formData);
   }
 
-  update(id: number, course: Partial<CourseUpdate>, image: File): Observable<Base<Course>> {
+  update(slug: string, course: Partial<CourseUpdate>, image?: File | null): Observable<Base<Course>> {
     const formData = new FormData();
-    formData.append('request', new Blob([JSON.stringify(course)], {type: 'application/json'}));
-    formData.append('image', image);
-    return this.http.put<Base<Course>>(`${this.PATH}/${id}`, course);
+
+    if (course) {
+      formData.append('request', new Blob([JSON.stringify(course)], {type: 'application/json'}));
+    }
+
+    if (image) {
+      formData.append('image', image);
+    }
+
+    return this.http.put<Base<Course>>(`${this.PATH}/${slug}`, formData);
   }
 
-  delete(id: number): Observable<Base<void>> {
-    return this.http.delete<Base<void>>(`${this.PATH}/${id}`).pipe(
+  getUpdateBySlug(slug: string): Observable<Base<CourseUpdate>> {
+    return this.http.get<Base<CourseUpdate>>(`${this.PATH}/update/${slug}`);
+  }
+
+  delete(slug: string): Observable<Base<void>> {
+    return this.http.delete<Base<void>>(`${this.PATH}/${slug}`).pipe(
       tap(() => {
-        this.courses.update(list => list.filter(c => c.id !== id));
+        this.courses.update(list => list.filter(c => c.slug !== slug));
       })
     );
   }
-
-//====================Grade============================================
-  getGrades(): Observable<Base<CourseGrade[]>> {
-    return this.http.get<Base<CourseGrade[]>>(`${this.PUBLIC_PATH}/course-grades`);
-  }
-
-  getGradeById(id: number): Observable<Base<OneCourseGrade>> {
-    return this.http.get<Base<OneCourseGrade>>(`${this.PATH}/grades/${id}`);
-  }
-
-  deleteGrade(id: number): Observable<Base<void>> {
-    return this.http.delete<Base<void>>(`${this.PATH}/grades/${id}`);
-  }
-
-  updateGrade(id: number, grade: Partial<CourseGrade>): Observable<Base<CourseGrade>> {
-    return this.http.put<Base<CourseGrade>>(`${this.PATH}/grades/${id}`, grade);
-  }
-
-//====================Science ============================================
-
-  getSciences(): Observable<Base<CourseScience[]>> {
-    return this.http.get<Base<CourseScience[]>>(`${this.SCIENCE_PATH}`);
-  }
-
-  getScienceById(id: number): Observable<Base<OneCourseScience>> {
-    return this.http.get<Base<OneCourseScience>>(`${this.SCIENCE_PATH}/${id}`);
-  }
-
-  createScience(science: CourseScienceCreate, image: File): Observable<Base<CourseScience>> {
-    const formData = new FormData();
-    formData.append('request', new Blob([JSON.stringify(science)], {type: 'application/json'}));
-    formData.append('image', image);
-    return this.http.post<Base<CourseScience>>(this.SCIENCE_PATH, formData);
-  }
-
-  updateScience(id: number, science: Partial<CourseScienceUpdate>, image: File): Observable<Base<CourseScience>> {
-    const formData = new FormData();
-    formData.append('request', new Blob([JSON.stringify(science)], {type: 'application/json'}));
-    formData.append('image', image);
-    return this.http.put<Base<CourseScience>>(`${this.SCIENCE_PATH}/${id}`, formData);
-  }
-
-  deleteScience(id: number): Observable<Base<void>> {
-    return this.http.delete<Base<void>>(`${this.SCIENCE_PATH}/${id}`);
-  }
-
 
 }

@@ -2,7 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
-import { PaymentRequestDto, PaymentResponseDto, PaymentFilter } from './payment.model';
+import { PaymentRequest, Payment, PaymentFilter } from './payment.model';
 import {Base, Page} from "../../common/model/base";
 import {environment} from "../../../environments/environment";
 
@@ -13,14 +13,14 @@ export class PaymentService {
   private http = inject(HttpClient);
   private readonly PATH = environment.apiPath + '/v1/api/payments';
 
-  payments = signal<PaymentResponseDto[]>([]);
+  payments = signal<Payment[]>([]);
   isLoading = signal(false);
 
-  purchase(request: PaymentRequestDto): Observable<Base<PaymentResponseDto>> {
-    return this.http.post<Base<PaymentResponseDto>>(this.PATH, request);
+  purchase(request: PaymentRequest): Observable<Base<Payment>> {
+    return this.http.post<Base<Payment>>(this.PATH, request);
   }
 
-  getHistory(filter: PaymentFilter, page: number = 0, size: number = 10): Observable<Base<Page<PaymentResponseDto>>> {
+  getHistory(filter: PaymentFilter, page: number = 0, size: number = 10): Observable<Base<Page<Payment>>> {
     this.isLoading.set(true);
 
     let params = new HttpParams()
@@ -31,7 +31,7 @@ export class PaymentService {
       if (value) params = params.set(key, value.toString());
     });
 
-    return this.http.get<Base<Page<PaymentResponseDto>>>(this.PATH, { params }).pipe(
+    return this.http.get<Base<Page<Payment>>>(this.PATH, { params }).pipe(
       tap(res => {
         this.payments.set(res.data.content);
         this.isLoading.set(false);
@@ -39,7 +39,7 @@ export class PaymentService {
     );
   }
 
-  getOne(exId: string): Observable<Base<PaymentResponseDto>> {
-    return this.http.get<Base<PaymentResponseDto>>(`${this.PATH}/${exId}`);
+  getOne(exId: string): Observable<Base<Payment>> {
+    return this.http.get<Base<Payment>>(`${this.PATH}/${exId}`);
   }
 }

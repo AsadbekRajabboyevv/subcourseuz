@@ -33,8 +33,8 @@ public class PublicController implements PublicApi {
     }
 
     @Override
-    public BaseResponseDto<CourseInfoResponseDto> getCourse(Long id) {
-        return BaseResponseDto.ok(publicService.getCourse(id));
+    public BaseResponseDto<CourseInfoResponseDto> getCourse(String slug) {
+        return BaseResponseDto.ok(publicService.getCourse(slug));
     }
 
     @Override
@@ -43,7 +43,7 @@ public class PublicController implements PublicApi {
     }
 
     @Override
-    public BaseResponseDto<List<CourseLessonResponseDto>> getCourseLessons(Long id) {
+    public BaseResponseDto<List<CourseLessonResponseDto>> getCourseLessons(String slug) {
         return null;
     }
 

@@ -12,8 +12,11 @@ import uz.asadbek.subcourse.comment.dto.CommentRequestDto;
 public interface CommentMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deletedAt", ignore = true)
     CommentEntity toEntity(CommentRequestDto dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deletedAt", ignore = true)
     void update(@MappingTarget CommentEntity entity, CommentRequestDto dto);
 }
