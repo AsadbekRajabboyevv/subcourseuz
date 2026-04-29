@@ -24,16 +24,19 @@ export class LessonUpdateComponent implements OnInit {
   private lessonService = inject(LessonService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-
+  private static readonly YOUTUBE_LINK_PREFIX = 'https://www.youtube.com/watch?v=';
   lessonId: number | null = null;
   isLoading = signal<boolean>(false);
   isDataLoaded = signal<boolean>(false);
 
   selectedFiles: File[] = [];
   deletedFileUrls: string[] = [];
-  existingFileUrls: string[] = []; // UI'da ko'rsatish uchun
-
-  coursePreview = { name: '', imagePath: '' };
+  existingFileUrls: string[] = [];
+  coursePreview = {
+    name: '',
+    imagePath: '',
+    slug: ''
+  };
 
   lessonForm: LessonUpdate = {
     name: '',
@@ -44,7 +47,7 @@ export class LessonUpdateComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.coursePreview.slug = this.route.snapshot.paramMap.get('courseSlug') ?? '';    this.route.queryParams.subscribe(params => {
       const id = params['id'] || params['lessonId'];
       if (id) {
         this.lessonId = Number(id);
@@ -61,7 +64,7 @@ export class LessonUpdateComponent implements OnInit {
         this.lessonForm = {
           name: data.name,
           lessonNumber: data.lessonNumber?.toString(),
-          videoUrl: data.videoUrl,
+          videoUrl: LessonUpdateComponent.YOUTUBE_LINK_PREFIX + data.videoUrl,
           textContent: data.textContent,
           isPublished: data.isPublished
         };
@@ -99,6 +102,7 @@ export class LessonUpdateComponent implements OnInit {
   onSubmit() {
     if (!this.lessonId) return;
     this.isLoading.set(true);
+    this.lessonForm.videoUrl = this.getYoutubeId(this.lessonForm.videoUrl)!;
     this.lessonService.updateLesson(
       this.lessonId,
       this.lessonForm,
@@ -107,7 +111,7 @@ export class LessonUpdateComponent implements OnInit {
     ).subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.router.navigate(['/courses-list']);
+        this.router.navigate(['/courses-view/', this.coursePreview.slug]);
       },
       error: () => this.isLoading.set(false)
     });

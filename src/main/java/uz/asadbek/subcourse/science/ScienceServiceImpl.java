@@ -26,8 +26,7 @@ public class ScienceServiceImpl implements ScienceService {
 
     @Override
     public List<ScienceResponseDto> get() {
-        var lang = "uz";
-        return repository.get(lang);
+        return repository.get(LangUtils.currentLang());
     }
 
     @Override

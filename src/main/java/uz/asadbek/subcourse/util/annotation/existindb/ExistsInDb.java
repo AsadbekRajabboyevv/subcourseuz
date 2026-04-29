@@ -24,6 +24,4 @@ public @interface ExistsInDb {
     boolean optional() default false;
 
     boolean setNull() default false;
-
-    String field() default "id";
 }

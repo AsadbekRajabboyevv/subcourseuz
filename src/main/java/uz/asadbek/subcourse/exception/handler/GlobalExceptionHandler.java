@@ -84,6 +84,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ErrorResponse> handleValidation(ValidationException ex) {
+        var response = ErrorResponse.builder()
+            .timestamp(LocalDateTime.now())
+            .errorCode("VALIDATION_FAILED")
+            .errorMessage(ExceptionUtil.resolveMessage("error.validation"))
+            .fieldErrorMessage(ex.getFieldErrors())
+            .build();
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     private ResponseEntity<ErrorResponse> buildResponse(
         HttpStatus status,
         String code,

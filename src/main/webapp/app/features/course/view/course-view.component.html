@@ -79,7 +79,7 @@
 
                                 <div class="flex items-center">
                                     @if (authService.isAdmin()) {
-                                        <button [routerLink]="['/courses-lesson-edit', lesson.name]"
+                                        <button [routerLink]="['/courses-lesson-edit', course()!.slug]"
                                                 [queryParams]="{id: lesson.id}"
                                                 class="mr-2 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 py-5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-amber-500/20 transition-all hover:bg-amber-600 active:scale-95">
                                             <i class="fa-solid fa-edit text-[10px]"></i>

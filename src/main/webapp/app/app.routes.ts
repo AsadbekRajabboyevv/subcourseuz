@@ -47,6 +47,11 @@ export const routes: Routes = [
   },
 
   {
+    path: 'tests-list',
+    loadComponent: () => import('./features/test/list/test-list.component').then(m => m.TestListComponent),
+    title: $localize`:@@test.list:Testlar ro‘yxati`
+  },
+  {
     path: 'courses-list',
     loadComponent: () => import('./features/course/list/course-list.component').then(m => m.CourseListComponent),
     title: $localize`:@@courses_list:Kurslar ro‘yxati`
@@ -78,7 +83,7 @@ export const routes: Routes = [
     title: $localize`:@@lesson_add:Dars qo‘shish`
   },
   {
-    path: 'courses-lesson-edit/:lessonSlug',
+    path: 'courses-lesson-edit/:courseSlug',
     loadComponent: () => import('./features/lesson/update/lesson-update.component').then(m => m.LessonUpdateComponent),
     title: $localize`:@@lesson_edit:Dars tahrirlash`
   },
