@@ -18,7 +18,7 @@ import uz.asadbek.subcourse.publicui.dto.HomePageResponseDto;
 import uz.asadbek.subcourse.publicui.dto.StatsDto;
 import uz.asadbek.subcourse.science.ScienceService;
 import uz.asadbek.subcourse.science.dto.ScienceResponseDto;
-import uz.asadbek.subcourse.test.TestService;
+import uz.asadbek.subcourse.test.test.TestService;
 import uz.asadbek.subcourse.user.UserService;
 
 @Slf4j

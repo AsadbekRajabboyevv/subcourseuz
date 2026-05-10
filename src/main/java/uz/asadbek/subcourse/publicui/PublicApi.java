@@ -15,8 +15,8 @@ import uz.asadbek.subcourse.course.grade.dto.CourseGradeResponseDto;
 import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
 import uz.asadbek.subcourse.publicui.dto.HomePageResponseDto;
 import uz.asadbek.subcourse.science.dto.ScienceResponseDto;
-import uz.asadbek.subcourse.test.dto.TestResponseDto;
-import uz.asadbek.subcourse.test.filter.TestFilter;
+import uz.asadbek.subcourse.test.test.dto.TestResponseDto;
+import uz.asadbek.subcourse.test.test.filter.TestFilter;
 
 @RequestMapping("/v1/api/public")
 @Tag(name = "Public", description = "Public")
