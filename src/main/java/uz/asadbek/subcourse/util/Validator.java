@@ -10,9 +10,11 @@ import uz.asadbek.subcourse.course.CourseRepository;
 import uz.asadbek.subcourse.course.dto.CourseRequestDto;
 import uz.asadbek.subcourse.course.grade.CourseGradeRepository;
 import uz.asadbek.subcourse.course.lesson.CourseLessonRepository;
+import uz.asadbek.subcourse.exception.NotFoundException;
 import uz.asadbek.subcourse.science.ScienceRepository;
-import uz.asadbek.subcourse.test.TestEntity;
-import uz.asadbek.subcourse.test.dto.TestRequestDto;
+import uz.asadbek.subcourse.test.test.TestEntity;
+import uz.asadbek.subcourse.test.test.dto.TestRequestDto;
+import uz.asadbek.subcourse.test.session.question.TestSessionQuestionRepository;
 import uz.asadbek.subcourse.test.usertest.UserTestRepository;
 import uz.asadbek.subcourse.user.UserRepository;
 
@@ -26,6 +28,7 @@ public class Validator {
     private final CourseLessonRepository lessonRepository;
     private final UserRepository userRepository;
     private final UserTestRepository userTestRepository;
+    private final TestSessionQuestionRepository testSessionQuestionRepository;
 
     public void validateTest(TestRequestDto dto) {
         Map<String, String> errors = new LinkedHashMap<>();
@@ -89,6 +92,15 @@ public class Validator {
         throwIfErrors(errors);
     }
 
+    public void validateTestSessionQuestion(Long sessionId, Long questionId) {
+        var exists = testSessionQuestionRepository.existsBySessionIdAndQuestionId(sessionId,
+            questionId);
+        if (!exists) {
+            throw ExceptionUtil.build(NotFoundException.class,
+                "error.test_session_question.not_found");
+        }
+    }
+
     private void validateExists(Long id,
         Function<Long, Boolean> existsChecker,
         String field,
@@ -106,7 +118,9 @@ public class Validator {
         String errorKey,
         Map<String, String> errors) {
 
-        if (childId == null) return;
+        if (childId == null) {
+            return;
+        }
 
         if (!relationChecker.apply(childId, parentId)) {
             errors.put(field, ExceptionUtil.resolveMessage(errorKey));
@@ -116,7 +130,9 @@ public class Validator {
     private void validateLesson(Long lessonId, Long courseId,
         Map<String, String> errors) {
 
-        if (lessonId == null) return;
+        if (lessonId == null) {
+            return;
+        }
 
         if (courseId == null) {
             errors.put("courseId",
