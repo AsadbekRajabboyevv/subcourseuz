@@ -1,8 +1,6 @@
 package uz.asadbek.subcourse.payment;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,8 +22,8 @@ import uz.asadbek.subcourse.payment.dto.PaymentResponseDto;
 import uz.asadbek.subcourse.payment.dto.PaymentStatus;
 import uz.asadbek.subcourse.payment.dto.PaymentType;
 import uz.asadbek.subcourse.payment.filter.PaymentFilter;
-import uz.asadbek.subcourse.test.TestService;
-import uz.asadbek.subcourse.test.dto.TestResponseDto;
+import uz.asadbek.subcourse.test.test.TestService;
+import uz.asadbek.subcourse.test.test.dto.TestResponseDto;
 import uz.asadbek.subcourse.util.ExceptionUtil;
 import uz.asadbek.subcourse.util.JwtUtil;
 
