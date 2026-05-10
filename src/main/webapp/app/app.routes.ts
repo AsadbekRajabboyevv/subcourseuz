@@ -31,6 +31,21 @@ export const routes: Routes = [
   },
 
   {
+    path: 'tests-create',
+    loadComponent: () => import('./features/test/create/test-create.component').then(m => m.TestCreateComponent),
+    title: $localize`:@@test.title:Testlar yaratish`
+  },
+  {
+    path: 'tests-update/:id',
+    loadComponent: () => import('./features/test/update/test-update.component').then(m => m.TestUpdateComponent),
+    title: $localize`:@@test.update.title:Testni yangilash`
+  },
+  {
+    path: 'tests-view/:id',
+    loadComponent: () => import('./features/test/view/test-view.component').then(m => m.TestViewComponent),
+    title: $localize`:@@test.update.title:Testni ishlash`
+  },
+  {
     path: 'top-up-requests',
     loadComponent: () => import('./features/admin/topuprequest/list/top-up-request-list.component').then(m => m.TopUpRequestListComponent),
     title: $localize`:@@topup_requests:So‘rovlar ro‘yxati`

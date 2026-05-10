@@ -55,6 +55,11 @@ spring:
 
 springdoc:
   pathsToMatch: /v1/api/**
+  swagger-ui:
+    doc-expansion: none
+    operations-sorter: method
+    tags-sorter: alpha
+    groups-order: asc
 
 app:
   file:

@@ -1,0 +1,225 @@
+import {Component, inject, signal, OnInit} from '@angular/core';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  AbstractControl
+} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {Router, RouterLink} from '@angular/router';
+
+import {TestCreate} from '../test.model';
+import {TestService} from "../test.service";
+import {ScienceService} from "../../science/science.service";
+import {GradeService} from "../../grade/grade.service";
+import {InputComponent} from "../../../shared/ui/forms/input.component";
+import {PageWrapperComponent} from "../../../shared/ui/layout/page-wrapper.component";
+
+@Component({
+  selector: 'app-test-create',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, InputComponent, PageWrapperComponent],
+  templateUrl: './test-create.component.html'
+})
+export class TestCreateComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private testService = inject(TestService);
+  private router = inject(Router);
+  private scienceService = inject(ScienceService);
+  private gradeService = inject(GradeService);
+
+  activeTab = signal<'manual' | 'ai'>('manual');
+  isLoading = signal(false);
+  aiLoading = signal(false);
+  aiError = signal<string | null>(null);
+
+  mainImage: File | null = null;
+  mainImagePreview: string | null = null;
+
+  scienceOptions = signal<{ label: string; value: number }[]>([]);
+  gradeOptions = signal<{ label: string; value: number }[]>([]);
+  langOptions = [
+    {label: 'O‘zbekcha', value: 'uz'},
+    {label: 'Русский', value: 'ru'},
+    {label: 'English', value: 'en'}
+  ];
+
+  testForm = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(3)]],
+    description: [''],
+    price: [0, [Validators.required, Validators.min(0)]],
+    lang: ['uz', Validators.required],
+    scienceId: [null as number | null, Validators.required],
+    gradeId: [null as number | null, Validators.required],
+    courseId: [null as number | null],
+    lessonId: [null as number | null],
+    duration: [30, [Validators.required, Validators.min(5)]],
+    isPublished: [true],
+    questions: this.fb.array<FormGroup>([]),
+    count: [0, [Validators.required, Validators.min(1)]],
+  });
+
+  aiForm = this.fb.group({
+    name: ['', Validators.required],
+    description: [''],
+    lang: ['uz'],
+    count: [10, [Validators.required, Validators.min(1)]],
+    isPublished: [true],
+    scienceId: [null as number | null, Validators.required],
+    gradeId: [null as number | null, Validators.required],
+    courseId: [null as number | null],
+    lessonId: [null as number | null],
+    sourceFile: [null as File | null, Validators.required],
+    duration: [30, [Validators.required]],
+    price: [0, [Validators.required]],
+  });
+
+  ngOnInit() {
+    this.loadInitialData();
+    this.addQuestion();
+  }
+
+  private loadInitialData() {
+    this.scienceService.get().subscribe(res => {
+      this.scienceOptions.set((res?.data || []).map((s: any) => ({label: s.name, value: s.id})));
+    });
+    this.gradeService.get().subscribe(res => {
+      this.gradeOptions.set((res?.data || []).map((g: any) => ({label: g.name, value: g.id})));
+    });
+  }
+
+  get questions() {
+    return this.testForm.controls.questions as FormArray;
+  }
+
+  getOptions(qIdx: number) {
+    return this.questions.at(qIdx).get('options') as FormArray;
+  }
+
+  getCorrectOptionControl(qIdx: number): FormControl {
+    return this.questions.at(qIdx).get('correctOptionIndex') as FormControl;
+  }
+
+  addQuestion() {
+    const qGroup = this.fb.group({
+      text: ['', Validators.required],
+      image: [null as File | null],
+      imagePreview: [null as string | null],
+      correctOptionIndex: [0, Validators.required],
+      options: this.fb.array([this.createOption(), this.createOption(), this.createOption(), this.createOption()])
+    });
+    this.questions.push(qGroup);
+  }
+
+  createOption(): FormGroup {
+    return this.fb.group({
+      text: ['', Validators.required],
+      image: [null as File | null],
+      imagePreview: [null as string | null]
+    });
+  }
+
+  addOption(qIdx: number) {
+    this.getOptions(qIdx).push(this.createOption());
+  }
+
+  deleteOption(qIdx: number, oIdx: number) {
+    const options = this.getOptions(qIdx);
+    if (options.length > 2) {
+      const correctCtrl = this.getCorrectOptionControl(qIdx);
+      if (correctCtrl.value === oIdx) correctCtrl.setValue(0);
+      else if (correctCtrl.value > oIdx) correctCtrl.setValue(correctCtrl.value - 1);
+      options.removeAt(oIdx);
+    }
+  }
+
+  onFileSelected(event: Event, group: AbstractControl) {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      const file = input.files[0];
+      group.patchValue({image: file});
+      const reader = new FileReader();
+      reader.onload = () => group.patchValue({imagePreview: reader.result});
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onMainImageSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      this.mainImage = input.files[0];
+      const reader = new FileReader();
+      reader.onload = () => this.mainImagePreview = reader.result as string;
+      reader.readAsDataURL(this.mainImage);
+    }
+  }
+
+  onAiFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) this.aiForm.patchValue({sourceFile: input.files[0]});
+  }
+
+  onSubmit() {
+    if (this.testForm.invalid) return this.testForm.markAllAsTouched();
+
+    this.isLoading.set(true);
+    const v = this.testForm.getRawValue();
+
+    const payload: TestCreate = {
+      name: v.name ?? '',
+      price: v.price ?? 0,
+      lang: v.lang ?? 'uz',
+      duration: v.duration ?? 30,
+      isPublished: v.isPublished ?? false,
+      description: v.description ?? undefined,
+      scienceId: v.scienceId ?? undefined,
+      gradeId: v.gradeId ?? undefined,
+      courseId: v.courseId ?? undefined,
+      lessonId: v.lessonId ?? undefined,
+      questions: (v.questions || []).map((q: any) => ({
+        text: q.text ?? '',
+        correctOptionIndex: q.correctOptionIndex ?? 0,
+        image: q.image,
+        options: (q.options || []).map((o: any) => ({
+          text: o.text ?? '',
+          image: o.image
+        }))
+      }))
+    };
+
+    this.testService.create(payload, this.mainImage || new File([], 'empty')).subscribe({
+      next: () => this.router.navigate(['/tests-list']),
+      error: (err) => {
+        this.isLoading.set(false);
+        console.error(err);
+      }
+    });
+  }
+
+  onAiSubmit() {
+    if (this.aiForm.invalid) return this.aiForm.markAllAsTouched();
+    this.aiLoading.set(true);
+    const v = this.aiForm.getRawValue();
+
+    this.testService.generateFromFile({
+      file: v.sourceFile as File,
+      name: v.name ?? '',
+      price: v.price ?? 0,
+      lang: v.lang ?? 'uz',
+      duration: v.duration ?? 30,
+      isPublished: v.isPublished ?? false,
+      count: v.count ?? 10,
+      scienceId: Number(v.scienceId),
+      gradeId: Number(v.gradeId)
+    }).subscribe({
+      next: () => this.router.navigate(['/tests']),
+      error: () => {
+        this.aiLoading.set(false);
+        this.aiError.set("AI xatolik!");
+      }
+    });
+  }
+}

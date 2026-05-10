@@ -18,6 +18,20 @@ export interface Test {
   imagePath: string;
   createdAt: string;
   updatedAt: string;
+  questions: Question[];
+}
+
+export interface Question {
+  id: number;
+  text: string;
+  imagePath: string;
+  options: Option[]
+}
+
+export interface Option {
+  id: number;
+  text: string;
+  imageUrl: string;
 }
 
 export interface TestCreate {
@@ -77,7 +91,7 @@ export interface TestUpdate {
   gradeId?: number;
   duration?: number;
   isPublished?: boolean;
-  image?: File;
+  count?: number;
   questions?: QuestionUpdate[];
 }
 
@@ -105,4 +119,5 @@ export interface TestFilter extends BaseFilter{
   gradeId?: number;
   priceFrom?: number;
   priceTo?: number;
+  isPublished?: boolean;
 }

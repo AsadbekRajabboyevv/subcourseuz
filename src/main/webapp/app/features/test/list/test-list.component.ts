@@ -5,14 +5,14 @@ import { InputComponent } from "../../../shared/ui/forms/input.component";
 import { PageWrapperComponent } from "../../../shared/ui/layout/page-wrapper.component";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { PaymentService } from "../../payment/payment.service";
-import { PaymentModalComponent } from "../../payment/modal/payment-modal.component";
 import { AuthService } from "../../../common/auth/auth.service";
 import { TestService } from "../test.service";
+import { TestFilter } from "../test.model";
 
 @Component({
   selector: 'app-test-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputComponent, PageWrapperComponent, RouterLink, PaymentModalComponent],
+  imports: [CommonModule, FormsModule, InputComponent, PageWrapperComponent, RouterLink],
   templateUrl: './test-list.component.html'
 })
 export class TestListComponent implements OnInit {
@@ -29,24 +29,26 @@ export class TestListComponent implements OnInit {
   loading = false;
   showPaymentModal = false;
   selectedItem: any = null;
-  paymentType: 'COURSE' | 'TEST' = 'TEST';
 
-  filter = {
-    search: '',
+  // 1. UI-dagi inputlar bog'lanadigan ob'ekt
+  filter: TestFilter = {
+    name: '',
     isPublished: true,
     lang: '',
-    scienceId: undefined as number | undefined
   };
 
+  // 2. Serverga yuboriladigan ob'ekt (faqat "Filtrlash" bosilganda yangilanadi)
+  appliedFilter: TestFilter = { ...this.filter };
+
   languages = [
+    { label: 'Barchasi', value: '' },
     { label: 'O‘zbekcha', value: 'UZ' },
     { label: 'Ruscha', value: 'RU' },
     { label: 'Inglizcha', value: 'EN' }
   ];
 
   ngOnInit() {
-    this.applyFilters();
-
+    this.loadData();
     this.route.queryParams.subscribe(params => {
       if (params['buyNow'] === 'true' && params['id']) {
         this.handleAutoOpenAfterLogin(Number(params['id']));
@@ -58,7 +60,6 @@ export class TestListComponent implements OnInit {
   onScroll() {
     const pos = window.scrollY + window.innerHeight;
     const max = document.documentElement.scrollHeight;
-
     if (pos >= max - 300 && !this.loading && this.hasMore) {
       this.loadData();
     }
@@ -66,51 +67,51 @@ export class TestListComponent implements OnInit {
 
   loadData() {
     if (this.loading || !this.hasMore) return;
-
     this.loading = true;
 
-    this.testService.get(this.page, this.size, this.filter).subscribe({
+    // MUHIM: So'rov faqat appliedFilter bilan yuboriladi
+    this.testService.get(this.page, this.size, this.appliedFilter).subscribe({
       next: (res) => {
         const data = res.data.content;
-
         this.page === 0
           ? this.testService.setTests(data)
           : this.testService.appendTests(data);
 
         this.hasMore = !res.data.last;
         this.page++;
-
         this.loading = false;
-        this.checkIfNeedMoreContent();
       },
-      error: () => {
-        this.loading = false;
-      }
+      error: () => this.loading = false
     });
   }
 
-  private checkIfNeedMoreContent() {
-    setTimeout(() => {
-      if (document.documentElement.scrollHeight <= window.innerHeight && this.hasMore) {
-        this.loadData();
-      }
-    }, 300);
-  }
-
+  // "Filtrlash" tugmasi bosilganda
   applyFilters() {
+    // UI-dagi filter qiymatlarini serverga yuboriladigan ob'ektga ko'chiramiz
+    this.appliedFilter = JSON.parse(JSON.stringify(this.filter));
+
     this.page = 0;
     this.hasMore = true;
     this.testService.setTests([]);
     this.loadData();
   }
 
+
   resetFilters() {
     this.filter = {
-      search: '',
-      isPublished: true,
+      name: '',
+      isPublished: this.filter.isPublished,
       lang: '',
-      scienceId: undefined
     };
+    this.applyFilters();
+  }
+
+  // Tab (Faol/Qoralama) bosilganda
+  changeTab(published: boolean) {
+    if (this.filter.isPublished === published) return;
+    this.filter.isPublished = published;
+
+    // Tab almashganda inputda nimadir yozilgan bo'lsa, o'sha bilan birga filtrlaymiz
     this.applyFilters();
   }
 
@@ -120,50 +121,19 @@ export class TestListComponent implements OnInit {
       void this.router.navigate(['/auth/login'], { queryParams: { returnUrl } });
       return;
     }
-
     this.selectedItem = item;
-    this.paymentType = 'TEST';
     this.showPaymentModal = true;
-  }
-
-  handlePayment(event: { couponCode: string }) {
-    if (!this.selectedItem) return;
-
-    this.paymentService.purchase({
-      testId: this.selectedItem.id,
-      amount: this.selectedItem.price,
-      couponCode: event.couponCode
-    }).subscribe(() => this.closeModal());
-  }
-
-  closeModal() {
-    this.showPaymentModal = false;
-    this.selectedItem = null;
-  }
-
-  changeTab(published: boolean) {
-    if (this.filter.isPublished === published) return;
-
-    this.filter.isPublished = published;
-    this.applyFilters();
   }
 
   private handleAutoOpenAfterLogin(testId: number) {
     const interval = setInterval(() => {
       const test = this.testService.tests().find(t => t.id === testId);
-
       if (test) {
         this.onBuy(test);
-
-        void this.router.navigate([], {
-          queryParams: { buyNow: null, id: null },
-          queryParamsHandling: 'merge'
-        });
-
+        void this.router.navigate([], { queryParams: { buyNow: null, id: null }, queryParamsHandling: 'merge' });
         clearInterval(interval);
       }
     }, 200);
-
     setTimeout(() => clearInterval(interval), 4000);
   }
 }
