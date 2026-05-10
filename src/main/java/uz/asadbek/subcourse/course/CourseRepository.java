@@ -1,5 +1,6 @@
 package uz.asadbek.subcourse.course;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -78,7 +79,7 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
                 c.slug
         """)
     Page<CourseResponseDto> get(Pageable pageable,
-                                CourseFilter filter, String lang, Long currentUserId);
+        CourseFilter filter, String lang, Long currentUserId);
 
     @Query("""
             select new uz.asadbek.subcourse.course.dto.CourseResponseDto(
@@ -162,4 +163,27 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
     Optional<Long> findIdBySlug(String slug);
 
     Optional<CourseEntity> findBySlug(String slug);
+
+    @Query("""
+               select new uz.asadbek.subcourse.course.dto.CourseResponseDto(
+                    c.id,
+                    c.name,
+                    count(distinct l.id),
+                    count(distinct sc.id),
+                    concat(coalesce(u.firstName, ''), ' ', coalesce(u.lastName, '')),
+                    c.price,
+                    c.imagePath,
+                    c.lang,
+                    c.isPublished,
+                    c.slug
+                )
+                from CourseEntity c
+                left join UserEntity u on c.ownerId = u.id
+                left join CourseLessonEntity l on l.courseId = c.id
+                left join UserCourseEntity sc on sc.id.referenceId = c.id
+                order by c.createdAt desc
+                limit 10
+        """)
+    List<CourseResponseDto> getTop();
+
 }

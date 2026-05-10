@@ -25,7 +25,7 @@ public class PublicController implements PublicApi {
 
     @Override
     public BaseResponseDto<HomePageResponseDto> getHomePage() {
-        return null;
+        return BaseResponseDto.ok(publicService.getHomePage());
     }
 
     @Override
@@ -49,13 +49,8 @@ public class PublicController implements PublicApi {
     }
 
     @Override
-    public BaseResponseDto<List<CourseLessonResponseDto>> getCourseLessons(String slug) {
-        return null;
-    }
-
-    @Override
-    public BaseResponseDto<List<TestResponseDto>> getTests(TestFilter filter, Pageable pageable) {
-        return null;
+    public BaseResponseDto<Page<TestResponseDto>> getTests(TestFilter filter, Pageable pageable) {
+        return BaseResponseDto.ok(publicService.getTests(filter, pageable));
     }
 
     @Override

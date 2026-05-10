@@ -11,7 +11,7 @@ import uz.asadbek.subcourse.course.grade.dto.CourseGradeResponseDto;
 @AllArgsConstructor
 public class HomePageResponseDto {
 
-    private StatsDto stats;
+    private HomePageStatsResponseDto stats;
     private List<CourseGradeResponseDto> courseGrades;
     private List<CourseResponseDto> topCourses;
     private List<CommentResponseDto> topComments;

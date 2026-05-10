@@ -13,12 +13,13 @@ import uz.asadbek.subcourse.course.filter.CourseFilter;
 import uz.asadbek.subcourse.course.grade.CourseGradeService;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeResponseDto;
 import uz.asadbek.subcourse.course.lesson.CourseLessonService;
-import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
 import uz.asadbek.subcourse.publicui.dto.HomePageResponseDto;
-import uz.asadbek.subcourse.publicui.dto.StatsDto;
+import uz.asadbek.subcourse.publicui.dto.HomePageStatsResponseDto;
 import uz.asadbek.subcourse.science.ScienceService;
 import uz.asadbek.subcourse.science.dto.ScienceResponseDto;
 import uz.asadbek.subcourse.test.test.TestService;
+import uz.asadbek.subcourse.test.test.dto.TestResponseDto;
+import uz.asadbek.subcourse.test.test.filter.TestFilter;
 import uz.asadbek.subcourse.user.UserService;
 
 @Slf4j
@@ -35,14 +36,15 @@ public class PublicServiceImpl implements PublicService {
 
     @Override
     public HomePageResponseDto getHomePage() {
-        var stats = StatsDto.builder()
+        var stats = HomePageStatsResponseDto.builder()
             .coursesCount(courseService.count())
             .testsCount(testService.count())
             .usersCount(userService.count())
             .videoCoursesCount(courseLessonService.videoCoursesCount())
             .build();
 
-        return new HomePageResponseDto(stats, List.of(), List.of(), List.of());
+        return new HomePageResponseDto(stats, courseGradeService.get(), courseService.getTop(),
+            List.of());
     }
 
     @Override
@@ -56,11 +58,6 @@ public class PublicServiceImpl implements PublicService {
     }
 
     @Override
-    public List<CourseLessonResponseDto> getCourseLessons() {
-        return List.of();
-    }
-
-    @Override
     public List<CourseGradeResponseDto> getCourseGrades() {
         return courseGradeService.get();
     }
@@ -68,5 +65,10 @@ public class PublicServiceImpl implements PublicService {
     @Override
     public List<ScienceResponseDto> getSciences() {
         return scienceService.get();
+    }
+
+    @Override
+    public Page<TestResponseDto> getTests(TestFilter filter, Pageable pageable) {
+        return testService.get(filter, pageable);
     }
 }
