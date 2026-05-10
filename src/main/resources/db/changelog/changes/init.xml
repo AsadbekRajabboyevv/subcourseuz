@@ -1,0 +1,1394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd"
+    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="202605102135-1" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="1" sequenceName="authority_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-2" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="1" sequenceName="balance_transactions_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-3" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="1" sequenceName="balances_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-4" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="comments_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-5" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="course_grades_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-6" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="course_lessons_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-7" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="courses_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-8" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="files_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-9" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="lesson_progresses_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-10" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="payments_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-11" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="1" sequenceName="refresh_tokens_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-12" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="sciences_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-13" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="test_options_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-14" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="test_questions_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-15" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="test_session_answers_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-16" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="test_session_options_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-17" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="test_session_questions_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-18" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="test_sessions_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-19" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="tests_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-20" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="top_up_req_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-21" author="Asadbek Rajabboyev">
+        <createSequence incrementBy="50" sequenceName="users_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="202605102135-22" author="Asadbek Rajabboyev">
+        <createTable tableName="authorities">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_authorities"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-23" author="Asadbek Rajabboyev">
+        <createTable tableName="balance_transactions">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"
+                    primaryKeyName="pk_balance_transactions"/>
+            </column>
+            <column name="external_tx" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_id" type="BIGINT"/>
+            <column name="transaction_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance_before" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance_after" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="reference_id" type="BIGINT"/>
+            <column name="completed_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-24" author="Asadbek Rajabboyev">
+        <createTable tableName="balances">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_balances"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="balance" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="pending_balance" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="true" name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_transaction_at" type="DATETIME"/>
+            <column name="currency" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-25" author="Asadbek Rajabboyev">
+        <createTable tableName="comments">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_comments"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="text" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="course_id" type="BIGINT"/>
+            <column name="lesson_id" type="BIGINT"/>
+            <column name="test_id" type="BIGINT"/>
+            <column name="rating" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-26" author="Asadbek Rajabboyev">
+        <createTable tableName="course_grades">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_course_grades"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="name_uz" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_ru" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_en" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_crl" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description_uz" type="TEXT"/>
+            <column name="description_ru" type="TEXT"/>
+            <column name="description_en" type="TEXT"/>
+            <column name="description_crl" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-27" author="Asadbek Rajabboyev">
+        <createTable tableName="course_lessons">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_course_lessons"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lesson_number" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text_content" type="text"/>
+            <column name="video_url" type="VARCHAR(255)"/>
+            <column name="course_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_published" type="BOOLEAN"/>
+            <column name="file_urls" type="jsonb"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-28" author="Asadbek Rajabboyev">
+        <createTable tableName="courses">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_courses"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="price" type="BIGINT"/>
+            <column name="name" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="duration" type="INT"/>
+            <column name="slug" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration_type" type="VARCHAR(255)"/>
+            <column name="image_path" type="VARCHAR(255)"/>
+            <column defaultValueBoolean="false" name="is_published" type="BOOLEAN"/>
+            <column name="science_id" type="BIGINT"/>
+            <column name="grade_id" type="BIGINT"/>
+            <column name="owner_id" type="BIGINT"/>
+            <column name="lang" type="VARCHAR(255)"/>
+            <column defaultValueBoolean="false" name="is_video_course" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-29" author="Asadbek Rajabboyev">
+        <createTable tableName="files">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_files"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="file_key" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="original_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stored_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="folder" type="VARCHAR(255)"/>
+            <column name="size" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="checksum" type="VARCHAR(64)"/>
+            <column name="file_type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_public" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="download_count" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_accessed_at" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-30" author="Asadbek Rajabboyev">
+        <createTable tableName="lesson_progresses">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"
+                    primaryKeyName="pk_lesson_progresses"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lesson_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="start_time" type="DATETIME"/>
+            <column name="end_time" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-31" author="Asadbek Rajabboyev">
+        <createTable tableName="payments">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_payments"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="reference_id" type="BIGINT"/>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ex_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cancel_reason" type="VARCHAR(255)"/>
+            <column name="completed_at" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-32" author="Asadbek Rajabboyev">
+        <createTable tableName="refresh_tokens">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_refresh_tokens"/>
+            </column>
+            <column name="token" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiry_date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revoked" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-33" author="Asadbek Rajabboyev">
+        <createTable tableName="sciences">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_sciences"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="image_path" type="VARCHAR(255)"/>
+            <column name="name_uz" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_ru" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_en" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_crl" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description_uz" type="TEXT"/>
+            <column name="description_ru" type="TEXT"/>
+            <column name="description_en" type="TEXT"/>
+            <column name="description_crl" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-34" author="Asadbek Rajabboyev">
+        <createTable tableName="test_options">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_test_options"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="text" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="question_id" type="BIGINT"/>
+            <column name="image_path" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-35" author="Asadbek Rajabboyev">
+        <createTable tableName="test_questions">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_test_questions"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="text" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_path" type="VARCHAR(255)"/>
+            <column name="test_id" type="BIGINT"/>
+            <column name="correct_option_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-36" author="Asadbek Rajabboyev">
+        <createTable tableName="test_session_answers">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"
+                    primaryKeyName="pk_test_session_answers"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="session_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="question_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="selected_option_id" type="BIGINT"/>
+            <column name="answered_at" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-37" author="Asadbek Rajabboyev">
+        <createTable tableName="test_session_options">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"
+                    primaryKeyName="pk_test_session_options"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="session_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="session_question_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="original_option_id" type="BIGINT"/>
+            <column name="option_text" type="TEXT"/>
+            <column name="image_path" type="VARCHAR(255)"/>
+            <column name="order_number" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-38" author="Asadbek Rajabboyev">
+        <createTable tableName="test_session_questions">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"
+                    primaryKeyName="pk_test_session_questions"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="session_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="question_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order_index" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="question_text" type="TEXT"/>
+            <column name="image_path" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-39" author="Asadbek Rajabboyev">
+        <createTable tableName="test_sessions">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_test_sessions"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="test_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="started_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expires_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="finished_at" type="DATETIME"/>
+            <column name="duration_seconds" type="INT"/>
+            <column name="score" type="DOUBLE"/>
+            <column name="wrong_answers" type="INT"/>
+            <column name="correct_answers" type="INT"/>
+            <column name="question_count" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-40" author="Asadbek Rajabboyev">
+        <createTable tableName="tests">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tests"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="science_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="course_id" type="BIGINT"/>
+            <column name="lesson_id" type="BIGINT"/>
+            <column name="lang" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="count" type="INT"/>
+            <column name="max_score" type="INT"/>
+            <column defaultValueBoolean="false" name="is_published" type="BOOLEAN"/>
+            <column defaultValueNumeric="0" name="price" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_path" type="VARCHAR(255)"/>
+            <column name="grade_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-41" author="Asadbek Rajabboyev">
+        <createTable tableName="top_up_requests">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"
+                    primaryKeyName="pk_top_up_requests"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_key" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="VARCHAR(255)"/>
+            <column name="comment" type="VARCHAR(255)"/>
+            <column name="approved_by" type="BIGINT"/>
+            <column name="approved_at" type="DATETIME"/>
+            <column name="rejected_at" type="DATETIME"/>
+            <column name="payment_ex_id" type="VARCHAR(255)"/>
+            <column name="payment_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-42" author="Asadbek Rajabboyev">
+        <createTable tableName="user_courses">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_courses"/>
+            </column>
+            <column name="reference_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_courses"/>
+            </column>
+            <column name="purchased_at" type="DATETIME">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_courses"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-43" author="Asadbek Rajabboyev">
+        <createTable tableName="users">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="deleted_by" type="BIGINT"/>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bio" type="TEXT"/>
+            <column name="first_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="language" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="position" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="confirmation_token" type="VARCHAR(255)"/>
+            <column name="birth_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="202605102135-44" author="Asadbek Rajabboyev">
+        <addUniqueConstraint columnNames="name" constraintName="uc_authorities_name"
+            tableName="authorities"/>
+    </changeSet>
+    <changeSet id="202605102135-45" author="Asadbek Rajabboyev">
+        <addUniqueConstraint columnNames="external_tx"
+            constraintName="uc_balance_transactions_external_tx" tableName="balance_transactions"/>
+    </changeSet>
+    <changeSet id="202605102135-46" author="Asadbek Rajabboyev">
+        <addUniqueConstraint columnNames="user_id" constraintName="uc_balances_user"
+            tableName="balances"/>
+    </changeSet>
+    <changeSet id="202605102135-47" author="Asadbek Rajabboyev">
+        <addUniqueConstraint columnNames="slug" constraintName="uc_courses_slug"
+            tableName="courses"/>
+    </changeSet>
+    <changeSet id="202605102135-48" author="Asadbek Rajabboyev">
+        <addUniqueConstraint columnNames="file_key" constraintName="uc_files_file_key"
+            tableName="files"/>
+    </changeSet>
+    <changeSet id="202605102135-49" author="Asadbek Rajabboyev">
+        <addUniqueConstraint columnNames="token" constraintName="uc_refresh_tokens_token"
+            tableName="refresh_tokens"/>
+    </changeSet>
+    <changeSet id="202605102135-50" author="Asadbek Rajabboyev">
+        <addUniqueConstraint columnNames="confirmation_token"
+            constraintName="uc_users_confirmation_token" tableName="users"/>
+    </changeSet>
+    <changeSet id="202605102135-51" author="Asadbek Rajabboyev">
+        <addUniqueConstraint columnNames="email" constraintName="uc_users_email" tableName="users"/>
+    </changeSet>
+    <changeSet id="202605102135-52" author="Asadbek Rajabboyev">
+        <addUniqueConstraint columnNames="slug, owner_id"
+            constraintName="uk_course_slug_and_owner_id"
+            tableName="courses"/>
+    </changeSet>
+    <changeSet id="202605102135-53" author="Asadbek Rajabboyev">
+        <createIndex indexName="courses_slug_idx" tableName="courses" unique="true">
+            <column name="slug"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-54" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_answer_session" tableName="test_session_answers">
+            <column name="session_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-55" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_answer_unique" tableName="test_session_answers" unique="true">
+            <column name="session_id"/>
+            <column name="question_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-56" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_file_folder" tableName="files">
+            <column name="folder"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-57" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_file_key" tableName="files" unique="true">
+            <column name="file_key"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-58" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_file_status" tableName="files">
+            <column name="status"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-59" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_file_type" tableName="files">
+            <column name="file_type"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-60" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_file_user" tableName="files">
+            <column name="created_by"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-61" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_question_order" tableName="test_session_questions">
+            <column name="session_id"/>
+            <column name="order_index"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-62" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_session" tableName="test_session_options">
+            <column name="session_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-63" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_session_option_original" tableName="test_session_options">
+            <column name="original_option_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-64" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_session_option_question" tableName="test_session_options">
+            <column name="session_question_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-65" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_session_question" tableName="test_session_questions">
+            <column name="session_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-66" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_session_status_expire" tableName="test_sessions">
+            <column name="status"/>
+            <column name="expires_at"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-67" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_session_test" tableName="test_sessions">
+            <column name="test_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-68" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_session_user" tableName="test_sessions">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-69" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_top_up_status" tableName="top_up_requests">
+            <column name="status"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="202605102135-70" author="Asadbek Rajabboyev">
+        <createIndex indexName="idx_top_up_user" tableName="top_up_requests">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="202605102135-71" author="Asadbek Rajabboyev">
+        <sql>
+            ALTER TABLE sciences
+                ALTER COLUMN id
+                    SET DEFAULT nextval('sciences_seq');
+
+            ALTER TABLE authorities
+                ALTER COLUMN id
+                    SET DEFAULT nextval('authorities');
+
+            ALTER TABLE balance_transactions
+                ALTER COLUMN id
+                    SET DEFAULT nextval('balance_transactions');
+
+            ALTER TABLE balances
+                ALTER COLUMN id
+                    SET DEFAULT nextval('balances_seq');
+
+            ALTER TABLE comments
+                ALTER COLUMN id
+                    SET DEFAULT nextval('comments');
+
+            ALTER TABLE course_grades
+                ALTER COLUMN id
+                    SET DEFAULT nextval('course_grades');
+
+            ALTER TABLE course_lessons
+                ALTER COLUMN id
+                    SET DEFAULT nextval('course_lessons');
+
+            ALTER TABLE courses
+                ALTER COLUMN id
+                    SET DEFAULT nextval('courses');
+
+            ALTER TABLE files
+                ALTER COLUMN id
+                    SET DEFAULT nextval('files_seq');
+
+            ALTER TABLE lesson_progresses
+                ALTER COLUMN id
+                    SET DEFAULT nextval('lesson_progresses_seq');
+
+            ALTER TABLE payments
+                ALTER COLUMN id
+                    SET DEFAULT nextval('payments_seq');
+
+            ALTER TABLE refresh_tokens
+                ALTER COLUMN id
+                    SET DEFAULT nextval('refresh_tokens_seq');
+
+            ALTER TABLE test_options
+                ALTER COLUMN id
+                    SET DEFAULT nextval('test_options_seq');
+
+            ALTER TABLE test_questions
+                ALTER COLUMN id
+                    SET DEFAULT nextval('test_questions_seq');
+
+            ALTER TABLE test_session_answers
+                ALTER COLUMN id
+                    SET DEFAULT nextval('test_session_answers');
+
+            ALTER TABLE test_session_options
+                ALTER COLUMN id
+                    SET DEFAULT nextval('test_session_options_seq');
+
+            ALTER TABLE test_session_questions
+                ALTER COLUMN id
+                    SET DEFAULT nextval('test_session_questions_seq');
+
+            ALTER TABLE test_sessions
+                ALTER COLUMN id
+                    SET DEFAULT nextval('test_sessions_seq');
+
+            ALTER TABLE tests
+                ALTER COLUMN id
+                    SET DEFAULT nextval('tests_seq');
+
+            ALTER TABLE top_up_requests
+                ALTER COLUMN id
+                    SET DEFAULT nextval('top_up_req_seq');
+
+            ALTER TABLE users
+                ALTER COLUMN id
+                    SET DEFAULT nextval('users_seq');
+
+
+
+            INSERT INTO sciences (id,
+                                  created_at,
+                                  updated_at,
+                                  deleted_at,
+                                  created_by,
+                                  updated_by,
+                                  deleted_by,
+                                  name_uz,
+                                  name_ru,
+                                  name_en,
+                                  name_crl,
+                                  description_uz,
+                                  description_ru,
+                                  description_en,
+                                  description_crl)
+            VALUES (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Frontend dasturlash',
+                    'Frontend разработка',
+                    'Frontend Development',
+                    'Фронтенд дастурлаш',
+                    'Frontend dasturlash fanlari',
+                    'Frontend технологии и разработка',
+                    'Frontend development subject',
+                    'Фронтенд дастурлаш фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Backend dasturlash',
+                    'Backend разработка',
+                    'Backend Development',
+                    'Бэкенд дастурлаш',
+                    'Backend dasturlash fanlari',
+                    'Backend технологии и разработка',
+                    'Backend development subject',
+                    'Бэкенд дастурлаш фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Java dasturlash',
+                    'Java программирование',
+                    'Java Programming',
+                    'Жава дастурлаш',
+                    'Java dasturlash fanlari',
+                    'Программирование на Java',
+                    'Java programming subject',
+                    'Жава дастурлаш фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Python dasturlash',
+                    'Python программирование',
+                    'Python Programming',
+                    'Пайтон дастурлаш',
+                    'Python dasturlash fanlari',
+                    'Программирование на Python',
+                    'Python programming subject',
+                    'Пайтон дастурлаш фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Mobile dasturlash',
+                    'Мобильная разработка',
+                    'Mobile Development',
+                    'Мобил дастурлаш',
+                    'Mobil ilovalar yaratish fanlari',
+                    'Разработка мобильных приложений',
+                    'Mobile development subject',
+                    'Мобил дастурлаш фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Sun’iy intellekt',
+                    'Искусственный интеллект',
+                    'Artificial Intelligence',
+                    'Сунъий интеллект',
+                    'Sun’iy intellekt va ML fanlari',
+                    'Искусственный интеллект и ML',
+                    'Artificial intelligence subject',
+                    'Сунъий интеллект фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Ma’lumotlar bazasi',
+                    'Базы данных',
+                    'Databases',
+                    'Маълумотлар базаси',
+                    'Database va SQL fanlari',
+                    'Базы данных и SQL',
+                    'Database subject',
+                    'Маълумотлар базаси фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Kiberxavfsizlik',
+                    'Кибербезопасность',
+                    'Cyber Security',
+                    'Киберхавфсизлик',
+                    'Kiberxavfsizlik fanlari',
+                    'Кибербезопасность и защита данных',
+                    'Cyber security subject',
+                    'Киберхавфсизлик фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'DevOps',
+                    'DevOps',
+                    'DevOps',
+                    'ДевОпс',
+                    'DevOps va deployment fanlari',
+                    'DevOps и deployment',
+                    'DevOps subject',
+                    'ДевОпс фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Kompyuter tarmoqlari',
+                    'Компьютерные сети',
+                    'Computer Networks',
+                    'Компютер тармоқлари',
+                    'Kompyuter tarmoqlari fanlari',
+                    'Компьютерные сети и инфраструктура',
+                    'Computer networks subject',
+                    'Компютер тармоқлари фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Algoritmlar',
+                    'Алгоритмы',
+                    'Algorithms',
+                    'Алгоритмлар',
+                    'Algoritmlar va data structures fanlari',
+                    'Алгоритмы и структуры данных',
+                    'Algorithms subject',
+                    'Алгоритмлар фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Web dasturlash',
+                    'Веб разработка',
+                    'Web Development',
+                    'Веб дастурлаш',
+                    'Web dasturlash fanlari',
+                    'Веб технологии и разработка',
+                    'Web development subject',
+                    'Веб дастурлаш фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Spring Boot',
+                    'Spring Boot',
+                    'Spring Boot',
+                    'Спринг Бут',
+                    'Spring Boot framework fanlari',
+                    'Spring Boot framework',
+                    'Spring Boot subject',
+                    'Спринг Бут фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Android dasturlash',
+                    'Android разработка',
+                    'Android Development',
+                    'Андроид дастурлаш',
+                    'Android ilovalar yaratish fanlari',
+                    'Разработка Android приложений',
+                    'Android development subject',
+                    'Андроид дастурлаш фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Flutter',
+                    'Flutter',
+                    'Flutter',
+                    'Флаттер',
+                    'Flutter framework fanlari',
+                    'Flutter framework',
+                    'Flutter subject',
+                    'Флаттер фанлари');
+
+            INSERT INTO sciences (id,
+                                  created_at,
+                                  updated_at,
+                                  deleted_at,
+                                  created_by,
+                                  updated_by,
+                                  deleted_by,
+                                  name_uz,
+                                  name_ru,
+                                  name_en,
+                                  name_crl,
+                                  description_uz,
+                                  description_ru,
+                                  description_en,
+                                  description_crl)
+            VALUES (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Frontend dasturlash',
+                    'Frontend разработка',
+                    'Frontend Development',
+                    'Фронтенд дастурлаш',
+                    'Frontend dasturlash fanlari',
+                    'Frontend технологии и разработка',
+                    'Frontend development subject',
+                    'Фронтенд дастурлаш фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Backend dasturlash',
+                    'Backend разработка',
+                    'Backend Development',
+                    'Бэкенд дастурлаш',
+                    'Backend dasturlash fanlari',
+                    'Backend технологии и разработка',
+                    'Backend development subject',
+                    'Бэкенд дастурлаш фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Java dasturlash',
+                    'Java программирование',
+                    'Java Programming',
+                    'Жава дастурлаш',
+                    'Java dasturlash fanlari',
+                    'Программирование на Java',
+                    'Java programming subject',
+                    'Жава дастурлаш фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Python dasturlash',
+                    'Python программирование',
+                    'Python Programming',
+                    'Пайтон дастурлаш',
+                    'Python dasturlash fanlari',
+                    'Программирование на Python',
+                    'Python programming subject',
+                    'Пайтон дастурлаш фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Mobile dasturlash',
+                    'Мобильная разработка',
+                    'Mobile Development',
+                    'Мобил дастурлаш',
+                    'Mobil ilovalar yaratish fanlari',
+                    'Разработка мобильных приложений',
+                    'Mobile development subject',
+                    'Мобил дастурлаш фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Sun’iy intellekt',
+                    'Искусственный интеллект',
+                    'Artificial Intelligence',
+                    'Сунъий интеллект',
+                    'Sun’iy intellekt va ML fanlari',
+                    'Искусственный интеллект и ML',
+                    'Artificial intelligence subject',
+                    'Сунъий интеллект фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Ma’lumotlar bazasi',
+                    'Базы данных',
+                    'Databases',
+                    'Маълумотлар базаси',
+                    'Database va SQL fanlari',
+                    'Базы данных и SQL',
+                    'Database subject',
+                    'Маълумотлар базаси фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Kiberxavfsizlik',
+                    'Кибербезопасность',
+                    'Cyber Security',
+                    'Киберхавфсизлик',
+                    'Kiberxavfsizlik fanlari',
+                    'Кибербезопасность и защита данных',
+                    'Cyber security subject',
+                    'Киберхавфсизлик фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'DevOps',
+                    'DevOps',
+                    'DevOps',
+                    'ДевОпс',
+                    'DevOps va deployment fanlari',
+                    'DevOps и deployment',
+                    'DevOps subject',
+                    'ДевОпс фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Kompyuter tarmoqlari',
+                    'Компьютерные сети',
+                    'Computer Networks',
+                    'Компютер тармоқлари',
+                    'Kompyuter tarmoqlari fanlari',
+                    'Компьютерные сети и инфраструктура',
+                    'Computer networks subject',
+                    'Компютер тармоқлари фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Algoritmlar',
+                    'Алгоритмы',
+                    'Algorithms',
+                    'Алгоритмлар',
+                    'Algoritmlar va data structures fanlari',
+                    'Алгоритмы и структуры данных',
+                    'Algorithms subject',
+                    'Алгоритмлар фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Web dasturlash',
+                    'Веб разработка',
+                    'Web Development',
+                    'Веб дастурлаш',
+                    'Web dasturlash fanlari',
+                    'Веб технологии и разработка',
+                    'Web development subject',
+                    'Веб дастурлаш фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Spring Boot',
+                    'Spring Boot',
+                    'Spring Boot',
+                    'Спринг Бут',
+                    'Spring Boot framework fanlari',
+                    'Spring Boot framework',
+                    'Spring Boot subject',
+                    'Спринг Бут фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Android dasturlash',
+                    'Android разработка',
+                    'Android Development',
+                    'Андроид дастурлаш',
+                    'Android ilovalar yaratish fanlari',
+                    'Разработка Android приложений',
+                    'Android development subject',
+                    'Андроид дастурлаш фанлари'),
+
+                   (nextval('sciences_seq'),
+                    NOW(),
+                    NOW(),
+                    NULL,
+                    1,
+                    1,
+                    NULL,
+                    'Flutter',
+                    'Flutter',
+                    'Flutter',
+                    'Флаттер',
+                    'Flutter framework fanlari',
+                    'Flutter framework',
+                    'Flutter subject',
+                    'Флаттер фанлари');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

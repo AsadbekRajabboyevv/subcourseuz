@@ -13,12 +13,6 @@
     <property name="uuidType" value="uuid" dbms="h2, oracle"/>
     <property name="datetimeType" value="datetime(6)" dbms="mysql, mariadb"/>
     <property name="datetimeType" value="datetime" dbms="oracle, mssql, postgresql, h2"/>
-
-    <include file="db/changelog/changes/03-01-changelog.xml"/>
-    <include file="/db/changelog/changes/07-01-changelog.xml"/>
-    <include file="/db/changelog/changes/17-01-changelog.xml"/>
-    <include file="/db/changelog/changes/21-01-changelog.xml"/>
-    <include file="/db/changelog/changes/22-01-changelog.xml"/>
-    <include file="db/changelog/changes/28-01-changelog.xml"/>
+    <include file="db/changelog/changes/init.xml"/>
 
 </databaseChangeLog>
