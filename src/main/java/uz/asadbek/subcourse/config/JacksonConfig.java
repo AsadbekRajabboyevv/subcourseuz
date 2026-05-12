@@ -1,8 +1,10 @@
 package uz.asadbek.subcourse.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.MapperFeature;
 
@@ -18,4 +20,13 @@ public class JacksonConfig {
                 .disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
     }
 
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 }

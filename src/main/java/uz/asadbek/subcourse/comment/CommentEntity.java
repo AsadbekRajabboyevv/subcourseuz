@@ -34,8 +34,8 @@ public class CommentEntity extends BaseEntity implements SoftDeletable {
     @Column(name = "text", nullable = false, columnDefinition = "TEXT")
     private String text;
 
-    @Column(name = "course_id")
-    private Long courseId;
+    @Column(name = "course_slug")
+    private String courseSlug;
 
     @Column(name = "lesson_id")
     private Long lessonId;

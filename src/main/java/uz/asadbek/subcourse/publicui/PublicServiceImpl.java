@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import uz.asadbek.subcourse.comment.CommentService;
 import uz.asadbek.subcourse.course.CourseService;
 import uz.asadbek.subcourse.course.dto.CourseInfoResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
@@ -33,6 +34,7 @@ public class PublicServiceImpl implements PublicService {
     private final CourseLessonService courseLessonService;
     private final CourseGradeService courseGradeService;
     private final ScienceService scienceService;
+    private final CommentService commentService;
 
     @Override
     public HomePageResponseDto getHomePage() {
@@ -44,7 +46,7 @@ public class PublicServiceImpl implements PublicService {
             .build();
 
         return new HomePageResponseDto(stats, courseGradeService.get(), courseService.getTop(),
-            List.of());
+            commentService.getTop());
     }
 
     @Override

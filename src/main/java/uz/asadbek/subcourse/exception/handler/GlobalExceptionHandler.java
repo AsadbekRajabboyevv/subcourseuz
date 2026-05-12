@@ -61,7 +61,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(){
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException e){
+        log.error("Data integrity violation exception: {}", e.getMessage());
+        return buildResponse(HttpStatus.BAD_REQUEST, "BAD_REQUEST", "BAD REQUEST");
+    }
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException e){
+        log.error("Null pointer exception: {}", e.getMessage());
         return buildResponse(HttpStatus.BAD_REQUEST, "BAD_REQUEST", "BAD REQUEST");
     }
 

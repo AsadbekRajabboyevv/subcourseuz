@@ -14,7 +14,7 @@ public class CommentResponseDto {
     private Long createdBy;
     private LocalDateTime createdAt;
     private Integer rating;
-    private Long courseId;
+    private String courseSlug;
     private Long lessonId;
     private Long testId;
 }

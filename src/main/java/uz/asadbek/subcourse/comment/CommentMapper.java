@@ -13,6 +13,7 @@ public interface CommentMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "deletedAt", ignore = true)
+    @Mapping(target = "courseSlug", source = "courseSlug")
     CommentEntity toEntity(CommentRequestDto dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

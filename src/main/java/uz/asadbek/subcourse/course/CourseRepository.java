@@ -165,24 +165,25 @@ public interface CourseRepository extends BaseRepository<CourseEntity, Long> {
     Optional<CourseEntity> findBySlug(String slug);
 
     @Query("""
-               select new uz.asadbek.subcourse.course.dto.CourseResponseDto(
-                    c.id,
-                    c.name,
-                    count(distinct l.id),
-                    count(distinct sc.id),
-                    concat(coalesce(u.firstName, ''), ' ', coalesce(u.lastName, '')),
-                    c.price,
-                    c.imagePath,
-                    c.lang,
-                    c.isPublished,
-                    c.slug
-                )
-                from CourseEntity c
-                left join UserEntity u on c.ownerId = u.id
-                left join CourseLessonEntity l on l.courseId = c.id
-                left join UserCourseEntity sc on sc.id.referenceId = c.id
-                order by c.createdAt desc
-                limit 10
+        SELECT new uz.asadbek.subcourse.course.dto.CourseResponseDto(
+            c.id,
+            c.name,
+            COUNT(DISTINCT l.id),
+            COUNT(DISTINCT sc.id),
+            CONCAT(COALESCE(u.firstName, ''), ' ', COALESCE(u.lastName, '')),
+            c.price,
+            c.imagePath,
+            c.lang,
+            c.isPublished,
+            c.slug
+        )
+        FROM CourseEntity c
+        LEFT JOIN UserEntity u ON c.ownerId = u.id
+        LEFT JOIN CourseLessonEntity l ON l.courseId = c.id
+        LEFT JOIN UserCourseEntity sc ON sc.id.referenceId = c.id
+        GROUP BY c.id, c.name, u.firstName, u.lastName, c.price, c.imagePath, c.lang, c.isPublished, c.slug, c.createdAt
+        ORDER BY c.createdAt DESC
+        LIMIT 10
         """)
     List<CourseResponseDto> getTop();
 
