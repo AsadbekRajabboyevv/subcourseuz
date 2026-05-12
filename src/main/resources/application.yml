@@ -62,6 +62,29 @@ springdoc:
     groups-order: asc
 
 app:
+  gemini:
+    api-key: ${GEMINI_API_KEY}
+    api-path: https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent
+    prompt:
+      generate-test: |
+        Ilova qilingan fayldagi testlarni tahlil qil va JSON formatga o'gir.
+        DIQQAT QOIDALAR:
+        1. Variantlarni matnidan 'A)', 'B)', 'C)', 'D)', '1.' kabi boshidagi variant harfi yoki raqamini bildiruvchi belgilarni OLIB TASHLANG.
+        2. Savollarning tagida to'g'ri javob varianti yozilgan bo'lishi mumkin yoki qandaydir belgilar va chiziqlar bilan ajratib berilgan bo'lishi mumkin.
+        Agar javob ko'rsatilmagan bo'lsa, o'zing to'g'ri javobni aniqlab 'correctOptionIndex' (bu har bir questionning ichidagi options listi ichidagi to'g'ri javob qaysi indexda joylashganligini bildiruvchi index hisoblanadi) ga yoz.
+        3. Har bir savol uchun kamida 4 ta variant bo'lsin.
+        Struktura:
+        {
+          "questions": [
+            {
+              "text": "...",
+              "correctOptionIndex": 0,
+              "options": [
+                { "text": "faqat matn" }
+              ]
+            }
+          ]
+        }
   file:
     storage:
       root: ${FILE_STORAGE_ROOT}
