@@ -11,7 +11,7 @@ import {
 import {CommonModule} from '@angular/common';
 import {Router, RouterLink} from '@angular/router';
 
-import {TestCreate} from '../test.model';
+import {TestCreate, TestGenerateRequestDto} from '../test.model';
 import {TestService} from "../test.service";
 import {ScienceService} from "../../science/science.service";
 import {GradeService} from "../../grade/grade.service";
@@ -201,24 +201,38 @@ export class TestCreateComponent implements OnInit {
 
   onAiSubmit() {
     if (this.aiForm.invalid) return this.aiForm.markAllAsTouched();
+
     this.aiLoading.set(true);
     const v = this.aiForm.getRawValue();
 
-    this.testService.generateFromFile({
-      file: v.sourceFile as File,
-      name: v.name ?? '',
-      price: v.price ?? 0,
+    const requestDto: TestGenerateRequestDto = {
+      name: v.name!,
+      description: v.description ?? '',
       lang: v.lang ?? 'uz',
-      duration: v.duration ?? 30,
-      isPublished: v.isPublished ?? false,
-      count: v.count ?? 10,
+      count: v.count!,
+      isPublished: v.isPublished ?? true,
       scienceId: Number(v.scienceId),
-      gradeId: Number(v.gradeId)
+      gradeId: Number(v.gradeId),
+      courseId: v.courseId ?? undefined,
+      lessonId: v.lessonId ?? undefined,
+      duration: v.duration ?? 30,
+      price: v.price ?? 0
+    };
+
+    const file = v.sourceFile as File;
+
+    this.testService.generateFromFile({
+      file: file,
+      ...requestDto
     }).subscribe({
-      next: () => this.router.navigate(['/tests']),
-      error: () => {
+      next: (res) => {
         this.aiLoading.set(false);
-        this.aiError.set("AI xatolik!");
+        this.router.navigate(['/tests-list']);
+      },
+      error: (err) => {
+        this.aiLoading.set(false);
+        this.aiError.set("AI generatsiya jarayonida xatolik yuz berdi!");
+        console.error(err);
       }
     });
   }

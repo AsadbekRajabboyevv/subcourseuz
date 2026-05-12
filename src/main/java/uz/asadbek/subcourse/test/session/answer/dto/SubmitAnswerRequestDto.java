@@ -1,6 +1,7 @@
 package uz.asadbek.subcourse.test.session.answer.dto;
 
 import lombok.Getter;
+import uz.asadbek.subcourse.test.option.TestOptionEntity;
 import uz.asadbek.subcourse.test.question.TestQuestionEntity;
 import uz.asadbek.subcourse.test.session.TestSessionEntity;
 import uz.asadbek.subcourse.util.annotation.existindb.ExistsInDb;
@@ -14,6 +15,6 @@ public class SubmitAnswerRequestDto {
     @ExistsInDb(entity = TestQuestionEntity.class)
     private Long questionId;
 
-    @ExistsInDb(entity = TestQuestionEntity.class)
+    @ExistsInDb(entity = TestOptionEntity.class)
     private Long optionId;
 }

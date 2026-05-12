@@ -19,4 +19,6 @@ public interface TestQuestionService {
     void delete(TestQuestionEntity question);
 
     void deleteAllByIds(List<Long> deleteQuestionIds);
+
+    List<TestQuestionEntity> saveAll(List<TestQuestionEntity> questionsToSave);
 }

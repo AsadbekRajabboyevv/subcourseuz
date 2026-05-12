@@ -2,11 +2,11 @@
     <div page-title class="flex flex-col md:flex-row md:items-center justify-between gap-6 w-full px-2 md:px-0">
         <div class="space-y-1">
             <nav class="mb-2 flex items-center gap-2 text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
-                <a routerLink="/" class="hover:text-emerald-500">Bosh sahifa</a>
+                <a routerLink="/" class="hover:text-emerald-500" i18n="@@common.home">Asosiy</a>
                 <i class="fa-solid fa-chevron-right text-[7px]"></i>
-                <span class="text-emerald-500">Testlar</span>
+                <span class="text-emerald-500" i18n="@@test.title">Testlar</span>
             </nav>
-            <h1 class="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-white uppercase">
+            <h1 class="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-white uppercase" i18n="@@test.list">
                 Testlar ro'yxati
             </h1>
         </div>
@@ -15,7 +15,7 @@
             <button routerLink="/tests-create"
                     class="group flex items-center justify-center gap-2 rounded-2xl bg-gray-900 px-6 py-3.5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl transition-all hover:bg-emerald-600 active:scale-95 dark:bg-emerald-600">
                 <i class="fa-solid fa-plus text-xs"></i>
-                <span>Test yaratish</span>
+                <span i18n="test.create.button">Test yaratish</span>
             </button>
         }
     </div>
@@ -31,7 +31,7 @@
                         <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-500/10">
                             <i class="fa-solid fa-filter text-xs"></i>
                         </div>
-                        <span class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">
+                        <span class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white" i18n="@@common.filter">
                             Filtrlar
                         </span>
                     </div>
@@ -43,12 +43,15 @@
                 <div [class.hidden]="!isFilterVisible" class="lg:block p-4 lg:p-0 space-y-5">
 
                     <app-input type="text"
+                               i18n-label="@@common.search"
                                label="Qidirish"
+                               i18n-placeholder="@@common.label_name"
                                placeholder="Test nomi..."
                                [(ngModel)]="filter.name">
                     </app-input>
 
                     <app-input type="select"
+                               i18n-label="@common.lang_label"
                                label="Tilni tanlang"
                                [options]="languages"
                                [(ngModel)]="filter.lang">
@@ -82,7 +85,7 @@
                     <button (click)="changeTab(false)"
                             [class]="!filter.isPublished ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-400'"
                             class="border-b-2 px-4 py-4 text-[10px] font-black uppercase tracking-widest transition-all">
-                        <i class="fa-solid fa-file-pen mr-2"></i> <span>Qoralamalar</span>
+                        <i class="fa-solid fa-file-pen mr-2"></i> <span i18n="@@course.drafts">Qoralamalar</span>
                     </button>
                 </div>
             }
@@ -93,7 +96,7 @@
 
                         @if (!test.isPublished) {
                             <div class="absolute top-5 right-5 z-10 rounded-full bg-orange-500 px-2 py-0.5 text-[7px] font-black text-white uppercase shadow-lg">
-                                <span>Qoralama</span>
+                                <span i18n="@@course.draft">Qoralama</span>
                             </div>
                         }
 

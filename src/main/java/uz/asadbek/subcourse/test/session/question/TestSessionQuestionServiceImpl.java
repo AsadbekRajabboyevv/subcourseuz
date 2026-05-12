@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uz.asadbek.subcourse.test.option.TestOptionEntity;
 import uz.asadbek.subcourse.test.option.TestOptionService;
@@ -16,6 +17,7 @@ import uz.asadbek.subcourse.test.session.option.TestSessionOptionService;
 import uz.asadbek.subcourse.test.session.option.dto.TestSessionOptionResponseDto;
 import uz.asadbek.subcourse.test.session.question.dto.TestSessionQuestionResponseDto;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TestSessionQuestionServiceImpl implements TestSessionQuestionService {
@@ -31,17 +33,18 @@ public class TestSessionQuestionServiceImpl implements TestSessionQuestionServic
         var optionsMap = allOptions.stream().collect(Collectors.groupingBy(
             TestOptionEntity::getQuestionId
         ));
+
         List<TestSessionQuestionEntity> sessionQuestions =
             IntStream.range(0, questions.size())
                 .mapToObj(i -> {
-
                     var question = questions.get(i);
                     return new TestSessionQuestionEntity(
                         sessionId,
                         question.getId(),
-                        i+1,
+                        i + 1,
                         question.getText(),
-                        question.getImagePath()
+                        question.getImagePath(),
+                        question.getCorrectOptionId()
                     );
                 })
                 .toList();
@@ -56,14 +59,17 @@ public class TestSessionQuestionServiceImpl implements TestSessionQuestionServic
                 Collections.emptyList()
             );
 
-            for (int i = 0; i < options.size(); i++) {
+            List<TestOptionEntity> shuffledOptions = new ArrayList<>(options);
 
-                var option = options.get(i);
+            Collections.shuffle(shuffledOptions);
+
+            for (int i = 0; i < shuffledOptions.size(); i++) {
+                var option = shuffledOptions.get(i);
 
                 sessionOptions.add(
                     new TestSessionOptionEntity(
                         sessionId,
-                        sessionQuestion.getId(),
+                        sessionQuestion.getQuestionId(),
                         option.getId(),
                         option.getText(),
                         option.getImagePath(),
@@ -74,22 +80,32 @@ public class TestSessionQuestionServiceImpl implements TestSessionQuestionServic
         }
         testSessionOptionService.saveAll(sessionOptions);
     }
-
     @Override
     public List<TestSessionQuestionResponseDto> findBySessionId(Long sessionId) {
-        var questions = repository.findBySessionId(sessionId);
-        var questionIds = questions.stream().map(TestSessionQuestionResponseDto::getId).toList();
-        var options = testSessionOptionService.findBySessionIdAndQuestionIds(
-            sessionId, questionIds);
-        var optionsMap = options.stream().collect(Collectors
-            .groupingBy(TestSessionOptionResponseDto::getQuestionId));
+        List<TestSessionQuestionResponseDto> questions = repository.findBySessionId(sessionId);
 
-        return questions.stream()
-            .peek(question ->
-                question.setOptions(optionsMap.getOrDefault(
-                    question.getId(),
-                    Collections.emptyList()
-                ))).toList();
+        if (questions == null || questions.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<TestSessionOptionResponseDto> options = testSessionOptionService.findBySessionId(sessionId);
+
+        Map<Long, List<TestSessionOptionResponseDto>> optionsMap = options.stream()
+            .filter(o -> o.getQuestionId() != null)
+            .collect(Collectors.groupingBy(TestSessionOptionResponseDto::getQuestionId));
+
+        questions.forEach(question -> {
+            Long qId = question.getId();
+
+            List<TestSessionOptionResponseDto> questionOptions = optionsMap.get(qId);
+
+            question.setOptions(questionOptions != null ? questionOptions : Collections.emptyList());
+
+            if (questionOptions == null || questionOptions.isEmpty()) {
+                log.info("Savol uchun variantlar topilmadi. ID: {}, Map Keys: {}", qId, optionsMap.keySet());
+            }
+        });
+
+        return questions;
     }
-
 }

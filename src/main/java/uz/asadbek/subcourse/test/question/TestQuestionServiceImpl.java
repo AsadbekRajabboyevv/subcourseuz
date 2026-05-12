@@ -51,4 +51,9 @@ public class TestQuestionServiceImpl implements TestQuestionService {
         repository.deleteAllById(deleteQuestionIds);
     }
 
+    @Override
+    public List<TestQuestionEntity> saveAll(List<TestQuestionEntity> questionsToSave) {
+        return repository.saveAll(questionsToSave);
+    }
+
 }

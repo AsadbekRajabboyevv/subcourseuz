@@ -3,6 +3,7 @@ package uz.asadbek.subcourse.test.test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
+import uz.asadbek.subcourse.ai.dto.GeminiTestGenerateResponseDto;
 import uz.asadbek.subcourse.test.test.dto.TestRequestDto;
 import uz.asadbek.subcourse.test.test.dto.TestResponseDto;
 import uz.asadbek.subcourse.test.test.dto.TestUpdateRequestDto;
@@ -31,4 +32,8 @@ public interface TestService {
     Long unpublish(Long id);
 
     void enroll(Long testId);
+
+    void saveAiGeneratedTest(GeminiTestGenerateResponseDto request, Long testId);
+
+    void save(TestEntity newTest);
 }

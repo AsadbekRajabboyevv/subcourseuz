@@ -2,6 +2,10 @@ package uz.asadbek.subcourse.test.session;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,6 +14,8 @@ import uz.asadbek.subcourse.exception.BadRequestException;
 import uz.asadbek.subcourse.exception.NotFoundException;
 import uz.asadbek.subcourse.exception.UnAuthorizedException;
 import uz.asadbek.subcourse.test.question.TestQuestionService;
+import uz.asadbek.subcourse.test.session.option.TestSessionOptionService;
+import uz.asadbek.subcourse.test.session.option.dto.TestSessionOptionResponseDto;
 import uz.asadbek.subcourse.test.session.question.TestSessionQuestionService;
 import uz.asadbek.subcourse.test.test.TestService;
 import uz.asadbek.subcourse.test.session.answer.dto.SubmitAnswerRequestDto;
@@ -19,6 +25,8 @@ import uz.asadbek.subcourse.test.session.answer.TestSessionAnswerEntity;
 import uz.asadbek.subcourse.test.session.answer.TestSessionAnswerService;
 import uz.asadbek.subcourse.test.session.dto.TestSessionResponseDto;
 import uz.asadbek.subcourse.test.session.dto.TestSessionStatus;
+import uz.asadbek.subcourse.test.test.dto.TestReviewOptionDto;
+import uz.asadbek.subcourse.test.test.dto.TestReviewQuestionDto;
 import uz.asadbek.subcourse.util.ExceptionUtil;
 import uz.asadbek.subcourse.util.JwtUtil;
 
@@ -32,19 +40,23 @@ public class TestSessionServiceImpl implements TestSessionService {
     private final TestQuestionService questionService;
     private final TestSessionAnswerService sessionAnswerService;
     private final TestSessionQuestionService sessionQuestionService;
+    private final TestSessionOptionService testSessionOptionService;
 
     @Override
     @Transactional
     public Long startTestSession(Long testId) {
 
         if (!JwtUtil.isAuthenticated()) {
-            throw ExceptionUtil.build(UnAuthorizedException.class, "error.auth.user_not_authenticated");
+            throw ExceptionUtil.build(UnAuthorizedException.class,
+                "error.auth.user_not_authenticated");
         }
 
         var currentUserId = JwtUtil.getCurrentUserId();
         var now = LocalDateTime.now();
-        if (repository.existsByUserIdAndTestIdAndStatus(currentUserId, testId, TestSessionStatus.STARTED)) {
-            throw ExceptionUtil.build(BadRequestException.class, "error.test_session.already_started");
+        if (repository.existsByUserIdAndTestIdAndStatus(currentUserId, testId,
+            TestSessionStatus.STARTED)) {
+            throw ExceptionUtil.build(BadRequestException.class,
+                "error.test_session.already_started");
         }
 
         var test = testService.get(testId);
@@ -65,6 +77,7 @@ public class TestSessionServiceImpl implements TestSessionService {
     }
 
     @Override
+    @Transactional
     public TestResultDto submitAnswer(SubmitAnswerRequestDto request) {
         var sessionId = request.getSessionId();
         var optionId = request.getOptionId();
@@ -79,10 +92,12 @@ public class TestSessionServiceImpl implements TestSessionService {
 
     private TestSessionEntity findById(Long sessionId) {
         return repository.findById(sessionId)
-            .orElseThrow(() -> ExceptionUtil.build(NotFoundException.class, "error.test_session.not_found"));
+            .orElseThrow(
+                () -> ExceptionUtil.build(NotFoundException.class, "error.test_session.not_found"));
     }
 
     @Override
+    @Transactional
     public TestResultDto finishTestSession(Long sessionId, TestSessionStatus sessionStatus) {
         var entity = findById(sessionId);
         var score = calculateTestScore(entity);
@@ -95,9 +110,21 @@ public class TestSessionServiceImpl implements TestSessionService {
         return score;
     }
 
-    private TestResultDto calculateTestScore(TestSessionEntity entity) {
+    private TestResultDto calculateTestScore(TestSessionEntity session) {
+        long durationInSeconds = 0;
+        if (session.getFinishedAt() != null && session.getStartedAt() != null) {
+            durationInSeconds = java.time.Duration.between(
+                session.getStartedAt(),
+                session.getFinishedAt()
+            ).getSeconds();
+        }
+
+        String spentTime = String.format("%02d:%02d",
+            (durationInSeconds % 3600) / 60,
+            durationInSeconds % 60);
+
         var answerMap = sessionAnswerService
-            .getAnswersBySessionId(entity.getId())
+            .findBySessionId(session.getId())
             .stream()
             .filter(a -> a.getSelectedOptionId() != null)
             .collect(Collectors.toMap(
@@ -106,8 +133,8 @@ public class TestSessionServiceImpl implements TestSessionService {
                 (_, newVal) -> newVal
             ));
 
-        var questions = questionService.getQuestions(entity.getTestId(), answerMap.keySet());
-        var test = testService.getById(entity.getTestId());
+        var questions = questionService.getQuestions(session.getTestId(), answerMap.keySet());
+        var test = testService.getById(session.getTestId());
 
         var correctAnswers = (int) questions.stream()
             .filter(question -> {
@@ -120,13 +147,105 @@ public class TestSessionServiceImpl implements TestSessionService {
         var totalQuestions = test.getCount();
         var score = ((double) correctAnswers / totalQuestions) * test.getMaxScore();
         score = Math.round(score * 100.0) / 100.0;
-
-        return new TestResultDto(score, correctAnswers, totalQuestions);
+        return new TestResultDto(score, correctAnswers, totalQuestions, session.getId(), spentTime,
+            session.getStartedAt(), session.getFinishedAt());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TestReviewDto getReview(Long sessionId) {
-        return null;
+        var session = repository.findByIdAndTestInfo(sessionId);
+        var sessionQuestions = sessionQuestionService.findBySessionId(sessionId);
+        var userAnswers = sessionAnswerService.findBySessionId(sessionId);
+        long durationInSeconds = 0;
+        if (session.getFinishedAt() != null && session.getStartedAt() != null) {
+            durationInSeconds = java.time.Duration.between(
+                session.getStartedAt(),
+                session.getFinishedAt()
+            ).getSeconds();
+        }
+
+        var spentTime = String.format("%02d:%02d",
+            (durationInSeconds % 3600) / 60,
+            durationInSeconds % 60);
+        Map<Long, Long> userAnswersMap = userAnswers.stream()
+            .collect(Collectors.toMap(
+                TestSessionAnswerEntity::getQuestionId,
+                TestSessionAnswerEntity::getSelectedOptionId,
+                (existing, _) -> existing
+            ));
+
+        int correctAnswersCount = 0;
+        List<TestReviewQuestionDto> reviewQuestions = new ArrayList<>();
+
+        for (var sQuestion : sessionQuestions) {
+            boolean isCorrect = false;
+            Integer selectedOrderNumber = null;
+            Long selectedOptionId = userAnswersMap.get(sQuestion.getId());
+
+            List<TestReviewOptionDto> reviewOptions = new ArrayList<>();
+            var options = sQuestion.getOptions();
+
+            if (options != null) {
+                for (int i = 0; i < options.size(); i++) {
+                    var opt = options.get(i);
+
+                    if (selectedOptionId != null && selectedOptionId.equals(opt.getId())) {
+                        selectedOrderNumber = i + 1;
+
+                        if (opt.getId().equals(sQuestion.getCorrectOptionId())) {
+                            isCorrect = true;
+                        }
+                    }
+
+                    reviewOptions.add(TestReviewOptionDto.builder()
+                        .text(opt.getText())
+                        .imagePath(opt.getImagePath())
+                        .build());
+                }
+            }
+
+            if (isCorrect) {
+                correctAnswersCount++;
+            }
+
+            reviewQuestions.add(TestReviewQuestionDto.builder()
+                .questionText(sQuestion.getText())
+                .imagePath(sQuestion.getImagePath())
+                .selectedOptionOrderNumber(selectedOrderNumber)
+                .isCorrect(isCorrect)
+                .options(reviewOptions)
+                .build());
+        }
+
+        int totalQuestions = sessionQuestions.size();
+        double maxScore =
+            session.getMaxScore() != null ? session.getMaxScore().doubleValue() : 100.0;
+
+        double calculatedScore = 0.0;
+        if (totalQuestions > 0) {
+            calculatedScore = ((double) correctAnswersCount * maxScore) / totalQuestions;
+        }
+
+        double finalScore = Math.round(calculatedScore * 10.0) / 10.0;
+
+        return TestReviewDto.builder()
+            .testName(session.getTestName())
+            .testAuthor(session.getAuthor())
+            .testLang(session.getLang())
+            .testScience(session.getScience())
+            .testGrade(session.getGrade())
+            .testImagePath(session.getImagePath())
+            .testDescription(session.getTestDescription())
+            .correctAnswers(correctAnswersCount)
+            .totalQuestions(totalQuestions)
+            .questions(reviewQuestions)
+            .score(finalScore)
+            .maxScore(maxScore)
+            .spentTime(spentTime)
+            .startedAt(session.getStartedAt())
+            .finishedAt(session.getFinishedAt())
+            .build();
     }
 
     @Override

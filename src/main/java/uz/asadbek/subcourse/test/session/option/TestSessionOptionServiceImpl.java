@@ -20,8 +20,7 @@ public class TestSessionOptionServiceImpl implements TestSessionOptionService {
     }
 
     @Override
-    public List<TestSessionOptionResponseDto> findBySessionIdAndQuestionIds(Long sessionId,
-        List<Long> questionIds) {
-        return repository.findBySessionIdAndSessionQuestionIds(sessionId, questionIds);
+    public List<TestSessionOptionResponseDto> findBySessionId(Long sessionId) {
+        return repository.findBySessionId(sessionId);
     }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 import uz.asadbek.base.dto.BaseResponseDto;
 import uz.asadbek.subcourse.test.session.answer.dto.SubmitAnswerRequestDto;
+import uz.asadbek.subcourse.test.session.dto.TestSessionResponseDto;
 import uz.asadbek.subcourse.test.test.dto.TestResultDto;
 import uz.asadbek.subcourse.test.test.dto.TestReviewDto;
 
@@ -25,11 +26,16 @@ public class TestSessionController implements TestSessionApi {
 
     @Override
     public BaseResponseDto<TestResultDto> finish(Long sessionId) {
-        return null;
+        return BaseResponseDto.ok(service.finishTestSession(sessionId, null));
     }
 
     @Override
     public BaseResponseDto<TestReviewDto> getReview(Long sessionId) {
-        return null;
+        return BaseResponseDto.ok(service.getReview(sessionId));
+    }
+
+    @Override
+    public BaseResponseDto<TestSessionResponseDto> getSession(Long sessionId) {
+        return BaseResponseDto.ok(service.getSession(sessionId));
     }
 }

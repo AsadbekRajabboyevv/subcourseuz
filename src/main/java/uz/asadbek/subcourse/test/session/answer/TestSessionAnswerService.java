@@ -6,5 +6,5 @@ public interface TestSessionAnswerService {
 
     void processAnswer(Long sessionId, Long questionId, Long optionId);
 
-    List<TestSessionAnswerEntity> getAnswersBySessionId(Long sessionId);
+    List<TestSessionAnswerEntity> findBySessionId(Long sessionId);
 }

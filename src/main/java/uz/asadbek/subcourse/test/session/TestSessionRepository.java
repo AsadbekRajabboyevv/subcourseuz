@@ -22,13 +22,21 @@ public interface TestSessionRepository extends JpaRepository<TestSessionEntity, 
            s.startedAt,
            s.expiresAt,
            s.finishedAt,
+           coalesce(u.firstName, ' ', u.lastName),
+           t.lang,
+           sc.name.nameUz,
+           cg.name.nameUz,
            CASE
              WHEN s.finishedAt IS NOT NULL THEN TRUE
              ELSE FALSE
-           END
+           END,
+           t.maxScore
        )
        FROM TestSessionEntity s
        LEFT JOIN TestEntity t ON s.testId = t.id
+       LEFT JOIN UserEntity u ON s.createdBy = u.id
+       LEFT JOIN ScienceEntity sc ON t.scienceId = sc.id
+       LEFT JOIN CourseGradeEntity cg ON t.gradeId = cg.id
        WHERE s.id = :sessionId
     """)
     TestSessionResponseDto findByIdAndTestInfo(

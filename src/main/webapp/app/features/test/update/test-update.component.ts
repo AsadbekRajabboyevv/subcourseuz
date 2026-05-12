@@ -90,7 +90,8 @@ export class TestUpdateComponent implements OnInit {
           scienceId: test.scienceId,
           gradeId: test.gradeId,
           duration: test.duration,
-          isPublished: test.isPublished
+          isPublished: test.isPublished,
+          count: test.count
         });
 
         if (test.imagePath) this.mainImagePreview = test.imagePath;

@@ -18,7 +18,6 @@ public interface TestSessionOptionRepository extends JpaRepository<TestSessionOp
         )
         FROM TestSessionOptionEntity o
         WHERE o.sessionId = :sessionId
-        AND o.sessionQuestionId IN :questionIds
         """)
-    List<TestSessionOptionResponseDto> findBySessionIdAndSessionQuestionIds(Long sessionId, List<Long> questionIds);
+    List<TestSessionOptionResponseDto> findBySessionId(Long sessionId);
 }

@@ -1,16 +1,28 @@
 import { Base, Page } from "../../common/model/base";
 import {from, Observable} from "rxjs";
-import { Injectable, signal } from "@angular/core";
-import { Test, TestCreate, TestUpdate, SubmitAnswer, TestReview, TestResult } from "./test.model";
+import {inject, Injectable, signal} from "@angular/core";
+import {
+  Test,
+  TestCreate,
+  TestUpdate,
+  SubmitAnswer,
+  TestReview,
+  TestResult,
+  TestSession
+} from "./test.model";
 import { environment } from "../../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
+import {AuthService} from "../../common/auth/auth.service";
 
 @Injectable({ providedIn: 'root' })
 export class TestService {
   private _tests = signal<Test[]>([]);
   public tests = this._tests.asReadonly();
-  private readonly PATH = environment.apiPath + '/v1/api/tests'
-
+  private readonly PATH = environment.apiPath + '/v1/api/tests';
+  private readonly SESSION_PATH = environment.apiPath + '/v1/api/test-sessions';
+  private readonly PUBLIC_PATH = environment.apiPath + '/v1/api/public/tests';
+  private readonly AI_PATH = environment.apiPath + '/v1/api/ai';
+  authService = inject(AuthService);
   constructor(private http: HttpClient) {}
 
   setTests(data: Test[]) { this._tests.set(data); }
@@ -29,8 +41,13 @@ export class TestService {
         }
       });
     }
-
-    return this.http.get<Base<Page<Test>>>(`${this.PATH}`, { params });
+    let path = "";
+    if (this.authService.isLoggedIn().valueOf()) {
+      path = this.PATH;
+    } else {
+      path = this.PUBLIC_PATH;
+    }
+    return this.http.get<Base<Page<Test>>>(path, { params });
   }
 
   getById(id: number): Observable<Base<Test>> {
@@ -107,53 +124,41 @@ export class TestService {
     return this.http.patch<Base<number>>(`${this.PATH}/${id}`, formData);
   }
 
-  submitAnswer(submitData: SubmitAnswer): Observable<Base<boolean>> {
-    return this.http.put<Base<boolean>>(`${this.PATH}/submit`, submitData);
-  }
-
-  start(id: number): Observable<Base<number>> {
-    return this.http.post<Base<number>>(`${this.PATH}/start/${id}`, {});
-  }
-
-  finish(id: number): Observable<Base<TestResult>> {
-    return this.http.post<Base<TestResult>>(`${this.PATH}/finish/${id}`, {});
-  }
-
-  getReview(sessionId: number): Observable<Base<TestReview[]>> {
-    return this.http.get<Base<TestReview[]>>(`${this.PATH}/review/${sessionId}`);
-  }
-
   getInfo(id: number): Observable<Base<Test>> {
     return this.http.get<Base<Test>>(`${this.PATH}/info/${id}`);
   }
 
-  generateFromFile(payload: {
-    file: File;
-    name: string;
-    description?: string;
-    lang?: string;
-    count?: number;
-    isPublished?: boolean;
-    scienceId: number;
-    gradeId: number;
-    courseId?: number;
-    lessonId?: number;
-    duration?: number;
-    price?: number;
-  }): Observable<Base<number>> {
+  generateFromFile(payload: any): Observable<Base<number>> {
     const form = new FormData();
     form.append('file', payload.file);
-    form.append('name', payload.name);
-    if (payload.description !== undefined && payload.description !== null) form.append('description', payload.description);
-    if (payload.lang) form.append('lang', payload.lang);
-    if (payload.count !== undefined && payload.count !== null) form.append('questionCount', String(payload.count));
-    if (payload.isPublished !== undefined && payload.isPublished !== null) form.append('isPublished', String(payload.isPublished));
-    form.append('scienceId', String(payload.scienceId));
-    form.append('gradeId', String(payload.gradeId));
-    form.append('duration', String(payload.duration));
-    if (payload.courseId !== undefined && payload.courseId !== null) form.append('courseId', String(payload.courseId));
-    if (payload.lessonId !== undefined && payload.lessonId !== null) form.append('lessonId', String(payload.lessonId));
+    if (payload.mainImage) {
+      form.append('mainImage', payload.mainImage);
+    }
+    const { file, mainImage, ...dtoPart } = payload;
+    form.append('request', new Blob([JSON.stringify(dtoPart)], {
+      type: 'application/json'
+    }));
 
-    return this.http.post<Base<number>>(`${this.PATH}/ai-generate`, form);
+    return this.http.post<Base<number>>(`${this.AI_PATH}/test-generate`, form);
+  }
+//===================Session=====================================
+  submitAnswer(submitData: SubmitAnswer): Observable<Base<boolean>> {
+    return this.http.put<Base<boolean>>(`${this.SESSION_PATH}/submit`, submitData);
+  }
+
+  start(id: number): Observable<Base<number>> {
+    return this.http.post<Base<number>>(`${this.SESSION_PATH}/start/${id}`, {});
+  }
+
+  finish(id: number): Observable<Base<TestResult>> {
+    return this.http.post<Base<TestResult>>(`${this.SESSION_PATH}/finish/${id}`, {});
+  }
+
+  getReview(sessionId: number): Observable<Base<TestReview>> {
+    return this.http.get<Base<TestReview>>(`${this.SESSION_PATH}/review/${sessionId}`);
+  }
+
+  getSession(sessionId: number): Observable<Base<TestSession>> {
+    return this.http.get<Base<TestSession>>(`${this.SESSION_PATH}/${sessionId}`);
   }
 }

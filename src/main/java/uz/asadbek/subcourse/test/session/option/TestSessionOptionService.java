@@ -7,5 +7,5 @@ public interface TestSessionOptionService {
 
     void saveAll(List<TestSessionOptionEntity> savedOptions);
 
-    List<TestSessionOptionResponseDto> findBySessionIdAndQuestionIds(Long sessionId, List<Long> questionIds);
+    List<TestSessionOptionResponseDto> findBySessionId(Long sessionId);
 }

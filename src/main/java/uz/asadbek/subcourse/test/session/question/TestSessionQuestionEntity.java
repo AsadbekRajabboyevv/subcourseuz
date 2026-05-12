@@ -50,17 +50,22 @@ public class TestSessionQuestionEntity extends BaseEntity {
     @Column(name = "image_path")
     private String imagePath;
 
+    @Column(name = "correct_option_id")
+    private Long correctOptionId;
+
     public TestSessionQuestionEntity(
         Long sessionId,
         Long questionId,
         Integer orderIndex,
         String questionText,
-        String imagePath
+        String imagePath,
+        Long correctOptionId
     ) {
         this.sessionId = sessionId;
         this.questionId = questionId;
         this.orderIndex = orderIndex;
         this.questionText = questionText;
         this.imagePath = imagePath;
+        this.correctOptionId = correctOptionId;
     }
 }

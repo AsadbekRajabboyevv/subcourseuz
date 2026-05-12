@@ -24,7 +24,12 @@ public class TestSessionResponseDto {
     private LocalDateTime expiresAt;
     private LocalDateTime finishedAt;
     private Long remainingSeconds;
+    private String author;
+    private String lang;
+    private String science;
+    private String grade;
     private Boolean finished;
+    private Integer maxScore;
     private List<TestSessionQuestionResponseDto> questions;
 
     public TestSessionResponseDto(
@@ -37,7 +42,12 @@ public class TestSessionResponseDto {
         LocalDateTime startedAt,
         LocalDateTime expiresAt,
         LocalDateTime finishedAt,
-        Boolean finished
+        String author,
+        String lang,
+        String science,
+        String grade,
+        Boolean finished,
+        Integer maxScore
     ) {
         this.id = id;
         this.testId = testId;
@@ -48,6 +58,11 @@ public class TestSessionResponseDto {
         this.startedAt = startedAt;
         this.expiresAt = expiresAt;
         this.finishedAt = finishedAt;
+        this.author = author;
+        this.lang = lang;
+        this.science = science;
+        this.grade = grade;
         this.finished = finished;
+        this.maxScore = maxScore;
     }
 }

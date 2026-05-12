@@ -27,7 +27,7 @@ public class TestSessionAnswerServiceImpl implements TestSessionAnswerService {
     }
 
     @Override
-    public List<TestSessionAnswerEntity> getAnswersBySessionId(Long sessionId) {
+    public List<TestSessionAnswerEntity> findBySessionId(Long sessionId) {
         return repository.findBySessionId(sessionId);
     }
 

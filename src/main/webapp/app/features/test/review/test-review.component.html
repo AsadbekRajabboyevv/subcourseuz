@@ -1,0 +1,119 @@
+<app-page-wrapper>
+    <div content class="min-h-screen py-12 px-4">
+        <div class="mx-auto max-w-5xl">
+
+            @if (reviewData(); as data) {
+                <div class="mb-12 rounded-[3rem] border border-gray-100 bg-white p-8 shadow-2xl dark:border-gray-800 dark:bg-gray-900 animate-in fade-in slide-in-from-top-4 text-gray-900 dark:text-white">
+                    <div class="flex flex-col lg:flex-row gap-8 items-center">
+
+                        <div class="h-40 w-40 shrink-0 overflow-hidden rounded-[2.5rem] border-4 border-emerald-50 shadow-lg dark:border-emerald-500/10">
+                            <img [src]="data.testImagePath || 'assets/images/placeholder.png'" class="h-full w-full object-cover">
+                        </div>
+
+                        <div class="flex-1 text-center lg:text-left">
+                            <h1 class="text-3xl font-black uppercase tracking-tight mb-2">{{ data.testName }}</h1>
+                            <div class="flex flex-wrap justify-center lg:justify-start gap-3 mb-4">
+                                <span class="rounded-xl bg-gray-50 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-gray-400 dark:bg-gray-800">{{ data.testScience }}</span>
+                                <span class="rounded-xl bg-gray-50 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-gray-400 dark:bg-gray-800">{{ data.testGrade }}-sinf</span>
+                                <span class="rounded-xl bg-emerald-50 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-emerald-600 dark:bg-emerald-500/10 italic">Muallif: {{ data.testAuthor }}</span>
+                            </div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">{{ data.testDescription }}</p>
+                        </div>
+
+                        <div class="shrink-0 rounded-[2rem] bg-emerald-500 p-8 text-white shadow-xl shadow-emerald-200 dark:shadow-none text-center min-w-[160px]">
+                            <p class="text-[10px] font-black uppercase tracking-[0.2em] mb-1 opacity-80">Sizning ballingiz</p>
+                            <div class="text-4xl font-black mb-1">{{ data.score }}</div>
+                            <div class="h-px w-full bg-white/20 mb-1"></div>
+                            <p class="text-[10px] font-black uppercase opacity-80">Maksimal: {{ data.maxScore }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 border-t border-gray-50 dark:border-gray-800 pt-8">
+                        <div class="text-center">
+                            <p class="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-1">To'g'ri</p>
+                            <p class="text-lg font-black text-emerald-500">{{ data.correctAnswers }} / {{ data.totalQuestions }}</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-1">Aniqilik</p>
+                            <p class="text-lg font-black text-blue-500">{{ ((data.correctAnswers / data.totalQuestions) * 100).toFixed(1) }}%</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-1">Boshlandi</p>
+                            <p class="text-lg font-black text-gray-700 dark:text-gray-300">{{ data.startedAt | date:'yyyy/MM/dd HH:mm:ss' }}</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-1">Tugadi</p>
+                            <p class="text-lg font-black text-gray-700 dark:text-gray-300">{{ data.finishedAt | date:'yyyy/MM/dd HH:mm:ss' }}</p>
+                        </div>
+                        <div class="text-center border-l border-gray-50 dark:border-gray-800">
+                            <p class="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-1">Sarflangan vaqt</p>
+                            <p class="text-lg font-black text-orange-500 italic">{{ data.spentTime }}</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-1">Til</p>
+                            <p class="text-lg font-black text-gray-500 uppercase">{{ data.testLang }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-8">
+                    @for (q of data.questions; track q.questionText; let i = $index) {
+                        <div class="rounded-[2.5rem] border bg-white p-8 shadow-xl dark:bg-gray-900 transition-all"
+                             [class.border-emerald-100.dark:border-emerald-900]="q.isCorrect"
+                             [class.border-red-100.dark:border-red-900]="!q.isCorrect">
+
+                            <div class="mb-6 flex items-center justify-between">
+                <span class="flex h-10 w-10 items-center justify-center rounded-2xl text-xs font-black italic"
+                      [class]="q.isCorrect ? 'bg-emerald-50 text-emerald-500 dark:bg-emerald-500/10' : 'bg-red-50 text-red-500 dark:bg-red-500/10'">
+                  #{{ i + 1 }}
+                </span>
+                                <span class="text-[10px] font-black uppercase tracking-widest" [class]="q.isCorrect ? 'text-emerald-500' : 'text-red-500'">
+                  <i [class]="q.isCorrect ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-xmark'" class="mr-1"></i>
+                                    {{ q.isCorrect ? 'To\'g\'ri' : 'Xato' }}
+                </span>
+                            </div>
+
+                            @if (q.imagePath) {
+                                <div class="mb-6 overflow-hidden rounded-2xl border dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
+                                    <img [src]="q.imagePath" class="max-h-60 w-full object-contain">
+                                </div>
+                            }
+
+                            <div class="prose prose-emerald dark:prose-invert mb-8 max-w-none text-lg font-bold leading-relaxed text-gray-800 dark:text-gray-100"
+                                 [innerHTML]="getMarkdownAsHtml(q.questionText)">
+                            </div>
+
+                            <div class="grid gap-3">
+                                @for (opt of q.options; track opt.text; let optIdx = $index) {
+                                    <div class="flex items-center gap-4 rounded-2xl border-2 p-4 transition-all"
+                                         [class.border-emerald-500.bg-emerald-50.dark:bg-emerald-500]="q.isCorrect && (optIdx + 1) === q.selectedOptionOrderNumber"
+                                         [class.border-red-500.bg-red-50.dark:bg-red-500]="!q.isCorrect && (optIdx + 1) === q.selectedOptionOrderNumber"
+                                         [class.border-gray-50.dark:border-gray-800]="(optIdx + 1) !== q.selectedOptionOrderNumber">
+
+                                        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-[10px] font-black"
+                                             [class]="(optIdx + 1) === q.selectedOptionOrderNumber ? (q.isCorrect ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white') : 'bg-gray-100 dark:bg-gray-800 text-gray-400'">
+                                            {{ (optIdx + 1) }}
+                                        </div>
+
+                                        <span class="font-bold text-sm text-gray-600 dark:text-gray-300">{{ opt.text }}</span>
+
+                                        @if ((optIdx + 1) === q.selectedOptionOrderNumber) {
+                                            <span class="ml-auto text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded-lg"
+                                                  [class]="q.isCorrect ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'">
+                        Sizning javobingiz
+                      </span>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            } @else {
+                <div class="flex h-[60vh] items-center justify-center">
+                    <div class="h-12 w-12 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent"></div>
+                </div>
+            }
+        </div>
+    </div>
+</app-page-wrapper>

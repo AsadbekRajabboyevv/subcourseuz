@@ -30,21 +30,19 @@ export class TestListComponent implements OnInit {
   showPaymentModal = false;
   selectedItem: any = null;
 
-  // 1. UI-dagi inputlar bog'lanadigan ob'ekt
   filter: TestFilter = {
     name: '',
     isPublished: true,
     lang: '',
   };
 
-  // 2. Serverga yuboriladigan ob'ekt (faqat "Filtrlash" bosilganda yangilanadi)
   appliedFilter: TestFilter = { ...this.filter };
 
   languages = [
     { label: 'Barchasi', value: '' },
-    { label: 'O‘zbekcha', value: 'UZ' },
-    { label: 'Ruscha', value: 'RU' },
-    { label: 'Inglizcha', value: 'EN' }
+    { label: 'O‘zbekcha', value: 'uz' },
+    { label: 'Ruscha', value: 'ru' },
+    { label: 'Inglizcha', value: 'en' }
   ];
 
   ngOnInit() {
@@ -69,7 +67,6 @@ export class TestListComponent implements OnInit {
     if (this.loading || !this.hasMore) return;
     this.loading = true;
 
-    // MUHIM: So'rov faqat appliedFilter bilan yuboriladi
     this.testService.get(this.page, this.size, this.appliedFilter).subscribe({
       next: (res) => {
         const data = res.data.content;
@@ -85,9 +82,7 @@ export class TestListComponent implements OnInit {
     });
   }
 
-  // "Filtrlash" tugmasi bosilganda
   applyFilters() {
-    // UI-dagi filter qiymatlarini serverga yuboriladigan ob'ektga ko'chiramiz
     this.appliedFilter = JSON.parse(JSON.stringify(this.filter));
 
     this.page = 0;
@@ -106,12 +101,10 @@ export class TestListComponent implements OnInit {
     this.applyFilters();
   }
 
-  // Tab (Faol/Qoralama) bosilganda
   changeTab(published: boolean) {
     if (this.filter.isPublished === published) return;
     this.filter.isPublished = published;
 
-    // Tab almashganda inputda nimadir yozilgan bo'lsa, o'sha bilan birga filtrlaymiz
     this.applyFilters();
   }
 

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import uz.asadbek.subcourse.ai.dto.GeminiTestGenerateResponseDto;
 import uz.asadbek.subcourse.exception.NotFoundException;
 import uz.asadbek.subcourse.filestorage.FileStorageService;
 import uz.asadbek.subcourse.filestorage.dto.FileUploadOptions;
@@ -319,6 +320,61 @@ public class TestServiceImpl implements TestService {
         validator.validateEnroll(userId, testId, repository::existsById, "error.not_found.test");
         var uc = new UserTestEntity();
         uc.setId(new UserPurchaseId(userId, testId, LocalDateTime.now()));
+    }
+
+    @Override
+    @Transactional
+    public void saveAiGeneratedTest(GeminiTestGenerateResponseDto request, Long testId) {
+        List<TestQuestionEntity> questions = request.getQuestions().stream()
+            .map(dto -> {
+                var q = new TestQuestionEntity();
+                q.setTestId(testId);
+                q.setText(dto.getText());
+                return q;
+            }).collect(Collectors.toList());
+
+        var savedQuestions = questionService.saveAll(questions);
+
+        List<TestOptionEntity> allOptionsToSave = new ArrayList<>();
+        Map<Integer, List<TestOptionEntity>> questionIndexToOptionsMap = new HashMap<>();
+
+        for (int i = 0; i < savedQuestions.size(); i++) {
+            var questionEntity = savedQuestions.get(i);
+            var questionDto = request.getQuestions().get(i);
+            List<TestOptionEntity> currentQuestionOptions = new ArrayList<>();
+
+            for (var optDto : questionDto.getOptions()) {
+                var option = new TestOptionEntity();
+                option.setQuestionId(questionEntity.getId());
+                option.setText(optDto.getText());
+
+                currentQuestionOptions.add(option);
+                allOptionsToSave.add(option);
+            }
+            questionIndexToOptionsMap.put(i, currentQuestionOptions);
+        }
+
+        optionService.saveAll(allOptionsToSave);
+
+        for (int i = 0; i < savedQuestions.size(); i++) {
+            var questionEntity = savedQuestions.get(i);
+            var questionDto = request.getQuestions().get(i);
+            var optionsOfThisQuestion = questionIndexToOptionsMap.get(i);
+
+            var correctIdx = questionDto.getCorrectOptionIndex();
+            if (correctIdx != null && correctIdx >= 0 && correctIdx < optionsOfThisQuestion.size()) {
+                var correctOptionEntity = optionsOfThisQuestion.get(correctIdx);
+                questionEntity.setCorrectOptionId(correctOptionEntity.getId());
+            }
+        }
+
+        questionService.saveAll(savedQuestions);
+    }
+
+    @Override
+    @Transactional
+    public void save(TestEntity newTest) {
+        repository.save(newTest);
     }
 
     @Override

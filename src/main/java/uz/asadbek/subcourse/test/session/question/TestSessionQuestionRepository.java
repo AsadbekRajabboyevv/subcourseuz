@@ -22,7 +22,8 @@ public interface TestSessionQuestionRepository extends
                CASE
                  WHEN a.id IS NOT NULL THEN TRUE
                  ELSE FALSE
-               END
+               END,
+               q.correctOptionId
             )
             FROM TestSessionQuestionEntity q
             LEFT JOIN TestSessionAnswerEntity a
