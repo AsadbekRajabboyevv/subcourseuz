@@ -915,6 +915,9 @@
             <trans-unit id="footer.about_us" datatype="html">
                 <source>About us</source>
             </trans-unit>
+            <trans-unit id="footer.terms_of_service" datatype="html">
+                <source>Terms of service</source>
+            </trans-unit>
             <trans-unit id="footer.collaboration" datatype="html">
                 <source>Collaboration</source>
             </trans-unit>
@@ -1607,6 +1610,115 @@
                     <context context-type="linenumber">128</context>
                 </context-group>
             </trans-unit>
+
+            <!-- ── Page title ── -->
+            <trans-unit id="home.title" datatype="html">
+                <source>Bosh sahifa</source>
+                <target>Home</target>
+            </trans-unit>
+
+            <!-- ── Hero ── -->
+            <trans-unit id="home.hero.title" datatype="html">
+                <source>Ta'lim platformasi</source>
+                <target>Learning Platform</target>
+            </trans-unit>
+            <trans-unit id="home.hero.description" datatype="html">
+                <source>Platformamizga xush kelibsiz. Bu yerda siz kurslar o'rganishingiz va test ishlashingiz mumkin.</source>
+                <target>Welcome to our platform. Here you can study courses and take tests.</target>
+            </trans-unit>
+            <trans-unit id="home.hero.view_courses" datatype="html">
+                <source>Kurslarni ko'rish</source>
+                <target>Browse Courses</target>
+            </trans-unit>
+
+            <!-- ── Stats ── -->
+            <trans-unit id="home.stats.courses" datatype="html">
+                <source>Faol kurslar</source>
+                <target>Active Courses</target>
+            </trans-unit>
+            <trans-unit id="home.stats.users" datatype="html">
+                <source>Talabalar</source>
+                <target>Students</target>
+            </trans-unit>
+            <trans-unit id="home.stats.videos" datatype="html">
+                <source>Video kurslar</source>
+                <target>Video Courses</target>
+            </trans-unit>
+            <trans-unit id="home.stats.tests" datatype="html">
+                <source>Testlar</source>
+                <target>Tests</target>
+            </trans-unit>
+
+            <!-- ── Course grades ── -->
+            <trans-unit id="home.grades.title" datatype="html">
+                <source>Kurs bosqichlari</source>
+                <target>Course Levels</target>
+            </trans-unit>
+            <trans-unit id="home.grades.view_all" datatype="html">
+                <source>Barchasini ko'rish →</source>
+                <target>View all →</target>
+            </trans-unit>
+
+            <!-- ── Top courses ── -->
+            <trans-unit id="home.courses.title" datatype="html">
+                <source>Mashhur kurslar</source>
+                <target>Popular Courses</target>
+            </trans-unit>
+            <trans-unit id="home.courses.empty" datatype="html">
+                <source>Kurslar mavjud emas</source>
+                <target>No courses available</target>
+            </trans-unit>
+            <trans-unit id="home.courses.lessons" datatype="html">
+                <source>dars</source>
+                <target>lessons</target>
+            </trans-unit>
+            <trans-unit id="home.courses.prev" datatype="html">
+                <source>Oldingi</source>
+                <target>Previous</target>
+            </trans-unit>
+            <trans-unit id="home.courses.next" datatype="html">
+                <source>Keyingi</source>
+                <target>Next</target>
+            </trans-unit>
+
+            <!-- ── Comments ── -->
+            <trans-unit id="home.comments.title" datatype="html">
+                <source>O'quvchilar fikrlari</source>
+                <target>Student Reviews</target>
+            </trans-unit>
+
+            <!-- ── Quick actions ── -->
+            <trans-unit id="home.actions.courses.title" datatype="html">
+                <source>Kurslar</source>
+                <target>Courses</target>
+            </trans-unit>
+            <trans-unit id="home.actions.courses.desc" datatype="html">
+                <source>Barcha kurslarni ko'ring</source>
+                <target>Browse all courses</target>
+            </trans-unit>
+            <trans-unit id="home.actions.tests.title" datatype="html">
+                <source>Testlar</source>
+                <target>Tests</target>
+            </trans-unit>
+            <trans-unit id="home.actions.tests.desc" datatype="html">
+                <source>Bilimingizni sinab ko'ring</source>
+                <target>Test your knowledge</target>
+            </trans-unit>
+            <trans-unit id="home.actions.my_courses.title" datatype="html">
+                <source>Mening kurslarim</source>
+                <target>My Courses</target>
+            </trans-unit>
+            <trans-unit id="home.actions.my_courses.desc" datatype="html">
+                <source>Sotib olingan kurslar</source>
+                <target>Purchased courses</target>
+            </trans-unit>
+
+            <!-- ── Price ── -->
+            <trans-unit id="home.price.free" datatype="html">
+                <source>Bepul</source>
+                <target>Free</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>

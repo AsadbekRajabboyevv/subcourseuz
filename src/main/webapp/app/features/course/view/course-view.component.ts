@@ -10,6 +10,7 @@ import {PaymentModalComponent} from "../../payment/modal/payment-modal.component
 import {PaymentRequest} from "../../payment/payment.model";
 import {AuthService} from "../../../common/auth/auth.service";
 import {MarkdownComponent} from "ngx-markdown";
+import {CommentSectionComponent} from "../../../shared/ui/comment/comment-section.component";
 
 @Component({
   selector: 'app-course-view',
@@ -19,7 +20,8 @@ import {MarkdownComponent} from "ngx-markdown";
     RouterModule,
     PageWrapperComponent,
     PaymentModalComponent,
-    MarkdownComponent
+    MarkdownComponent,
+    CommentSectionComponent
   ],
   templateUrl: './course-view.component.html',
   styles: ``

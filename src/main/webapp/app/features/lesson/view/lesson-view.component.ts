@@ -6,11 +6,12 @@ import { LessonInfo } from '../lesson.model';
 import { LessonService } from '../lesson.service';
 import { PageWrapperComponent } from '../../../shared/ui/layout/page-wrapper.component';
 import { AuthService } from '../../../common/auth/auth.service';
+import { CommentSectionComponent } from '../../../shared/ui/comment/comment-section.component';
 
 @Component({
   selector: 'app-lesson-view',
   standalone: true,
-  imports: [CommonModule, RouterModule, PageWrapperComponent, MarkdownModule],
+  imports: [CommonModule, RouterModule, PageWrapperComponent, MarkdownModule, CommentSectionComponent],
   templateUrl: './lesson-view.component.html',
 })
 export class LessonViewComponent implements OnInit {

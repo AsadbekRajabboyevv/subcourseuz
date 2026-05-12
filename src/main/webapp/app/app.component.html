@@ -1,12 +1,18 @@
+<!-- Top progress bar — always visible during navigation -->
+<app-page-loader></app-page-loader>
+
 <div class="flex flex-col min-h-screen">
-    <app-header *ngIf="!isAuthPage"></app-header>
+  <app-header *ngIf="!isAuthPage"></app-header>
 
-    <main class="flex-1 pt-[5px]" [ngClass]="{'my-3': !isAuthPage}">
-        <div [class.mx-auto]="!isAuthPage" [class.px-4]="!isAuthPage" [class.md:px-6]="!isAuthPage">
-            <router-outlet></router-outlet>
-        </div>
-    </main>
+  <main class="flex-1 pt-[5px]" [ngClass]="{'my-3': !isAuthPage}">
+    <div [class.mx-auto]="!isAuthPage"
+         [class.px-4]="!isAuthPage"
+         [class.md:px-6]="!isAuthPage">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
 
-    <app-footer *ngIf="!isAuthPage"></app-footer>
+  <app-footer *ngIf="!isAuthPage"></app-footer>
 </div>
+
 <app-error-modal></app-error-modal>

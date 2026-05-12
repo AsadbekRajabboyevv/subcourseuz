@@ -63,7 +63,7 @@
 
             <div class="rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-2xl dark:border-gray-800 dark:bg-gray-900 space-y-5">
 
-                <app-input type="number" label="Narxi (UZS)" i18n-label="@@course.price_label" [(ngModel)]="courseForm.price"></app-input>
+                <app-input type="amount" label="Narxi (UZS)" i18n-label="@@course.price_label" [(ngModel)]="courseForm.price"></app-input>
 
                 <div class="grid grid-cols-2 gap-4">
                     <app-input type="select" label="Fan" i18n-label="@@course.science_label" [options]="sciences()" [(ngModel)]="courseForm.scienceId"></app-input>

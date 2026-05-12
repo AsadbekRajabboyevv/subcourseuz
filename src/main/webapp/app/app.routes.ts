@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './features/home/home.component';
 import { AuthLayoutComponent } from "./common/auth/auth.layout.component";
+import {PrivacyPolicyComponent} from "./common/user-terms/privacy-policy.component";
+import {TermsOfServiceComponent} from "./common/user-terms/terms-of-service.component";
 
 export const routes: Routes = [
   {
@@ -39,6 +41,21 @@ export const routes: Routes = [
     path: 'tests-update/:id',
     loadComponent: () => import('./features/test/update/test-update.component').then(m => m.TestUpdateComponent),
     title: $localize`:@@test.update.title:Testni yangilash`
+  },
+  {
+    path: 'test-process/:id',
+    loadComponent: () => import('./features/test/process/test-process.component').then(m => m.TestProcessComponent),
+    title: $localize`:@@test.update.title:Test ishlash`
+  },
+  {
+    path: 'test-result/:sessionId',
+    loadComponent: () => import('./features/test/result/test-result.component').then(m => m.TestResultComponent),
+    title: $localize`:@@test.update.title:Test natijasi`
+  },
+  {
+    path: 'test-review/:sessionId',
+    loadComponent: () => import('./features/test/review/test-review.component').then(m => m.TestReviewComponent),
+    title: $localize`:@@test.update.title:Testni ko'rib chiqish`
   },
   {
     path: 'tests-view/:id',
@@ -113,6 +130,16 @@ export const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     title: $localize`:@@home_title:Bosh sahifa`
+  },
+  {
+    path: 'privacy-policy',
+    component: PrivacyPolicyComponent,
+    title: $localize`:@@privacy_policy_title:Maxfiylik siyosati`
+  },
+  {
+    path: 'terms-of-service',
+    component: TermsOfServiceComponent,
+    title: $localize`:@@terms_of_service_title:Foydalanish shartlari`
   },
 
   {

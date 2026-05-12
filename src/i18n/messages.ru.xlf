@@ -928,6 +928,9 @@
             <trans-unit id="footer.about_us" datatype="html">
                 <source>О нас</source>
             </trans-unit>
+            <trans-unit id="footer.terms_of_service" datatype="html">
+                <source>Условия предоставления услуг</source>
+            </trans-unit>
             <trans-unit id="footer.collaboration" datatype="html">
                 <source>Сотрудничество</source>
             </trans-unit>
@@ -1635,6 +1638,99 @@
                     <context context-type="linenumber">128</context>
                 </context-group>
             </trans-unit>
+            <trans-unit id="home.title" datatype="html">
+                <source>Bosh sahifa</source>
+                <target>Главная страница</target>
+            </trans-unit>
+            <trans-unit id="home.hero.title" datatype="html">
+                <source>Ta'lim platformasi</source>
+                <target>Образовательная платформа</target>
+            </trans-unit>
+            <trans-unit id="home.hero.description" datatype="html">
+                <source>Platformamizga xush kelibsiz. Bu yerda siz kurslar o'rganishingiz va test ishlashingiz mumkin.</source>
+                <target>Добро пожаловать на нашу платформу. Здесь вы можете изучать курсы и проходить тесты.</target>
+            </trans-unit>
+            <trans-unit id="home.hero.view_courses" datatype="html">
+                <source>Kurslarni ko'rish</source>
+                <target>Смотреть курсы</target>
+            </trans-unit>
+            <trans-unit id="home.stats.courses" datatype="html">
+                <source>Faol kurslar</source>
+                <target>Активные курсы</target>
+            </trans-unit>
+            <trans-unit id="home.stats.users" datatype="html">
+                <source>Talabalar</source>
+                <target>Студенты</target>
+            </trans-unit>
+            <trans-unit id="home.stats.videos" datatype="html">
+                <source>Video kurslar</source>
+                <target>Видеокурсы</target>
+            </trans-unit>
+            <trans-unit id="home.stats.tests" datatype="html">
+                <source>Testlar</source>
+                <target>Тесты</target>
+            </trans-unit>
+            <trans-unit id="home.grades.title" datatype="html">
+                <source>Kurs bosqichlari</source>
+                <target>Уровни курсов</target>
+            </trans-unit>
+            <trans-unit id="home.grades.view_all" datatype="html">
+                <source>Barchasini ko'rish →</source>
+                <target>Смотреть все →</target>
+            </trans-unit>
+            <trans-unit id="home.courses.title" datatype="html">
+                <source>Mashhur kurslar</source>
+                <target>Популярные курсы</target>
+            </trans-unit>
+            <trans-unit id="home.courses.empty" datatype="html">
+                <source>Kurslar mavjud emas</source>
+                <target>Курсы отсутствуют</target>
+            </trans-unit>
+            <trans-unit id="home.courses.lessons" datatype="html">
+                <source>dars</source>
+                <target>урок</target>
+            </trans-unit>
+            <trans-unit id="home.courses.prev" datatype="html">
+                <source>Oldingi</source>
+                <target>Предыдущий</target>
+            </trans-unit>
+            <trans-unit id="home.courses.next" datatype="html">
+                <source>Keyingi</source>
+                <target>Следующий</target>
+            </trans-unit>
+            <trans-unit id="home.comments.title" datatype="html">
+                <source>O'quvchilar fikrlari</source>
+                <target>Отзывы студентов</target>
+            </trans-unit>
+            <trans-unit id="home.actions.courses.title" datatype="html">
+                <source>Kurslar</source>
+                <target>Курсы</target>
+            </trans-unit>
+            <trans-unit id="home.actions.courses.desc" datatype="html">
+                <source>Barcha kurslarni ko'ring</source>
+                <target>Смотреть все курсы</target>
+            </trans-unit>
+            <trans-unit id="home.actions.tests.title" datatype="html">
+                <source>Testlar</source>
+                <target>Тесты</target>
+            </trans-unit>
+            <trans-unit id="home.actions.tests.desc" datatype="html">
+                <source>Bilimingizni sinab ko'ring</source>
+                <target>Проверьте свои знания</target>
+            </trans-unit>
+            <trans-unit id="home.actions.my_courses.title" datatype="html">
+                <source>Mening kurslarim</source>
+                <target>Мои курсы</target>
+            </trans-unit>
+            <trans-unit id="home.actions.my_courses.desc" datatype="html">
+                <source>Sotib olingan kurslar</source>
+                <target>Купленные курсы</target>
+            </trans-unit>
+            <trans-unit id="home.price.free" datatype="html">
+                <source>Bepul</source>
+                <target>Бесплатно</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>
