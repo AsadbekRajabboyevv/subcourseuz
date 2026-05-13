@@ -45,7 +45,6 @@ public class TestSessionServiceImpl implements TestSessionService {
     @Override
     @Transactional
     public Long startTestSession(Long testId) {
-
         if (!JwtUtil.isAuthenticated()) {
             throw ExceptionUtil.build(UnAuthorizedException.class,
                 "error.auth.user_not_authenticated");
