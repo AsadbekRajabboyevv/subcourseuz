@@ -1,6 +1,5 @@
 package uz.asadbek.subcourse.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.boot.persistence.autoconfigure.EntityScan;
