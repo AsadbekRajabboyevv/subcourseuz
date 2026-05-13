@@ -1,6 +1,10 @@
 spring:
   liquibase:
     change-log: classpath:db/changelog/master.xml
+    enabled: true
+    user: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+
   messages:
     basename: messages/messages
     encoding: UTF-8
