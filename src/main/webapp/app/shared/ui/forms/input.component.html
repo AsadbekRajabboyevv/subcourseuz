@@ -1,14 +1,23 @@
 <div class="space-y-2 w-full" [class.opacity-50]="disabled" [class.pointer-events-none]="disabled">
     <label *ngIf="label" class="field-label">{{ label }}</label>
     <div class="relative group">
+
         <ng-container *ngIf="['text', 'number', 'date'].includes(type)">
-            <input [type]="type" [value]="value" [disabled]="disabled" (input)="onValueChange($any($event.target).value)" [placeholder]="placeholder" class="base-input">
+            <input [type]="type" [value]="value" [disabled]="disabled"
+                   (input)="onValueChange($any($event.target).value)"
+                   [placeholder]="placeholder" class="base-input">
+        </ng-container>
+
+        <ng-container *ngIf="type === 'amount'">
+            <input type="text" [value]="formattedAmount" [disabled]="disabled"
+                   (input)="onAmountInput($any($event.target).value)"
+                   [placeholder]="placeholder" class="base-input">
         </ng-container>
 
         <ng-container *ngIf="type === 'textarea'">
-          <textarea [value]="value" [disabled]="disabled"
-                    (input)="onValueChange($any($event.target).value)"
-                    [placeholder]="placeholder" rows="4" class="base-input"></textarea>
+            <textarea [value]="value" [disabled]="disabled"
+                      (input)="onValueChange($any($event.target).value)"
+                      [placeholder]="placeholder" rows="4" class="base-input"></textarea>
         </ng-container>
 
         <ng-container *ngIf="type === 'select'">
@@ -22,15 +31,19 @@
         </ng-container>
 
         <div *ngIf="type === 'multi-select'" class="multi-wrap">
-            <button *ngFor="let opt of options" type="button" [disabled]="disabled" (click)="toggleMultiSelect(opt.value)" [class.multi-selected]="isSelected(opt.value)" class="multi-btn">
+            <button *ngFor="let opt of options" type="button" [disabled]="disabled"
+                    (click)="toggleMultiSelect(opt.value)"
+                    [class.multi-selected]="isSelected(opt.value)" class="multi-btn">
                 {{ opt.label }}
             </button>
         </div>
 
-        <div *ngIf="type === 'checkbox'" (click)="!disabled && onValueChange(!value)" class="check-row" [class.checked-row]="value">
+        <div *ngIf="type === 'checkbox'" (click)="!disabled && onValueChange(!value)"
+             class="check-row" [class.checked-row]="value">
             <div class="check-box" [class.checked-box]="value">
                 <svg *ngIf="value" width="11" height="11" viewBox="0 0 11 11" fill="none">
-                    <path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="2"
+                          stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
             <span class="check-label">{{ placeholder }}</span>
@@ -39,8 +52,10 @@
         <div *ngIf="type === 'file'" class="file-zone">
             <input type="file" [disabled]="disabled" (change)="handleFileUpload($event)" class="file-input">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="file-icon">
-                <path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <rect x="3" y="3" width="18" height="18" rx="6" stroke="#10b981" stroke-width="1.5" stroke-dasharray="3 2"/>
+                <path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="#10b981" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="3" y="3" width="18" height="18" rx="6" stroke="#10b981"
+                      stroke-width="1.5" stroke-dasharray="3 2"/>
             </svg>
             <p class="file-text">{{ fileName || placeholder }}</p>
             <div *ngIf="uploadProgress > 0 && uploadProgress < 100" class="progress-track">
@@ -48,8 +63,10 @@
             </div>
         </div>
 
-        <ng-container *ngIf="type === 'trix' || type === 'markdown'">
-            <app-markdown-editor [placeholder]="placeholder" [disabled]="disabled" [ngModel]="value" (ngModelChange)="onValueChange($event)"></app-markdown-editor>
+        <ng-container *ngIf="type === 'markdown'">
+            <app-markdown-editor [placeholder]="placeholder" [disabled]="disabled"
+                                 [ngModel]="value" (ngModelChange)="onValueChange($event)">
+            </app-markdown-editor>
         </ng-container>
 
     </div>

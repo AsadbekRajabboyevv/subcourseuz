@@ -61,7 +61,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(){
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException e){
+        log.error("Data integrity violation exception: {}", e.getMessage());
+        return buildResponse(HttpStatus.BAD_REQUEST, "BAD_REQUEST", "BAD REQUEST");
+    }
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException e){
+        log.error("Null pointer exception: {}", e.getMessage());
         return buildResponse(HttpStatus.BAD_REQUEST, "BAD_REQUEST", "BAD REQUEST");
     }
 
@@ -81,6 +87,17 @@ public class GlobalExceptionHandler {
             .fieldErrorMessage(errors)
             .build();
 
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ErrorResponse> handleValidation(ValidationException ex) {
+        var response = ErrorResponse.builder()
+            .timestamp(LocalDateTime.now())
+            .errorCode("VALIDATION_FAILED")
+            .errorMessage(ExceptionUtil.resolveMessage("error.validation"))
+            .fieldErrorMessage(ex.getFieldErrors())
+            .build();
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

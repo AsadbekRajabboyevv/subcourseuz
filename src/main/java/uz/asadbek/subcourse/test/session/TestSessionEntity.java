@@ -60,5 +60,14 @@ public class TestSessionEntity extends BaseEntity {
     private Integer durationSeconds;
 
     @Column(name = "score")
-    private Integer score;
+    private Double score;
+
+    @Column(name = "wrong_answers")
+    private Integer wrongAnswers;
+
+    @Column(name = "correct_answers")
+    private Integer correctAnswers;
+
+    @Column(name = "question_count")
+    private Integer questionsCount;
 }

@@ -22,6 +22,7 @@ import uz.asadbek.subcourse.util.JwtUtil;
 public class BalanceServiceImpl implements BalanceService {
 
     private final BalanceRepository repository;
+    private static final Long INITIAL_BALANCE = 100_000L;
 
     @Override
     public BalanceResponseDto get(Long userId) {
@@ -91,6 +92,7 @@ public class BalanceServiceImpl implements BalanceService {
     public void createBalance(UserEntity user) {
         var balance = new BalanceEntity();
         balance.setUserId(user.getId());
+        balance.setBalance(INITIAL_BALANCE);
         balance.setCurrency(CurrencyEnum.UZS);
         repository.save(balance);
     }

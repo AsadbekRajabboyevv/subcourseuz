@@ -24,28 +24,30 @@ export class LessonUpdateComponent implements OnInit {
   private lessonService = inject(LessonService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-
+  private static readonly YOUTUBE_LINK_PREFIX = 'https://www.youtube.com/watch?v=';
   lessonId: number | null = null;
   isLoading = signal<boolean>(false);
   isDataLoaded = signal<boolean>(false);
 
   selectedFiles: File[] = [];
   deletedFileUrls: string[] = [];
-  existingFileUrls: string[] = []; // UI'da ko'rsatish uchun
-
-  coursePreview = { name: '', imagePath: '' };
+  existingFileUrls: string[] = [];
+  coursePreview = {
+    name: '',
+    imagePath: '',
+    slug: ''
+  };
 
   lessonForm: LessonUpdate = {
     name: '',
     lessonNumber: '',
     videoUrl: '',
     textContent: '',
-    courseId: null,
     isPublished: true
   };
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.coursePreview.slug = this.route.snapshot.paramMap.get('courseSlug') ?? '';    this.route.queryParams.subscribe(params => {
       const id = params['id'] || params['lessonId'];
       if (id) {
         this.lessonId = Number(id);
@@ -58,23 +60,17 @@ export class LessonUpdateComponent implements OnInit {
     this.isLoading.set(true);
     this.lessonService.getLesson(id).subscribe({
       next: (res: any) => {
-        // Backenddan LessonInfo formatida keladi
         const data: LessonInfo = res.data ? res.data : res;
-
-        // 1. Formaga faqat kerakli qismlarni o'zlashtiramiz
         this.lessonForm = {
           name: data.name,
           lessonNumber: data.lessonNumber?.toString(),
-          videoUrl: data.videoUrl,
+          videoUrl: LessonUpdateComponent.YOUTUBE_LINK_PREFIX + data.videoUrl,
           textContent: data.textContent,
-          courseId: data.courseId,
           isPublished: data.isPublished
         };
 
-        // 2. Fayllarni alohida massivga olamiz
         this.existingFileUrls = data.fileUrls || [];
 
-        // 3. Preview uchun
         this.coursePreview.name = data.courseName;
         this.coursePreview.imagePath = data.courseImagePath;
 
@@ -106,8 +102,7 @@ export class LessonUpdateComponent implements OnInit {
   onSubmit() {
     if (!this.lessonId) return;
     this.isLoading.set(true);
-
-    // request (LessonUpdate), files (File[]), deletedFileUrls (string[])
+    this.lessonForm.videoUrl = this.getYoutubeId(this.lessonForm.videoUrl)!;
     this.lessonService.updateLesson(
       this.lessonId,
       this.lessonForm,
@@ -116,7 +111,7 @@ export class LessonUpdateComponent implements OnInit {
     ).subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.router.navigate(['/courses-list']);
+        this.router.navigate(['/courses-view/', this.coursePreview.slug]);
       },
       error: () => this.isLoading.set(false)
     });

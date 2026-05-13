@@ -1,7 +1,6 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
-import {AuthService} from "../../common/auth/auth.service";
 import {Base} from "../../common/model/base";
 import {CourseGrade, OneCourseGrade} from "./grade.model";
 import {Observable} from "rxjs";
@@ -9,11 +8,11 @@ import {Observable} from "rxjs";
 @Injectable({providedIn: 'root'})
 export class GradeService {
   private readonly http = inject(HttpClient);
-  private readonly authService = inject(AuthService);
   private readonly PATH = `${environment.apiPath}/v1/api/course-grades`;
+  private readonly PUBLIC_PATH = `${environment.apiPath}/v1/api/public`;
 
   get(): Observable<Base<CourseGrade[]>> {
-    return this.http.get<Base<CourseGrade[]>>(`${this.PATH}`);
+    return this.http.get<Base<CourseGrade[]>>(`${this.PUBLIC_PATH}/course-grades`);
   }
 
   getGradeById(id: number): Observable<Base<OneCourseGrade>> {

@@ -16,7 +16,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EntityScan("uz.asadbek.subcourse")
 @EnableJpaRepositories("uz.asadbek.subcourse")
 @EnableTransactionManagement
-@EnableJpaAuditing(dateTimeProviderRef = "auditingDateTimeProvider")
+@EnableJpaAuditing(
+    dateTimeProviderRef = "auditingDateTimeProvider",
+    auditorAwareRef = "auditAware"
+)
 public class DomainConfig {
 
     @Bean(name = "auditingDateTimeProvider")

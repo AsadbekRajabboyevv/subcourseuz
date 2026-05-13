@@ -1,17 +1,18 @@
 package uz.asadbek.subcourse.test.session;
 
-import uz.asadbek.subcourse.test.dto.SubmitAnswerRequestDto;
-import uz.asadbek.subcourse.test.dto.TestResultDto;
-import uz.asadbek.subcourse.test.dto.TestReviewDto;
+import uz.asadbek.subcourse.test.session.answer.dto.SubmitAnswerRequestDto;
+import uz.asadbek.subcourse.test.test.dto.TestResultDto;
+import uz.asadbek.subcourse.test.test.dto.TestReviewDto;
 import uz.asadbek.subcourse.test.session.dto.TestSessionResponseDto;
+import uz.asadbek.subcourse.test.session.dto.TestSessionStatus;
 
 public interface TestSessionService {
 
     Long startTestSession(Long testId);
 
-    Boolean submitAnswer(SubmitAnswerRequestDto request);
+    TestResultDto submitAnswer(SubmitAnswerRequestDto request);
 
-    TestResultDto finishTestSession(Long sessionId);
+    TestResultDto finishTestSession(Long sessionId, TestSessionStatus sessionStatus);
 
     TestReviewDto getReview(Long sessionId);
 

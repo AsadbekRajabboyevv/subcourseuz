@@ -12,10 +12,10 @@ import uz.asadbek.subcourse.course.dto.CourseInfoResponseDto;
 import uz.asadbek.subcourse.course.dto.CourseResponseDto;
 import uz.asadbek.subcourse.course.filter.CourseFilter;
 import uz.asadbek.subcourse.course.grade.dto.CourseGradeResponseDto;
-import uz.asadbek.subcourse.course.lesson.dto.CourseLessonResponseDto;
 import uz.asadbek.subcourse.publicui.dto.HomePageResponseDto;
-import uz.asadbek.subcourse.test.dto.TestResponseDto;
-import uz.asadbek.subcourse.test.filter.TestFilter;
+import uz.asadbek.subcourse.science.dto.ScienceResponseDto;
+import uz.asadbek.subcourse.test.test.dto.TestResponseDto;
+import uz.asadbek.subcourse.test.test.filter.TestFilter;
 
 @RequestMapping("/v1/api/public")
 @Tag(name = "Public", description = "Public")
@@ -33,11 +33,11 @@ public interface PublicApi {
     @GetMapping("/course-grades")
     BaseResponseDto<List<CourseGradeResponseDto>> getCourseGrades();
 
-    @GetMapping("/courses/{slug}/lessons")
-    BaseResponseDto<List<CourseLessonResponseDto>> getCourseLessons(@PathVariable String slug);
+    @GetMapping("/sciences")
+    BaseResponseDto<List<ScienceResponseDto>> getSciences();
 
     @GetMapping("/tests")
-    BaseResponseDto<List<TestResponseDto>> getTests(TestFilter filter, Pageable pageable);
+    BaseResponseDto<Page<TestResponseDto>> getTests(TestFilter filter, Pageable pageable);
 
     @GetMapping("/duration-types")
     BaseResponseDto<?> getDurationTypes();

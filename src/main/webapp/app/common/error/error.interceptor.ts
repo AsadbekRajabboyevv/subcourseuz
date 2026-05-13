@@ -18,6 +18,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       const errorData: ErrorData = {
         title: serverError?.title || error.statusText || String(error.status),
         message: serverError?.errorMessage || error.message,
+        fieldErrorMessages: serverError?.fieldErrorMessage,
         code: serverError?.errorCode || String(error.status)
       };
 
@@ -26,6 +27,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         errorData.message = "Network unreachable";
       }
 
+      if (serverError.errorCode === 'VALIDATION_FAILED') {
+        errorData.type = "warning";
+      }
       errorService.show(errorData);
       return throwError(() => error);
     })

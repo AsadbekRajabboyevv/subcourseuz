@@ -4,9 +4,6 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import uz.asadbek.subcourse.course.CourseEntity;
-import uz.asadbek.subcourse.course.lesson.CourseLessonEntity;
-import uz.asadbek.subcourse.util.annotation.existindb.ExistsInDb;
 
 @Getter
 public class CourseLessonRequestDto {
@@ -22,11 +19,7 @@ public class CourseLessonRequestDto {
     private String textContent;
 
     @NotNull
-    @ExistsInDb(
-        entity = CourseEntity.class,
-        field = "slug"
-    )
-    private String slug;
+    private String courseSlug;
 
     @NotNull
     private Boolean isPublished;

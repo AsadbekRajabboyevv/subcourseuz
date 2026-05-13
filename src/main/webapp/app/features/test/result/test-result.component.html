@@ -1,0 +1,78 @@
+<app-page-wrapper>
+    <div content class="min-h-screen py-12 px-4">
+        <div class="mx-auto max-w-2xl">
+
+            <div class="rounded-[3rem] border border-gray-100 bg-white p-10 shadow-2xl dark:border-gray-800 dark:bg-gray-900 animate-in fade-in zoom-in duration-500">
+
+                <div class="text-center">
+                    <div class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-[2rem]"
+                         [class]="isPassed() ? 'bg-emerald-50 text-emerald-500 dark:bg-emerald-500/10' : 'bg-orange-50 text-orange-500 dark:bg-orange-500/10'">
+                        <i [class]="isPassed() ? 'fa-solid fa-trophy' : 'fa-solid fa-award'" class="text-4xl"></i>
+                    </div>
+
+                    <h1 class="mb-2 text-3xl font-black uppercase tracking-tight text-gray-900 dark:text-white">
+                        {{ isPassed() ? 'Tabriklaymiz!' : 'Yaxshi urinish!' }}
+                    </h1>
+                    <p class="mb-10 text-sm font-bold text-gray-400">Test yakunlandi. Sizning natijangiz quyidagicha:</p>
+
+                    <div class="relative mx-auto mb-12 h-48 w-48 flex items-center justify-center">
+                        <svg class="h-full w-full rotate-[-90deg]">
+                            <circle cx="96" cy="96" r="88" stroke="currentColor" stroke-width="12" fill="transparent"
+                                    class="text-gray-100 dark:text-gray-800"></circle>
+                            <circle cx="96" cy="96" r="88" stroke="currentColor" stroke-width="12" fill="transparent"
+                                    [style.stroke-dasharray]="552.92"
+                                    [style.stroke-dashoffset]="552.92 - (552.92 * result().score / 100)"
+                                    class="text-emerald-500 transition-all duration-1000 ease-out" stroke-linecap="round"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span class="text-5xl font-black text-gray-900 dark:text-white">{{ result().score }}%</span>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Umumiy ball</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="rounded-3xl bg-emerald-50/50 p-6 dark:bg-emerald-500/5">
+                            <p class="mb-1 text-[10px] font-black uppercase tracking-widest text-gray-400">To'g'ri javoblar</p>
+                            <p class="text-2xl font-black text-emerald-600 dark:text-emerald-400">
+                                {{ result().correctAnswers }} / {{ result().totalQuestions }}
+                            </p>
+                        </div>
+                        <div class="rounded-3xl bg-red-50/50 p-6 dark:bg-red-500/5">
+                            <p class="mb-1 text-[10px] font-black uppercase tracking-widest text-gray-400">Xato javoblar</p>
+                            <p class="text-2xl font-black text-red-500">
+                                {{ result().totalQuestions - result().correctAnswers }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mb-10 rounded-[2rem] border border-gray-50 bg-gray-50/30 p-6 dark:border-gray-800 dark:bg-gray-800/20">
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="text-center">
+                                <p class="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-1">Boshlandi</p>
+                                <p class="text-xs font-bold text-gray-700 dark:text-gray-300">{{ result().startedAt | date:'HH:mm' }}</p>
+                            </div>
+                            <div class="border-x border-gray-100 dark:border-gray-700 text-center px-2">
+                                <p class="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-1">Sarflangan vaqt</p>
+                                <p class="text-sm font-black text-orange-500 italic">{{ result().spentTime }}</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-1">Tugadi</p>
+                                <p class="text-xs font-bold text-gray-700 dark:text-gray-300">{{ result().finishedAt | date:'HH:mm' }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-4">
+                        <button (click)="goToReview()" class="w-full rounded-2xl bg-emerald-600 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-emerald-200 hover:bg-emerald-500 transition-all dark:shadow-none">
+                            Xatolarni ko'rish (Review)
+                        </button>
+                        <button routerLink="/tests-list" class="w-full rounded-2xl bg-gray-900 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-gray-800 transition-all dark:bg-gray-800 dark:hover:bg-gray-700">
+                            Testlar ro'yxatiga qaytish
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</app-page-wrapper>

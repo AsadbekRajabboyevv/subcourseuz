@@ -1,1478 +1,2048 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="uz" datatype="plaintext" original="ng2.template">
-    <body>
-        <trans-unit id="login_title" datatype="html">
-            <source>Tizimga kirish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">13</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="register_title" datatype="html">
-            <source>Ro‘yxatdan o‘tish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">18</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="confirm_success" datatype="html">
-            <source>Email tasdiqlandi</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">23</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="confirm_error" datatype="html">
-            <source>Tasdiqlashda xatolik</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">28</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="topup_requests" datatype="html">
-            <source>So‘rovlar ro‘yxati</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">36</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="topup" datatype="html">
-            <source>Balansni to‘ldirish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">41</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="topup_history" datatype="html">
-            <source>Balans tarixi</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">46</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="courses_list" datatype="html">
-            <source>Kurslar ro‘yxati</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">52</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course_create" datatype="html">
-            <source>Kurs yaratish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">57</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="my_courses" datatype="html">
-            <source>Mening kurslarim</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">62</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course_view" datatype="html">
-            <source>Kursni ko‘rish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">67</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course_update" datatype="html">
-            <source>Kursni tahrirlash</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">72</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson_add" datatype="html">
-            <source>Dars qo‘shish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">78</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson_edit" datatype="html">
-            <source>Dars tahrirlash</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">83</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson_view" datatype="html">
-            <source>Dars</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">89</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="home_title" datatype="html">
-            <source>Bosh sahifa</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">95</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="not_found" datatype="html">
-            <source>Sahifa topilmadi</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
-                <context context-type="linenumber">107</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.login.title" datatype="html">
-            <source>
-                Tizimga kirish
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/login.component.html</context>
-                <context context-type="linenumber">6,8</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.login.welcome" datatype="html">
-            <source>
-                Xush kelibsiz
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/login.component.html</context>
-                <context context-type="linenumber">9,13</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.login.email_label" datatype="html">
-            <source>Email</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/login.component.html</context>
-                <context context-type="linenumber">17</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.login.email_placeholder" datatype="html">
-            <source>emailingizni kiriting</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/login.component.html</context>
-                <context context-type="linenumber">18,19</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.login.password_label" datatype="html">
-            <source>Parol</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/login.component.html</context>
-                <context context-type="linenumber">27</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.login.password_placeholder" datatype="html">
-            <source>parolingizni kiriting</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/login.component.html</context>
-                <context context-type="linenumber">28,29</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.login.button" datatype="html">
-            <source>Kirish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/login.component.html</context>
-                <context context-type="linenumber">37,39</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.login.no_account" datatype="html">
-            <source>Akkauntingiz yo&apos;qmi?</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/login.component.html</context>
-                <context context-type="linenumber">43,45</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.login.register_link" datatype="html">
-            <source>Ro&apos;yxatdan o&apos;tish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/login.component.html</context>
-                <context context-type="linenumber">48,50</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.title" datatype="html">
-            <source>Ro&apos;yxatdan o&apos;tish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">5,6</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.subtitle" datatype="html">
-            <source>Professional hamjamiyatga qo&apos;shiling</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">6,9</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.email_label" datatype="html">
-            <source>Email</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">12</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.email_placeholder" datatype="html">
-            <source>asadbek@example.com</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">12</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.first_name_label" datatype="html">
-            <source>Ism</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">15</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.first_name_placeholder" datatype="html">
-            <source>Asadbek</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">15</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.last_name_label" datatype="html">
-            <source>Familiya</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">16</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.last_name_placeholder" datatype="html">
-            <source>Rajabboyev</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">16</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.password_label" datatype="html">
-            <source>Parol</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">19</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.password_placeholder" datatype="html">
-            <source>Kamida 8 ta belgi</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">19</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.phone_label" datatype="html">
-            <source>Telefon</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">22</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.phone_placeholder" datatype="html">
-            <source>+998 90 123 45 67</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">22</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.birth_date_label" datatype="html">
-            <source>Tug&apos;ilgan sana</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">23</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.position_label" datatype="html">
-            <source>Lavozimingiz (Position)</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">25</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.bio_label" datatype="html">
-            <source>O&apos;zingiz haqingizda (Bio)</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">38</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.bio_placeholder" datatype="html">
-            <source>Tajribangiz haqida qisqacha...</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">38</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.button" datatype="html">
-            <source>Ro&apos;yxatdan o&apos;tish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">44,45</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.has_account" datatype="html">
-            <source>Akkauntingiz bormi?</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">51,52</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="auth.register.login_link" datatype="html">
-            <source>Tizimga kirish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/auth/component/register.component.html</context>
-                <context context-type="linenumber">52,54</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.academy" datatype="html">
-            <source>Online Academy</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/header/app.header.component.html</context>
-                <context context-type="linenumber">15,16</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.title" datatype="html">
-            <source>
-                Kurslar
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/header/app.header.component.html</context>
-                <context context-type="linenumber">22,24</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">7,8</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">7,9</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">7,8</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">8,9</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">4,5</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/update/lesson-update.component.html</context>
-                <context context-type="linenumber">127,128</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/view/lesson-view.component.html</context>
-                <context context-type="linenumber">5,6</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/view/lesson-view.component.html</context>
-                <context context-type="linenumber">71,72</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="test.title" datatype="html">
-            <source>
-                Testlar
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/header/app.header.component.html</context>
-                <context context-type="linenumber">25,27</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.blog" datatype="html">
-            <source>
-                Blog
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/header/app.header.component.html</context>
-                <context context-type="linenumber">28,31</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="profile.my_courses" datatype="html">
-            <source>
-                Mening kurslarim
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/header/app.header.component.html</context>
-                <context context-type="linenumber">33,36</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/me/course-me.component.html</context>
-                <context context-type="linenumber">6,8</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="profile.instructor" datatype="html">
-            <source>Foydalanuvchi</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/header/app.header.component.html</context>
-                <context context-type="linenumber">68,69</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="profile.settings" datatype="html">
-            <source>Profil sozlamalari</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/header/app.header.component.html</context>
-                <context context-type="linenumber">74,75</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="profile.balance_history" datatype="html">
-            <source>Balans tarixi</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/header/app.header.component.html</context>
-                <context context-type="linenumber">78,79</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.logout" datatype="html">
-            <source>Chiqish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/header/app.header.component.html</context>
-                <context context-type="linenumber">82,83</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="profile.balance" datatype="html">
-            <source>Balans</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/header/app.header.component.html</context>
-                <context context-type="linenumber">114,115</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="profile.top_up" datatype="html">
-            <source>To&apos;ldirish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/common/header/app.header.component.html</context>
-                <context context-type="linenumber">118,119</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.home" datatype="html">
-            <source>Asosiy</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">5,6</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">5,6</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/me/course-me.component.html</context>
-                <context context-type="linenumber">4,5</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">5,6</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">6,7</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.create.title" datatype="html">
-            <source>Yangi kurs yaratish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">9,11</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">11,12</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.create.subtitle" datatype="html">
-            <source>Kurs ma&apos;lumotlarini to&apos;ldiring</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">12,16</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.name_label" datatype="html">
-            <source>Kurs nomi</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">23</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">33</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.name_placeholder" datatype="html">
-            <source>Masalan: Java Backend Development</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">23</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">33,35</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.description_label" datatype="html">
-            <source>Kurs haqida batafsil ma&apos;lumot</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">28</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">36,37</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.description_placeholder" datatype="html">
-            <source>Kurs mazmuni, nimalar o&apos;rgatilishi haqida batafsil yozing...</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">29</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.cover_image" datatype="html">
-            <source>Kurs muqovasi</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">40,41</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">46,47</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.select_image" datatype="html">
-            <source>Rasm tanlang</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">55,56</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">58,59</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.image_requirements" datatype="html">
-            <source>(JPG, PNG max 2MB)</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">56,57</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.price_label" datatype="html">
-            <source>Kurs narxi (UZS)</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">69</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">66</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">129,130</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.price_placeholder" datatype="html">
-            <source>500 000</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">69</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.science_label" datatype="html">
-            <source>Fan</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">72</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">69</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.grade_label" datatype="html">
-            <source>Sinf</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">73</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">70</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.duration_label" datatype="html">
-            <source>Davomiyligi</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">77</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">74</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">179,180</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.duration_type_label" datatype="html">
-            <source>Birligi</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">78</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">75</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.language_label" datatype="html">
-            <source>Kurs tili</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">81</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">78</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">194,195</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.video_course" datatype="html">
-            <source>Video Kurs</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">91,92</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">88,89</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.publish_course" datatype="html">
-            <source>Hoziroq nashr qilish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">99,100</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">96,97</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.saving" datatype="html">
-            <source>Saqlanmoqda...</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">110,111</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.create_button" datatype="html">
-            <source>Yaratishni yakunash</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/create/course-create.component.html</context>
-                <context context-type="linenumber">113,115</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.list.title" datatype="html">
-            <source>
-                Kurslar ro&apos;yxati
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">10,14</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.create.button" datatype="html">
-            <source>Kurs yaratish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">18,20</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.filter" datatype="html">
-            <source>
-                Filtr
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">35,37</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">46,48</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/me/course-me.component.html</context>
-                <context context-type="linenumber">33,34</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.clear" datatype="html">
-            <source>
-                Tozalash
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">49,51</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">77,78</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/me/course-me.component.html</context>
-                <context context-type="linenumber">34,35</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.search" datatype="html">
-            <source>Qidirish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">54</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/me/course-me.component.html</context>
-                <context context-type="linenumber">38</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.search_placeholder" datatype="html">
-            <source>nom orqali qidirish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">54</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.from" datatype="html">
-            <source>dan</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">57</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.to" datatype="html">
-            <source>gacha</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">58</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.language" datatype="html">
-            <source>Til</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">61</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.time" datatype="html">
-            <source>Vaqt</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">64,65</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.apply_filter" datatype="html">
-            <source>Natijani ko&apos;rsatish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">73,74</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.published" datatype="html">
-            <source>Yuklanganlar</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">91,92</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.drafts" datatype="html">
-            <source>Qoralamalar</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">96,97</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.draft" datatype="html">
-            <source>Qoralama</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">114,115</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">72,73</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.lessons_count" datatype="html">
-            <source>Darslar soni</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">132</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/me/course-me.component.html</context>
-                <context context-type="linenumber">81,82</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">50,51</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.price" datatype="html">
-            <source>Narx</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">142,143</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.no_courses" datatype="html">
-            <source>Kurslar topilmadi</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/list/course-list.component.html</context>
-                <context context-type="linenumber">178,179</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/me/course-me.component.html</context>
-                <context context-type="linenumber">106,107</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="profile.my_courses_title" datatype="html">
-            <source>O&apos;quv jarayoni</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/me/course-me.component.html</context>
-                <context context-type="linenumber">9,13</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.search" datatype="html">
-            <source>Kursni qidirish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/me/course-me.component.html</context>
-                <context context-type="linenumber">24,25</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.apply_filter" datatype="html">
-            <source>Natijalarni ko&apos;rish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/me/course-me.component.html</context>
-                <context context-type="linenumber">42,43</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.purchased" datatype="html">
-            <source>Sotib olingan</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/me/course-me.component.html</context>
-                <context context-type="linenumber">70,71</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">150,151</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.continue_learning" datatype="html">
-            <source>O&apos;qishni davom ettirish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/me/course-me.component.html</context>
-                <context context-type="linenumber">93,94</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.go_to_catalog" datatype="html">
-            <source>Kurslar katalogiga o&apos;tish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/me/course-me.component.html</context>
-                <context context-type="linenumber">107,109</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.update.title" datatype="html">
-            <source>Kursni tahrirlash</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">9,11</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">11,12</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.cancel" datatype="html">
-            <source>Bekor qilish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">17,18</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/payment/modal/payment-modal.component.html</context>
-                <context context-type="linenumber">40,41</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.update.save" datatype="html">
-            <source>O&apos;zgarishlarni saqlash</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/update/course-update.component.html</context>
-                <context context-type="linenumber">23,25</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.about_title" datatype="html">
-            <source>Kurs haqida</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">36,37</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.lessons_title" datatype="html">
-            <source>Mundarija</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">46,47</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.lesson_number" datatype="html">
-            <source><x id="INTERPOLATION" equiv-text="{{ lesson.lessonNumber }}"/>-dars</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">76,77</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.premium" datatype="html">
-            <source>Premium</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">121,122</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.buy_button" datatype="html">
-            <source>Kursni sotib olish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">142,143</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.add_lesson" datatype="html">
-            <source>Dars qo&apos;shish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">162,163</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.update_button" datatype="html">
-            <source>Tahrirlash</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">170,171</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.students_label" datatype="html">
-            <source>O&apos;quvchilar</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">186,187</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.instructor" datatype="html">
-            <source>Kurs muallifi</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">205,206</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.senior_instructor" datatype="html">
-            <source>Katta o&apos;qituvchi</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/course/view/course-view.component.html</context>
-                <context context-type="linenumber">214,215</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="error.page_not_found" datatype="html">
-            <source>Sahifa topilmadi</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/error/error.component.html</context>
-                <context context-type="linenumber">11,13</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="ERROR_MESSAGE" datatype="html">
-            <source>
-                Siz izlayotgan sahifa hozirda mavjud emas.
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/error/error.component.html</context>
-                <context context-type="linenumber">14,18</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.go_home" datatype="html">
-            <source>Bosh sahifaga qaytish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/error/error.component.html</context>
-                <context context-type="linenumber">22,24</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.go_back" datatype="html">
-            <source>Ortga qaytish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/error/error.component.html</context>
-                <context context-type="linenumber">28,30</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="HOME" datatype="html">
-            <source>
-                Bosh sahifa
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/home/home.component.html</context>
-                <context context-type="linenumber">8,10</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="home.hero.title" datatype="html">
-            <source>
-                Ta&apos;lim platformasi
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/home/home.component.html</context>
-                <context context-type="linenumber">18,20</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="home.hero.description" datatype="html">
-            <source>
-                Platformamizga xush kelibsiz. Bu yerda siz kurslar o&apos;rganishingiz va test ishlashingiz mumkin.
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/home/home.component.html</context>
-                <context context-type="linenumber">21,24</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="home.hero.view_courses" datatype="html">
-            <source>Kurslarni ko&apos;rish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/home/home.component.html</context>
-                <context context-type="linenumber">26,27</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="home.hero.take_tests" datatype="html">
-            <source>Test ishlash</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/home/home.component.html</context>
-                <context context-type="linenumber">29,30</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="home.popular_courses.title" datatype="html">
-            <source>
-                Mashhur kurslar
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/home/home.component.html</context>
-                <context context-type="linenumber">69,71</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.create.title" datatype="html">
-            <source>Dars qo&apos;shish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">6,8</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">9,13</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.name_label" datatype="html">
-            <source>Dars nomi</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">20</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/update/lesson-update.component.html</context>
-                <context context-type="linenumber">21</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.name_placeholder" datatype="html">
-            <source>Mavzu sarlavhasi...</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">20</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.lesson_number" datatype="html">
-            <source>Dars raqami</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">23</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">123,124</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/update/lesson-update.component.html</context>
-                <context context-type="linenumber">24</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/view/lesson-view.component.html</context>
-                <context context-type="linenumber">77,78</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.youtube_url" datatype="html">
-            <source>YouTube link</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">27</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/update/lesson-update.component.html</context>
-                <context context-type="linenumber">28</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.content_label" datatype="html">
-            <source>
-                Dars matni
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">31,33</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/update/lesson-update.component.html</context>
-                <context context-type="linenumber">32,34</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/view/lesson-view.component.html</context>
-                <context context-type="linenumber">40,41</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.status_label" datatype="html">
-            <source>
-                Dars holati
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">39,41</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">128,129</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/view/lesson-view.component.html</context>
-                <context context-type="linenumber">81,82</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.available_to_all" datatype="html">
-            <source>
-                Barchaga ochiq
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">42,44</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.additional_files" datatype="html">
-            <source>
-                Qo&apos;shimcha fayllar
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">53,55</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/view/lesson-view.component.html</context>
-                <context context-type="linenumber">49,50</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.upload_files" datatype="html">
-            <source>
-                Fayllarni yuklash
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">59,62</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.saving" datatype="html">
-            <source>Saqlanmoqda</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">77,78</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.save_button" datatype="html">
-            <source>Saqlash</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">79,80</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/update/lesson-update.component.html</context>
-                <context context-type="linenumber">94,95</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.no_video" datatype="html">
-            <source>
-                Video yo&apos;q
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">102,104</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/update/lesson-update.component.html</context>
-                <context context-type="linenumber">118,119</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.details" datatype="html">
-            <source>
-                Tafsilotlar
-            </source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">110,112</context>
-            </context-group>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">113,114</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="course.course_id" datatype="html">
-            <source>Kurs ID:</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/create/lesson-create.component.html</context>
-                <context context-type="linenumber">118,119</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.update.title" datatype="html">
-            <source>Darsni tahrirlash</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/update/lesson-update.component.html</context>
-                <context context-type="linenumber">5,7</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.lesson_id" datatype="html">
-            <source>ID:</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/update/lesson-update.component.html</context>
-                <context context-type="linenumber">8,9</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.video_details" datatype="html">
-            <source>Video tafsilotlari</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/update/lesson-update.component.html</context>
-                <context context-type="linenumber">39,40</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.publish_course" datatype="html">
-            <source>Nashr qilish (Public)</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/update/lesson-update.component.html</context>
-                <context context-type="linenumber">42,43</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.existing_files" datatype="html">
-            <source>Mavjud fayllar</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/update/lesson-update.component.html</context>
-                <context context-type="linenumber">53,54</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.upload_new_files" datatype="html">
-            <source>Yangi fayllarni yuklash</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/update/lesson-update.component.html</context>
-                <context context-type="linenumber">75,76</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.lesson_number_value" datatype="html">
-            <source>#<x id="INTERPOLATION" equiv-text="{{ data.lessonNumber }}"/></source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/view/lesson-view.component.html</context>
-                <context context-type="linenumber">78,79</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.status_published" datatype="html">
-            <source>Nashr qilingan</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/view/lesson-view.component.html</context>
-                <context context-type="linenumber">82,83</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.status_draft" datatype="html">
-            <source>Qoralama</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/view/lesson-view.component.html</context>
-                <context context-type="linenumber">83,85</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="lesson.update_button" datatype="html">
-            <source>Darsni tahrirlash</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/lesson/view/lesson-view.component.html</context>
-                <context context-type="linenumber">89,91</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="payment.promo_code" datatype="html">
-            <source>Promo-kod</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/payment/modal/payment-modal.component.html</context>
-                <context context-type="linenumber">24</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="payment.promo_placeholder" datatype="html">
-            <source>Ixtiyoriy...</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/payment/modal/payment-modal.component.html</context>
-                <context context-type="linenumber">24</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="payment.base_price" datatype="html">
-            <source>Asosiy narx:</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/payment/modal/payment-modal.component.html</context>
-                <context context-type="linenumber">28,29</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="payment.amount" datatype="html">
-            <source>To&apos;lov miqdori:</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/payment/modal/payment-modal.component.html</context>
-                <context context-type="linenumber">32,33</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="payment.confirm" datatype="html">
-            <source>Tasdiqlash</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/payment/modal/payment-modal.component.html</context>
-                <context context-type="linenumber">44,45</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="topup.title" datatype="html">
-            <source>Hisobni <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br&gt;"/> <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;text-emerald-500&quot;&gt;"/>To&apos;ldirish<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/topup/create/top-up-create.component.html</context>
-                <context context-type="linenumber">7,8</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="topup.description" datatype="html">
-            <source>To&apos;lovni amalga oshiring va chek skrinshotini forma orqali yuboring. Adminlar tez orada so&apos;rovingizni tasdiqlashadi.</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/topup/create/top-up-create.component.html</context>
-                <context context-type="linenumber">10,12</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="payment.humo_card" datatype="html">
-            <source>Humo Card</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/topup/create/top-up-create.component.html</context>
-                <context context-type="linenumber">18,20</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.copy" datatype="html">
-            <source>Nusxa olish</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/topup/create/top-up-create.component.html</context>
-                <context context-type="linenumber">27,28</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="payment.uzcard" datatype="html">
-            <source>Uzcard</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/topup/create/top-up-create.component.html</context>
-                <context context-type="linenumber">32,33</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="common.make_payment" datatype="html">
-            <source>To&apos;lovni amalga oshiring</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/topup/create/top-up-create.component.html</context>
-                <context context-type="linenumber">41,43</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="payment.upload_check" datatype="html">
-            <source>Chekni rasmga oling</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/topup/create/top-up-create.component.html</context>
-                <context context-type="linenumber">45,47</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="payment.fill_form" datatype="html">
-            <source>Formani to&apos;ldiring</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/topup/create/top-up-create.component.html</context>
-                <context context-type="linenumber">49,51</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="topup.amount_label" datatype="html">
-            <source>To&apos;lov miqdori (UZS)</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/topup/create/top-up-create.component.html</context>
-                <context context-type="linenumber">58</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="topup.note_label" datatype="html">
-            <source>Izoh (Masalan: Payme orqali)</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/topup/create/top-up-create.component.html</context>
-                <context context-type="linenumber">66</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="topup.note_placeholder" datatype="html">
-            <source>Qisqacha izoh qoldiring...</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/topup/create/top-up-create.component.html</context>
-                <context context-type="linenumber">68</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="topup.screenshot_label" datatype="html">
-            <source>To&apos;lov skrinshoti</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/topup/create/top-up-create.component.html</context>
-                <context context-type="linenumber">73</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="topup.screenshot_placeholder" datatype="html">
-            <source>Chek rasmini tanlang</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/topup/create/top-up-create.component.html</context>
-                <context context-type="linenumber">75</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="topup.submit_button" datatype="html">
-            <source>SO&apos;ROVNI YUBORISH</source>
-            <context-group purpose="location">
-                <context context-type="sourcefile">src/main/webapp/app/features/topup/create/top-up-create.component.html</context>
-                <context context-type="linenumber">84,85</context>
-            </context-group>
-        </trans-unit>
-        <trans-unit id="footer.description" datatype="html">
-            <source>Sizni har bir qadamingizda bilim bilan qo'llab-quvvatlashdan mamnunmiz. Kelajakni biz bilan quring.</source>
-        </trans-unit>
-        <trans-unit id="footer.useful_links" datatype="html">
-            <source>Foydali havolalar</source>
-        </trans-unit>
-        <trans-unit id="footer.about_us" datatype="html">
-            <source>Biz haqimizda</source>
-        </trans-unit>
-        <trans-unit id="footer.faq" datatype="html">
-            <source>Ko'p beriladigan savollar</source>
-        </trans-unit>
-        <trans-unit id="footer.learning_centers" datatype="html">
-            <source>O'quv markazlar</source>
-        </trans-unit>
-        <trans-unit id="footer.collaboration" datatype="html">
-            <source>Hamkorlik</source>
-        </trans-unit>
-        <trans-unit id="footer.privacy_policy" datatype="html">
-            <source>Maxfiylik siyosati</source>
-        </trans-unit>
-        <trans-unit id="footer.payment_methods" datatype="html">
-            <source>To'lov turlari</source>
-        </trans-unit>
-        <trans-unit id="footer.follow_us" datatype="html">
-            <source>Bizga ulaning</source>
-        </trans-unit>
-        <trans-unit id="footer.newsletter_title" datatype="html">
-            <source>Yangi kurslar haqida xabar oling</source>
-        </trans-unit>
-        <trans-unit id="footer.newsletter_placeholder" datatype="html">
-            <source>Email...</source>
-        </trans-unit>
-        <trans-unit id="footer.copyright" datatype="html">
-            <source>Barcha huquqlar himoyalangan.</source>
-        </trans-unit>
-    </body>
-  </file>
+    <file source-language="uz" datatype="plaintext" original="ng2.template">
+        <body>
+            <trans-unit id="ERROR_MESSAGE" datatype="html">
+                <source>
+                    Siz izlayotgan sahifa hozirda mavjud emas.
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/error/error.component.html
+                    </context>
+                    <context context-type="linenumber">14,18</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="HOME" datatype="html">
+                <source>
+                    Bosh sahifa
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/home/home.component.html
+                    </context>
+                    <context context-type="linenumber">8,10</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.login.button" datatype="html">
+                <source>Kirish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/login.component.html
+                    </context>
+                    <context context-type="linenumber">37,39</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.login.email_label" datatype="html">
+                <source>Email</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/login.component.html
+                    </context>
+                    <context context-type="linenumber">17</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.login.email_placeholder" datatype="html">
+                <source>emailingizni kiriting</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/login.component.html
+                    </context>
+                    <context context-type="linenumber">18,19</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.login.no_account" datatype="html">
+                <source>Akkauntingiz yo'qmi?</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/login.component.html
+                    </context>
+                    <context context-type="linenumber">43,45</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.login.password_label" datatype="html">
+                <source>Parol</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/login.component.html
+                    </context>
+                    <context context-type="linenumber">27</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.login.password_placeholder" datatype="html">
+                <source>parolingizni kiriting</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/login.component.html
+                    </context>
+                    <context context-type="linenumber">28,29</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.login.register_link" datatype="html">
+                <source>Ro'yxatdan o'tish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/login.component.html
+                    </context>
+                    <context context-type="linenumber">48,50</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.login.title" datatype="html">
+                <source>
+                    Tizimga kirish
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/login.component.html
+                    </context>
+                    <context context-type="linenumber">6,8</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.login.welcome" datatype="html">
+                <source>
+                    Xush kelibsiz
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/login.component.html
+                    </context>
+                    <context context-type="linenumber">9,13</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.bio_label" datatype="html">
+                <source>O'zingiz haqingizda (Bio)</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">38</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.bio_placeholder" datatype="html">
+                <source>Tajribangiz haqida qisqacha...</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">38</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.birth_date_label" datatype="html">
+                <source>Tug'ilgan sana</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">23</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.button" datatype="html">
+                <source>Ro'yxatdan o'tish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">44,45</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.email_label" datatype="html">
+                <source>Email</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">12</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.email_placeholder" datatype="html">
+                <source>asadbek@example.com</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">12</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.first_name_label" datatype="html">
+                <source>Ism</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">15</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.first_name_placeholder" datatype="html">
+                <source>Asadbek</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">15</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.has_account" datatype="html">
+                <source>Akkauntingiz bormi?</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">51,52</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.last_name_label" datatype="html">
+                <source>Familiya</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">16</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.last_name_placeholder" datatype="html">
+                <source>Rajabboyev</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">16</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.login_link" datatype="html">
+                <source>Tizimga kirish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">52,54</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.password_label" datatype="html">
+                <source>Parol</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">19</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.password_placeholder" datatype="html">
+                <source>Kamida 8 ta belgi</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">19</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.phone_label" datatype="html">
+                <source>Telefon</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">22</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.phone_placeholder" datatype="html">
+                <source>+998 90 123 45 67</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">22</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.position_label" datatype="html">
+                <source>Lavozimingiz (Position)</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">25</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.subtitle" datatype="html">
+                <source>Professional hamjamiyatga qo'shiling</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">6,9</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="auth.register.title" datatype="html">
+                <source>Ro'yxatdan o'tish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/auth/component/register.component.html
+                    </context>
+                    <context context-type="linenumber">5,6</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="register_title" datatype="html">
+                <source>Ro‘yxatdan o‘tish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">18</context>
+                </context-group>
+            </trans-unit>
+
+            <trans-unit id="common.academy" datatype="html">
+                <source>Online Academy</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/header/app.header.component.html
+                    </context>
+                    <context context-type="linenumber">15,16</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.apply_filter" datatype="html">
+                <source>Natijalarni ko'rish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/me/course-me.component.html
+                    </context>
+                    <context context-type="linenumber">42,43</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.blog" datatype="html">
+                <source>
+                    Blog
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/header/app.header.component.html
+                    </context>
+                    <context context-type="linenumber">28,31</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.cancel" datatype="html">
+                <source>Bekor qilish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">17,18</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/payment/modal/payment-modal.component.html
+                    </context>
+                    <context context-type="linenumber">40,41</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.clear" datatype="html">
+                <source>
+                    Tozalash
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">49,51</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">77,78</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/me/course-me.component.html
+                    </context>
+                    <context context-type="linenumber">34,35</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.copy" datatype="html">
+                <source>Nusxa olish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/create/top-up-create.component.html
+                    </context>
+                    <context context-type="linenumber">27,28</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.details" datatype="html">
+                <source>
+                    Tafsilotlar
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">110,112</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">113,114</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.filter" datatype="html">
+                <source>
+                    Filtr
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">35,37</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">46,48</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/me/course-me.component.html
+                    </context>
+                    <context context-type="linenumber">33,34</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.from" datatype="html">
+                <source>dan</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">57</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.go_back" datatype="html">
+                <source>Ortga qaytish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/error/error.component.html
+                    </context>
+                    <context context-type="linenumber">28,30</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.go_home" datatype="html">
+                <source>Bosh sahifaga qaytish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/error/error.component.html
+                    </context>
+                    <context context-type="linenumber">22,24</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.home" datatype="html">
+                <source>Asosiy</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">5,6</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">5,6</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/me/course-me.component.html
+                    </context>
+                    <context context-type="linenumber">4,5</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">5,6</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">6,7</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.language" datatype="html">
+                <source>Til</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">61</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.logout" datatype="html">
+                <source>Chiqish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/header/app.header.component.html
+                    </context>
+                    <context context-type="linenumber">82,83</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.make_payment" datatype="html">
+                <source>To'lovni amalga oshiring</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/create/top-up-create.component.html
+                    </context>
+                    <context context-type="linenumber">41,43</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.premium" datatype="html">
+                <source>Premium</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">121,122</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.search" datatype="html">
+                <source>Qidirish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">54</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/me/course-me.component.html
+                    </context>
+                    <context context-type="linenumber">38</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.time" datatype="html">
+                <source>Vaqt</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">64,65</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="common.to" datatype="html">
+                <source>gacha</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">58</context>
+                </context-group>
+            </trans-unit>
+
+            <trans-unit id="confirm_error" datatype="html">
+                <source>Tasdiqlashda xatolik</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">28</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="confirm_success" datatype="html">
+                <source>Email tasdiqlandi</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">23</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.about_title" datatype="html">
+                <source>Kurs haqida</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">36,37</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.add_lesson" datatype="html">
+                <source>Dars qo'shish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">162,163</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.apply_filter" datatype="html">
+                <source>Natijani ko'rsatish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">73,74</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.buy_button" datatype="html">
+                <source>Kursni sotib olish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">142,143</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.continue_learning" datatype="html">
+                <source>O'qishni davom ettirish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/me/course-me.component.html
+                    </context>
+                    <context context-type="linenumber">93,94</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.course_id" datatype="html">
+                <source>Kurs ID:</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">118,119</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.cover_image" datatype="html">
+                <source>Kurs muqovasi</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">40,41</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">46,47</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.create.button" datatype="html">
+                <source>Kurs yaratish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">18,20</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.create.subtitle" datatype="html">
+                <source>Kurs ma'lumotlarini to'ldiring</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">12,16</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.create.title" datatype="html">
+                <source>Yangi kurs yaratish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">9,11</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">11,12</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.create_button" datatype="html">
+                <source>Yaratishni yakunash</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">113,115</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.description_label" datatype="html">
+                <source>Kurs haqida batafsil ma'lumot</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">28</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">36,37</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.description_placeholder" datatype="html">
+                <source>Kurs mazmuni, nimalar o'rgatilishi haqida batafsil yozing...</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">29</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.draft" datatype="html">
+                <source>Qoralama</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">114,115</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">72,73</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.drafts" datatype="html">
+                <source>Qoralamalar</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">96,97</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.duration_label" datatype="html">
+                <source>Davomiyligi</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">77</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">74</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">179,180</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.duration_type_label" datatype="html">
+                <source>Birligi</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">78</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">75</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.go_to_catalog" datatype="html">
+                <source>Kurslar katalogiga o'tish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/me/course-me.component.html
+                    </context>
+                    <context context-type="linenumber">107,109</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.grade_label" datatype="html">
+                <source>Sinf</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">73</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">70</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.image_requirements" datatype="html">
+                <source>(JPG, PNG max 2MB)</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">56,57</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.instructor" datatype="html">
+                <source>Kurs muallifi</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">205,206</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.language_label" datatype="html">
+                <source>Kurs tili</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">81</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">78</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">194,195</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.lesson_number" datatype="html">
+                <source><x id="INTERPOLATION" equiv-text="{{ lesson.lessonNumber }}"/>-dars
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">76,77</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.lessons_count" datatype="html">
+                <source>Darslar soni</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">132</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/me/course-me.component.html
+                    </context>
+                    <context context-type="linenumber">81,82</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">50,51</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.lessons_title" datatype="html">
+                <source>Mundarija</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">46,47</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.list.title" datatype="html">
+                <source>
+                    Kurslar ro'yxati
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">10,14</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.name_label" datatype="html">
+                <source>Kurs nomi</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">23</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">33</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.name_placeholder" datatype="html">
+                <source>Masalan: Java Backend Development</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">23</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">33,35</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.no_courses" datatype="html">
+                <source>Kurslar topilmadi</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">178,179</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/me/course-me.component.html
+                    </context>
+                    <context context-type="linenumber">106,107</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.price" datatype="html">
+                <source>Narx</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">142,143</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.price_label" datatype="html">
+                <source>Kurs narxi (UZS)</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">69</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">66</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">129,130</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.price_placeholder" datatype="html">
+                <source>500 000</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">69</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.publish_course" datatype="html">
+                <source>Hoziroq nashr qilish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">99,100</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">96,97</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.published" datatype="html">
+                <source>Yuklanganlar</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">91,92</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.purchased" datatype="html">
+                <source>Sotib olingan</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/me/course-me.component.html
+                    </context>
+                    <context context-type="linenumber">70,71</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">150,151</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.saving" datatype="html">
+                <source>Saqlanmoqda...</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">110,111</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.science_label" datatype="html">
+                <source>Fan</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">72</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">69</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.search" datatype="html">
+                <source>Kursni qidirish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/me/course-me.component.html
+                    </context>
+                    <context context-type="linenumber">24,25</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.search_placeholder" datatype="html">
+                <source>nom orqali qidirish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">54</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.select_image" datatype="html">
+                <source>Rasm tanlang</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">55,56</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">58,59</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.senior_instructor" datatype="html">
+                <source>Katta o'qituvchi</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">214,215</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.students_label" datatype="html">
+                <source>O'quvchilar</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">186,187</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.title" datatype="html">
+                <source>
+                    Kurslar
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/header/app.header.component.html
+                    </context>
+                    <context context-type="linenumber">22,24</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">7,8</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/list/course-list.component.html
+                    </context>
+                    <context context-type="linenumber">7,9</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">7,8</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">8,9</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">4,5</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/update/lesson-update.component.html
+                    </context>
+                    <context context-type="linenumber">127,128</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/view/lesson-view.component.html
+                    </context>
+                    <context context-type="linenumber">5,6</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/view/lesson-view.component.html
+                    </context>
+                    <context context-type="linenumber">71,72</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.update.save" datatype="html">
+                <source>O'zgarishlarni saqlash</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">23,25</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.update.title" datatype="html">
+                <source>Kursni tahrirlash</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">9,11</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">11,12</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.update_button" datatype="html">
+                <source>Tahrirlash</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/view/course-view.component.html
+                    </context>
+                    <context context-type="linenumber">170,171</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course.video_course" datatype="html">
+                <source>Video Kurs</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/create/course-create.component.html
+                    </context>
+                    <context context-type="linenumber">91,92</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/update/course-update.component.html
+                    </context>
+                    <context context-type="linenumber">88,89</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course_create" datatype="html">
+                <source>Kurs yaratish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">57</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course_update" datatype="html">
+                <source>Kursni tahrirlash</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">72</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="course_view" datatype="html">
+                <source>Kursni ko‘rish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">67</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="courses_list" datatype="html">
+                <source>Kurslar ro‘yxati</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">52</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="error.page_not_found" datatype="html">
+                <source>Sahifa topilmadi</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/error/error.component.html
+                    </context>
+                    <context context-type="linenumber">11,13</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="footer.about_us" datatype="html">
+                <source>Biz haqimizda</source>
+            </trans-unit>
+            <trans-unit id="footer.collaboration" datatype="html">
+                <source>Hamkorlik</source>
+            </trans-unit>
+            <trans-unit id="footer.copyright" datatype="html">
+                <source>Barcha huquqlar himoyalangan.</source>
+            </trans-unit>
+            <trans-unit id="footer.description" datatype="html">
+                <source>Sizni har bir qadamingizda bilim bilan qo'llab-quvvatlashdan mamnunmiz.
+                    Kelajakni biz bilan quring.
+                </source>
+            </trans-unit>
+            <trans-unit id="footer.faq" datatype="html">
+                <source>Ko'p beriladigan savollar</source>
+            </trans-unit>
+            <trans-unit id="footer.follow_us" datatype="html">
+                <source>Bizga ulaning</source>
+            </trans-unit>
+            <trans-unit id="footer.learning_centers" datatype="html">
+                <source>O'quv markazlar</source>
+            </trans-unit>
+            <trans-unit id="footer.newsletter_placeholder" datatype="html">
+                <source>Email...</source>
+            </trans-unit>
+            <trans-unit id="footer.newsletter_title" datatype="html">
+                <source>Yangi kurslar haqida xabar oling</source>
+            </trans-unit>
+            <trans-unit id="footer.payment_methods" datatype="html">
+                <source>To'lov turlari</source>
+            </trans-unit>
+            <trans-unit id="footer.privacy_policy" datatype="html">
+                <source>Maxfiylik siyosati</source>
+            </trans-unit>
+            <trans-unit id="footer.useful_links" datatype="html">
+                <source>Foydali havolalar</source>
+            </trans-unit>
+            <trans-unit id="home.hero.description" datatype="html">
+                <source>
+                    Platformamizga xush kelibsiz. Bu yerda siz kurslar o'rganishingiz va test
+                    ishlashingiz mumkin.
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/home/home.component.html
+                    </context>
+                    <context context-type="linenumber">21,24</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="home.hero.take_tests" datatype="html">
+                <source>Test ishlash</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/home/home.component.html
+                    </context>
+                    <context context-type="linenumber">29,30</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="home.hero.title" datatype="html">
+                <source>
+                    Ta'lim platformasi
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/home/home.component.html
+                    </context>
+                    <context context-type="linenumber">18,20</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="home.hero.view_courses" datatype="html">
+                <source>Kurslarni ko'rish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/home/home.component.html
+                    </context>
+                    <context context-type="linenumber">26,27</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="home.popular_courses.title" datatype="html">
+                <source>
+                    Mashhur kurslar
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/home/home.component.html
+                    </context>
+                    <context context-type="linenumber">69,71</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="home_title" datatype="html">
+                <source>Bosh sahifa</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">95</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.additional_files" datatype="html">
+                <source>
+                    Qo'shimcha fayllar
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">53,55</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/view/lesson-view.component.html
+                    </context>
+                    <context context-type="linenumber">49,50</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.available_to_all" datatype="html">
+                <source>
+                    Barchaga ochiq
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">42,44</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.content_label" datatype="html">
+                <source>
+                    Dars matni
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">31,33</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/update/lesson-update.component.html
+                    </context>
+                    <context context-type="linenumber">32,34</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/view/lesson-view.component.html
+                    </context>
+                    <context context-type="linenumber">40,41</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.create.title" datatype="html">
+                <source>Dars qo'shish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">6,8</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">9,13</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.existing_files" datatype="html">
+                <source>Mavjud fayllar</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/update/lesson-update.component.html
+                    </context>
+                    <context context-type="linenumber">53,54</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.lesson_id" datatype="html">
+                <source>ID:</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/update/lesson-update.component.html
+                    </context>
+                    <context context-type="linenumber">8,9</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.lesson_number" datatype="html">
+                <source>Dars raqami</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">23</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">123,124</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/update/lesson-update.component.html
+                    </context>
+                    <context context-type="linenumber">24</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/view/lesson-view.component.html
+                    </context>
+                    <context context-type="linenumber">77,78</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.lesson_number_value" datatype="html">
+                <source>#
+                    <x id="INTERPOLATION" equiv-text="{{ data.lessonNumber }}"/>
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/view/lesson-view.component.html
+                    </context>
+                    <context context-type="linenumber">78,79</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.name_label" datatype="html">
+                <source>Dars nomi</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">20</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/update/lesson-update.component.html
+                    </context>
+                    <context context-type="linenumber">21</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.name_placeholder" datatype="html">
+                <source>Mavzu sarlavhasi...</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">20</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.no_video" datatype="html">
+                <source>
+                    Video yo'q
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">102,104</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/update/lesson-update.component.html
+                    </context>
+                    <context context-type="linenumber">118,119</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.publish_course" datatype="html">
+                <source>Nashr qilish (Public)</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/update/lesson-update.component.html
+                    </context>
+                    <context context-type="linenumber">42,43</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.save_button" datatype="html">
+                <source>Saqlash</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">79,80</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/update/lesson-update.component.html
+                    </context>
+                    <context context-type="linenumber">94,95</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.saving" datatype="html">
+                <source>Saqlanmoqda</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">77,78</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.status_draft" datatype="html">
+                <source>Qoralama</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/view/lesson-view.component.html
+                    </context>
+                    <context context-type="linenumber">83,85</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.status_label" datatype="html">
+                <source>
+                    Dars holati
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">39,41</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">128,129</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/view/lesson-view.component.html
+                    </context>
+                    <context context-type="linenumber">81,82</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.status_published" datatype="html">
+                <source>Nashr qilingan</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/view/lesson-view.component.html
+                    </context>
+                    <context context-type="linenumber">82,83</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.update.title" datatype="html">
+                <source>Darsni tahrirlash</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/update/lesson-update.component.html
+                    </context>
+                    <context context-type="linenumber">5,7</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.update_button" datatype="html">
+                <source>Darsni tahrirlash</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/view/lesson-view.component.html
+                    </context>
+                    <context context-type="linenumber">89,91</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.upload_files" datatype="html">
+                <source>
+                    Fayllarni yuklash
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">59,62</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.upload_new_files" datatype="html">
+                <source>Yangi fayllarni yuklash</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/update/lesson-update.component.html
+                    </context>
+                    <context context-type="linenumber">75,76</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.video_details" datatype="html">
+                <source>Video tafsilotlari</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/update/lesson-update.component.html
+                    </context>
+                    <context context-type="linenumber">39,40</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson.youtube_url" datatype="html">
+                <source>YouTube link</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/create/lesson-create.component.html
+                    </context>
+                    <context context-type="linenumber">27</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/lesson/update/lesson-update.component.html
+                    </context>
+                    <context context-type="linenumber">28</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson_add" datatype="html">
+                <source>Dars qo‘shish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">78</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson_edit" datatype="html">
+                <source>Dars tahrirlash</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">83</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="lesson_view" datatype="html">
+                <source>Dars</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">89</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="login_title" datatype="html">
+                <source>Tizimga kirish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">13</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="my_courses" datatype="html">
+                <source>Mening kurslarim</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">62</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="not_found" datatype="html">
+                <source>Sahifa topilmadi</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">107</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="payment.amount" datatype="html">
+                <source>To'lov miqdori:</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/payment/modal/payment-modal.component.html
+                    </context>
+                    <context context-type="linenumber">32,33</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="payment.base_price" datatype="html">
+                <source>Asosiy narx:</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/payment/modal/payment-modal.component.html
+                    </context>
+                    <context context-type="linenumber">28,29</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="payment.confirm" datatype="html">
+                <source>Tasdiqlash</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/payment/modal/payment-modal.component.html
+                    </context>
+                    <context context-type="linenumber">44,45</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="payment.fill_form" datatype="html">
+                <source>Formani to'ldiring</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/create/top-up-create.component.html
+                    </context>
+                    <context context-type="linenumber">49,51</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="payment.humo_card" datatype="html">
+                <source>Humo Card</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/create/top-up-create.component.html
+                    </context>
+                    <context context-type="linenumber">18,20</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="payment.promo_code" datatype="html">
+                <source>Promo-kod</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/payment/modal/payment-modal.component.html
+                    </context>
+                    <context context-type="linenumber">24</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="payment.promo_placeholder" datatype="html">
+                <source>Ixtiyoriy...</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/payment/modal/payment-modal.component.html
+                    </context>
+                    <context context-type="linenumber">24</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="payment.upload_check" datatype="html">
+                <source>Chekni rasmga oling</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/create/top-up-create.component.html
+                    </context>
+                    <context context-type="linenumber">45,47</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="payment.uzcard" datatype="html">
+                <source>Uzcard</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/create/top-up-create.component.html
+                    </context>
+                    <context context-type="linenumber">32,33</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="profile.balance" datatype="html">
+                <source>Balans</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/header/app.header.component.html
+                    </context>
+                    <context context-type="linenumber">114,115</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="profile.balance_history" datatype="html">
+                <source>Balans tarixi</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/header/app.header.component.html
+                    </context>
+                    <context context-type="linenumber">78,79</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="profile.instructor" datatype="html">
+                <source>Foydalanuvchi</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/header/app.header.component.html
+                    </context>
+                    <context context-type="linenumber">68,69</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="profile.my_courses" datatype="html">
+                <source>
+                    Mening kurslarim
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/header/app.header.component.html
+                    </context>
+                    <context context-type="linenumber">33,36</context>
+                </context-group>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/me/course-me.component.html
+                    </context>
+                    <context context-type="linenumber">6,8</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="profile.my_courses_title" datatype="html">
+                <source>O'quv jarayoni</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/course/me/course-me.component.html
+                    </context>
+                    <context context-type="linenumber">9,13</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="profile.settings" datatype="html">
+                <source>Profil sozlamalari</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/header/app.header.component.html
+                    </context>
+                    <context context-type="linenumber">74,75</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="profile.top_up" datatype="html">
+                <source>To'ldirish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/header/app.header.component.html
+                    </context>
+                    <context context-type="linenumber">118,119</context>
+                </context-group>
+            </trans-unit>
+
+            <trans-unit id="test.title" datatype="html">
+                <source>
+                    Testlar
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/common/header/app.header.component.html
+                    </context>
+                    <context context-type="linenumber">25,27</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="test.list" datatype="html">
+                <source>
+                    Testlar ro'yhati
+                </source>
+            </trans-unit>
+            <trans-unit id="test.search_placeholder">
+                <source>Test nomi...</source>
+            </trans-unit>
+            <trans-unit id="test.list.title">
+                <source>Testlar ro'yxati</source>
+            </trans-unit>
+            <trans-unit id="test.create.button">
+                <source>Test yaratish</source>
+            </trans-unit>
+            <trans-unit id="test.published_tests">
+                <source>Faol testlar</source>
+            </trans-unit>
+            <trans-unit id="test.drafts">
+                <source>Qoralamalar</source>
+            </trans-unit>
+            <trans-unit id="test.duration_minutes">
+                <source>daqiqa</source>
+            </trans-unit>
+            <trans-unit id="test.price_label">
+                <source>Narx</source>
+            </trans-unit>
+            <trans-unit id="test.draft">
+                <source>Qoralama</source>
+            </trans-unit>
+            <trans-unit id="test.no_tests">
+                <source>Testlar topilmadi</source>
+            </trans-unit>
+
+            <trans-unit id="topup" datatype="html">
+                <source>Balansni to‘ldirish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">41</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.amount_label" datatype="html">
+                <source>To'lov miqdori (UZS)</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/create/top-up-create.component.html
+                    </context>
+                    <context context-type="linenumber">58</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.description" datatype="html">
+                <source>To'lovni amalga oshiring va chek skrinshotini forma orqali yuboring.
+                    Adminlar tez orada so'rovingizni tasdiqlashadi.
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/create/top-up-create.component.html
+                    </context>
+                    <context context-type="linenumber">10,12</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.note_label" datatype="html">
+                <source>Izoh (Masalan: Payme orqali)</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/create/top-up-create.component.html
+                    </context>
+                    <context context-type="linenumber">66</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.note_placeholder" datatype="html">
+                <source>Qisqacha izoh qoldiring...</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/create/top-up-create.component.html
+                    </context>
+                    <context context-type="linenumber">68</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.screenshot_label" datatype="html">
+                <source>To'lov skrinshoti</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/create/top-up-create.component.html
+                    </context>
+                    <context context-type="linenumber">73</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.screenshot_placeholder" datatype="html">
+                <source>Chek rasmini tanlang</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/create/top-up-create.component.html
+                    </context>
+                    <context context-type="linenumber">75</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.submit_button" datatype="html">
+                <source>SO'ROVNI YUBORISH</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/create/top-up-create.component.html
+                    </context>
+                    <context context-type="linenumber">84,85</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.title" datatype="html">
+                <source>Hisobni
+                    <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br&gt;"/>
+                    <x id="START_TAG_SPAN" ctype="x-span"
+                        equiv-text="&lt;span class=&quot;text-emerald-500&quot;&gt;"/>To'ldirish
+                    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+                </source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/create/top-up-create.component.html
+                    </context>
+                    <context context-type="linenumber">7,8</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup_history" datatype="html">
+                <source>Balans tarixi</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">46</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup_requests" datatype="html">
+                <source>So‘rovlar ro‘yxati</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">src/main/webapp/app/app.routes.ts</context>
+                    <context context-type="linenumber">36</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.request.history.title" datatype="html">
+                <source>Balans to'ldirish so'rovlari tarixi</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/list/top-up-list.component.html
+                    </context>
+                    <context context-type="linenumber">9</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.request.history.title2" datatype="html">
+                <source>Barcha tranzaksiyalaringiz ro'yxati</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/list/top-up-list.component.html
+                    </context>
+                    <context context-type="linenumber">10</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.page" datatype="html">
+                <source>Sahifa</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/list/top-up-list.component.html
+                    </context>
+                    <context context-type="linenumber">19</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.date" datatype="html">
+                <source>Sana</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/list/top-up-list.component.html
+                    </context>
+                    <context context-type="linenumber">34</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.status" datatype="html">
+                <source>Holat</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/list/top-up-list.component.html
+                    </context>
+                    <context context-type="linenumber">33</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.sum" datatype="html">
+                <source>Summa</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/list/top-up-list.component.html
+                    </context>
+                    <context context-type="linenumber">35</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.transaction" datatype="html">
+                <source>Tranzaksiya</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/list/top-up-list.component.html
+                    </context>
+                    <context context-type="linenumber">32</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.cancel" datatype="html">
+                <source>Bekor qilish</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/list/top-up-list.component.html
+                    </context>
+                    <context context-type="linenumber">107</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.all" datatype="html">
+                <source>Jami: <x id="INTERPOLATION"/> ta tranzaksiya</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/list/top-up-list.component.html
+                    </context>
+                    <context context-type="linenumber">124</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.approved" datatype="html">
+                <source>Tasdiqlangan</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/list/top-up-list.component.html
+                    </context>
+                    <context context-type="linenumber">127</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.pending" datatype="html">
+                <source>Kutilmoqda</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/list/top-up-list.component.html
+                    </context>
+                    <context context-type="linenumber">128</context>
+                </context-group>
+            </trans-unit>
+            <trans-unit id="topup.empty" datatype="html">
+                <source>Hozircha ma'lumotlar yo'q</source>
+                <context-group purpose="location">
+                    <context context-type="sourcefile">
+                        src/main/webapp/app/features/topup/list/top-up-list.component.html
+                    </context>
+                    <context context-type="linenumber">118</context>
+                </context-group>
+            </trans-unit>
+
+        </body>
+    </file>
 </xliff>

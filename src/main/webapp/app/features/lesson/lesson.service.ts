@@ -8,7 +8,7 @@ import {Lesson, LessonCreate, LessonInfo, LessonUpdate} from "./lesson.model";
   providedIn: 'root'
 })
 export class LessonService {
-  private readonly apiUrl = `${environment.apiPath}/v1/api/courses/lessons`;
+  private readonly apiUrl = `${environment.apiPath}/v1/api/lessons`;
 
   isLoading = signal<boolean>(false);
 

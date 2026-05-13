@@ -1,6 +1,7 @@
 package uz.asadbek.subcourse.course;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -88,6 +89,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseResponseDto get(String slug) {
+        log.info(slug);
         return repository.get(slug);
     }
 
@@ -136,6 +138,11 @@ public class CourseServiceImpl implements CourseService {
     public Long getIdBySlug(String slug) {
         return repository.findIdBySlug(slug).orElseThrow(
             () -> ExceptionUtil.build(NotFoundException.class, "error.not_found.course", slug));
+    }
+
+    @Override
+    public List<CourseResponseDto> getTop() {
+        return repository.getTop();
     }
 
     @Override

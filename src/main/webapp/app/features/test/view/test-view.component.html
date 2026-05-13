@@ -1,0 +1,131 @@
+<app-page-wrapper>
+    <div page-title>
+        <nav class="mb-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
+            <a routerLink="/" class="hover:text-emerald-500">Asosiy</a>
+            <i class="fa-solid fa-chevron-right text-[7px]"></i>
+            <a routerLink="/tests-list" class="hover:text-emerald-500">Testlar</a>
+            <i class="fa-solid fa-chevron-right text-[7px]"></i>
+            <span class="text-emerald-500 uppercase tracking-widest">Tafsilotlar</span>
+        </nav>
+    </div>
+
+    <div content class="max-w-6xl mx-auto pb-20">
+        @if (isLoading()) {
+            <div class="flex h-96 w-full flex-col items-center justify-center gap-4">
+                <div class="relative">
+                    <div class="h-16 w-16 rounded-full border-4 border-emerald-500/20 border-t-emerald-500 animate-spin"></div>
+                </div>
+                <p class="text-[10px] font-black uppercase tracking-widest text-gray-400">Test yuklanmoqda...</p>
+            </div>
+        } @else if (testInfo()) {
+            <div class="grid grid-cols-12 gap-8 lg:gap-12 animate-in fade-in slide-in-from-bottom-6 duration-700">
+
+                <div class="col-span-12 lg:col-span-5 space-y-6">
+                    <div class="relative group">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-emerald-600 to-blue-600 rounded-[2.6rem] blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                        <div class="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-2xl">
+                            <img [src]="testInfo().imagePath || 'assets/img/test-placeholder.png'"
+                                 class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+
+                            <div class="absolute top-6 left-6 flex flex-col gap-2">
+                <span class="px-4 py-2 rounded-2xl bg-white/90 dark:bg-gray-900/90 backdrop-blur-md text-[9px] font-black uppercase text-emerald-600 shadow-lg">
+                  ID: #{{ testInfo().id }}
+                </span>
+                                <span class="px-4 py-2 rounded-2xl bg-emerald-600 text-white text-[9px] font-black uppercase shadow-lg">
+                  {{ testInfo().lang === 'uz' ? 'O\'zbekcha' : testInfo().lang | uppercase }}
+                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rounded-[2.5rem] bg-white dark:bg-gray-900 p-8 shadow-xl border border-gray-100 dark:border-gray-800">
+                        <div class="flex items-center justify-between mb-8">
+                            <div>
+                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Test narxi</p>
+                                <h2 class="text-3xl font-black text-gray-900 dark:text-white">
+                                    {{ testInfo().price === 0 ? 'Bepul' : (testInfo().price | number) + ' UZS' }}
+                                </h2>
+                            </div>
+                            <div class="h-14 w-14 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-600">
+                                <i class="fa-solid fa-wallet text-xl"></i>
+                            </div>
+                        </div>
+
+                        <button (click)="startTest(testInfo().id)"
+                                [disabled]="isStarting()"
+                                class="w-full group relative flex items-center justify-center gap-3 rounded-2xl bg-gray-900 dark:bg-emerald-600 py-6 text-xs font-black uppercase tracking-[0.2em] text-white overflow-hidden transition-all hover:bg-emerald-600 active:scale-95">
+                            @if (isStarting()) {
+                                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                                <span>Tayyorlanmoqda...</span>
+                            } @else {
+                                <span>Testni boshlash</span>
+                                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                            }
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-7 space-y-8">
+                    <div class="space-y-4">
+                        <h1 class="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white leading-tight uppercase italic tracking-tighter">
+                            {{ testInfo().name }}
+                        </h1>
+
+                        <div class="flex flex-wrap gap-3">
+                            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-[10px] font-bold text-gray-600 dark:text-gray-300">
+                                <i class="fa-solid fa-clock text-emerald-500"></i> {{ testInfo().duration }} daqiqa
+                            </div>
+                            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-[10px] font-bold text-gray-600 dark:text-gray-300">
+                                <i class="fa-solid fa-list-check text-blue-500"></i> {{ testInfo().count }} ta savol
+                            </div>
+                            <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-[10px] font-bold text-gray-600 dark:text-gray-300">
+                                <i class="fa-solid fa-graduation-cap text-purple-500"></i> {{ testInfo().gradeId }}-sinf
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="h-px bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-800 to-transparent"></div>
+
+                    <div class="space-y-4">
+                        <h3 class="text-xs font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
+                            Test tavsifi va qoidalari
+                        </h3>
+                        <div class="text-gray-600 dark:text-gray-400 leading-relaxed text-sm whitespace-pre-wrap">
+                            <markdown [data]="testInfo().description"></markdown>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-6 rounded-[2rem] bg-gray-50 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-700/50">
+                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Yaratilgan sana</p>
+                            <p class="text-xs font-bold text-gray-700 dark:text-gray-300">
+                                {{ testInfo().createdAt | date:'dd.MM.yyyy | HH:mm' }}
+                            </p>
+                        </div>
+                        <div class="p-6 rounded-[2rem] bg-gray-50 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-700/50">
+                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Oxirgi yangilanish</p>
+                            <p class="text-xs font-bold text-gray-700 dark:text-gray-300">
+                                {{ testInfo().updatedAt | date:'dd.MM.yyyy | HH:mm' }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="p-8 rounded-[2.5rem] bg-blue-50 dark:bg-blue-500/5 border border-blue-100 dark:border-blue-500/10">
+                        <div class="flex items-start gap-4">
+                            <div class="h-10 w-10 rounded-xl bg-blue-500 text-white flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-lightbulb"></i>
+                            </div>
+                            <div class="space-y-2">
+                                <h4 class="text-[11px] font-black uppercase tracking-widest text-blue-900 dark:text-blue-400">Foydali maslahat</h4>
+                                <p class="text-xs text-blue-800/70 dark:text-blue-400/60 leading-relaxed">
+                                    Testni boshlashdan oldin internet aloqasi barqarorligiga ishonch hosil qiling.
+                                    Har bir savolga ajratilgan vaqtni to'g'ri taqsimlang. Omad yor bo'lsin!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</app-page-wrapper>

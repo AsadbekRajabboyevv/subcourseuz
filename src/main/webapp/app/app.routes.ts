@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './features/home/home.component';
 import { AuthLayoutComponent } from "./common/auth/auth.layout.component";
+import {PrivacyPolicyComponent} from "./common/user-terms/privacy-policy.component";
+import {TermsOfServiceComponent} from "./common/user-terms/terms-of-service.component";
 
 export const routes: Routes = [
   {
@@ -31,6 +33,36 @@ export const routes: Routes = [
   },
 
   {
+    path: 'tests-create',
+    loadComponent: () => import('./features/test/create/test-create.component').then(m => m.TestCreateComponent),
+    title: $localize`:@@test.title:Testlar yaratish`
+  },
+  {
+    path: 'tests-update/:id',
+    loadComponent: () => import('./features/test/update/test-update.component').then(m => m.TestUpdateComponent),
+    title: $localize`:@@test.update.title:Testni yangilash`
+  },
+  {
+    path: 'test-process/:id',
+    loadComponent: () => import('./features/test/process/test-process.component').then(m => m.TestProcessComponent),
+    title: $localize`:@@test.update.title:Test ishlash`
+  },
+  {
+    path: 'test-result/:sessionId',
+    loadComponent: () => import('./features/test/result/test-result.component').then(m => m.TestResultComponent),
+    title: $localize`:@@test.update.title:Test natijasi`
+  },
+  {
+    path: 'test-review/:sessionId',
+    loadComponent: () => import('./features/test/review/test-review.component').then(m => m.TestReviewComponent),
+    title: $localize`:@@test.update.title:Testni ko'rib chiqish`
+  },
+  {
+    path: 'tests-view/:id',
+    loadComponent: () => import('./features/test/view/test-view.component').then(m => m.TestViewComponent),
+    title: $localize`:@@test.update.title:Testni ishlash`
+  },
+  {
     path: 'top-up-requests',
     loadComponent: () => import('./features/admin/topuprequest/list/top-up-request-list.component').then(m => m.TopUpRequestListComponent),
     title: $localize`:@@topup_requests:So‘rovlar ro‘yxati`
@@ -46,6 +78,11 @@ export const routes: Routes = [
     title: $localize`:@@topup_history:Balans tarixi`
   },
 
+  {
+    path: 'tests-list',
+    loadComponent: () => import('./features/test/list/test-list.component').then(m => m.TestListComponent),
+    title: $localize`:@@test.list:Testlar ro‘yxati`
+  },
   {
     path: 'courses-list',
     loadComponent: () => import('./features/course/list/course-list.component').then(m => m.CourseListComponent),
@@ -78,7 +115,7 @@ export const routes: Routes = [
     title: $localize`:@@lesson_add:Dars qo‘shish`
   },
   {
-    path: 'courses-lesson-edit/:lessonSlug',
+    path: 'courses-lesson-edit/:courseSlug',
     loadComponent: () => import('./features/lesson/update/lesson-update.component').then(m => m.LessonUpdateComponent),
     title: $localize`:@@lesson_edit:Dars tahrirlash`
   },
@@ -93,6 +130,16 @@ export const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     title: $localize`:@@home_title:Bosh sahifa`
+  },
+  {
+    path: 'privacy-policy',
+    component: PrivacyPolicyComponent,
+    title: $localize`:@@privacy_policy_title:Maxfiylik siyosati`
+  },
+  {
+    path: 'terms-of-service',
+    component: TermsOfServiceComponent,
+    title: $localize`:@@terms_of_service_title:Foydalanish shartlari`
   },
 
   {

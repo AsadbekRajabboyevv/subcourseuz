@@ -359,7 +359,7 @@ public class JwtUtil {
 
         @Value("${spring.security.custom.jwt-expiration-in-ms}")
         public void setAccessTokenExpirationMs(long value) {
-            JwtUtil.ACCESS_TOKEN_EXPIRATION_MS = value;
+                JwtUtil.ACCESS_TOKEN_EXPIRATION_MS = value;
             log.info("JWT access token expiration set to {} ms", value);
         }
 

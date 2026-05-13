@@ -1,6 +1,7 @@
 package uz.asadbek.subcourse.course;
 
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,4 +35,7 @@ public interface CourseService {
     CourseUpdateRequestDto getUpdateData(String slug);
 
     Long getIdBySlug(@NotNull String slug);
+
+    List<CourseResponseDto> getTop();
+
 }

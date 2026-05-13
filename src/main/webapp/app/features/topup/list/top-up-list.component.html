@@ -6,8 +6,8 @@
                     <i class="fa-solid fa-clock-rotate-left text-white text-base md:text-lg"></i>
                 </div>
                 <div>
-                    <h1 class="text-lg md:text-xl font-black dark:text-white leading-none">To'lovlar Tarixi</h1>
-                    <p class="text-[9px] md:text-[10px] text-gray-400 uppercase font-bold tracking-widest mt-1">Barcha tranzaksiyalaringiz ro'yxati</p>
+                    <h1 class="text-lg md:text-xl font-black dark:text-white leading-none" i18n="@@topup.request.history.title">Balans to'ldirish so'rovlari tarixi</h1>
+                    <p class="text-[9px] md:text-[10px] text-gray-400 uppercase font-bold tracking-widest mt-1" i18n="@@topup.request.history.title2">Barcha tranzaksiyalaringiz ro'yxati</p>
                 </div>
             </div>
 
@@ -16,7 +16,7 @@
                         class="p-2 hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all disabled:opacity-20">
                     <i class="fa-solid fa-chevron-left text-xs"></i>
                 </button>
-                <span class="px-2 text-[10px] font-black dark:text-gray-400 uppercase">Sahifa {{currentPage() + 1}}</span>
+                <span class="px-2 text-[10px] font-black dark:text-gray-400 uppercase" i18n="@@topup.page">Sahifa {{currentPage() + 1}}</span>
                 <button (click)="changePage(1)" [disabled]="(currentPage() + 1) * pageSize >= totalLength()"
                         class="p-2 hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all disabled:opacity-20">
                     <i class="fa-solid fa-chevron-right text-xs"></i>
@@ -29,10 +29,10 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                     <tr class="bg-gray-50/50 dark:bg-gray-800/30 border-b border-gray-100 dark:border-gray-800 text-[10px] font-black uppercase text-gray-400 tracking-widest">
-                        <th class="p-6">Tranzaksiya</th>
-                        <th class="p-6 text-center">Status</th>
-                        <th class="p-6">Sana</th>
-                        <th class="p-6 text-right">Summa</th>
+                        <th class="p-6" i18n="@@topup.transaction">Tranzaksiya</th>
+                        <th class="p-6 text-center" i18n="@@topup.status">Status</th>
+                        <th class="p-6" i18n="@@topup.date">Sana</th>
+                        <th class="p-6 text-right" i18n="@@topup.sum">Summa</th>
                         <th class="p-6 w-10"></th>
                     </tr>
                     </thead>
@@ -41,10 +41,10 @@
                         <td class="p-6">
                             <div class="flex flex-col">
                                 <span class="text-sm font-black dark:text-white group-hover:text-emerald-500 transition-colors uppercase">
-                                    {{ req.transactionId || 'Nomalum ID' }}
+                                    {{ req.transactionId || '' }}
                                 </span>
                                 <span class="text-[11px] font-bold text-gray-400 truncate max-w-[200px]">
-                                    {{ req.message || 'Hisobni to\'ldirish' }}
+                                    {{ req.message || '' }}
                                 </span>
                             </div>
                         </td>
@@ -96,7 +96,7 @@
                     <div class="flex justify-between items-end">
                         <div class="flex flex-col max-w-[60%]">
                             <span class="text-[11px] text-gray-500 dark:text-gray-400 font-medium italic truncate">
-                                {{ req.message || 'To`lov' }}
+                                {{ req.message || '' }}
                             </span>
                             <span class="text-lg font-black dark:text-emerald-400 text-emerald-600 mt-1">
                                 +{{ req.amount | number }} <small class="text-[10px]">UZS</small>
@@ -104,7 +104,7 @@
                         </div>
 
                         <button *ngIf="req.status === 'CREATED'" (click)="onCancel(req.id)"
-                                class="flex items-center gap-2 px-3 py-2 bg-red-50 dark:bg-red-500/10 text-red-500 rounded-xl text-[10px] font-black uppercase transition-all active:scale-95">
+                               i18n="@@topup.cancel" class="flex items-center gap-2 px-3 py-2 bg-red-50 dark:bg-red-500/10 text-red-500 rounded-xl text-[10px] font-black uppercase transition-all active:scale-95">
                             <i class="fa-solid fa-xmark text-xs"></i>
                             Bekor qilish
                         </button>
@@ -115,17 +115,17 @@
             <div *ngIf="requests().length === 0" class="p-20 text-center bg-white dark:bg-gray-900 rounded-3xl border border-dashed border-gray-200 dark:border-gray-800">
                 <div class="flex flex-col items-center opacity-20">
                     <i class="fa-solid fa-receipt text-5xl mb-4"></i>
-                    <p class="font-black uppercase tracking-[0.2em] text-xs">Hozircha ma'lumotlar yo'q</p>
+                    <p class="font-black uppercase tracking-[0.2em] text-xs" i18n="@@topup.empty">Hozircha ma'lumotlar yo'q</p>
                 </div>
             </div>
 
             <div class="mt-8 flex flex-col md:flex-row justify-between items-center gap-4 px-2">
-                <p class="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest order-2 md:order-1">
+                <p class="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest order-2 md:order-1" i18n="@@topup.all">
                     Jami: {{ totalLength() }} ta tranzaksiya
                 </p>
                 <div class="flex flex-wrap justify-center items-center gap-4 text-[9px] md:text-[10px] font-black uppercase text-gray-400 order-1 md:order-2">
-                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle text-[6px] text-emerald-500"></i> Tasdiqlangan</span>
-                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle text-[6px] text-amber-500"></i> Kutilmoqda</span>
+                    <span class="flex items-center gap-1.5" i18n="@@topup.approved"><i class="fa-solid fa-circle text-[6px] text-emerald-500" ></i> Tasdiqlangan</span>
+                    <span class="flex items-center gap-1.5" i18n="@@topup.pending"><i class="fa-solid fa-circle text-[6px] text-amber-500"></i> Kutilmoqda</span>
                 </div>
             </div>
         </div>

@@ -2,9 +2,11 @@ package uz.asadbek.subcourse.filestorage;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import uz.asadbek.subcourse.filestorage.dto.*;
 
+@RequestMapping("/v1/api/files")
 public interface FileStorageApi {
 
     ResponseEntity<FileUploadResponse> uploadFile(MultipartFile file);

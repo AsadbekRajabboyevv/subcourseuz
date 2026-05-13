@@ -13,14 +13,14 @@ public class CommentInfoResponseDto extends BaseAuditResponseDto {
     private String text;
     private String createdByName;
     private Integer rating;
-    private Long courseId;
+    private String courseSlug;
     private Long lessonId;
     private Long testId;
 
     public CommentInfoResponseDto(
         Long id, String text, String createdByName,
         Long createdBy, LocalDateTime createdAt,
-        Integer rating, Long courseId, Long lessonId, Long testId
+        Integer rating, String courseSlug, Long lessonId, Long testId
     ) {
         this.setCreatedBy(createdBy);
         this.setCreatedAt(createdAt);
@@ -28,7 +28,7 @@ public class CommentInfoResponseDto extends BaseAuditResponseDto {
         this.text = text;
         this.createdByName = createdByName;
         this.rating = rating;
-        this.courseId = courseId;
+        this.courseSlug = courseSlug;
         this.lessonId = lessonId;
         this.testId = testId;
     }
