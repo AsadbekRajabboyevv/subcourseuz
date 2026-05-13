@@ -27,8 +27,4 @@ public class DomainConfig {
         return () -> Optional.of(LocalDateTime.now());
     }
 
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
-    }
 }
