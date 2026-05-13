@@ -1,0 +1,187 @@
+<app-page-wrapper>
+    <div page-title class="flex flex-col md:flex-row md:items-center justify-between gap-6 w-full px-2 md:px-0">
+        <div class="space-y-1">
+            <nav class="mb-2 flex items-center gap-2 text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
+                <a routerLink="/" class="hover:text-emerald-500" i18n="@@common.home">Asosiy</a>
+                <i class="fa-solid fa-chevron-right text-[7px]"></i>
+                <span class="text-emerald-500" i18n="@@test.title">Testlar</span>
+            </nav>
+            <h1 class="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-white uppercase" i18n="@@test.list">
+                Testlar ro'yxati
+            </h1>
+        </div>
+
+        @if (authService.isAdmin()) {
+            <button routerLink="/tests-create"
+                    class="group flex items-center justify-center gap-2 rounded-2xl bg-gray-900 px-6 py-3.5 text-[10px] font-black uppercase tracking-widest text-white shadow-xl transition-all hover:bg-emerald-600 active:scale-95 dark:bg-emerald-600">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span i18n="test.create.button">Test yaratish</span>
+            </button>
+        }
+    </div>
+
+    <div content class="grid grid-cols-12 gap-4 md:gap-8">
+
+        <aside class="col-span-12 lg:col-span-3 lg:order-1 order-1">
+            <div class="lg:sticky lg:top-24 rounded-[2rem] border border-gray-100 bg-white p-2 dark:border-gray-800 dark:bg-gray-900 shadow-xl lg:p-7">
+
+                <button (click)="isFilterVisible = !isFilterVisible"
+                        class="flex w-none items-center justify-between p-4 lg:hidden w-full">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-500/10">
+                            <i class="fa-solid fa-filter text-xs"></i>
+                        </div>
+                        <span class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white" i18n="@@common.filter">
+                            Filtrlar
+                        </span>
+                    </div>
+                    <i class="fa-solid text-gray-400 transition-transform duration-300"
+                       [class.rotate-180]="isFilterVisible"
+                       [class]="isFilterVisible ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                </button>
+
+                <div [class.hidden]="!isFilterVisible" class="lg:block p-4 lg:p-0 space-y-5">
+
+                    <app-input type="text"
+                               i18n-label="@@common.search"
+                               label="Qidirish"
+                               i18n-placeholder="@@common.label_name"
+                               placeholder="Test nomi..."
+                               [(ngModel)]="filter.name">
+                    </app-input>
+
+                    <app-input type="select"
+                               i18n-label="@common.lang_label"
+                               label="Tilni tanlang"
+                               [options]="languages"
+                               [(ngModel)]="filter.lang">
+                    </app-input>
+
+                    <div class="grid grid-cols-1 gap-3 pt-4">
+                        <button (click)="applyFilters()"
+                                class="w-full rounded-2xl bg-blue-600 py-4 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-blue-200 dark:shadow-none active:scale-95 transition-all hover:bg-blue-700">
+                            <span>Natijalarni ko'rish</span>
+                        </button>
+
+                        <button (click)="resetFilters()"
+                                class="w-full rounded-2xl bg-gray-50 dark:bg-gray-800 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-all">
+                            <span>Tozalash</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="col-span-12 lg:col-span-9 lg:order-2 order-2">
+
+            @if (authService.isAdmin()) {
+                <div class="mb-6 flex items-center gap-4 border-b border-gray-100 dark:border-gray-800">
+                    <button (click)="changeTab(true)"
+                            [class]="filter.isPublished ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-400'"
+                            class="border-b-2 px-4 py-4 text-[10px] font-black uppercase tracking-widest transition-all">
+                        <i class="fa-solid fa-check-double mr-2"></i> <span>Faol testlar</span>
+                    </button>
+
+                    <button (click)="changeTab(false)"
+                            [class]="!filter.isPublished ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-400'"
+                            class="border-b-2 px-4 py-4 text-[10px] font-black uppercase tracking-widest transition-all">
+                        <i class="fa-solid fa-file-pen mr-2"></i> <span i18n="@@course.drafts">Qoralamalar</span>
+                    </button>
+                </div>
+            }
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
+                @for (test of testService.tests(); track test.id) {
+                    <div class="group relative flex flex-col rounded-[2.5rem] border border-gray-100 bg-white p-3 md:p-4 hover:border-blue-500 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900 transition-all duration-300">
+
+                        @if (!test.isPublished) {
+                            <div class="absolute top-5 right-5 z-10 rounded-full bg-orange-500 px-2 py-0.5 text-[7px] font-black text-white uppercase shadow-lg">
+                                <span i18n="@@course.draft">Qoralama</span>
+                            </div>
+                        }
+
+                        <div class="relative h-40 md:h-44 overflow-hidden rounded-[1.8rem] bg-gray-50 dark:bg-gray-800">
+                            <img [src]="test.imagePath || 'assets/images/placeholder.png'"
+                                 class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
+
+                            <div class="absolute bottom-3 left-3 flex gap-2">
+                                <div class="rounded-lg bg-white/90 dark:bg-gray-900/90 px-2 py-1 text-[8px] font-black text-blue-600 dark:text-blue-400 uppercase backdrop-blur-sm">
+                                    <i class="fa-solid fa-clock mr-1"></i> {{ test.duration }} daqiqa
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 md:mt-5 px-1 flex-1 flex flex-col">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[8px] font-black uppercase text-blue-500 tracking-wider">
+                                    ID: #{{ test.id }}
+                                </span>
+                                <span class="rounded-md bg-gray-50 dark:bg-gray-800 px-1.5 py-0.5 text-[8px] font-bold text-gray-400 uppercase">
+                                    {{ test.lang }}
+                                </span>
+                            </div>
+
+                            <h3 class="text-md md:text-lg font-black text-gray-900 dark:text-white line-clamp-2 leading-tight group-hover:text-blue-600 transition-colors">
+                                {{ test.name }}
+                            </h3>
+
+                            <p class="mt-2 text-[10px] text-gray-500 dark:text-gray-400 line-clamp-2 italic leading-relaxed">
+                                {{ test.description || 'Test tavsifi mavjud emas.' }}
+                            </p>
+
+                            <div class="mt-auto pt-6 flex items-center justify-between border-t border-gray-50 dark:border-gray-800/50">
+                                <div>
+                                    <p class="text-[7px] font-bold uppercase text-gray-400 mb-0.5">Narxi</p>
+                                    <p class="text-sm font-black text-gray-900 dark:text-blue-400">
+                                        {{ test.price | number }} <span class="text-[10px]">UZS</span>
+                                    </p>
+                                </div>
+
+                                <div class="flex items-center gap-2">
+                                    <button [routerLink]="['/tests-view/', test.id]"
+                                            class="flex h-9 w-9 items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-blue-600 hover:text-white transition-all active:scale-90">
+                                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                                    </button>
+
+                                    @if (test.isPublished) {
+                                        <button (click)="onBuy(test)"
+                                                class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600 text-white hover:bg-emerald-500 shadow-lg shadow-emerald-100 dark:shadow-none transition-all active:scale-90">
+                                            <i class="fa-solid fa-cart-plus text-[10px]"></i>
+                                        </button>
+                                    }
+
+                                    @if (authService.isAdmin()) {
+                                        <button [routerLink]="['/tests-update/', test.id]"
+                                                class="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-500 text-white hover:bg-orange-400 transition-all active:scale-90">
+                                            <i class="fa-solid fa-gear text-[10px]"></i>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (testService.tests().length === 0 && !loading) {
+                <div class="py-24 text-center animate-in fade-in zoom-in duration-500">
+                    <div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[2rem] bg-gray-50 dark:bg-gray-800">
+                        <i class="fa-solid fa-vial-circle-check text-3xl text-gray-300"></i>
+                    </div>
+                    <p class="font-black uppercase text-xs tracking-widest text-gray-400">
+                        Testlar topilmadi
+                    </p>
+                </div>
+            }
+
+            @if (loading) {
+                <div class="flex justify-center py-12">
+                    <div class="flex items-center gap-3 rounded-full bg-white dark:bg-gray-900 px-6 py-3 shadow-xl">
+                        <i class="fa-solid fa-circle-notch fa-spin text-blue-600"></i>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-gray-500">Ma'lumotlar yuklanmoqda...</span>
+                    </div>
+                </div>
+            }
+        </main>
+    </div>
+</app-page-wrapper>

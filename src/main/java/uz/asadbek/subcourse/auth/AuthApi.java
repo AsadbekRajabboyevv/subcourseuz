@@ -1,5 +1,6 @@
 package uz.asadbek.subcourse.auth;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -14,6 +15,7 @@ import uz.asadbek.subcourse.auth.dto.AuthResponseDto;
 import uz.asadbek.subcourse.user.dto.UserRequestDto;
 
 @RequestMapping("/v1/api/auth")
+@Tag(name = "Auth", description = "Auth")
 public interface AuthApi {
 
     @PostMapping("/login")
@@ -24,7 +26,7 @@ public interface AuthApi {
     BaseResponseDto<AuthResponseDto> register(@RequestBody @Valid UserRequestDto dto, @RequestParam(required = false, defaultValue = "UZ") String language);
 
     @GetMapping("/confirm")
-    BaseResponseDto<Boolean> confirm(@RequestParam String confirmToken);
+    void confirm(@RequestParam String confirmToken, HttpServletResponse response);
 
     @PostMapping("/refresh")
     BaseResponseDto<AuthResponseDto> refresh(HttpServletRequest request, HttpServletResponse response);

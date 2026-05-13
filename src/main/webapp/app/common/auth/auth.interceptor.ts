@@ -6,18 +6,10 @@ import {
   HttpRequest
 } from '@angular/common/http';
 import { inject } from '@angular/core';
-import {
-  BehaviorSubject,
-  Observable,
-  throwError
-} from 'rxjs';
-import {
-  catchError,
-  filter,
-  switchMap,
-  take
-} from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import {LangService} from "../../shared/ui/services/language.service";
 
 let isRefreshing = false;
 const refreshTokenSubject = new BehaviorSubject<string | null | undefined>(undefined);
@@ -28,27 +20,28 @@ export const authInterceptor: HttpInterceptorFn = (
 ): Observable<HttpEvent<unknown>> => {
 
   const authService = inject(AuthService);
-  const token = authService.getToken();
+  const langService = inject(LangService);
 
-  let authReq = req;
+  const token = authService.getToken();
+  const lang = langService.getLang();
+
+  let headers = req.headers.set('Accept-Language', lang);
 
   if (token) {
-    authReq = req.clone({
-      setHeaders: { Authorization: `Bearer ${token}` }
-    });
+    headers = headers.set('Authorization', `Bearer ${token}`);
   }
+
+  const authReq = req.clone({ headers });
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse): Observable<HttpEvent<unknown>> => {
-
       if (
         error.status === 401 &&
         !req.url.includes('/auth/login') &&
         !req.url.includes('/auth/refresh')
       ) {
-        return handle401Error(authService, authReq, next);
+        return handle401Error(authService, langService, authReq, next);
       }
-
       return throwError(() => error);
     })
   );
@@ -56,6 +49,7 @@ export const authInterceptor: HttpInterceptorFn = (
 
 function handle401Error(
   authService: AuthService,
+  langService: LangService,
   req: HttpRequest<unknown>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> {
@@ -67,8 +61,9 @@ function handle401Error(
     return authService.refreshToken().pipe(
       switchMap(() => {
         isRefreshing = false;
-
         const newToken = authService.getToken();
+        const currentLang = langService.getLang();
+
         refreshTokenSubject.next(newToken);
 
         if (!newToken) {
@@ -76,7 +71,10 @@ function handle401Error(
         }
 
         return next(req.clone({
-          setHeaders: { Authorization: `Bearer ${newToken}` }
+          setHeaders: {
+            Authorization: `Bearer ${newToken}`,
+            'Accept-Language': currentLang
+          }
         }));
       }),
       catchError((err) => {
@@ -97,7 +95,10 @@ function handle401Error(
       }
 
       return next(req.clone({
-        setHeaders: { Authorization: `Bearer ${token}` }
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+          'Accept-Language': langService.getLang()
+        }
       }));
     })
   );

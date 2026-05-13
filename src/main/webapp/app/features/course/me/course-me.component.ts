@@ -10,7 +10,13 @@ import { RouterLink } from "@angular/router";
 @Component({
   selector: 'app-course-me',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputComponent, PageWrapperComponent, RouterLink],
+  imports: [
+    CommonModule,
+    FormsModule,
+    InputComponent,
+    PageWrapperComponent,
+    RouterLink,
+  ],
   templateUrl: './course-me.component.html'
 })
 export class CourseMeComponent implements OnInit {
@@ -19,16 +25,17 @@ export class CourseMeComponent implements OnInit {
   page = 0;
   size = 12;
   hasMore = true;
-
+  isFilterVisible = false;
   filter: CourseFilter = {
     search: '',
+    isPublished: true,
     scienceId: undefined,
     gradeId: undefined,
     priceFrom: undefined,
     priceTo: undefined,
     lang: '',
     durationType: undefined,
-    duration: undefined
+    duration: undefined,
   };
 
   durationTypes = Object.entries(DurationType).map(([key, value]) => ({
@@ -83,7 +90,10 @@ export class CourseMeComponent implements OnInit {
   }
 
   resetFilters() {
-    this.filter = { search: '' };
+    this.filter = {
+      search: '',
+      isPublished: true
+    };
     this.applyFilters();
   }
 }

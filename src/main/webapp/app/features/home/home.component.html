@@ -1,125 +1,253 @@
 <app-page-wrapper>
-    <div page-title class="flex items-center justify-between w-full">
-        <button class="relative p-2 text-gray-400 hover:text-indigo-600">
-            <i class="fa-solid fa-home text-xl"></i>
-            <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-gray-950"></span>
-        </button>
-        <span class="text-gray-900 dark:text-gray-100 font-black text-2xl tracking-tight uppercase">Bosh sahifa</span>
+  <div page-title class="flex items-center justify-between w-full">
+    <span i18n="@@home.title" class="text-gray-900 dark:text-gray-100 font-black text-2xl tracking-tight uppercase">
+      Bosh sahifa
+    </span>
+  </div>
+
+  <div content class="space-y-10 pb-10">
+
+    <!-- HERO -->
+    <div class="rounded-[2.5rem] bg-gradient-to-br from-indigo-600 via-blue-600 to-emerald-500 p-8 md:p-12 text-white shadow-2xl relative overflow-hidden">
+      <div class="relative z-10 max-w-2xl">
+        <h1 i18n="@@home.hero.title" class="mb-4 text-3xl md:text-5xl font-black tracking-tighter">
+          Ta'lim platformasi
+        </h1>
+        <p i18n="@@home.hero.description" class="mb-8 text-base md:text-lg opacity-90 font-medium">
+          Platformamizga xush kelibsiz. Bu yerda siz kurslar o'rganishingiz va test ishlashingiz mumkin.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <button (click)="goToCourses()"
+                  class="flex items-center gap-3 rounded-2xl bg-white text-indigo-700 px-8 py-4 font-black text-xs uppercase active:scale-95 hover:rotate-2 transition-transform">
+            <i class="fa-solid fa-play"></i>
+            <span i18n="@@home.hero.view_courses">Kurslarni ko'rish</span>
+          </button>
+        </div>
+      </div>
+      <i class="fa-solid fa-graduation-cap absolute -right-10 -bottom-10 text-[15rem] text-white/10"></i>
     </div>
 
-    <div content class="space-y-10 pb-10">
-        <div class="rounded-[2.5rem] bg-gradient-to-br from-indigo-600 via-blue-600 to-emerald-500 p-8 md:p-12 text-white shadow-2xl relative overflow-hidden group">
-            <div class="relative z-10 max-w-2xl">
-                <h1 class="mb-4 text-3xl md:text-5xl font-black tracking-tighter">Subcourse Platform</h1>
-                <p class="mb-8 text-base md:text-lg opacity-90 font-medium">Online ta'lim platformasiga xush kelibsiz! O'z kelajagingizni professional mentorlar bilan quring.</p>
-                <div class="flex flex-wrap gap-4">
-                    <button class="flex items-center gap-3 rounded-2xl bg-white text-indigo-700 px-8 py-4 font-black text-xs uppercase active:scale-95 hover:rotate-2 transition-transform">
-                        <i class="fa-solid fa-play"></i> Kurslarni ko'rish
-                    </button>
-                    <button class="flex items-center gap-3 rounded-2xl bg-white text-indigo-700 px-8 py-4 font-black text-xs uppercase active:scale-95 hover:rotate-2 transition-transform">
-                        <i class="fa-solid fa-play"></i> Test yechish
-                    </button>
-                </div>
+    <!-- STATS -->
+    @if (isLoading()) {
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger-children">
+        @for (i of skeletonItems; track i) {
+          <div class="skeleton h-28 rounded-3xl"></div>
+        }
+      </div>
+    } @else {
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger-children animate-slide-up">
+        @for (card of statCards; track card.key) {
+          <div [class]="'group rounded-3xl border border-gray-100 bg-white p-6 shadow-sm card-hover dark:border-gray-800 dark:bg-gray-900 ' + card.borderH">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{{ card.label }}</p>
+                <p class="text-3xl font-black text-gray-900 dark:text-white">
+                  {{ getStatValue(card.key) | number }}
+                </p>
+              </div>
+              <div [class]="'rounded-2xl p-4 bg-' + card.color + '-100 text-' + card.color + '-600 dark:bg-' + card.color + '-900/30 dark:text-' + card.color + '-400'">
+                <i [class]="'fa-solid ' + card.icon + ' text-xl'"></i>
+              </div>
             </div>
-            <i class="fa-solid fa-graduation-cap absolute -right-10 -bottom-10 text-[15rem] text-white/10"></i>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- COURSE GRADES -->
+    @if (courseGrades.length > 0) {
+      <div>
+        <div class="flex items-center justify-between mb-6">
+          <h2 i18n="@@home.grades.title" class="text-xl font-black text-gray-900 dark:text-white uppercase">
+            Kurs bosqichlari
+          </h2>
+          <button (click)="goToCourses()"
+                  i18n="@@home.grades.view_all"
+                  class="text-[10px] font-black uppercase tracking-widest text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 transition-colors">
+            Barchasini ko'rish →
+          </button>
         </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div *ngFor="let stat of [
-                    {l:'Faol kurslar', v:'24', i:'fa-book-open', c:'emerald', bh:'hover:border-emerald-500'},
-                    {l:'O\'quvchilar', v:'1,234', i:'fa-users', c:'blue', bh:'hover:border-blue-500'},
-                    {l:'Mentorlar', v:'45', i:'fa-chalkboard-user', c:'purple', bh:'hover:border-purple-500'},
-                    {l:'Testlar', v:'156', i:'fa-vial', c:'orange', bh:'hover:border-orange-500'}
-                ]"
-                 [ngClass]="stat.bh"
-                 class="group rounded-3xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 dark:border-gray-800 dark:bg-gray-900 hover:shadow-md  active:scale-95 hover:rotate-2">
-
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{{stat.l}}</p>
-                        <p class="text-3xl font-black text-gray-900 dark:text-white transition-colors group-hover:text-gray-700 dark:group-hover:text-gray-100">
-                            {{stat.v}}
-                        </p>
-                    </div>
-
-                    <div class="rounded-2xl p-4 transition-all duration-300 group-hover:scale-110"
-                         [ngClass]="'bg-' + stat.c + '-100 text-' + stat.c + '-600 dark:bg-' + stat.c + '-900/30 dark:text-' + stat.c + '-400'">
-                        <i class="fa-solid {{stat.i}} text-xl"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div>
-            <div class="mb-6 flex items-center justify-between px-2">
-                <h2 class="text-xl font-black text-gray-900 dark:text-white uppercase">Mashhur kurslar</h2>
-                <div class="hidden md:flex gap-3">
-                    <button (click)="prevSlide()" class="w-10 h-10 rounded-xl bg-white shadow-md hover:bg-indigo-600 hover:text-white transition-all dark:bg-gray-800">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </button>
-                    <button (click)="nextSlide()" class="w-10 h-10 rounded-xl bg-white shadow-md hover:bg-indigo-600 hover:text-white transition-all dark:bg-gray-800">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="slider-container overflow-hidden cursor-grab active:cursor-grabbing"
-                 (touchstart)="onTouchStart($event)"
-                 (touchend)="onTouchEnd($event)">
-                <div class="slider-track flex transition-transform duration-500 ease-in-out"
-                     [style.transform]="'translateX(-' + (currentSlideIndex * (100 / 6)) + '%)'">
-
-                    @for (course of courses; track course.id) {
-                        <div class="px-3" style="flex: 0 0 16.666%; min-width: 280px;">
-                            <div class="group h-full rounded-[2rem] border border-gray-100 bg-white shadow-sm hover:shadow-2xl hover:border-indigo-500 transition-all duration-300 dark:border-gray-800 dark:bg-gray-900">
-
-                                <div class="relative h-40 overflow-hidden rounded-t-[2rem]">
-                                    <img [src]="course.image" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                                    <span class="absolute top-4 left-4 rounded-xl bg-white/20 backdrop-blur-md px-3 py-1 text-[9px] font-black text-white uppercase tracking-widest border border-white/20">
-                            {{course.category}}
-                        </span>
-                                </div>
-
-                                <div class="p-6">
-                                    <h3 class="mb-2 text-sm font-black text-gray-900 dark:text-white line-clamp-1 group-hover:text-indigo-600 transition-colors duration-300">
-                                        {{course.title}}
-                                    </h3>
-
-                                    <div class="flex items-center justify-between border-t border-gray-50 pt-4 dark:border-gray-800">
-                            <span class="text-sm font-black text-indigo-600 dark:text-indigo-400">
-                                {{ (course.price/1000).toFixed(0) }}k UZS
-                            </span>
-
-                                        <button class="w-8 h-8 rounded-lg bg-gray-50 text-gray-400 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300 dark:bg-gray-800">
-                                            <i class="fa-solid fa-arrow-right text-xs"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
-            </div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <button *ngFor="let act of [
-        {t:'Test yechish', d:'Bilimingizni sinang', i:'fa-puzzle-piece', c:'emerald', borderH: 'hover:border-emerald-500'},
-        {t:'Kutubxona', d:'Bepul resurslar', i:'fa-book', c:'blue', borderH: 'hover:border-blue-500'},
-        {t:'Forum', d:'Savollarga javob', i:'fa-comments', c:'purple', borderH: 'hover:border-purple-500'}]"
-                    [ngClass]="act.borderH"
-                    class="group flex items-center gap-5 rounded-[2rem] border border-gray-100 bg-white p-6 shadow-sm hover:shadow-xl transition-all duration-300 dark:border-gray-800 dark:bg-gray-900  active:scale-95 hover:rotate-2">
-
-                <div class="rounded-2xl p-4 transition-transform duration-300 group-hover:scale-110 shadow-inner"
-                     [ngClass]="'bg-' + act.c + '-100 text-' + act.c + '-600 dark:bg-' + act.c + '-900/30 dark:text-' + act.c + '-400'">
-                    <i class="fa-solid {{act.i}} text-xl"></i>
-                </div>
-
-                <div class="text-left">
-                    <h4 class="font-black text-sm text-gray-900 dark:text-white uppercase tracking-tight group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors">
-                        {{act.t}}
-                    </h4>
-                    <p class="text-xs text-gray-400 font-medium">{{act.d}}</p>
-                </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          @for (grade of courseGrades; track grade.id) {
+            <button (click)="goToCourses()"
+                    class="group flex flex-col items-center gap-3 rounded-[2rem] border border-gray-100 bg-white p-5 shadow-sm hover:shadow-lg hover:border-emerald-400 hover:-translate-y-1 dark:border-gray-800 dark:bg-gray-900 dark:hover:border-emerald-500 transition-all active:scale-95">
+              <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-500 group-hover:text-white dark:bg-emerald-500/10 dark:text-emerald-400 dark:group-hover:bg-emerald-500 dark:group-hover:text-white transition-colors">
+                <i class="fa-solid fa-layer-group text-lg"></i>
+              </div>
+              <span class="text-center text-[11px] font-black uppercase tracking-wide text-gray-700 dark:text-gray-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors leading-tight">
+                {{ grade.name }}
+              </span>
+              @if (grade.description) {
+                <span class="text-center text-[9px] text-gray-400 dark:text-gray-500 line-clamp-2 leading-tight">
+                  {{ grade.description }}
+                </span>
+              }
             </button>
+          }
         </div>
+      </div>
+    }
+
+    <!-- TOP COURSES -->
+    <div>
+      <div class="mb-6 flex items-center justify-between px-2">
+        <h2 i18n="@@home.courses.title" class="text-xl font-black text-gray-900 dark:text-white uppercase">
+          Mashhur kurslar
+        </h2>
+        <div class="flex gap-3">
+          <button (click)="prevSlide()" [attr.aria-label]="prevLabel"
+                  class="w-10 h-10 rounded-xl bg-white shadow-md hover:bg-emerald-600 hover:text-white dark:bg-gray-800 dark:text-gray-300 transition-colors flex items-center justify-center">
+            <i class="fa-solid fa-chevron-left text-sm"></i>
+          </button>
+          <button (click)="nextSlide()" [attr.aria-label]="nextLabel"
+                  class="w-10 h-10 rounded-xl bg-white shadow-md hover:bg-emerald-600 hover:text-white dark:bg-gray-800 dark:text-gray-300 transition-colors flex items-center justify-center">
+            <i class="fa-solid fa-chevron-right text-sm"></i>
+          </button>
+        </div>
+      </div>
+
+      @if (isLoading()) {
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
+          @for (i of skeletonItems; track i) {
+            <div class="skeleton h-64 rounded-[2rem]"></div>
+          }
+        </div>
+      } @else if (topCourses.length === 0) {
+        <div class="flex flex-col items-center justify-center py-16 text-center">
+          <i class="fa-solid fa-book-open text-4xl text-gray-300 mb-4"></i>
+          <p i18n="@@home.courses.empty" class="text-sm font-bold text-gray-400 uppercase tracking-widest">
+            Kurslar mavjud emas
+          </p>
+        </div>
+      } @else {
+        <!-- Slider viewport -->
+        <div class="overflow-hidden"
+             (touchstart)="onTouchStart($event)"
+             (touchend)="onTouchEnd($event)">
+          <div class="flex transition-transform duration-500 ease-out"
+               [style.transform]="'translateX(-' + (currentSlideIndex * cardWidthPct) + '%)'">
+            @for (course of topCourses; track course.slug) {
+              <div class="flex-shrink-0 px-2"
+                   [style.width]="cardWidthPct + '%'">
+                <div (click)="goToCourse(course.slug)"
+                     class="group h-full rounded-[2rem] border border-gray-100 bg-white shadow-sm hover:shadow-2xl hover:border-emerald-400 dark:border-gray-800 dark:bg-gray-900 cursor-pointer transition-all active:scale-95">
+
+                  <!-- Image -->
+                  <div class="relative h-44 overflow-hidden rounded-t-[2rem]">
+                    @if (course.imagePath) {
+                      <img [src]="course.imagePath" [alt]="course.name"
+                           class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                           loading="lazy">
+                    } @else {
+                      <div class="h-full w-full bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center">
+                        <i class="fa-solid fa-book-open text-4xl text-white/60"></i>
+                      </div>
+                    }
+                    <span class="absolute top-3 left-3 rounded-xl bg-black/30 backdrop-blur-sm px-3 py-1 text-[9px] font-black text-white uppercase">
+                      {{ course.lang }}
+                    </span>
+                  </div>
+
+                  <div class="p-5">
+                    <h3 class="mb-1 text-sm font-black text-gray-900 dark:text-white line-clamp-2 leading-tight">
+                      {{ course.name }}
+                    </h3>
+                    <p class="text-[10px] text-gray-400 font-semibold mb-3">{{ course.ownerName }}</p>
+
+                    <div class="flex items-center gap-3 text-[10px] text-gray-400 mb-3">
+                      <span>
+                        <i class="fa-solid fa-play-circle mr-1"></i>
+                        {{ course.lessonsCount }}
+                        <ng-container i18n="@@home.courses.lessons"> dars</ng-container>
+                      </span>
+                      <span><i class="fa-solid fa-users mr-1"></i>{{ course.studentsCount }}</span>
+                    </div>
+
+                    <div class="flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-3">
+                      <span class="text-sm font-black text-emerald-600 dark:text-emerald-400">
+                        {{ formatPrice(course.price) }}
+                      </span>
+                      <div class="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-gray-400 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Dot indicators -->
+        @if (dotCount > 1) {
+          <div class="flex justify-center gap-2 mt-5">
+            @for (dot of dotItems; track dot) {
+              <button (click)="goToDot(dot)"
+                      [attr.aria-label]="'Slide ' + (dot + 1)"
+                      [class]="dot === currentSlideIndex
+                        ? 'w-6 h-2 rounded-full bg-emerald-500 transition-all duration-300'
+                        : 'w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600 hover:bg-emerald-400 transition-all duration-300'">
+              </button>
+            }
+          </div>
+        }
+      }
     </div>
+
+    <!-- TOP COMMENTS -->
+    @if (topComments.length > 0) {
+      <div>
+        <h2 i18n="@@home.comments.title" class="text-xl font-black text-gray-900 dark:text-white uppercase mb-6">
+          O'quvchilar fikrlari
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          @for (comment of topComments; track comment.id) {
+            <div class="rounded-[2rem] border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+              <div class="flex mb-3">
+                @for (s of filledStars(comment.rating); track $index) {
+                  <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292Z"/>
+                  </svg>
+                }
+                @for (s of emptyStars(comment.rating); track $index) {
+                  <svg class="w-4 h-4 text-gray-300 dark:text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292Z"/>
+                  </svg>
+                }
+              </div>
+              <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4 line-clamp-3">
+                "{{ comment.text }}"
+              </p>
+              <div class="flex items-center gap-3 border-t border-gray-100 dark:border-gray-800 pt-4">
+                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 dark:bg-emerald-500/10 font-black text-emerald-600 dark:text-emerald-400 text-sm uppercase">
+                  {{ comment.createdByName.charAt(0) || '?' }}
+                </div>
+                <div>
+                  <p class="text-xs font-black text-gray-900 dark:text-white">{{ comment.createdByName }}</p>
+                  <p class="text-[10px] text-gray-400">{{ formatDate(comment.createdAt) }}</p>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- QUICK ACTIONS -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      @for (act of quickActions; track act.route) {
+        <button [routerLink]="act.route"
+                [class]="'group flex items-center gap-5 rounded-[2rem] border border-gray-100 bg-white p-6 shadow-sm hover:shadow-xl dark:border-gray-800 dark:bg-gray-900 transition-all active:scale-95 ' + act.borderH">
+          <div [class]="'rounded-2xl p-4 bg-' + act.color + '-100 text-' + act.color + '-600 dark:bg-' + act.color + '-900/30 dark:text-' + act.color + '-400'">
+            <i [class]="'fa-solid ' + act.icon + ' text-xl'"></i>
+          </div>
+          <div class="text-left">
+            <h4 class="font-black text-sm text-gray-900 dark:text-white uppercase">{{ act.title }}</h4>
+            <p class="text-xs text-gray-400">{{ act.description }}</p>
+          </div>
+        </button>
+      }
+    </div>
+
+  </div>
 </app-page-wrapper>

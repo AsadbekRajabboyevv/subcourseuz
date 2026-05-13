@@ -2,6 +2,8 @@ package uz.asadbek.subcourse.payment;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -42,21 +44,24 @@ public class PaymentEntity extends BaseEntity {
     )
     private Long id;
 
-    @Column(name = "reference_id", nullable = false)
+    @Column(name = "reference_id")
     private Long referenceId;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private PaymentStatus status;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private PaymentType type;
 
     @Column(name = "amount", nullable = false)
     private Long amount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "currency", nullable = false)
     private CurrencyEnum currency;
 

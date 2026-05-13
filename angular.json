@@ -4,6 +4,14 @@
   "newProjectRoot": "projects",
   "projects": {
     "angularclient": {
+      "i18n": {
+        "sourceLocale": "uz",
+        "locales": {
+          "ru": "src/i18n/messages.ru.xlf",
+          "en": "src/i18n/messages.en.xlf",
+          "uz-Cyrl": "src/i18n/messages.uz-Cyrl.xlf"
+        }
+      },
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -24,14 +32,15 @@
             "index": "src/main/webapp/index.html",
             "browser": "src/main/webapp/main.ts",
             "polyfills": [
-              "@angular/localize/init",
-              "zone.js"
+              "zone.js",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "css",
             "assets": [
               "src/main/webapp/favicon.ico",
-              {"glob": "**/*", "input": "src/main/webapp/public"}
+              { "glob": "**/*", "input": "src/main/webapp/public" },
+              { "glob": "**/*", "input": "src/main/webapp/assets", "output": "/assets" }
             ],
             "styles": [
               "src/main/webapp/styles.css"
@@ -53,8 +62,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumWarning": "10kB",
+                  "maximumError": "15kB"
                 }
               ],
               "optimization": {
@@ -74,10 +83,21 @@
                   "with": "src/main/webapp/environments/environment.development.ts"
                 }
               ]
+            },
+
+            "ru": {
+              "localize": ["ru"]
+            },
+            "en": {
+              "localize": ["en"]
+            },
+            "uz-Cyrl": {
+              "localize": ["uz-Cyrl"]
             }
           },
           "defaultConfiguration": "production"
         },
+
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
@@ -86,6 +106,15 @@
             },
             "development": {
               "buildTarget": "angularclient:build:development"
+            },
+            "ru": {
+              "buildTarget": "angularclient:build:ru"
+            },
+            "en": {
+              "buildTarget": "angularclient:build:en"
+            },
+            "uz-Cyrl": {
+              "buildTarget": "angularclient:build:uz-Cyrl"
             }
           },
           "defaultConfiguration": "development",
@@ -93,21 +122,25 @@
             "open": true
           }
         },
+
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
         },
+
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "polyfills": [
               "zone.js",
-              "zone.js/testing"
+              "zone.js/testing",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "css",
             "assets": [
               "src/main/webapp/favicon.ico",
-              {"glob": "**/*", "input": "src/main/webapp/public"}
+              { "glob": "**/*", "input": "src/main/webapp/public" },
+              { "glob": "**/*", "input": "src/main/webapp/assets", "output": "/assets" }
             ],
             "styles": [
               "src/main/webapp/styles.css"
@@ -117,5 +150,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "f3679a72-57f5-4a5d-87f1-e1c39ab64f2e"
   }
 }

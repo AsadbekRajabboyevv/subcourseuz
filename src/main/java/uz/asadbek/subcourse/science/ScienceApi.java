@@ -1,5 +1,6 @@
 package uz.asadbek.subcourse.science;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,7 @@ import uz.asadbek.subcourse.science.dto.ScienceResponseDto;
 import uz.asadbek.subcourse.science.dto.ScienceUpdateRequestDto;
 
 @RequestMapping("/v1/api/sciences")
+@Tag(name = "Fanlar", description = "Fanlar")
 public interface ScienceApi {
 
     @GetMapping

@@ -36,7 +36,7 @@ public class TestQuestionEntity extends BaseEntity implements SoftDeletable {
     )
     private Long id;
 
-    @Column(name = "text", nullable = false)
+    @Column(name = "text", nullable = false, columnDefinition = "TEXT")
     private String text;
 
     @Column(name = "image_path")

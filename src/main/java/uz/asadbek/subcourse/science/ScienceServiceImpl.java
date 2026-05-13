@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import uz.asadbek.subcourse.exception.NotFoundException;
 import uz.asadbek.subcourse.filestorage.FileStorageService;
 import uz.asadbek.subcourse.filestorage.dto.FileUploadOptions;
 import uz.asadbek.subcourse.science.dto.OneScienceResponseDto;
@@ -25,8 +26,7 @@ public class ScienceServiceImpl implements ScienceService {
 
     @Override
     public List<ScienceResponseDto> get() {
-        var lang = "uz";
-        return repository.get(lang);
+        return repository.get(LangUtils.currentLang());
     }
 
     @Override
@@ -40,7 +40,7 @@ public class ScienceServiceImpl implements ScienceService {
         var entity = mapper.toEntity(request);
         if (image != null && !image.isEmpty()) {
             var path = fileStorageService.upload(image,
-                new FileUploadOptions().setScienceImages()).getUrl();
+                FileUploadOptions.SCIENCE_IMAGE).getUrl();
             entity.setImagePath(path);
         }
         var saved = repository.save(entity);
@@ -51,12 +51,15 @@ public class ScienceServiceImpl implements ScienceService {
     @Transactional
     public ScienceResponseDto update(Long id, ScienceUpdateRequestDto request,
         MultipartFile image) {
-        var science = repository.findById(id).orElseThrow(()-> ExceptionUtil.notFoundException("science_not_found"));
+        var science = repository.findById(id).orElseThrow(()-> ExceptionUtil.build(NotFoundException.class, "error.not_found.science"));
         mapper.update(science, request);
         if (image != null && !image.isEmpty()) {
+            fileStorageService.softDelete(science.getImagePath());
+
             var path = fileStorageService.upload(image,
-                new FileUploadOptions().setScienceImages()).getUrl();
+                FileUploadOptions.SCIENCE_IMAGE).getUrl();
             science.setImagePath(path);
+
         }
         var saved = repository.save(science);
         return getResponse(saved);

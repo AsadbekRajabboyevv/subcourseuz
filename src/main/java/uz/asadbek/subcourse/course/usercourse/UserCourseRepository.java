@@ -6,4 +6,8 @@ import uz.asadbek.subcourse.util.embedded.UserPurchaseId;
 
 @Repository
 public interface UserCourseRepository extends JpaRepository<UserCourseEntity, UserPurchaseId> {
+
+    Long countByIdReferenceId(Long id);
+
+    boolean existsByIdUserIdAndIdReferenceId(Long currentUserId, Long id);
 }

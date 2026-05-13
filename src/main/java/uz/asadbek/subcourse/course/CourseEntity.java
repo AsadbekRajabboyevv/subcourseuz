@@ -8,8 +8,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,7 +22,10 @@ import uz.asadbek.subcourse.course.dto.DurationType;
 @Getter
 @Setter
 @Entity
-@Table(name = "courses")
+@Table(name = "courses",
+    uniqueConstraints = {@UniqueConstraint(name = "uk_course_slug_and_owner_id", columnNames = {"slug", "owner_id"})},
+    indexes = {@Index(name = "courses_slug_idx", columnList = "slug", unique = true)}
+)
 @EntityListeners(AuditingEntityListener.class)
 public class CourseEntity extends BaseEntity implements SoftDeletable {
 
@@ -43,6 +48,9 @@ public class CourseEntity extends BaseEntity implements SoftDeletable {
 
     @Column(name = "duration")
     private Integer duration;
+
+    @Column(name = "slug", unique = true, nullable = false)
+    private String slug;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "duration_type")

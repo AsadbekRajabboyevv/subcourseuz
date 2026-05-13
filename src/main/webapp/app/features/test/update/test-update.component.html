@@ -1,0 +1,167 @@
+<app-page-wrapper>
+    <div page-title>
+        <nav class="mb-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
+            <a routerLink="/" class="hover:text-emerald-500">Asosiy</a>
+            <i class="fa-solid fa-chevron-right text-[7px]"></i>
+            <a routerLink="/tests-list" class="hover:text-emerald-500 uppercase">Testlar</a>
+            <i class="fa-solid fa-chevron-right text-[7px]"></i>
+            <span class="text-emerald-500 uppercase tracking-widest">Tahrirlash</span>
+        </nav>
+        <h1 class="text-2xl font-black uppercase tracking-tight text-gray-900 dark:text-white">
+            Testni tahrirlash <span class="text-emerald-500 ml-2">#{{ testName }}</span>
+        </h1>
+    </div>
+
+    <div content>
+        @if (isLoading()) {
+            <div class="flex h-64 w-full items-center justify-center">
+                <i class="fa-solid fa-circle-notch fa-spin text-4xl text-emerald-500"></i>
+            </div>
+        } @else {
+            <form [formGroup]="updateForm" (ngSubmit)="onSubmit()" class="grid grid-cols-12 gap-8 pb-20">
+
+                <div class="col-span-12 lg:col-span-8 space-y-8" formArrayName="questions">
+                    @for (q of questions.controls; track q; let i = $index) {
+                        <div [formGroupName]="i" class="rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-2xl dark:border-gray-800 dark:bg-gray-900 animate-in fade-in slide-in-from-bottom-4">
+
+                            <div class="mb-6 flex items-center justify-between">
+                                <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-xs font-black text-emerald-600 dark:bg-emerald-500/10 italic">
+                                    #{{ i + 1 }}
+                                </span>
+                                <button type="button" (click)="deleteQuestion(i)" class="h-10 w-10 rounded-2xl bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                                <div class="md:col-span-3">
+                                    <app-input type="markdown" label="Savol matni" placeholder="Savolni kiriting..." formControlName="text"></app-input>
+                                </div>
+                                <div class="md:col-span-1 text-center">
+                                    <label class="mb-2 block text-[10px] font-black uppercase text-gray-400">Savol rasmi</label>
+                                    <div class="relative aspect-square rounded-3xl border-2 border-dashed border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 flex items-center justify-center overflow-hidden group">
+                                        <input type="file" (change)="onFileSelected($event, q)" class="absolute inset-0 z-20 opacity-0 cursor-pointer">
+
+                                        @if (q.get('imagePreview')?.value) {
+                                            <img [src]="q.get('imagePreview')?.value" class="h-full w-full object-cover">
+                                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all z-30">
+                                                <i class="fa-solid fa-camera text-white text-xl"></i>
+                                            </div>
+                                        } @else {
+                                            <i class="fa-solid fa-image text-gray-300 dark:text-gray-700 text-2xl group-hover:text-emerald-500 transition-colors"></i>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div formArrayName="options" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                @for (opt of getOptions(i).controls; track opt; let j = $index) {
+                                    <div [formGroupName]="j" class="group relative rounded-3xl border-2 p-4 transition-all duration-300"
+                                         [class.border-emerald-500.bg-emerald-50.dark:bg-emerald-500]="q.get('correctOptionIndex')?.value === j"
+                                        [class.border-gray-50.dark:border-gray-800]="q.get('correctOptionIndex')?.value !== j">
+
+                                    <div class="flex items-start gap-3">
+                                        <div class="flex-1">
+                                            <div class="flex items-center gap-3">
+                                                <input type="radio" [value]="j" [formControl]="getCorrectOptionControl(i)" [name]="'correctOptionIndex_' + i" class="h-5 w-5 text-emerald-500 focus:ring-emerald-500 dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
+                                                <input formControlName="text" type="text" [placeholder]="'Variant ' + (j+1)" class="w-full border-none bg-transparent p-0 text-sm font-bold focus:ring-0 dark:text-white">
+                                            </div>
+
+                                            @if (opt.get('imagePreview')?.value) {
+                                                <div class="mt-3 relative h-20 w-20 rounded-xl overflow-hidden border-2 border-white dark:border-gray-700 shadow-md">
+                                                    <img [src]="opt.get('imagePreview')?.value" class="h-full w-full object-cover">
+                                                    <button type="button" (click)="opt.patchValue({image: null, imagePreview: null})" class="absolute top-0 right-0 bg-red-500 text-white p-1 hover:bg-red-600 transition-colors">
+                                                        <i class="fa-solid fa-xmark text-[10px]"></i>
+                                                    </button>
+                                                </div>
+                                            }
+                                        </div>
+
+                                        <div class="flex flex-col gap-2">
+                                            <div class="relative h-9 w-9 rounded-xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center cursor-pointer hover:bg-emerald-100 dark:hover:bg-emerald-500/10 transition-colors">
+                                                <input type="file" (change)="onFileSelected($event, opt)" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+                                                <i class="fa-solid fa-image text-[12px] text-gray-400"></i>
+                                            </div>
+                                            @if (getOptions(i).length > 2) {
+                                                <button type="button" (click)="deleteOption(i, j)" class="h-9 w-9 rounded-xl bg-red-50 dark:bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
+                                                    <i class="fa-solid fa-trash-can text-[11px]"></i>
+                                                </button>
+                                            }
+                                        </div>
+                                    </div>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="mt-6 flex items-center gap-4">
+                                <button type="button" (click)="addOption(asFormGroup(q))" class="flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all">
+                                    <i class="fa-solid fa-plus-circle"></i> Variant qo'shish
+                                </button>
+                            </div>
+                        </div>
+                    }
+
+                    <button type="button" (click)="addQuestion()" class="w-full rounded-[2.5rem] border-4 border-dashed border-gray-100 dark:border-gray-800 py-12 text-sm font-black uppercase text-gray-300 hover:border-emerald-500 hover:text-emerald-500 transition-all group">
+                        <i class="fa-solid fa-plus mr-2 text-xl group-hover:scale-125 transition-transform"></i> Yangi savol qo'shish
+                    </button>
+                </div>
+
+                <div class="col-span-12 lg:col-span-4 space-y-6">
+                    <div class="rounded-[2.5rem] border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 shadow-2xl space-y-4 lg:sticky lg:top-24">
+                        <h3 class="text-[11px] font-black uppercase tracking-widest text-gray-400 mb-4">Test sozlamalari</h3>
+
+                        <div class="relative h-48 w-full rounded-3xl border-2 border-dashed border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 flex items-center justify-center overflow-hidden group mb-6">
+                            <input type="file" (change)="onMainImageSelected($event)" class="absolute inset-0 opacity-0 z-20 cursor-pointer">
+                            @if (mainImagePreview) {
+                                <img [src]="mainImagePreview" class="h-full w-full object-cover">
+                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all z-10 text-white font-black text-[10px] uppercase">
+                                    Rasmni almashtirish
+                                </div>
+                            } @else {
+                                <div class="text-center">
+                                    <i class="fa-solid fa-camera text-2xl text-gray-300 mb-2 block"></i>
+                                    <span class="text-[8px] font-black uppercase text-gray-400 tracking-wider">Asosiy muqova</span>
+                                </div>
+                            }
+                        </div>
+
+                        <app-input type="text" label="Test nomi" formControlName="name"></app-input>
+                        <app-input type="markdown" label="Izoh" formControlName="description"></app-input>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <app-input type="amount" label="Narxi (UZS)" formControlName="price"></app-input>
+                            <app-input type="number" label="Vaqt (daqiqa)" formControlName="duration"></app-input>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <app-input type="select" label="Fan" [options]="scienceOptions()" formControlName="scienceId"></app-input>
+                            <app-input type="select" label="Sinf" [options]="gradeOptions()" formControlName="gradeId"></app-input>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <app-input type="select" label="Til" [options]="langOptions" formControlName="lang"></app-input>
+                            <app-input type="amount" label="Savollar ko'rsatish soni" formControlName="count"></app-input>
+                        </div>
+
+                        <label class="flex items-center gap-3 cursor-pointer mt-6 group bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl">
+                            <input type="checkbox" formControlName="isPublished" class="peer h-6 w-6 rounded-lg border-2 border-gray-200 dark:border-gray-700 text-emerald-500 bg-transparent focus:ring-0">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 group-hover:text-emerald-500 transition-colors">Nashr etilgan</span>
+                        </label>
+
+                        <div class="flex flex-col gap-3 pt-6">
+                            <button type="submit" [disabled]="isSaving() || updateForm.invalid" class="w-full rounded-[2rem] bg-emerald-600 py-6 text-xs font-black uppercase tracking-[0.3em] text-white hover:bg-emerald-500 transition-all shadow-xl shadow-emerald-200 dark:shadow-none disabled:opacity-50">
+                                @if (isSaving()) {
+                                    <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Saqlanmoqda...
+                                } @else {
+                                    O'zgarishlarni saqlash
+                                }
+                            </button>
+
+                            <button type="button" routerLink="/tests-list" class="w-full rounded-[2rem] bg-gray-400 py-6 text-xs font-black uppercase tracking-[0.3em] text-white hover:bg-gray-600 transition-all shadow-xl dark:shadow-none">
+                                Bekor qilish
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        }
+    </div>
+</app-page-wrapper>

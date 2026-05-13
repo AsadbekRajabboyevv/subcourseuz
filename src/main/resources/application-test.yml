@@ -1,0 +1,75 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+
+  datasource:
+    url: jdbc:h2:mem:subcourse_db;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 5
+
+  liquibase:
+    enabled: false
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+
+  security:
+    custom:
+      jwt-secret: "v9y$B&E)H@McQfTjWnZr4u7x!A%C*F-JaNdRgUkXp2s5v8y/B?E(G+KbPeShVmYq" # 256-bitli xavfsiz kalit
+      jwt-expiration-in-ms: 3600000
+    user:
+      name: "test_admin"
+      password: "{noop}test_pass"
+      roles: "ADMIN"
+
+  mail:
+    host: localhost
+    port: 25
+    username: "test@example.com"
+    password: "password"
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+app:
+  gemini:
+    api-key: "AIzaSyB3KRESypOeRc4dUHpVlM8ZreBcTScL8wc"
+  file:
+    storage:
+      root: "./test-storage"
+      quota-bytes: 1073741824
+      video-chunk-size-bytes: 1048576
+      max-video-size-bytes: 524288000
+      max-size-bytes: 104857600
+    server:
+      url: http://localhost:8080/v1/api/files/
+
+telegram:
+  api-id: "123456"
+  api-hash: "abcdef1234567890"
+  phone-number: "+998901234567"
+  session-name: "test_session"
+  session-path: "sessions/test"
+
+springdoc:
+  api-docs:
+    enabled: false

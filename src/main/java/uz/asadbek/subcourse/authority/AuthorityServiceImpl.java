@@ -12,6 +12,7 @@ import uz.asadbek.subcourse.authority.dto.AuthorityResponseDto;
 import uz.asadbek.subcourse.authority.filter.AuthorityFilter;
 import uz.asadbek.subcourse.exception.BadRequestException;
 import uz.asadbek.subcourse.exception.NotFoundException;
+import uz.asadbek.subcourse.util.ExceptionUtil;
 
 @Slf4j
 @Service
@@ -39,8 +40,8 @@ public class AuthorityServiceImpl implements AuthorityService {
     private AuthorityEntity findById(Long id) {
         return repository.findById(id)
             .orElseThrow(() -> {
-                log.warn("authority_not_found: {}", id);
-                return new NotFoundException("authority_not_found");
+                log.warn("Authority not found: {}", id);
+                return ExceptionUtil.build(NotFoundException.class, "error.not_found.authority", id);
             });
     }
 
@@ -48,7 +49,6 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Long create(AuthorityRequestDto dto) {
-        // Validate unique name
         check(repository.existsByName(dto.getName()), dto);
 
         var entity = new AuthorityEntity();
@@ -75,7 +75,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     private void check(boolean repository, AuthorityRequestDto dto) {
         if (repository) {
             log.warn("authority_name_already_exists: {}", dto.getName());
-            throw new BadRequestException("authority_name_already_exists");
+            throw ExceptionUtil.build(BadRequestException.class, "error.already_exists.authority", dto.getName());
         }
     }
 

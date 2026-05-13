@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd"
+    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1776427404610-2" author="AsadbekRajabboyev">
+        <addColumn tableName="course_lessons">
+            <column name="is_published" type="BOOLEAN" defaultValueBoolean="true"/>
+        </addColumn>
+        <addColumn tableName="course_lessons">
+            <column name="file_urls"
+                type="jsonb" defaultValue="{}"/>
+        </addColumn>
+        <addNotNullConstraint columnDataType="BIGINT" columnName="course_id"
+        tableName="course_lessons" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

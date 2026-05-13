@@ -40,14 +40,14 @@ public interface ScienceRepository extends JpaRepository<ScienceEntity, Long> {
                     when :lang = 'uz' then name.nameUz
                     when :lang = 'ru' then name.nameRu
                     when :lang = 'en' then name.nameEn
-                    when :lang = 'crl' then name.nameCrl
+                    when :lang = 'uz-cyrl' then name.nameCrl
                     else name.nameUz
                 end,
                 case
                     when :lang = 'uz' then description.descriptionUz
                     when :lang = 'ru' then description.descriptionRu
                     when :lang = 'en' then description.descriptionEn
-                    when :lang = 'crl' then description.descriptionCrl
+                    when :lang = 'uz-cyrl' then description.descriptionCrl
                     else description.descriptionUz
                 end,
              imagePath

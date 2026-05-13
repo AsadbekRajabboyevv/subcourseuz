@@ -1,67 +1,96 @@
 <app-page-wrapper>
-    <div page-title>
-        <nav class="mb-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
-            <a routerLink="/" class="hover:text-emerald-500">Asosiy</a>
-            <i class="fa-solid fa-chevron-right text-[7px]"></i>
-            <a routerLink="/courses/view/me" class="text-emerald-500">Mening kurslarim</a>
-            <i class="fa-solid fa-chevron-right text-[7px]"></i>
+    <div page-title class="w-full px-2 md:px-0">
+        <nav class="mb-3 flex items-center gap-2 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+            <a routerLink="/" class="hover:text-emerald-500 transition-colors" i18n="@@common.home">Asosiy</a>
+            <i class="fa-solid fa-chevron-right text-[7px] opacity-50"></i>
+            <span class="text-emerald-500" i18n="@@profile.my_courses">Mening kurslarim</span>
         </nav>
+        <h1 class="text-xl md:text-3xl font-black tracking-tight text-gray-900 dark:text-white uppercase">
+            <span i18n="@@profile.my_courses_title">O'quv jarayoni</span>
+        </h1>
     </div>
 
-    <div content class="grid grid-cols-12 gap-8">
-        <aside class="col-span-12 lg:col-span-3">
-            <div class="sticky top-24 space-y-5 rounded-[2.5rem] border border-gray-100 bg-white p-7 shadow-2xl dark:border-gray-800 dark:bg-gray-900">
-                <div class="flex items-center justify-between px-1">
-                    <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-sliders text-emerald-500 text-xs"></i>
-                        <h3 class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">Filtrlash</h3>
-                    </div>
-                    <button (click)="resetFilters()" class="active:scale-95 hover:rotate-2 text-[9px] font-bold uppercase text-gray-400 hover:text-red-500 transition-colors">Tozalash</button>
-                </div>
+    <div content class="grid grid-cols-12 gap-4 md:gap-8">
 
-                <div class="space-y-4 ">
-                    <app-input type="text" label="Qidiruv" placeholder="Nomi..." [(ngModel)]="filter.search"></app-input>
-                    <button (click)="applyFilters()" class="mt-5 hover:rotate-2 w-full rounded-2xl bg-emerald-600 py-4 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-emerald-500/20 hover:bg-emerald-700 transition-all active:scale-95">
-                        Natijalarni ko'rish
-                    </button>
+        <aside class="col-span-12 lg:col-span-3 order-1">
+            <div class="lg:sticky lg:top-24 rounded-[2rem] border border-gray-100 bg-white p-2 shadow-xl dark:border-gray-800 dark:bg-gray-900 lg:p-7 transition-all">
+
+                <button (click)="isFilterVisible = !isFilterVisible"
+                        class="flex w-full items-center justify-between p-4 lg:hidden focus:outline-none">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10">
+                            <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                        </div>
+                        <span class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white" i18n="@@course.search">Kursni qidirish</span>
+                    </div>
+                    <i class="fa-solid transition-transform duration-300 text-gray-400"
+                       [class.rotate-180]="isFilterVisible"
+                       [class]="isFilterVisible ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                </button>
+
+                <div [class.hidden]="!isFilterVisible" class="lg:block p-4 lg:p-0 space-y-5 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div class="hidden lg:flex items-center justify-between mb-2 px-1">
+                        <h3 class="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white" i18n="@@common.filter">Filtrlash</h3>
+                        <button (click)="resetFilters()" class="text-[9px] font-bold uppercase text-gray-400 hover:text-red-500 transition-colors" i18n="@@common.clear">Tozalash</button>
+                    </div>
+
+                    <div class="space-y-4">
+                        <app-input type="text" label="Qidiruv" i18n-label="@@common.search" placeholder="Kurs nomi..." [(ngModel)]="filter.search"></app-input>
+
+                        <button (click)="applyFilters(); isFilterVisible = false"
+                                class="w-full rounded-2xl bg-emerald-600 py-4 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-emerald-500/20 active:scale-95 transition-all hover:bg-emerald-700">
+                            <span i18n="@@common.apply_filter">Natijalarni ko'rish</span>
+                        </button>
+
+                        <button (click)="resetFilters()" class="w-full lg:hidden text-[9px] font-black uppercase text-gray-400 py-2">Tozalash</button>
+                    </div>
                 </div>
             </div>
         </aside>
 
-        <main class="col-span-12 lg:col-span-9">
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <main class="col-span-12 lg:col-span-9 order-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
 
                 @if (courseService.isLoading() && courseService.courses().length === 0) {
                     @for (i of [1,2,3,4,5,6]; track i) {
-                        <div class="h-80 animate-pulse rounded-[2.5rem] bg-gray-100 dark:bg-gray-800"></div>
+                        <div class="h-80 animate-pulse rounded-[2.5rem] bg-gray-100 dark:bg-gray-800/50"></div>
                     }
                 }
 
-                @for (course of courseService.courses(); track course.id) {
-                    <div class="active:scale-95 hover:rotate-2 group relative flex flex-col rounded-[2.5rem] border border-gray-100 bg-white p-4 transition-all hover:border-emerald-500 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900">
+                @for (course of courseService.courses(); track course.slug) {
+                    <div class="active:scale-95 hover:rotate-2 group relative flex flex-col rounded-[2.5rem] border border-gray-100 bg-white p-3 md:p-4 transition-all hover:border-emerald-500 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900 active:scale-[0.98]">
+
                         <div class="relative h-44 overflow-hidden rounded-[1.8rem]">
-                            <img [src]="course.imagePath || 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png'" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                            <div class="absolute top-3 left-3 rounded-lg bg-black/40 backdrop-blur-md px-2 py-1 text-[9px] font-black text-white uppercase">
+                            <img [src]="course.imagePath || 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png'"
+                                 class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute top-3 left-3 rounded-lg bg-black/40 backdrop-blur-md px-2 py-1 text-[8px] font-black text-white uppercase tracking-wider">
                                 {{ course.lang }}
+                            </div>
+                            <div class="absolute bottom-3 right-3 rounded-full bg-emerald-500 px-3 py-1 text-[9px] font-black text-white shadow-lg">
+                                <span i18n="@@course.purchased">Sotib olingan</span>
                             </div>
                         </div>
 
                         <div class="mt-5 px-1 flex-1 flex flex-col">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-[9px] font-black uppercase text-emerald-500 tracking-tighter">{{ course.ownerName }}</span>
-                                <span class="text-[9px] font-bold text-gray-400">{{ course.lessonsCount }} dars</span>
+                                <span class="text-[9px] font-black uppercase text-emerald-500 tracking-tighter truncate max-w-[120px]">
+                                    {{ course.ownerName }}
+                                </span>
+                                <div class="flex items-center gap-1.5 text-gray-400">
+                                    <i class="fa-solid fa-layer-group text-[8px]"></i>
+                                    <span class="text-[9px] font-bold">{{ course.lessonsCount }} <span i18n="@@course.lessons_count">dars</span></span>
+                                </div>
                             </div>
 
-                            <h3 class="text-lg font-black tracking-tight text-gray-900 dark:text-white line-clamp-2 leading-tight">
+                            <h3 class="text-md md:text-lg font-black tracking-tight text-gray-900 dark:text-white line-clamp-2 leading-tight group-hover:text-emerald-500 transition-colors">
                                 {{ course.name }}
                             </h3>
 
-                            <div class="mt-auto pt-4 flex items-center gap-2">
-                                <button [routerLink]="['/courses-view/', course.name]"
-                                        [queryParams]="{ id: course.id }"
-                                        class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-[10px] font-black uppercase text-white transition-all hover:bg-emerald-600 dark:bg-white dark:text-gray-900 active:scale-95">
-                                    <i class="fa-solid fa-play text-xs"></i>
-                                    <span>Davom ettirish</span>
+                            <div class="mt-auto pt-5">
+                                <button [routerLink]="['/courses-view/', course.slug]"
+                                        class="flex w-full items-center justify-center gap-3 rounded-2xl bg-gray-900 py-4 text-[10px] font-black uppercase tracking-[0.1em] text-white transition-all hover:bg-emerald-600 dark:bg-white dark:text-gray-900 active:scale-95 shadow-xl hover:shadow-emerald-500/20">
+                                    <i class="fa-solid fa-circle-play text-xs"></i>
+                                    <span i18n="@@course.continue_learning">O'qishni davom ettirish</span>
                                 </button>
                             </div>
                         </div>
@@ -69,21 +98,23 @@
                 }
             </div>
 
-            @if (courseService.isLoading() && courseService.courses().length > 0) {
-                <div class="flex justify-center py-12">
-                    <div class="flex items-center gap-3">
-                        <div class="h-2 w-2 animate-bounce rounded-full bg-emerald-500"></div>
-                        <div class="h-2 w-2 animate-bounce rounded-full bg-emerald-500 [animation-delay:-0.3s]"></div>
-                        <div class="h-2 w-2 animate-bounce rounded-full bg-emerald-500 [animation-delay:-0.5s]"></div>
-                        <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-2">Yuklanmoqda...</span>
+            @if (!courseService.isLoading() && courseService.courses().length === 0) {
+                <div class="py-32 text-center">
+                    <div class="inline-flex h-20 w-20 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 mb-6">
+                        <i class="fa-solid fa-book-open-reader text-3xl text-gray-200"></i>
                     </div>
+                    <p class="font-black uppercase tracking-[0.2em] text-[10px] text-gray-400" i18n="@@course.no_courses">Sizda hali kurslar mavjud emas</p>
+                    <button routerLink="/courses-list" class="mt-6 text-[10px] font-black uppercase text-emerald-500 hover:underline" i18n="@@course.go_to_catalog">Kurslar katalogiga o'tish</button>
                 </div>
             }
 
-            @if (!courseService.isLoading() && courseService.courses().length === 0) {
-                <div class="py-20 text-center opacity-30">
-                    <i class="fa-solid fa-box-open text-5xl mb-4 text-gray-300"></i>
-                    <p class="font-black uppercase tracking-widest text-xs">Kurslar topilmadi</p>
+            @if (courseService.isLoading() && courseService.courses().length > 0) {
+                <div class="flex justify-center py-10">
+                    <div class="flex gap-1.5">
+                        <div class="h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-500"></div>
+                        <div class="h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-500 [animation-delay:0.2s]"></div>
+                        <div class="h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-500 [animation-delay:0.4s]"></div>
+                    </div>
                 </div>
             }
         </main>

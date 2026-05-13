@@ -1,5 +1,6 @@
 package uz.asadbek.subcourse.user;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +13,7 @@ import uz.asadbek.subcourse.user.dto.UserResponseDto;
 import uz.asadbek.subcourse.user.filter.UserFilter;
 
 @RequestMapping("/v1/api/users")
+@Tag(name = "Userlar", description = "Userlar")
 public interface UserApi {
 
     @GetMapping("/profile")

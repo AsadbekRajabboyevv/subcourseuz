@@ -20,3 +20,226 @@ html.dark body {
     transition-property: color, background-color, border-color;
     transition-duration: 200ms;
 }
+
+/* ── Markdown preview global styles (ngx-markdown renders outside component scope) ── */
+.md-preview-body a {
+  color: #0969da !important;
+  text-decoration: none;
+}
+.md-preview-body a:hover {
+  text-decoration: underline;
+}
+.dark .md-preview-body a {
+  color: #58a6ff !important;
+}
+
+.md-preview-body h1, .md-preview-body h2, .md-preview-body h3,
+.md-preview-body h4, .md-preview-body h5, .md-preview-body h6 {
+  font-weight: 600; line-height: 1.25; margin: .75em 0 .4em;
+  padding-bottom: .3em; border-bottom: 1px solid #d0d7de;
+}
+.md-preview-body h1 { font-size: 2em; }
+.md-preview-body h2 { font-size: 1.5em; }
+.md-preview-body h3 { font-size: 1.25em; border-bottom: none; }
+.md-preview-body p { margin: .5em 0; font-size: 14px; line-height: 1.6; }
+.md-preview-body ul { list-style: disc; padding-left: 2em; margin: .5em 0; }
+.md-preview-body ol { list-style: decimal; padding-left: 2em; margin: .5em 0; }
+.md-preview-body li { margin: .2em 0; font-size: 14px; }
+.md-preview-body code {
+  background: rgba(175,184,193,.2); border-radius: 6px;
+  padding: .2em .4em; font-family: ui-monospace, monospace; font-size: 85%;
+}
+.md-preview-body pre {
+  background: #f6f8fa; border-radius: 6px; padding: 16px;
+  overflow-x: auto; margin: .75em 0; font-size: 85%; line-height: 1.45;
+}
+.md-preview-body pre code { background: none; padding: 0; font-size: 100%; }
+.md-preview-body blockquote {
+  border-left: 4px solid #d0d7de; padding: 0 1em; color: #57606a; margin: .75em 0;
+}
+
+/* Table — Tailwind preflight resets borders, force them back */
+.md-preview-body table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  margin: .75em 0 !important;
+  display: table !important;
+}
+.md-preview-body thead { display: table-header-group !important; }
+.md-preview-body tbody { display: table-row-group !important; }
+.md-preview-body tr { display: table-row !important; }
+.md-preview-body th {
+  display: table-cell !important;
+  background: #f6f8fa !important;
+  font-weight: 600 !important;
+  padding: 6px 13px !important;
+  border: 1px solid #d0d7de !important;
+  text-align: left !important;
+}
+.md-preview-body td {
+  display: table-cell !important;
+  padding: 6px 13px !important;
+  border: 1px solid #d0d7de !important;
+  vertical-align: top !important;
+}
+.md-preview-body tbody tr:nth-child(even) td { background: #f6f8fa !important; }
+
+.md-preview-body hr { border: none; border-top: 1px solid #d0d7de; margin: 1em 0; }
+.md-preview-body strong { font-weight: 600; }
+.md-preview-body em { font-style: italic; }
+
+.dark .md-preview-body h1, .dark .md-preview-body h2,
+.dark .md-preview-body h3 { border-color: #21262d; color: #c9d1d9; }
+.dark .md-preview-body code { background: rgba(110,118,129,.4); }
+.dark .md-preview-body pre { background: #161b22; }
+.dark .md-preview-body blockquote { border-color: #3b434b; color: #8b949e; }
+.dark .md-preview-body th { background: #161b22 !important; border-color: #30363d !important; color: #c9d1d9 !important; }
+.dark .md-preview-body td { border-color: #30363d !important; }
+.dark .md-preview-body tbody tr:nth-child(even) td { background: #161b22 !important; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GLOBAL ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Page enter animation ── */
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes bounce-dots {
+  0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+  40%           { transform: scale(1); opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* ── Apply page-enter to router-outlet content ── */
+router-outlet + * {
+  animation: page-enter 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Utility animation classes ── */
+.animate-page-enter  { animation: page-enter 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-fade-in     { animation: fade-in 0.3s ease both; }
+.animate-slide-up    { animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-slide-down  { animation: slide-down 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-scale-in    { animation: scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-float       { animation: float 3s ease-in-out infinite; }
+
+/* Staggered children */
+.stagger-children > *:nth-child(1)  { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2)  { animation-delay: 60ms; }
+.stagger-children > *:nth-child(3)  { animation-delay: 120ms; }
+.stagger-children > *:nth-child(4)  { animation-delay: 180ms; }
+.stagger-children > *:nth-child(5)  { animation-delay: 240ms; }
+.stagger-children > *:nth-child(6)  { animation-delay: 300ms; }
+.stagger-children > *:nth-child(7)  { animation-delay: 360ms; }
+.stagger-children > *:nth-child(8)  { animation-delay: 420ms; }
+
+/* ── Skeleton shimmer ── */
+.skeleton {
+  background: linear-gradient(90deg,
+    #f1f5f9 25%,
+    #e2e8f0 50%,
+    #f1f5f9 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+.dark .skeleton {
+  background: linear-gradient(90deg,
+    #1e293b 25%,
+    #334155 50%,
+    #1e293b 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ── Bounce dots loader ── */
+.bounce-dots {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+.bounce-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  animation: bounce-dots 1.4s ease-in-out infinite;
+}
+.bounce-dots span:nth-child(1) { animation-delay: 0s; }
+.bounce-dots span:nth-child(2) { animation-delay: 0.16s; }
+.bounce-dots span:nth-child(3) { animation-delay: 0.32s; }
+
+/* ── Smooth hover transitions for cards ── */
+.card-hover {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s ease,
+              border-color 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+}
+.dark .card-hover:hover {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+
+/* ── Button press effect ── */
+.btn-press {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* ── Reduce motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

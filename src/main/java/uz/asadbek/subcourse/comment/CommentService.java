@@ -1,5 +1,6 @@
 package uz.asadbek.subcourse.comment;
 
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.asadbek.subcourse.comment.dto.CommentInfoResponseDto;
@@ -14,4 +15,6 @@ public interface CommentService {
     Long create(CommentRequestDto dto);
     Long update(Long id, CommentRequestDto dto);
     Long delete(Long id);
+    Double getAvgRating(String courseSlug, Long lessonId, Long testId);
+    List<CommentResponseDto> getTop();
 }

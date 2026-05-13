@@ -1,47 +1,40 @@
-import { Injectable, computed, signal, EventEmitter } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
   private readonly STORAGE_KEY = 'theme';
 
-  theme = signal<'light' | 'dark'>('light');
+  // Read from localStorage immediately — index.html script already applied the class,
+  // so the signal just needs to reflect the real current state.
+  theme = signal<'light' | 'dark'>(this.getSavedTheme());
   isDark = computed(() => this.theme() === 'dark');
 
-  // Theme change event
-  themeChange = new EventEmitter<'light' | 'dark'>();
-
-  constructor() {
-    const saved = localStorage.getItem(this.STORAGE_KEY) as 'light' | 'dark' | null;
-    const initial = saved ?? 'light';
-    this.theme.set(initial);
-    this.applyTheme(initial);
+  private getSavedTheme(): 'light' | 'dark' {
+    try {
+      const saved = localStorage.getItem(this.STORAGE_KEY);
+      return saved === 'dark' ? 'dark' : 'light';
+    } catch {
+      return 'light';
+    }
   }
 
   toggle(): void {
-    const newTheme = this.theme() === 'light' ? 'dark' : 'light';
-    this.setTheme(newTheme);
+    this.setTheme(this.theme() === 'light' ? 'dark' : 'light');
   }
 
   setTheme(theme: 'light' | 'dark'): void {
     this.theme.set(theme);
-    localStorage.setItem(this.STORAGE_KEY, theme);
+    try {
+      localStorage.setItem(this.STORAGE_KEY, theme);
+    } catch { /* ignore */ }
     this.applyTheme(theme);
-    this.themeChange.emit(theme);
   }
 
-  applyTheme(theme: 'light' | 'dark'): void {
-    const html = document.documentElement;
+  private applyTheme(theme: 'light' | 'dark'): void {
     if (theme === 'dark') {
-      html.classList.add('dark');
+      document.documentElement.classList.add('dark');
     } else {
-      html.classList.remove('dark');
+      document.documentElement.classList.remove('dark');
     }
-  }
-
-  // Initialize theme on app start
-  initializeTheme(): void {
-    const saved = localStorage.getItem(this.STORAGE_KEY) as 'light' | 'dark' | null;
-    const theme = saved ?? 'light';
-    this.setTheme(theme);
   }
 }

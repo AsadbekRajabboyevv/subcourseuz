@@ -3,6 +3,7 @@ package uz.asadbek.subcourse.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -54,36 +55,28 @@ public class SecurityConfig {
                     "/v3/api-docs/**",
                     "/swagger-ui/**",
                     "/swagger-ui.html",
-                    "/swagger-ui/index.html",
-                    "/swagger-ui/swagger-ui.css",
-                    "/swagger-ui/swagger-ui-bundle.js",
-                    "/swagger-ui/swagger-ui-standalone-preset.js",
                     "/webjars/**"
                 ).permitAll()
+                .requestMatchers(HttpMethod.GET, "/v1/api/comments/**").permitAll()
                 .requestMatchers("/v1/api/**").authenticated()
                 .anyRequest().permitAll()
             )
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
             )
-
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling(
-                ex -> ex.authenticationEntryPoint((request, response, authException) -> {
-                        handlerExceptionResolver.resolveException(request, response, null,
-                            authException);
+            .exceptionHandling(ex ->
+                ex.authenticationEntryPoint((request, response, authException) -> {
+                        handlerExceptionResolver.resolveException(request, response, null, authException);
                     })
                     .accessDeniedHandler((request, response, accessDeniedException) -> {
-                        handlerExceptionResolver.resolveException(request, response, null,
-                            accessDeniedException);
+                        handlerExceptionResolver.resolveException(request, response, null, accessDeniedException);
                     })
             );
 
         return http.build();
     }
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(

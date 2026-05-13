@@ -67,6 +67,9 @@ public class TopUpRequestEntity extends BaseEntity {
     @Column(name = "rejected_at")
     private LocalDateTime rejectedAt;
 
+    @Column(name = "payment_ex_id")
+    private String paymentExId;
+
     @Column(name = "payment_id")
     private Long paymentId; // approve bo‘lganda PaymentEntity ga link
 

@@ -15,7 +15,7 @@ import {RegisterRequest} from "../auth.model";
 export class RegisterComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
-
+  showSuccessModal = false;
   regData: RegisterRequest = {
     email: '',
     password: '',
@@ -26,14 +26,19 @@ export class RegisterComponent {
     phone: '',
     position: ''
   };
-
   onRegister() {
     this.authService.register(this.regData).subscribe({
       next: () => {
-        alert('Muvaffaqiyatli ro\'yxatdan o\'tdingiz!');
-        this.router.navigate(['/auth/login']);
+        this.showSuccessModal = true;
       },
-      error: (err) => console.error('Xatolik:', err)
+      error: (err) => {
+        console.error(err);
+      }
     });
+  }
+
+  closeModalAndLogin() {
+    this.showSuccessModal = false;
+    this.router.navigate(['/login']);
   }
 }

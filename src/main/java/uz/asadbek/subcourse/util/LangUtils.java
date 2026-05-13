@@ -2,17 +2,12 @@ package uz.asadbek.subcourse.util;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import uz.asadbek.subcourse.auth.CustomUserDetails;
+import org.springframework.context.i18n.LocaleContextHolder;
 import uz.asadbek.subcourse.util.embedded.DescriptionEmbedded;
 import uz.asadbek.subcourse.util.embedded.NameEmbedded;
 
 public final class LangUtils {
-
-    public static final String DEFAULT_LANG = "uz";
     private static final Map<String, String> MAP = new LinkedHashMap<>();
-
     static {
         MAP.put("sh", "ш");
         MAP.put("ch", "ч");
@@ -78,15 +73,7 @@ public final class LangUtils {
     }
 
     public static String currentLang() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null
-            || !(authentication.getPrincipal() instanceof CustomUserDetails user)) {
-            return DEFAULT_LANG;
-        }
-
-        String lang = user.getLanguage();
-        return normalize(lang);
+        return LocaleContextHolder.getLocale().getLanguage();
     }
 
     public static String getName(NameEmbedded name) {
@@ -121,20 +108,6 @@ public final class LangUtils {
         };
 
         return fallback(resolved, desc.getDescriptionUz());
-    }
-
-    private static String normalize(String lang) {
-        if (lang == null || lang.isBlank()) {
-            return DEFAULT_LANG;
-        }
-
-        lang = lang.toLowerCase();
-
-        if (lang.contains("-")) {
-            return lang.split("-")[0];
-        }
-
-        return lang;
     }
 
     private static String fallback(String value, String defaultValue) {

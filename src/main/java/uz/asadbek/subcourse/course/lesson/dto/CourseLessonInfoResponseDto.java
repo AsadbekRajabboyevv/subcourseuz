@@ -1,5 +1,6 @@
 package uz.asadbek.subcourse.course.lesson.dto;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -14,4 +15,7 @@ public class CourseLessonInfoResponseDto {
     private String courseName;
     private String courseImagePath;
     private String textContent;
+    private Long courseId;
+    private Boolean isPublished;
+    private List<String> fileUrls;
 }

@@ -29,7 +29,7 @@ public interface TopUpRequestRepository extends JpaRepository<TopUpRequestEntity
                CONCAT(a.firstName,' ', a.lastName),
                t.approvedAt,
                t.rejectedAt,
-               p.exId,
+               t.paymentExId,
                t.createdAt,
                t.updatedAt,
                t.deletedAt,
@@ -63,7 +63,7 @@ public interface TopUpRequestRepository extends JpaRepository<TopUpRequestEntity
                CONCAT(a.firstName,' ', a.lastName),
                t.approvedAt,
                t.rejectedAt,
-               p.exId,
+               t.paymentExId,
                t.createdAt,
                t.updatedAt,
                t.deletedAt,
@@ -77,7 +77,6 @@ public interface TopUpRequestRepository extends JpaRepository<TopUpRequestEntity
             LEFT JOIN PaymentEntity p ON t.paymentId = p.id
             LEFT JOIN BalanceTransactionEntity bt ON bt.paymentId = t.paymentId
             WHERE t.deletedAt IS NULL
-            AND t.id = :id
             AND t.userId = :userId
             AND (:#{#filter.status} IS NULL OR t.status = :#{#filter.status})
             AND (:#{#filter.transactionId} IS NULL OR bt.externalTx = :#{#filter.transactionId})
@@ -106,7 +105,7 @@ public interface TopUpRequestRepository extends JpaRepository<TopUpRequestEntity
                CONCAT(a.firstName,' ', a.lastName),
                t.approvedAt,
                t.rejectedAt,
-               p.exId,
+               t.paymentExId,
                t.createdAt,
                t.updatedAt,
                t.deletedAt,
@@ -117,7 +116,6 @@ public interface TopUpRequestRepository extends JpaRepository<TopUpRequestEntity
             FROM TopUpRequestEntity t
             LEFT JOIN UserEntity u ON u.id = t.userId
             LEFT JOIN UserEntity a ON a.id = t.approvedBy
-            LEFT JOIN PaymentEntity p ON t.paymentId = p.id
             LEFT JOIN BalanceTransactionEntity bt ON bt.paymentId = t.paymentId
             WHERE t.deletedAt IS NULL
             AND (:#{#filter.status} IS NULL OR t.status = :#{#filter.status})
@@ -147,7 +145,7 @@ public interface TopUpRequestRepository extends JpaRepository<TopUpRequestEntity
                CONCAT(a.firstName,' ', a.lastName),
                t.approvedAt,
                t.rejectedAt,
-               p.exId,
+               t.paymentExId,
                t.createdAt,
                t.updatedAt,
                t.deletedAt,

@@ -1,5 +1,6 @@
 package uz.asadbek.subcourse.payment.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,4 +21,6 @@ public class PaymentResponseDto {
     private Long amount;
     private CurrencyEnum currency;
     private PaymentType type;
+    @JsonIgnore
+    private Long paymentId;
 }

@@ -21,7 +21,8 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
               t.externalTx,
               p.amount,
               p.currency,
-              p.type
+              p.type,
+              null
             )
             FROM PaymentEntity p
             LEFT JOIN BalanceTransactionEntity t on p.id = t.paymentId
@@ -48,7 +49,8 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
               t.externalTx,
               p.amount,
               p.currency,
-              p.type
+              p.type,
+              null
             )
             FROM PaymentEntity p
             LEFT JOIN BalanceTransactionEntity t on p.id = t.paymentId

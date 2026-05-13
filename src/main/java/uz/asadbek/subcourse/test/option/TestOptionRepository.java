@@ -22,4 +22,11 @@ public interface TestOptionRepository extends JpaRepository<TestOptionEntity, Lo
             WHERE o.questionId IN :questionIds
         """)
     List<TestOptionResponseDto> getByQuestionIds(List<Long> questionIds);
+
+    @Query("""
+            SELECT o
+            FROM TestOptionEntity o
+            WHERE o.questionId IN :questionIds
+        """)
+    List<TestOptionEntity> findByQuestionIds(List<Long> questionIds);
 }

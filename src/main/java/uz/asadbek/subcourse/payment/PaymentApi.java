@@ -1,5 +1,6 @@
 package uz.asadbek.subcourse.payment;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import uz.asadbek.subcourse.payment.dto.PaymentResponseDto;
 import uz.asadbek.subcourse.payment.filter.PaymentFilter;
 
 @RequestMapping("/v1/api/payments")
+@Tag(name = "Payment", description = "Payment")
 public interface PaymentApi {
 
     @PostMapping

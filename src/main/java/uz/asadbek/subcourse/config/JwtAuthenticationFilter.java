@@ -1,94 +1,179 @@
 package uz.asadbek.subcourse.config;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import uz.asadbek.subcourse.auth.CustomUserDetails;
+import uz.asadbek.subcourse.exception.InvalidTokenException;
+import uz.asadbek.subcourse.exception.TokenExpiredException;
 import uz.asadbek.subcourse.user.UserEntity;
+import uz.asadbek.subcourse.util.ExceptionUtil;
 import uz.asadbek.subcourse.util.JwtUtil;
 
+@Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private final ObjectMapper objectMapper;
+
+    private static CustomUserDetails buildUserDetails(
+        Long id, String username, String lang, List<String> roles
+    ) {
+        var user = new UserEntity();
+        user.setId(id);
+        user.setEmail(username);
+        user.setLanguage(lang);
+        if (!roles.isEmpty()) {
+            user.setRole(roles.get(0));
+        }
+
+        return CustomUserDetails.builder().user(user).build();
+    }
+
+    private static String getClientIp(HttpServletRequest request) {
+        String forwarded = request.getHeader("X-Forwarded-For");
+        if (StringUtils.hasText(forwarded)) {
+            return forwarded.split(",")[0].trim();
+        }
+        return request.getRemoteAddr();
+    }
 
     @Override
     protected void doFilterInternal(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        FilterChain filterChain
+        @NonNull HttpServletRequest request,
+        @NonNull HttpServletResponse response,
+        @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
+        Optional<String> tokenOpt = JwtUtil.resolveAccessToken(request);
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (tokenOpt.isEmpty()) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token = authHeader.substring(7);
+        String token = tokenOpt.get();
 
         try {
-            Claims claims = JwtUtil.parseToken(token);
-
-            String username = claims.getSubject();
-            Long userId = claims.get("id", Long.class);
-            List<String> roles = claims.get("roles", List.class);
-            String lang = claims.get("lang", String.class);
-
-            if (username != null
-                && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UsernamePasswordAuthenticationToken authentication = getAuthenticationToken(
-                    userId, username, lang, roles);
-
-                authentication.setDetails(
-                    new WebAuthenticationDetailsSource()
-                        .buildDetails(request)
-                );
-
-                SecurityContextHolder.getContext()
-                    .setAuthentication(authentication);
-            }
-
-        } catch (JwtException e) {
+            authenticateFromToken(token, request);
+        } catch (TokenExpiredException ex) {
+            log.warn("[JWT] Expired token – uri={} ip={}",
+                request.getRequestURI(), getClientIp(request));
+            writeErrorResponse(response, HttpStatus.UNAUTHORIZED, "TOKEN_EXPIRED",
+                "Access token has expired. Please refresh your session.");
+            return;
+        } catch (InvalidTokenException ex) {
+            log.warn("[JWT] Invalid token – uri={} ip={} reason={}",
+                request.getRequestURI(), getClientIp(request), ex.getMessage());
+            writeErrorResponse(response, HttpStatus.UNAUTHORIZED, "TOKEN_INVALID",
+                "Access token is invalid.");
+            return;
+        } catch (Exception ex) {
+            log.error("[JWT] Unexpected error during token processing – uri={}",
+                request.getRequestURI(), ex);
             SecurityContextHolder.clearContext();
-
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.getWriter().write(
-                "{\"success\":false,\"message\":\"Invalid or expired token\"}"
-            );
+            writeErrorResponse(response, HttpStatus.INTERNAL_SERVER_ERROR, "AUTH_ERROR",
+                "Authentication could not be completed.");
             return;
         }
 
         filterChain.doFilter(request, response);
     }
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return path.startsWith("/v1/api/auth/") ||
+            path.startsWith("/v1/api/public/") ||
+            path.startsWith("/swagger-ui/") ||
+            path.startsWith("/v3/api-docs");
+    }
 
-    private static UsernamePasswordAuthenticationToken getAuthenticationToken(
-        Long id, String username, String lang, List<String> roles) {
+    private void authenticateFromToken(String token, HttpServletRequest request) {
+        var claims = JwtUtil.parseToken(token);
 
-        UserEntity user = new UserEntity();
-        user.setId(id);
-        user.setEmail(username);
-        user.setLanguage(lang);
-        if (roles != null && !roles.isEmpty()) {
-            user.setRole(roles.get(0));
+        String username = claims.getSubject();
+        if (!StringUtils.hasText(username)) {
+            throw ExceptionUtil.build(TokenExpiredException.class, "error.auth.invalid_token");
         }
 
-        var userDetails = CustomUserDetails.builder().user(user).build();
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            log.trace("[JWT] Security context already populated – skipping for user '{}'",
+                username);
+            return;
+        }
 
-        return new UsernamePasswordAuthenticationToken(
+        Long userId = claims.get("id", Long.class);
+        String lang = claims.get("lang", String.class);
+
+        @SuppressWarnings("unchecked")
+        List<String> roles = Optional
+            .ofNullable(claims.get("roles", List.class))
+            .orElse(Collections.emptyList());
+
+        CustomUserDetails userDetails = buildUserDetails(userId, username, lang, roles);
+
+        var authentication = new UsernamePasswordAuthenticationToken(
             userDetails,
             null,
             userDetails.getAuthorities()
         );
+
+        authentication.setDetails(
+            new WebAuthenticationDetailsSource().buildDetails(request)
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        log.debug("[JWT] Authenticated user='{}' roles={}", username, roles);
+    }
+
+    private void writeErrorResponse(
+        HttpServletResponse response,
+        HttpStatus status,
+        String errorCode,
+        String message
+    ) throws IOException {
+        SecurityContextHolder.clearContext();
+
+        var body = new ErrorResponse(
+            false,
+            status.value(),
+            errorCode,
+            message,
+            Instant.now().toString()
+        );
+
+        response.setStatus(status.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
+        objectMapper.writeValue(response.getWriter(), body);
+    }
+
+    private record ErrorResponse(
+        boolean success,
+        int status,
+        String errorCode,
+        String message,
+        String timestamp
+    ) {
+
     }
 }

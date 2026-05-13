@@ -37,6 +37,7 @@ public class BalanceEntity extends BaseEntity {
     @Column(name = "last_transaction_at")
     private LocalDateTime lastTransactionAt;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "currency", nullable = false)
     private CurrencyEnum currency;
 

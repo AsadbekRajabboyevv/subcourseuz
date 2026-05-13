@@ -1,5 +1,6 @@
 package uz.asadbek.subcourse.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.boot.persistence.autoconfigure.EntityScan;
@@ -15,7 +16,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EntityScan("uz.asadbek.subcourse")
 @EnableJpaRepositories("uz.asadbek.subcourse")
 @EnableTransactionManagement
-@EnableJpaAuditing(dateTimeProviderRef = "auditingDateTimeProvider")
+@EnableJpaAuditing(
+    dateTimeProviderRef = "auditingDateTimeProvider",
+    auditorAwareRef = "auditAware"
+)
 public class DomainConfig {
 
     @Bean(name = "auditingDateTimeProvider")
@@ -23,4 +27,8 @@ public class DomainConfig {
         return () -> Optional.of(LocalDateTime.now());
     }
 
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
 }

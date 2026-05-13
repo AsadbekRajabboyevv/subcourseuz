@@ -8,13 +8,12 @@ import {
   provideRouter,
   withRouterConfig,
   withInMemoryScrolling,
-  TitleStrategy
 } from '@angular/router';
 import { provideHttpClient, withInterceptors} from '@angular/common/http';
 import { routes } from 'app/app.routes';
-import { CustomTitleStrategy } from 'app/common/title-strategy.injectable';
 import { authInterceptor } from './common/auth/auth.interceptor';
 import { errorInterceptor } from "./common/error/error.interceptor";
+import { provideMarkdown } from 'ngx-markdown';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -42,9 +41,6 @@ export const appConfig: ApplicationConfig = {
       BrowserAnimationsModule,
     ),
 
-    {
-      provide: TitleStrategy,
-      useClass: CustomTitleStrategy
-    }
+    provideMarkdown(),
   ]
 };
