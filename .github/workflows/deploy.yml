@@ -138,16 +138,15 @@ jobs:
 
       - name: 🔐 Setup SSH
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.SERVER_HOST_STABLE }} >> ~/.ssh/known_hosts
-
+            mkdir -p ~/.ssh
+            echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
       - name: 🔗 Test SSH Connection
         run: |
-          ssh -i ~/.ssh/id_ed25519 \
+          ssh -i ~/.ssh/id_rsa \
               -o StrictHostKeyChecking=no \
-              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST_STABLE }} \
+              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
               "echo '✅ SSH connection OK' && uptime"
 
       - name: 🛑 Stop Service
