@@ -187,8 +187,7 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>run build</arguments>
-                        </configuration>
+                            <arguments>run build:localize</arguments>                        </configuration>
                     </execution>
                 </executions>
                 <configuration>
