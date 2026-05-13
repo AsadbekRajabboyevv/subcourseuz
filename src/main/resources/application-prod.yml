@@ -63,7 +63,7 @@ springdoc:
 
 app:
   confirmation:
-    url: https://localhost:8080/v1/api/auth/confirm?token=
+    url: https://subcourse.asadbek-rajabboyev.uz/v1/api/auth/confirm?token=
   gemini:
     api-key: ${GEMINI_API_KEY}
     api-path: https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent
@@ -95,11 +95,4 @@ app:
       max-video-size-bytes: ${FILE_STORAGE_MAX_VIDEO_SIZE_BYTES}
       max-size-bytes: ${FILE_STORAGE_MAX_SIZE_BYTES}
     server:
-      url: http://localhost:8080/v1/api/files/
-
-telegram:
-  api-id: ${TELEGRAM_API_ID}
-  api-hash: ${TELEGRAM_API_HASH}
-  phone-number: ${TELEGRAM_PHONE_NUMBER}
-  session-name: ${TELEGRAM_SESSION_NAME}
-  session-path: ${TELEGRAM_SESSION_PATH}
+      url: https://subcourse.asadbek-rajabboyev.uz/v1/api/files/

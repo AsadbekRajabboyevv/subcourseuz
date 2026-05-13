@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,13 +39,16 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final BalanceService balanceService;
     private final MessageSource messageSource;
+    @Value("${app.confirmation.url}")
+    private String confirmationUrl;
 
     @Override
     @Transactional
     public AuthResponseDto login(AuthRequestDto dto, String language,
         HttpServletResponse response) {
         UserEntity user = userService.findByEmail(dto.getEmail())
-            .orElseThrow(() -> ExceptionUtil.build(BadRequestException.class, "error.auth.invalid_credentials"));
+            .orElseThrow(() -> ExceptionUtil.build(BadRequestException.class,
+                "error.auth.invalid_credentials"));
 
         if (!user.isEnabled()) {
             throw ExceptionUtil.build(BadRequestException.class, "error.auth.user_not_enabled");
@@ -75,8 +79,7 @@ public class AuthServiceImpl implements AuthService {
 
         user = userService.save(user);
         balanceService.createBalance(user);
-        String confirmationLink =
-            STR."http://localhost:8080/v1/api/auth/confirm?token=\{confirmToken}";
+        var confirmationLink = confirmationUrl + confirmToken;
 
         emailService.sendEmail(
             user.getEmail(),
@@ -92,16 +95,17 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public AuthResponseDto refresh(HttpServletRequest request, HttpServletResponse response) {
-        Optional<String> token = JwtUtil.extractRefreshTokenFromCookie(request);
+        var token = JwtUtil.extractRefreshTokenFromCookie(request);
 
-        RefreshTokenEntity stored = refreshTokenRepository.findByToken(token.get())
+        var stored = refreshTokenRepository.findByToken(token.get())
             .filter(t -> !t.isRevoked() && t.getExpiryDate().isAfter(LocalDateTime.now()))
-            .orElseThrow(() -> ExceptionUtil.build(TokenExpiredException.class, "error.auth.refresh_token_expired"));
+            .orElseThrow(() -> ExceptionUtil.build(TokenExpiredException.class,
+                "error.auth.refresh_token_expired"));
 
         stored.setRevoked(true);
         refreshTokenRepository.save(stored);
 
-        UserEntity user = userService.findById(stored.getUserId());
+        var user = userService.findById(stored.getUserId());
 
         return issueTokens(user, user.getLanguage(), response);
     }
@@ -109,7 +113,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void logout(HttpServletRequest request, HttpServletResponse response) {
-        Optional<String> token = JwtUtil.extractRefreshTokenFromCookie(request);
+        var token = JwtUtil.extractRefreshTokenFromCookie(request);
 
         token.flatMap(refreshTokenRepository::findByToken).ifPresent(t -> {
             t.setRevoked(true);
@@ -135,7 +139,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void changeEmail(String newEmail) {
-        UserEntity user = userService.getCurrentUser();
+        var user = userService.getCurrentUser();
 
         if (user.getEmail().equalsIgnoreCase(newEmail)) {
             return;
@@ -148,26 +152,26 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(newEmail);
         user.setEnabled(false);
 
-        String token = UUID.randomUUID().toString();
+        var token = UUID.randomUUID().toString();
         user.setConfirmationToken(token);
 
         userService.save(user);
 
-        String confirmationLink =
-            STR."http://localhost:8080/v1/api/users/confirm?token=\{token}";
+        var confirmationLink = confirmationUrl + token;
 
         emailService.sendEmail(
             newEmail,
-            messageSource.getMessage("email.confirmation_subject", null, LocaleContextHolder.getLocale()),
+            messageSource.getMessage("email.confirmation_subject", null,
+                LocaleContextHolder.getLocale()),
             buildChangeEmailTemplate(confirmationLink)
         );
     }
 
     private AuthResponseDto issueTokens(UserEntity user, String language,
         HttpServletResponse response) {
-        String refreshToken = JwtUtil.generateRefreshToken();
+        var refreshToken = JwtUtil.generateRefreshToken();
 
-        RefreshTokenEntity entity = new RefreshTokenEntity();
+        var entity = new RefreshTokenEntity();
         entity.setToken(refreshToken);
         entity.setUserId(user.getId());
         entity.setExpiryDate(LocalDateTime.now().plusDays(7));
@@ -181,7 +185,7 @@ public class AuthServiceImpl implements AuthService {
             .user(user)
             .build();
 
-        String accessToken = JwtUtil.generateAccessToken(userDetails);
+        var accessToken = JwtUtil.generateAccessToken(userDetails);
 
         return AuthResponseDto.builder()
             .bearerToken(accessToken)
@@ -192,12 +196,18 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private String buildEmailTemplate(String confirmationLink) {
-        var msg1 = messageSource.getMessage("email.confirmation_message1", null, LocaleContextHolder.getLocale());
-        var msg2 = messageSource.getMessage("email.confirmation_message2", null, LocaleContextHolder.getLocale());
-        var msg3 = messageSource.getMessage("email.confirmation_message3", null, LocaleContextHolder.getLocale());
-        var msg4 = messageSource.getMessage("email.confirmation_message4", null, LocaleContextHolder.getLocale());
-        var msg5 = messageSource.getMessage("email.confirmation_message5", null, LocaleContextHolder.getLocale());
-        var msg6 = messageSource.getMessage("email.confirmation_message6", null, LocaleContextHolder.getLocale());
+        var msg1 = messageSource.getMessage("email.confirmation_message1", null,
+            LocaleContextHolder.getLocale());
+        var msg2 = messageSource.getMessage("email.confirmation_message2", null,
+            LocaleContextHolder.getLocale());
+        var msg3 = messageSource.getMessage("email.confirmation_message3", null,
+            LocaleContextHolder.getLocale());
+        var msg4 = messageSource.getMessage("email.confirmation_message4", null,
+            LocaleContextHolder.getLocale());
+        var msg5 = messageSource.getMessage("email.confirmation_message5", null,
+            LocaleContextHolder.getLocale());
+        var msg6 = messageSource.getMessage("email.confirmation_message6", null,
+            LocaleContextHolder.getLocale());
         return """
                 <html>
                     <body style="font-family: Arial, sans-serif; background-color:#f6f6f6; padding:20px;">
@@ -225,7 +235,8 @@ public class AuthServiceImpl implements AuthService {
                         </div>
                     </body>
                 </html>
-            """.formatted(msg1, msg2, msg3, confirmationLink, msg4, msg5, confirmationLink, confirmationLink, msg6);
+            """.formatted(msg1, msg2, msg3, confirmationLink, msg4, msg5, confirmationLink,
+            confirmationLink, msg6);
     }
 
     private String buildChangeEmailTemplate(String confirmationLink) {

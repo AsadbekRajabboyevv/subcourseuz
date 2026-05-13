@@ -53,4 +53,27 @@
               </p>
           </div>
       </div>
+    <div *ngIf="showSuccessModal"
+         class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-in fade-in duration-300">
+
+        <div class="w-full max-w-md transform overflow-hidden rounded-[2.5rem] bg-white p-10 text-center shadow-2xl dark:bg-gray-900 animate-in zoom-in duration-300">
+
+            <div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-emerald-50 text-emerald-500 dark:bg-emerald-500/10">
+                <i class="fa-solid fa-paper-plane text-3xl"></i>
+            </div>
+
+            <h3 class="mb-2 text-2xl font-black uppercase tracking-tight text-gray-900 dark:text-white">
+                Xat yuborildi!
+            </h3>
+            <p class="mb-8 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+                Email manzilingizga tasdiqlash havolasini yubordik. Iltimos, pochtangizni tekshiring.
+                <span class="block mt-2 font-bold text-emerald-600 italic text-xs">Spam papkasini ham ko'rib chiqing!</span>
+            </p>
+
+            <button (click)="closeModalAndLogin()"
+                    class="w-full rounded-2xl bg-emerald-600 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-lg shadow-emerald-200 hover:bg-emerald-500 transition-all dark:shadow-none">
+                Tushunarli, Login qilish
+            </button>
+        </div>
+    </div>
 </div>
