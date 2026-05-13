@@ -29,8 +29,8 @@ public class JacksonConfig {
     @Bean
     public RestTemplate restTemplate() {
         var factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(60000);
-        factory.setReadTimeout(60000);
+        factory.setConnectTimeout(300000);
+        factory.setReadTimeout(300000);
         return new RestTemplate(factory);
     }
 }
