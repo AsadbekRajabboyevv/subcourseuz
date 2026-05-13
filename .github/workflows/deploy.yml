@@ -248,59 +248,59 @@ jobs:
 
       - name: 🔐 Setup SSH
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+            mkdir -p ~/.ssh
+            echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
       - name: 🔗 Test SSH Connection
         run: |
-          ssh -i ~/.ssh/id_ed25519 \
+          ssh -i ~/.ssh/id_rsa \
               -o StrictHostKeyChecking=no \
               ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
               "echo '✅ SSH connection OK' && uptime"
 
       - name: 🛑 Stop Service
         run: |
-          ssh -i ~/.ssh/id_ed25519 \
+          ssh -i ~/.ssh/id_rsa \
               ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
               "sudo systemctl stop ${{ env.APP_NAME }} || true"
 
       - name: 📂 Backup Old JAR
         run: |
-          ssh -i ~/.ssh/id_ed25519 \
+          ssh -i ~/.ssh/id_rsa \
               ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
               "[ -f ${{ env.DEPLOY_PATH }} ] && sudo cp ${{ env.DEPLOY_PATH }} ${{ env.DEPLOY_PATH }}.bak || true"
 
       - name: 📦 Copy New JAR
         run: |
-          scp -i ~/.ssh/id_ed25519 \
+          scp -i ~/.ssh/id_rsa \
               target/*.jar \
               ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ env.DEPLOY_PATH }}
 
       - name: ▶️ Start Service
         run: |
-          ssh -i ~/.ssh/id_ed25519 \
+          ssh -i ~/.ssh/id_rsa \
               ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
               "sudo systemctl start ${{ env.APP_NAME }}"
 
       - name: 🩺 Health Check
         run: |
-          ssh -i ~/.ssh/id_ed25519 \
-              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
-              "
-              echo 'Waiting for service...'
-              sleep 10
-              STATUS=\$(systemctl is-active ${{ env.APP_NAME }})
-              echo \"Service status: \$STATUS\"
-              if [ \"\$STATUS\" != 'active' ]; then
-                echo '❌ Service failed to start! Rolling back...'
-                sudo cp ${{ env.DEPLOY_PATH }}.bak ${{ env.DEPLOY_PATH }} || true
-                sudo systemctl restart ${{ env.APP_NAME }} || true
-                exit 1
-              fi
-              echo '✅ Service is running'
-              "
+          ssh -i ~/.ssh/id_rsa \
+           ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+           "
+           echo 'Waiting for service...'
+           sleep 10
+           STATUS=\$(systemctl is-active ${{ env.APP_NAME }})
+           echo \"Service status: \$STATUS\"
+           if [ \"\$STATUS\" != 'active' ]; then
+             echo '❌ Service failed to start! Rolling back...'
+             sudo cp ${{ env.DEPLOY_PATH }}.bak ${{ env.DEPLOY_PATH }} || true
+             sudo systemctl restart ${{ env.APP_NAME }} || true
+             exit 1
+           fi
+           echo '✅ Service is running'
+           "
 
       - name: 📨 Telegram — Deploy Result
         if: always()
