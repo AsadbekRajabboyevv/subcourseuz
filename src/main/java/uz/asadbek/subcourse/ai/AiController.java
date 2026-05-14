@@ -11,11 +11,19 @@ import uz.asadbek.subcourse.ai.dto.TestGenerateRequestDto;
 public class AiController implements AiApi {
 
     private final AiService service;
+
     @Override
     public BaseResponseDto<String> testGenerate(TestGenerateRequestDto request,
         MultipartFile mainImage,
         MultipartFile file) {
         service.testGenerate(file, mainImage, request);
+        return BaseResponseDto.ok("success", "Test generated successfully.");
+    }
+
+    @Override
+    public BaseResponseDto<String> manualTestGenerate(String request,
+        MultipartFile mainImage) {
+        service.manualTestGenerate(request, mainImage);
         return BaseResponseDto.ok("success", "Test generated successfully.");
     }
 }

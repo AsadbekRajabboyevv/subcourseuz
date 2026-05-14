@@ -26,6 +26,7 @@ export class RegisterComponent {
     phone: '',
     position: ''
   };
+
   onRegister() {
     this.authService.register(this.regData).subscribe({
       next: () => {
@@ -39,6 +40,6 @@ export class RegisterComponent {
 
   closeModalAndLogin() {
     this.showSuccessModal = false;
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
   }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uz.asadbek.base.dto.BaseResponseDto;
 import uz.asadbek.subcourse.test.session.answer.dto.SubmitAnswerRequestDto;
 import uz.asadbek.subcourse.test.session.dto.TestSessionResponseDto;
+import uz.asadbek.subcourse.test.session.dto.UserTestSessionResponseDto;
 import uz.asadbek.subcourse.test.test.dto.TestResultDto;
 import uz.asadbek.subcourse.test.test.dto.TestReviewDto;
 
@@ -52,4 +53,7 @@ public interface TestSessionApi {
 
     @GetMapping("/{sessionId}")
     BaseResponseDto<TestSessionResponseDto> getSession(@PathVariable Long sessionId);
+
+    @GetMapping
+    BaseResponseDto<UserTestSessionResponseDto> getSessions();
 }

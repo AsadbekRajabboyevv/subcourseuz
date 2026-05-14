@@ -20,4 +20,6 @@ public class TestGenerateRequestDto {
     private Long gradeId;
     @NotNull
     private Long scienceId;
+
+    private GeminiTestGenerateResponseDto data;
 }
