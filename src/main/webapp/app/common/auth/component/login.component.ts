@@ -40,9 +40,9 @@ export class LoginComponent {
   }
 
   loginWithGoogle() {
-    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    const encodedReturnUrl = encodeURIComponent(returnUrl);
-    const encodedRedirectUri = encodeURIComponent(environment.oauth2RedirectUri);
-    window.location.href = `${environment.oauth2GooglePath}?redirect_uri=${encodedRedirectUri}&returnUrl=${encodedReturnUrl}`;
+     const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+     window.location.href = `${environment.oauth2GooglePath}?returnUrl=${window.btoa(returnUrl)}`;
   }
+
 }
+
