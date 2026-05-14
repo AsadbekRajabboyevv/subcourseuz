@@ -1,3 +1,10 @@
+server:
+  forward-headers-strategy: native
+  port: 8080
+  tomcat:
+    remoteip:
+      protocol-header: x-forwarded-proto
+      remote-ip-header: x-forwarded-for
 spring:
   liquibase:
     change-log: classpath:db/changelog/master.xml
@@ -73,8 +80,8 @@ app:
   front:
     google:
       oauth2:
-        failure-url: http://localhost:4200/auth/login
-        success-url: http://localhost:4200/oauth2/success
+        failure-url: https://subcourse.asadbek-rajabboyev.uz/auth/login
+        success-url: https://subcourse.asadbek-rajabboyev.uz/oauth2/success
   confirmation:
     url: https://subcourse.asadbek-rajabboyev.uz/v1/api/auth/confirm?token=
   gemini:

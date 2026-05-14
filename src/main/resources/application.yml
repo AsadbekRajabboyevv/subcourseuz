@@ -1,3 +1,10 @@
+server:
+  forward-headers-strategy: native
+  port: 8080
+  tomcat:
+    remoteip:
+      protocol-header: x-forwarded-proto
+      remote-ip-header: x-forwarded-for
 spring:
   liquibase:
     change-log: classpath:db/changelog/master.xml
