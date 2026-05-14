@@ -81,17 +81,7 @@ public class SecurityConfig {
             )
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(new JwtAuthenticationFilter(customUserDetailsService),
-                UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling(ex ->
-                ex.authenticationEntryPoint((request, response, authException) -> {
-                        handlerExceptionResolver.resolveException(request, response, null,
-                            authException);
-                    })
-                    .accessDeniedHandler((request, response, accessDeniedException) -> {
-                        handlerExceptionResolver.resolveException(request, response, null,
-                            accessDeniedException);
-                    })
-            );
+                UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
