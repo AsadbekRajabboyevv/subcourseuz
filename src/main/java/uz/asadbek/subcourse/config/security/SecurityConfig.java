@@ -1,4 +1,4 @@
-package uz.asadbek.subcourse.config;
+package uz.asadbek.subcourse.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-import uz.asadbek.subcourse.auth.CustomUserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -27,7 +26,9 @@ import uz.asadbek.subcourse.auth.CustomUserDetailsServiceImpl;
 public class SecurityConfig {
 
     private final CustomUserDetailsServiceImpl customUserDetailsService;
-    private final JwtAuthenticationFilter jwtFilter;
+    private final OAuth2FailureHandler oAuth2FailureHandler;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
@@ -47,6 +48,8 @@ public class SecurityConfig {
                     "/*.ico",
                     "/*.svg",
                     "/assets/**",
+                    "/assets/images/**",
+                    "/assets/icon",
                     "/static/**",
                     "/favicon.ico",
                     "/v1/api/auth/**",
@@ -55,28 +58,44 @@ public class SecurityConfig {
                     "/v3/api-docs/**",
                     "/swagger-ui/**",
                     "/swagger-ui.html",
-                    "/webjars/**"
+                    "/webjars/**",
+                    "/oauth2/**",
+                    "/login/oauth2/**"
                 ).permitAll()
                 .requestMatchers(HttpMethod.GET, "/v1/api/comments/**").permitAll()
                 .requestMatchers("/v1/api/**").authenticated()
                 .anyRequest().permitAll()
             )
+            .oauth2Login(oauth2 -> oauth2
+                .authorizationEndpoint(endpoint ->
+                    endpoint.baseUri("/oauth2/authorize"))
+                .redirectionEndpoint(endpoint ->
+                    endpoint.baseUri("/login/oauth2/code/*"))
+                .userInfoEndpoint(userInfo ->
+                    userInfo.userService(customOAuth2UserService))
+                .successHandler(oAuth2SuccessHandler)
+                .failureHandler(oAuth2FailureHandler)
+            )
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authenticationProvider(authenticationProvider())
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new JwtAuthenticationFilter(customUserDetailsService),
+                UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(ex ->
                 ex.authenticationEntryPoint((request, response, authException) -> {
-                        handlerExceptionResolver.resolveException(request, response, null, authException);
+                        handlerExceptionResolver.resolveException(request, response, null,
+                            authException);
                     })
                     .accessDeniedHandler((request, response, accessDeniedException) -> {
-                        handlerExceptionResolver.resolveException(request, response, null, accessDeniedException);
+                        handlerExceptionResolver.resolveException(request, response, null,
+                            accessDeniedException);
                     })
             );
 
         return http.build();
     }
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(

@@ -16,6 +16,7 @@ import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uz.asadbek.base.entity.BaseEntity;
 import uz.asadbek.base.repository.SoftDeletable;
+import uz.asadbek.subcourse.auth.dto.AuthProviderEnum;
 import uz.asadbek.subcourse.user.dto.UserPositions;
 
 
@@ -77,5 +78,9 @@ public class UserEntity extends BaseEntity implements SoftDeletable {
 
     @Column(name = "phone")
     private String phone;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provider")
+    private AuthProviderEnum provider;
 
 }

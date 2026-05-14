@@ -38,7 +38,15 @@ spring:
       name: ${SECURITY_USER_NAME}
       password: ${SECURITY_USER_PASSWORD}
       roles: ${SECURITY_USER_ROLES}
-
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID:684830909568-4ao8afmt2cbia7m76utmik1diessolea.apps.googleusercontent.com}
+            client-secret: ${GOOGLE_CLIENT_SECRET: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}
+            scope:
+              - email
+              - profile
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}
@@ -66,6 +74,11 @@ springdoc:
     groups-order: asc
 
 app:
+  front:
+    google:
+      oauth2:
+        failure-url: http://localhost:4200/auth/login
+        success-url: http://localhost:4200/oauth2/success
   confirmation:
     url: https://localhost:8080/v1/api/auth/confirm?token=
   gemini:
