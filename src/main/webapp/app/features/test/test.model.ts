@@ -201,3 +201,17 @@ export interface TestReviewOption {
   text: string;
   imagePath: string | null;
 }
+
+export interface UserTestSession {
+  sessionId: number;
+  testId: number;
+  testName: string;
+  status: string;
+  correctAnswers: number;
+  wrongAnswers: number;
+  score: number;
+  maxScore: number;
+  remainingSeconds: number;
+  startedAt: string;
+  finishedAt: string;
+}

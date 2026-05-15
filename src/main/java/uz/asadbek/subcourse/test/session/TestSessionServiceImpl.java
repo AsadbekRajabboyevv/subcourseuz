@@ -3,19 +3,20 @@ package uz.asadbek.subcourse.test.session;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.asadbek.subcourse.exception.BadRequestException;
 import uz.asadbek.subcourse.exception.NotFoundException;
 import uz.asadbek.subcourse.exception.UnAuthorizedException;
 import uz.asadbek.subcourse.test.question.TestQuestionService;
+import uz.asadbek.subcourse.test.session.dto.UserTestSessionResponseDto;
 import uz.asadbek.subcourse.test.session.option.TestSessionOptionService;
-import uz.asadbek.subcourse.test.session.option.dto.TestSessionOptionResponseDto;
 import uz.asadbek.subcourse.test.session.question.TestSessionQuestionService;
 import uz.asadbek.subcourse.test.test.TestService;
 import uz.asadbek.subcourse.test.session.answer.dto.SubmitAnswerRequestDto;
@@ -268,5 +269,10 @@ public class TestSessionServiceImpl implements TestSessionService {
         }
         session.setQuestions(sessionQuestionService.findBySessionId(sessionId));
         return session;
+    }
+
+    @Override
+    public Page<UserTestSessionResponseDto> getSessions(Pageable pageable) {
+        return repository.findAllByUserId(JwtUtil.getCurrentUserId(), pageable);
     }
 }

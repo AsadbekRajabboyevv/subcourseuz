@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,5 +57,5 @@ public interface TestSessionApi {
     BaseResponseDto<TestSessionResponseDto> getSession(@PathVariable Long sessionId);
 
     @GetMapping
-    BaseResponseDto<UserTestSessionResponseDto> getSessions();
+    BaseResponseDto<Page<UserTestSessionResponseDto>> getSessions(Pageable pageable);
 }

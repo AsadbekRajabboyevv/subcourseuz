@@ -58,6 +58,11 @@ export const routes: Routes = [
     title: $localize`:@@test.update.title:Test natijasi`
   },
   {
+    path: 'test-review-list',
+    loadComponent: () => import('./features/test/review/test-review-list.component').then(m => m.TestReviewListComponent),
+    title: $localize`:@@test.update.title:Testlar natijalari`
+  },
+  {
     path: 'test-review/:sessionId',
     loadComponent: () => import('./features/test/review/test-review.component').then(m => m.TestReviewComponent),
     title: $localize`:@@test.update.title:Testni ko'rib chiqish`

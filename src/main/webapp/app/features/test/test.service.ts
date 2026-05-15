@@ -8,7 +8,7 @@ import {
   SubmitAnswer,
   TestReview,
   TestResult,
-  TestSession
+  TestSession, UserTestSession
 } from "./test.model";
 import { environment } from "../../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
@@ -175,5 +175,9 @@ export class TestService {
 
   getSession(sessionId: number): Observable<Base<TestSession>> {
     return this.http.get<Base<TestSession>>(`${this.SESSION_PATH}/${sessionId}`);
+  }
+
+  getUserSessions(page: number, size: number): Observable<Base<Page<UserTestSession>>> {
+    return this.http.get<Base<Page<UserTestSession>>>(`${this.SESSION_PATH}`);
   }
 }
