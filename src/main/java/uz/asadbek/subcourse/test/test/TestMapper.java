@@ -17,6 +17,8 @@ public interface TestMapper {
     @Mapping(target = "price", expression = "java(dto.getPrice() == null ? 0L : dto.getPrice())")
     @Mapping(target = "isPublished", expression = "java(Boolean.TRUE.equals(dto.getIsPublished()))")
     @Mapping(target = "count", source = "count")
+    @Mapping(target = "enabledViewCorrectAnswers", source = "enabledViewCorrectAnswers")
+    @Mapping(target = "maxScore", source = "maxScore")
     TestEntity toEntity(TestRequestDto dto);
 
 

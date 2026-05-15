@@ -31,17 +31,14 @@ export class TestResultComponent implements OnInit {
 
   ngOnInit() {
     this.sessionId = Number(this.route.snapshot.paramMap.get('sessionId'));
-    const stateResult = window.history.state?.result as TestResult;
 
-    if (stateResult) {
+    const navigation = this.router.getCurrentNavigation();
+    const stateResult = (navigation?.extras.state?.['result'] || window.history.state?.result) as TestResult;
+
+    if (stateResult && stateResult.totalQuestions > 0) {
       this.result.set(stateResult);
-    } else if (this.sessionId) {
-      this.loadResultFromReview();
-    }
-  }
-
-  loadResultFromReview() {
-    if (!this.result().totalQuestions) {
+    } else {
+      this.router.navigate(['/tests-list']);
     }
   }
 

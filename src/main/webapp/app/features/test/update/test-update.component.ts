@@ -56,6 +56,8 @@ export class TestUpdateComponent implements OnInit {
     duration: [30, [Validators.required]],
     isPublished: [true],
     count: [0, [Validators.required, Validators.min(1)]],
+    enabledViewCorrectAnswers: [false, [Validators.required]],
+    maxScore: [100, [Validators.required, Validators.min(1)]],
     questions: this.fb.array<FormGroup>([])
   });
 
@@ -91,7 +93,9 @@ export class TestUpdateComponent implements OnInit {
           gradeId: test.gradeId,
           duration: test.duration,
           isPublished: test.isPublished,
-          count: test.count
+          count: test.count,
+          enabledViewCorrectAnswers: test.enabledViewCorrectAnswers,
+          maxScore: test.maxScore
         });
 
         if (test.imagePath) this.mainImagePreview = test.imagePath;
@@ -205,6 +209,8 @@ export class TestUpdateComponent implements OnInit {
       scienceId: v.scienceId ? Number(v.scienceId) : undefined,
       gradeId: v.gradeId ? Number(v.gradeId) : undefined,
       count: v.count ?? 0,
+      maxScore: v.maxScore ?? 100,
+      enabledViewCorrectAnswers: v.enabledViewCorrectAnswers ?? false,
       questions: (v.questions || []).map((q: any): QuestionUpdate => ({
         id: q.id ?? undefined,
         text: q.text,

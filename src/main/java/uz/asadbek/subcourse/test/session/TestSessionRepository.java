@@ -32,7 +32,8 @@ public interface TestSessionRepository extends JpaRepository<TestSessionEntity, 
              WHEN s.finishedAt IS NOT NULL THEN TRUE
              ELSE FALSE
            END,
-           t.maxScore
+           t.maxScore,
+           t.enabledViewCorrectAnswers
        )
        FROM TestSessionEntity s
        LEFT JOIN TestEntity t ON s.testId = t.id

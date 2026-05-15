@@ -7,7 +7,7 @@
             <i class="fa-solid fa-chevron-right text-[7px]"></i>
             <span class="text-emerald-500">Yangi test yaratish</span>
         </nav>
-        <h1 class="text-2xl font-black uppercase tracking-tight text-gray-900 dark:text-white">Test Creator</h1>
+        <h1 class="text-2xl font-black uppercase tracking-tight text-gray-900 dark:text-white">Yangi test yaratish</h1>
 
         <div class="mt-6 flex p-1 bg-gray-100 dark:bg-gray-800/50 border border-transparent dark:border-gray-700 rounded-2xl w-fit transition-all duration-300">
             <button (click)="activeTab.set('manual')"
@@ -20,6 +20,12 @@
                     [class]="activeTab() === 'ai' ? 'bg-white dark:bg-gray-700 text-emerald-600 dark:text-emerald-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'"
                     class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
                 <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> AI Generator
+            </button>
+
+            <button (click)="activeTab.set('json')"
+                    [class]="activeTab() === 'json' ? 'bg-white dark:bg-gray-700 text-emerald-600 dark:text-emerald-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'"
+                    class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
+                <i class="fa-solid fa-code mr-1.5"></i> Json
             </button>
         </div>
     </div>
@@ -106,8 +112,8 @@
                     </button>
                 </div>
 
-                <div class="col-span-12 lg:col-span-4 sticky top-6 h-fit space-y-6">
-                    <div class="rounded-[2.5rem] border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 shadow-2xl space-y-4">
+                <div class="col-span-12 lg:col-span-4 sticky top-6 h-fit max-h-[calc(100vh-60px)] flex flex-col">
+                    <div class="flex-1 overflow-y-auto rounded-[2.5rem] border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 shadow-2xl space-y-4 scrollbar-hide">
                         <h3 class="text-[11px] font-black uppercase tracking-widest text-gray-400">Umumiy sozlamalar</h3>
 
                         <div class="relative h-40 w-full rounded-3xl border-2 border-dashed border-gray-100 dark:border-gray-800 flex items-center justify-center overflow-hidden group mb-4">
@@ -122,7 +128,10 @@
                             }
                         </div>
 
-                        <app-input type="text" label="Test nomi" formControlName="name"></app-input>
+                        <div class="grid grid-cols-2 gap-4">
+                            <app-input type="text" label="Test nomi" formControlName="name"></app-input>
+                            <app-input type="amount" label="Ball" formControlName="maxScore"></app-input>
+                        </div>
                         <app-input type="markdown" label="Izoh" formControlName="description"></app-input>
 
                         <div class="grid grid-cols-2 gap-4">
@@ -134,17 +143,24 @@
                             <app-input type="select" label="Fan" [options]="scienceOptions()" formControlName="scienceId"></app-input>
                             <app-input type="select" label="Sinf" [options]="gradeOptions()" formControlName="gradeId"></app-input>
                         </div>
+
                         <div class="grid grid-cols-2 gap-4">
                             <app-input type="select" label="Til" [options]="langOptions" formControlName="lang"></app-input>
                             <app-input type="amount" label="Savollar ko'rsatish soni" formControlName="count"></app-input>
                         </div>
-                        <app-input type="checkbox" placeholder="Nashr qilish" formControlName="isPublished"></app-input>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <app-input type="checkbox" placeholder="Nashr qilish" formControlName="isPublished"></app-input>
+                            <app-input type="checkbox" placeholder="Javoblarni korsatish" formControlName="enabledViewCorrectAnswers"></app-input>
+                        </div>
 
                     </div>
 
-                    <button type="submit" [disabled]="isLoading() || testForm.invalid" class="w-full rounded-[2rem] bg-gray-900 dark:bg-emerald-600 py-6 text-xs font-black uppercase tracking-[0.3em] text-white hover:bg-emerald-600 dark:hover:bg-emerald-500 transition-all shadow-xl shadow-gray-200 dark:shadow-none disabled:opacity-50">
-                        {{ isLoading() ? 'Saqlanmoqda...' : 'Testni Saqlash' }}
-                    </button>
+                    <div class="mt-4">
+                        <button type="submit" [disabled]="isLoading() || testForm.invalid" class="w-full rounded-[2rem] bg-gray-900 dark:bg-emerald-600 py-6 text-xs font-black uppercase tracking-[0.3em] text-white hover:bg-emerald-600 dark:hover:bg-emerald-500 transition-all shadow-xl shadow-gray-200 dark:shadow-none disabled:opacity-50">
+                            {{ isLoading() ? 'Saqlanmoqda...' : 'Testni Saqlash' }}
+                        </button>
+                    </div>
                 </div>
             </form>
         }
@@ -152,7 +168,6 @@
         @if (activeTab() === 'ai') {
             <div class="max-w-3xl mx-auto animate-in fade-in slide-in-from-top-4">
                 <form [formGroup]="aiForm" (ngSubmit)="onAiSubmit()" class="rounded-[2.5rem] border border-emerald-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-10 shadow-2xl space-y-6">
-
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="h-10 w-10 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center">
@@ -168,9 +183,6 @@
                             <input type="file" (change)="onMainImageSelected($event)" class="absolute inset-0 opacity-0 cursor-pointer z-10" accept="image/*">
                             @if (mainImagePreview) {
                                 <img [src]="mainImagePreview" class="h-full w-full object-cover">
-                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                    <i class="fa-solid fa-camera text-white text-2xl"></i>
-                                </div>
                             } @else {
                                 <div class="text-center">
                                     <div class="mb-2 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-300 group-hover:text-emerald-500 transition-colors">
@@ -215,6 +227,44 @@
                     </button>
                 </form>
             </div>
+        }
+        @if (activeTab() === 'json') {
+            <div class="max-w-3xl mx-auto animate-in fade-in slide-in-from-top-4">
+                <form [formGroup]="jsonForm" (ngSubmit)="onJsonSubmit()" class="rounded-[2.5rem] border border-emerald-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-10 shadow-2xl space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="h-10 w-10 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center">
+                                <i class="fa-solid fa-wand-magic-sparkles text-emerald-600 dark:text-emerald-400"></i>
+                            </div>
+                            <h2 class="text-xl font-black uppercase text-emerald-600 dark:text-emerald-400 tracking-tight">Json Generator</h2>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">Test muqovasi (Ixtiyoriy)</label>
+                        <div class="relative h-48 w-full rounded-[2rem] border-2 border-dashed border-emerald-100 dark:border-gray-800 flex items-center justify-center overflow-hidden group transition-all hover:border-emerald-500">
+                            <input type="file" (change)="onMainImageSelected($event)" class="absolute inset-0 opacity-0 cursor-pointer z-10" accept="image/*">
+                            @if (mainImagePreview) {
+                                <img [src]="mainImagePreview" class="h-full w-full object-cover">
+                            } @else {
+                                <div class="text-center">
+                                    <div class="mb-2 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-300 group-hover:text-emerald-500 transition-colors">
+                                        <i class="fa-solid fa-image text-xl"></i>
+                                    </div>
+                                    <span class="block text-[8px] font-black uppercase text-gray-400">Rasm yuklash</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <app-input type="textarea" label="Json" placeholder="{}" formControlName="json"></app-input>
+
+                    <button type="submit" class="w-full rounded-[2rem] bg-emerald-600 py-6 text-xs font-black uppercase tracking-[0.3em] text-white hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-200 dark:shadow-none">
+                        {{ jsonLoading() ? 'Generatsiya ishlamoqda...' : 'Generatsiyani boshlash' }}
+                    </button>
+                </form>
+            </div>
+
         }
     </div>
 </app-page-wrapper>

@@ -11,5 +11,6 @@ public class TestReviewQuestionDto {
     private String imagePath;
     private Integer selectedOptionOrderNumber;
     private Boolean isCorrect;
+    private Long correctOptionId;
     private List<TestReviewOptionDto> options;
 }

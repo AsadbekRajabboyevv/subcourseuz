@@ -18,6 +18,8 @@ export interface Test {
   imagePath: string;
   createdAt: string;
   updatedAt: string;
+  enabledViewCorrectAnswers: boolean;
+  maxScore: number;
   count: number;
   questions: Question[];
 }
@@ -91,6 +93,8 @@ export interface TestUpdate {
   duration?: number;
   isPublished?: boolean;
   count?: number;
+  maxScore?: number;
+  enabledViewCorrectAnswers?: boolean;
   questions?: QuestionUpdate[];
 }
 
@@ -179,6 +183,7 @@ export interface TestReview {
   spentTime: string;
   startedAt: string;
   finishedAt: string;
+  enabledViewCorrectAnswers: boolean;
   questions: TestReviewQuestion[];
 }
 
@@ -186,11 +191,13 @@ export interface TestReviewQuestion {
   questionText: string;
   imagePath: string | null;
   selectedOptionOrderNumber: number | null;
+  correctOptionId: number | null;
   isCorrect: boolean;
   options: TestReviewOption[];
 }
 
 export interface TestReviewOption {
+  id: number;
   text: string;
   imagePath: string | null;
 }

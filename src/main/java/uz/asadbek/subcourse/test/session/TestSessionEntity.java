@@ -62,6 +62,9 @@ public class TestSessionEntity extends BaseEntity {
     @Column(name = "score")
     private Double score;
 
+    @Column(name = "max_score")
+    private Integer maxScore;
+
     @Column(name = "wrong_answers")
     private Integer wrongAnswers;
 

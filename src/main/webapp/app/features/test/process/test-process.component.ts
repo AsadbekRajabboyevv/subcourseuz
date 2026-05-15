@@ -135,13 +135,13 @@ export class TestProcessComponent implements OnInit, OnDestroy {
       next: (res) => {
         localStorage.removeItem('active_session_id');
         this.router.navigate(['/test-result', this.sessionId()], {
-          state: { result: res.data }
+          state: { result: res.data },
+          replaceUrl: true
         });
       },
-      error: () => {
+      error: (err) => {
         this.isLoading.set(false);
-        alert("Testni yakunlashda xatolik yuz berdi!");
-        this.startTimer();
+        alert("Xatolik: " + err.error?.message);
       }
     });
   }

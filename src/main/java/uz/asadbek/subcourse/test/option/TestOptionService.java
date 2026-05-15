@@ -7,9 +7,11 @@ public interface TestOptionService {
 
     List<TestOptionResponseDto> getByQuestionIds(List<Long> questionIds);
 
-    void saveAll(List<TestOptionEntity> savedOptions);
+    List<TestOptionEntity> saveAll(List<TestOptionEntity> savedOptions);
 
-    void deleteAllByIds(List<Long> deleteOptionIds);
+    void deleteById(Long deleteOptionId);
 
-    List<TestOptionEntity> findByQuestionIds(List<Long> questionIds);
+    List<TestOptionEntity> findByQuestionId(Long questionId);
+
+    List<TestOptionEntity> findByQuestionId(List<Long> questionIds);
 }

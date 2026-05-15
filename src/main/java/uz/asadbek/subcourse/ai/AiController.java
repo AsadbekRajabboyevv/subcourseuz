@@ -1,5 +1,6 @@
 package uz.asadbek.subcourse.ai;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,7 +22,7 @@ public class AiController implements AiApi {
     }
 
     @Override
-    public BaseResponseDto<String> manualTestGenerate(String request,
+    public BaseResponseDto<String> manualTestGenerate(@Valid TestGenerateRequestDto request,
         MultipartFile mainImage) {
         service.manualTestGenerate(request, mainImage);
         return BaseResponseDto.ok("success", "Test generated successfully.");
