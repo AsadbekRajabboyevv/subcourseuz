@@ -2,11 +2,12 @@ package uz.asadbek.subcourse.test.test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -159,158 +160,100 @@ public class TestServiceImpl implements TestService {
         return test.getId();
     }
 
+    private String findFileByKey(Map<String, MultipartFile> fileMap, String prefix) {
+        if (fileMap == null) return null;
+        return fileMap.keySet().stream()
+            .filter(key -> key.startsWith(prefix))
+            .findFirst()
+            .orElse(null);
+    }
+
     @Override
     @Transactional
     public Long update(Long id, TestUpdateRequestDto request, MultipartFile image,
-        MultipartFile[] qFiles, MultipartFile[] oFiles) {
+        MultipartFile[] questionImages, MultipartFile[] optionImages) {
 
         var test = repository.findById(id).orElseThrow(
             () -> ExceptionUtil.build(NotFoundException.class, "error.not_found.test", id));
-        Map<String, MultipartFile> qFileMap = new HashMap<>();
 
-        if (qFiles != null) {
-            for (MultipartFile file : qFiles) {
-                if (file.getOriginalFilename() != null) {
-                    qFileMap.put(file.getOriginalFilename(), file);
-                }
-            }
-        }
+        Map<String, MultipartFile> qFileMap = (questionImages != null) ? Arrays.stream(questionImages)
+            .collect(Collectors.toMap(MultipartFile::getOriginalFilename, f -> f, (a, b) -> a)) : Map.of();
 
-        Map<String, MultipartFile> oFileMap = new HashMap<>();
-
-        if (oFiles != null) {
-            for (MultipartFile file : oFiles) {
-                if (file.getOriginalFilename() != null) {
-                    oFileMap.put(file.getOriginalFilename(), file);
-                }
-            }
-        }
+        Map<String, MultipartFile> oFileMap = (optionImages != null) ? Arrays.stream(optionImages)
+            .collect(Collectors.toMap(MultipartFile::getOriginalFilename, f -> f, (a, b) -> a)) : Map.of();
 
         mapper.update(test, request);
-
         if (image != null && !image.isEmpty()) {
-            test.setImagePath(
-                fileStorageService.upload(image, FileUploadOptions.TEST_IMAGE).getUrl());
+            test.setImagePath(fileStorageService.upload(image, FileUploadOptions.TEST_IMAGE).getUrl());
         }
+        repository.save(test);
 
-        validator.validateTestForUpdate(test);
+        var existingQuestions = questionService.findByTestId(id);
+        Map<Long, TestQuestionEntity> qEntityMap = existingQuestions.stream()
+            .collect(Collectors.toMap(TestQuestionEntity::getId, q -> q));
 
-        if (request.getQuestions() != null) {
-            var existingQuestions = questionService.findByTestId(test.getId());
-            Map<Long, TestQuestionEntity> questionMap = existingQuestions.stream()
-                .collect(Collectors.toMap(TestQuestionEntity::getId, q -> q));
-            var questionIds = existingQuestions.stream().map(TestQuestionEntity::getId).toList();
-            var allOptions = optionService.findByQuestionIds(questionIds);
+        Set<Long> updatedQIds = new HashSet<>();
 
-            Map<Long, List<TestOptionEntity>> optionsMap = allOptions.stream()
-                .collect(Collectors.groupingBy(TestOptionEntity::getQuestionId));
+        for (int i = 0; i < request.getQuestions().size(); i++) {
+            var qDto = request.getQuestions().get(i);
+            TestQuestionEntity qEntity = (qDto.getId() == null) ? new TestQuestionEntity() : qEntityMap.get(qDto.getId());
 
-            Set<Long> requestQuestionIds = new HashSet<>();
+            if (qDto.getId() != null && qEntity == null) throw new RuntimeException("Question not found");
 
-            for (int i = 0; i < request.getQuestions().size(); i++) {
-                var qDto = request.getQuestions().get(i);
+            questionMapper.update(qEntity, qDto);
+            qEntity.setTestId(id);
 
-                TestQuestionEntity question;
-                if (qDto.getId() == null) {
-                    question = new TestQuestionEntity();
-                    question.setTestId(test.getId());
-
-                } else {
-                    question = questionMap.get(qDto.getId());
-                    if (question == null) {
-                        throw ExceptionUtil.build(NotFoundException.class,
-                            "error.not_found.question");
-                    }
-
-                    requestQuestionIds.add(question.getId());
-                }
-
-                questionMapper.update(question, qDto);
-                String qPrefix = "q_" + i + ".";
-                String finalQKey = findFileByKey(qFileMap, qPrefix);
-
-                if (finalQKey != null) {
-                    question.setImagePath(fileStorageService.upload(qFileMap.get(finalQKey),
-                        FileUploadOptions.QUESTION_IMAGE).getUrl());
-                }
-
-                questionService.save(question);
-
-                if (qDto.getOptions() != null) {
-
-                    var existingOptions = optionsMap.getOrDefault(question.getId(),
-                        Collections.emptyList());
-
-                    Map<Long, TestOptionEntity> optionMap = existingOptions.stream()
-                        .collect(Collectors.toMap(TestOptionEntity::getId, o -> o));
-                    Set<Long> requestOptionIds = new HashSet<>();
-                    List<TestOptionEntity> savedOptions = new ArrayList<>();
-                    for (int j = 0; j < qDto.getOptions().size(); j++) {
-                        var oDto = qDto.getOptions().get(j);
-                        TestOptionEntity option;
-                        if (oDto.getId() == null) {
-
-                            option = new TestOptionEntity();
-                            option.setQuestionId(question.getId());
-
-                        } else {
-                            option = optionMap.get(oDto.getId());
-                            if (option == null) {
-                                throw ExceptionUtil.build(NotFoundException.class,
-                                    "error.not_found.option");
-                            }
-
-                            requestOptionIds.add(option.getId());
-                        }
-
-                        optionMapper.update(option, oDto);
-
-                        String oPrefix = "q_" + i + "_opt_" + j + ".";
-
-                        String finalOKey = findFileByKey(oFileMap, oPrefix);
-
-                        if (finalOKey != null) {
-                            option.setImagePath(fileStorageService.upload(oFileMap.get(finalOKey),
-                                FileUploadOptions.OPTION_IMAGE).getUrl());
-                        }
-
-                        savedOptions.add(option);
-                    }
-
-                    optionService.saveAll(savedOptions);
-
-                    List<Long> deleteOptionIds = existingOptions.stream()
-                        .map(TestOptionEntity::getId)
-                        .filter(optionId -> !requestOptionIds.contains(optionId)).toList();
-
-                    if (!deleteOptionIds.isEmpty()) {
-                        optionService.deleteAllByIds(deleteOptionIds);
-                    }
-
-                    if (qDto.getCorrectOptionIndex() != null) {
-                        int idx = qDto.getCorrectOptionIndex();
-                        if (idx < savedOptions.size()) {
-                            question.setCorrectOptionId(savedOptions.get(idx).getId());
-                            questionService.save(question);
-                        }
-                    }
-                }
+            String qPrefix = "q_" + i + ".";
+            String foundQKey = findFileByKey(qFileMap, qPrefix);
+            if (foundQKey != null) {
+                qEntity.setImagePath(fileStorageService.upload(qFileMap.get(foundQKey), FileUploadOptions.QUESTION_IMAGE).getUrl());
             }
 
-            List<Long> deleteQuestionIds = existingQuestions.stream().map(TestQuestionEntity::getId)
-                .filter(questionId -> !requestQuestionIds.contains(questionId)).toList();
+            qEntity = questionService.save(qEntity);
+            updatedQIds.add(qEntity.getId());
 
-            if (!deleteQuestionIds.isEmpty()) {
-                questionService.deleteAllByIds(deleteQuestionIds);
+            if (qDto.getOptions() != null) {
+                var existingOptions = optionService.findByQuestionId(qEntity.getId());
+                Map<Long, TestOptionEntity> oEntityMap = existingOptions.stream()
+                    .collect(Collectors.toMap(TestOptionEntity::getId, o -> o));
+
+                List<TestOptionEntity> optionsToSave = new ArrayList<>();
+                Set<Long> updatedOIds = new HashSet<>();
+
+                for (int j = 0; j < qDto.getOptions().size(); j++) {
+                    var oDto = qDto.getOptions().get(j);
+                    TestOptionEntity oEntity = (oDto.getId() == null) ? new TestOptionEntity() : oEntityMap.get(oDto.getId());
+
+                    optionMapper.update(oEntity, oDto);
+                    oEntity.setQuestionId(qEntity.getId());
+
+                    String oPrefix = "q_" + i + "_opt_" + j + ".";
+                    String foundOKey = findFileByKey(oFileMap, oPrefix);
+                    if (foundOKey != null) {
+                        oEntity.setImagePath(fileStorageService.upload(oFileMap.get(foundOKey), FileUploadOptions.OPTION_IMAGE).getUrl());
+                    }
+                    optionsToSave.add(oEntity);
+                }
+
+                var savedOptions = optionService.saveAll(optionsToSave);
+                savedOptions.forEach(o -> updatedOIds.add(o.getId()));
+
+                existingOptions.stream()
+                    .filter(o -> !updatedOIds.contains(o.getId()))
+                    .forEach(o -> optionService.deleteById(o.getId()));
+
+                if (qDto.getCorrectOptionIndex() != null && qDto.getCorrectOptionIndex() < savedOptions.size()) {
+                    qEntity.setCorrectOptionId(savedOptions.get(qDto.getCorrectOptionIndex()).getId());
+                    questionService.save(qEntity);
+                }
             }
         }
 
-        return test.getId();
-    }
+        existingQuestions.stream()
+            .filter(q -> !updatedQIds.contains(q.getId()))
+            .forEach(q -> questionService.deleteById(q.getId()));
 
-    private String findFileByKey(Map<String, MultipartFile> fileMap, String prefix) {
-        return fileMap.keySet().stream().filter(key -> key.startsWith(prefix)).findFirst()
-            .orElse(null);
+        return id;
     }
 
     @Override

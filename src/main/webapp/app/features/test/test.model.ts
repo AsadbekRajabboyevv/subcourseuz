@@ -18,6 +18,8 @@ export interface Test {
   imagePath: string;
   createdAt: string;
   updatedAt: string;
+  enabledViewCorrectAnswers: boolean;
+  maxScore: number;
   count: number;
   questions: Question[];
 }
@@ -46,6 +48,9 @@ export interface TestCreate {
   gradeId?: number;
   duration: number;
   isPublished: boolean;
+  count: number;
+  maxScore: number;
+  enabledViewCorrectAnswers: boolean;
   questions: QuestionCreate[];
 }
 
@@ -88,6 +93,8 @@ export interface TestUpdate {
   duration?: number;
   isPublished?: boolean;
   count?: number;
+  maxScore?: number;
+  enabledViewCorrectAnswers?: boolean;
   questions?: QuestionUpdate[];
 }
 
@@ -150,6 +157,8 @@ export interface TestGenerateRequestDto {
   lessonId?: number;
   duration: number;
   price: number;
+  maxScore: number;
+  enabledViewCorrectAnswers: boolean;
 }
 export interface TestSessionOption {
   id: number;
@@ -174,6 +183,7 @@ export interface TestReview {
   spentTime: string;
   startedAt: string;
   finishedAt: string;
+  enabledViewCorrectAnswers: boolean;
   questions: TestReviewQuestion[];
 }
 
@@ -181,11 +191,27 @@ export interface TestReviewQuestion {
   questionText: string;
   imagePath: string | null;
   selectedOptionOrderNumber: number | null;
+  correctOptionId: number | null;
   isCorrect: boolean;
   options: TestReviewOption[];
 }
 
 export interface TestReviewOption {
+  id: number;
   text: string;
   imagePath: string | null;
+}
+
+export interface UserTestSession {
+  sessionId: number;
+  testId: number;
+  testName: string;
+  status: string;
+  correctAnswers: number;
+  wrongAnswers: number;
+  score: number;
+  maxScore: number;
+  remainingSeconds: number;
+  startedAt: string;
+  finishedAt: string;
 }

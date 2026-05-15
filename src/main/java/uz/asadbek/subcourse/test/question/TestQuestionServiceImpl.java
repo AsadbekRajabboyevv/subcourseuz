@@ -36,8 +36,8 @@ public class TestQuestionServiceImpl implements TestQuestionService {
 
     @Override
     @Transactional
-    public void save(TestQuestionEntity question) {
-        repository.save(question);
+    public TestQuestionEntity save(TestQuestionEntity question) {
+        return repository.save(question);
     }
 
     @Override
@@ -47,8 +47,8 @@ public class TestQuestionServiceImpl implements TestQuestionService {
     }
 
     @Override
-    public void deleteAllByIds(List<Long> deleteQuestionIds) {
-        repository.deleteAllById(deleteQuestionIds);
+    public void deleteById(Long deleteQuestionId) {
+        repository.deleteById(deleteQuestionId);
     }
 
     @Override

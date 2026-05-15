@@ -56,7 +56,8 @@ public class AiServiceImpl implements AiService {
 
         String mainImageUrl = null;
         if (mainImage != null) {
-            mainImageUrl  = fileStorageService.upload(mainImage, FileUploadOptions.TEST_IMAGE).getUrl();
+            mainImageUrl = fileStorageService.upload(mainImage, FileUploadOptions.TEST_IMAGE)
+                .getUrl();
         }
         var newTest = initializeTestEntity(request, mainImageUrl);
         testService.save(newTest);
@@ -96,7 +97,8 @@ public class AiServiceImpl implements AiService {
 
             log.info("Gemini response: {}", aiJsonResponse);
 
-            var generatedTest = objectMapper.readValue(aiJsonResponse, GeminiTestGenerateResponseDto.class);
+            var generatedTest = objectMapper.readValue(aiJsonResponse,
+                GeminiTestGenerateResponseDto.class);
             testService.saveAiGeneratedTest(generatedTest, newTest.getId());
 
         } catch (Exception e) {
@@ -106,22 +108,20 @@ public class AiServiceImpl implements AiService {
     }
 
     @Override
-    public void manualTestGenerate(String request, MultipartFile mainImage) {
+    public void manualTestGenerate(TestGenerateRequestDto request, MultipartFile mainImage) {
         String mainImageUrl = null;
         if (mainImage != null) {
-            mainImageUrl  = fileStorageService.upload(mainImage, FileUploadOptions.TEST_IMAGE).getUrl();
+            mainImageUrl = fileStorageService.upload(mainImage, FileUploadOptions.TEST_IMAGE)
+                .getUrl();
         }
-        try {
-            var test = objectMapper.readValue(request, TestGenerateRequestDto.class);
-            var newTest = initializeTestEntity(test, mainImageUrl);
-            testService.save(newTest);
-            testService.saveAiGeneratedTest(test.getData(), newTest.getId());
-        } catch (JsonProcessingException e) {
-            throw new BadRequestException(e.getMessage());
-        }
+        var newTest = initializeTestEntity(request, mainImageUrl);
+        testService.save(newTest);
+        testService.saveAiGeneratedTest(request.getData(), newTest.getId());
+
     }
 
-    private static TestEntity initializeTestEntity(TestGenerateRequestDto request, String mainImageUrl) {
+    private static TestEntity initializeTestEntity(TestGenerateRequestDto request,
+        String mainImageUrl) {
         var newTest = new TestEntity();
         newTest.setCount(request.getCount());
         newTest.setName(request.getName());
@@ -133,6 +133,8 @@ public class AiServiceImpl implements AiService {
         newTest.setGradeId(request.getGradeId());
         newTest.setScienceId(request.getScienceId());
         newTest.setImagePath(mainImageUrl);
+        newTest.setMaxScore(request.getMaxScore());
+        newTest.setEnabledViewCorrectAnswers(request.getEnableViewCorrectAnswers());
         return newTest;
     }
 }

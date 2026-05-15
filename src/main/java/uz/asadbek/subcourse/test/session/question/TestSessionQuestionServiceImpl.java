@@ -29,7 +29,7 @@ public class TestSessionQuestionServiceImpl implements TestSessionQuestionServic
     @Override
     public void initializeSessionQuestions(Long sessionId, List<TestQuestionEntity> questions) {
         var questionIds = questions.stream().map(TestQuestionEntity::getId).toList();
-        var allOptions = optionService.findByQuestionIds(questionIds);
+        var allOptions = optionService.findByQuestionId(questionIds);
         var optionsMap = allOptions.stream().collect(Collectors.groupingBy(
             TestOptionEntity::getQuestionId
         ));

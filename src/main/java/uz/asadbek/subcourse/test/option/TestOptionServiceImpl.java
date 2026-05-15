@@ -20,18 +20,23 @@ public class TestOptionServiceImpl implements TestOptionService {
 
     @Override
     @Transactional
-    public void saveAll(List<TestOptionEntity> savedOptions) {
-        repository.saveAll(savedOptions);
+    public List<TestOptionEntity> saveAll(List<TestOptionEntity> savedOptions) {
+        return repository.saveAll(savedOptions);
     }
 
     @Override
     @Transactional
-    public void deleteAllByIds(List<Long> deleteOptionIds) {
-        repository.deleteAllById(deleteOptionIds);
+    public void deleteById(Long deleteOptionId) {
+        repository.deleteById(deleteOptionId);
     }
 
     @Override
-    public List<TestOptionEntity> findByQuestionIds(List<Long> questionIds) {
+    public List<TestOptionEntity> findByQuestionId(Long questionId) {
+        return repository.findByQuestionId(questionId);
+    }
+
+    @Override
+    public List<TestOptionEntity> findByQuestionId(List<Long> questionIds) {
         return repository.findByQuestionIds(questionIds);
     }
 }

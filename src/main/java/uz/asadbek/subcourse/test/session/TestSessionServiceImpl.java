@@ -3,19 +3,20 @@ package uz.asadbek.subcourse.test.session;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.asadbek.subcourse.exception.BadRequestException;
 import uz.asadbek.subcourse.exception.NotFoundException;
 import uz.asadbek.subcourse.exception.UnAuthorizedException;
 import uz.asadbek.subcourse.test.question.TestQuestionService;
+import uz.asadbek.subcourse.test.session.dto.UserTestSessionResponseDto;
 import uz.asadbek.subcourse.test.session.option.TestSessionOptionService;
-import uz.asadbek.subcourse.test.session.option.dto.TestSessionOptionResponseDto;
 import uz.asadbek.subcourse.test.session.question.TestSessionQuestionService;
 import uz.asadbek.subcourse.test.test.TestService;
 import uz.asadbek.subcourse.test.session.answer.dto.SubmitAnswerRequestDto;
@@ -52,10 +53,11 @@ public class TestSessionServiceImpl implements TestSessionService {
 
         var currentUserId = JwtUtil.getCurrentUserId();
         var now = LocalDateTime.now();
-        if (repository.existsByUserIdAndTestIdAndStatus(currentUserId, testId,
-            TestSessionStatus.STARTED)) {
-            throw ExceptionUtil.build(BadRequestException.class,
-                "error.test_session.already_started");
+        var idOpt = repository.findIdByUserIdAndTestIdAndStatus(currentUserId, testId,
+            TestSessionStatus.STARTED);
+
+        if (idOpt.isPresent()) {
+            return idOpt.get();
         }
 
         var test = testService.get(testId);
@@ -70,6 +72,7 @@ public class TestSessionServiceImpl implements TestSessionService {
         entity.setExpiresAt(now.plusMinutes(test.getDuration()));
         entity.setStatus(TestSessionStatus.STARTED);
         entity.setStartedAt(now);
+        entity.setMaxScore(test.getMaxScore());
         var sessionId = repository.save(entity).getId();
         sessionQuestionService.initializeSessionQuestions(sessionId, randomQuestions);
         return sessionId;
@@ -99,54 +102,48 @@ public class TestSessionServiceImpl implements TestSessionService {
     @Transactional
     public TestResultDto finishTestSession(Long sessionId, TestSessionStatus sessionStatus) {
         var entity = findById(sessionId);
-        var score = calculateTestScore(entity);
 
-        entity.setStatus(sessionStatus != null ? sessionStatus : TestSessionStatus.FINISHED);
         entity.setFinishedAt(LocalDateTime.now());
-        entity.setScore(score.getScore());
+        entity.setStatus(sessionStatus != null ? sessionStatus : TestSessionStatus.FINISHED);
+
+        var scoreDto = calculateTestScore(entity);
+
+        entity.setScore(scoreDto.getScore());
         repository.save(entity);
 
-        return score;
+        return scoreDto;
     }
 
     private TestResultDto calculateTestScore(TestSessionEntity session) {
-        long durationInSeconds = 0;
-        if (session.getFinishedAt() != null && session.getStartedAt() != null) {
-            durationInSeconds = java.time.Duration.between(
-                session.getStartedAt(),
-                session.getFinishedAt()
-            ).getSeconds();
-        }
+        long durationInSeconds = java.time.Duration.between(session.getStartedAt(),
+            session.getFinishedAt()).getSeconds();
+        String spentTime = String.format("%02d:%02d", (durationInSeconds / 60),
+            (durationInSeconds % 60));
 
-        String spentTime = String.format("%02d:%02d",
-            (durationInSeconds % 3600) / 60,
-            durationInSeconds % 60);
+        var answers = sessionAnswerService.findBySessionId(session.getId());
 
-        var answerMap = sessionAnswerService
-            .findBySessionId(session.getId())
-            .stream()
+        var sessionQuestions = sessionQuestionService.findBySessionId(session.getId());
+        int totalQuestions = sessionQuestions.size();
+
+        Map<Long, Long> answerMap = answers.stream()
             .filter(a -> a.getSelectedOptionId() != null)
-            .collect(Collectors.toMap(
-                TestSessionAnswerEntity::getQuestionId,
-                TestSessionAnswerEntity::getSelectedOptionId,
-                (_, newVal) -> newVal
-            ));
+            .collect(Collectors.toMap(TestSessionAnswerEntity::getQuestionId,
+                TestSessionAnswerEntity::getSelectedOptionId));
 
-        var questions = questionService.getQuestions(session.getTestId(), answerMap.keySet());
-        var test = testService.getById(session.getTestId());
-
-        var correctAnswers = (int) questions.stream()
-            .filter(question -> {
-                Long selectedOptionId = answerMap.get(question.getId());
-                return selectedOptionId != null
-                    && selectedOptionId.equals(
-                    question.getCorrectOptionId());
+        long correctAnswers = sessionQuestions.stream()
+            .filter(q -> {
+                Long selected = answerMap.get(q.getId());
+                return selected != null && selected.equals(q.getCorrectOptionId());
             }).count();
 
-        var totalQuestions = test.getCount();
-        var score = ((double) correctAnswers / totalQuestions) * test.getMaxScore();
+        double maxScore = session.getMaxScore();
+        double score =
+            (totalQuestions > 0) ? ((double) correctAnswers / totalQuestions) * maxScore : 0;
+
         score = Math.round(score * 100.0) / 100.0;
-        return new TestResultDto(score, correctAnswers, totalQuestions, session.getId(), spentTime,
+
+        return new TestResultDto(score, (int) correctAnswers, totalQuestions, session.getId(),
+            spentTime,
             session.getStartedAt(), session.getFinishedAt());
     }
 
@@ -175,6 +172,7 @@ public class TestSessionServiceImpl implements TestSessionService {
             ));
 
         int correctAnswersCount = 0;
+        Boolean enabledViewCorrectAnswers = session.getEnabledViewCorrectAnswers();
         List<TestReviewQuestionDto> reviewQuestions = new ArrayList<>();
 
         for (var sQuestion : sessionQuestions) {
@@ -188,9 +186,11 @@ public class TestSessionServiceImpl implements TestSessionService {
             if (options != null) {
                 for (int i = 0; i < options.size(); i++) {
                     var opt = options.get(i);
+                    int currentOrder = i + 1;
+
 
                     if (selectedOptionId != null && selectedOptionId.equals(opt.getId())) {
-                        selectedOrderNumber = i + 1;
+                        selectedOrderNumber = currentOrder;
 
                         if (opt.getId().equals(sQuestion.getCorrectOptionId())) {
                             isCorrect = true;
@@ -198,6 +198,7 @@ public class TestSessionServiceImpl implements TestSessionService {
                     }
 
                     reviewOptions.add(TestReviewOptionDto.builder()
+                        .id(opt.getId())
                         .text(opt.getText())
                         .imagePath(opt.getImagePath())
                         .build());
@@ -212,6 +213,7 @@ public class TestSessionServiceImpl implements TestSessionService {
                 .questionText(sQuestion.getText())
                 .imagePath(sQuestion.getImagePath())
                 .selectedOptionOrderNumber(selectedOrderNumber)
+                .correctOptionId(Boolean.TRUE.equals(enabledViewCorrectAnswers) ? sQuestion.getCorrectOptionId() : null)
                 .isCorrect(isCorrect)
                 .options(reviewOptions)
                 .build());
@@ -237,6 +239,7 @@ public class TestSessionServiceImpl implements TestSessionService {
             .testImagePath(session.getImagePath())
             .testDescription(session.getTestDescription())
             .correctAnswers(correctAnswersCount)
+            .enabledViewCorrectAnswers(session.getEnabledViewCorrectAnswers())
             .totalQuestions(totalQuestions)
             .questions(reviewQuestions)
             .score(finalScore)
@@ -266,5 +269,10 @@ public class TestSessionServiceImpl implements TestSessionService {
         }
         session.setQuestions(sessionQuestionService.findBySessionId(sessionId));
         return session;
+    }
+
+    @Override
+    public Page<UserTestSessionResponseDto> getSessions(Pageable pageable) {
+        return repository.findAllByUserId(JwtUtil.getCurrentUserId(), pageable);
     }
 }

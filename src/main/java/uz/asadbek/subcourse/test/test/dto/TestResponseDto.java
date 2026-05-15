@@ -22,6 +22,8 @@ public class TestResponseDto {
     private Long gradeId;
     private String imagePath;
     private Integer count;
+    private Integer maxScore;
+    private Boolean enabledViewCorrectAnswers;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<TestQuestionResponseDto> questions;
@@ -40,6 +42,8 @@ public class TestResponseDto {
         Long gradeId,
         String imagePath,
         Integer count,
+        Integer maxScore,
+        Boolean enabledViewCorrectAnswers,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
     ) {
@@ -56,6 +60,8 @@ public class TestResponseDto {
         this.gradeId = gradeId;
         this.imagePath = imagePath;
         this.count = count;
+        this.maxScore = maxScore;
+        this.enabledViewCorrectAnswers = enabledViewCorrectAnswers;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

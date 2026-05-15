@@ -14,11 +14,11 @@ public interface TestQuestionService {
 
     List<TestQuestionEntity> findByTestId(Long id);
 
-    void save(TestQuestionEntity question);
+    TestQuestionEntity save(TestQuestionEntity question);
 
     void delete(TestQuestionEntity question);
 
-    void deleteAllByIds(List<Long> deleteQuestionIds);
+    void deleteById(Long deleteQuestionId);
 
     List<TestQuestionEntity> saveAll(List<TestQuestionEntity> questionsToSave);
 }

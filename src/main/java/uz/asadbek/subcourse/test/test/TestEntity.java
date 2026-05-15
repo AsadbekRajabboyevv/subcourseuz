@@ -63,6 +63,9 @@ public class TestEntity extends BaseEntity implements SoftDeletable {
     @Column(name = "max_score")
     private Integer maxScore;
 
+    @Column(name = "enabled_view_correct_answers", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean enabledViewCorrectAnswers;
+
     @Column(name = "is_published", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isPublished;
 

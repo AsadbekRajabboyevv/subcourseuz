@@ -64,5 +64,10 @@ public class TestRequestDto {
     private Boolean isPublished;
 
     private Integer count;
+
+    private Integer maxScore;
+
+    private Boolean enabledViewCorrectAnswers;
+
     private List<TestQuestionRequestDto> questions;
 }

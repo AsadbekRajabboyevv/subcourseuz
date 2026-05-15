@@ -48,6 +48,8 @@ public interface TestRepository extends BaseRepository<TestEntity, Long> {
                 t.gradeId,
                 t.imagePath,
                 t.count,
+                t.maxScore,
+                t.enabledViewCorrectAnswers,
                 t.createdAt,
                 t.updatedAt
             )
@@ -101,6 +103,8 @@ public interface TestRepository extends BaseRepository<TestEntity, Long> {
                 t.gradeId,
                 t.imagePath,
                 t.count,
+                t.maxScore,
+                t.enabledViewCorrectAnswers,
                 t.createdAt,
                 t.updatedAt
             )

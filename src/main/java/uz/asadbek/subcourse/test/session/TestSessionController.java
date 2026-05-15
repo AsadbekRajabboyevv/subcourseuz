@@ -1,6 +1,8 @@
 package uz.asadbek.subcourse.test.session;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RestController;
 import uz.asadbek.base.dto.BaseResponseDto;
 import uz.asadbek.subcourse.test.session.answer.dto.SubmitAnswerRequestDto;
@@ -41,7 +43,7 @@ public class TestSessionController implements TestSessionApi {
     }
 
     @Override
-    public BaseResponseDto<UserTestSessionResponseDto> getSessions() {
-        return null;
+    public BaseResponseDto<Page<UserTestSessionResponseDto>> getSessions(Pageable pageable) {
+        return BaseResponseDto.ok(service.getSessions(pageable));
     }
 }
