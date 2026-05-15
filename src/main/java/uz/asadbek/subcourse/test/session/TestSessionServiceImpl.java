@@ -52,10 +52,11 @@ public class TestSessionServiceImpl implements TestSessionService {
 
         var currentUserId = JwtUtil.getCurrentUserId();
         var now = LocalDateTime.now();
-        if (repository.existsByUserIdAndTestIdAndStatus(currentUserId, testId,
-            TestSessionStatus.STARTED)) {
-            throw ExceptionUtil.build(BadRequestException.class,
-                "error.test_session.already_started");
+        var idOpt = repository.findIdByUserIdAndTestIdAndStatus(currentUserId, testId,
+            TestSessionStatus.STARTED);
+
+        if (idOpt.isPresent()) {
+            return idOpt.get();
         }
 
         var test = testService.get(testId);

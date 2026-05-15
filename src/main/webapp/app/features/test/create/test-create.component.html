@@ -26,7 +26,7 @@
 
     <div content>
         @if (activeTab() === 'manual') {
-            <form [formGroup]="testForm" (ngSubmit)="onSubmit()" class="grid grid-cols-12 gap-8 pb-20">
+            <form [formGroup]="testForm" (ngSubmit)="onSubmit()" class="grid grid-cols-12 gap-8 pb-20 items-start">
 
                 <div class="col-span-12 lg:col-span-8 space-y-8" formArrayName="questions">
                     @for (q of questions.controls; track q; let i = $index) {
@@ -60,35 +60,35 @@
                                 @for (opt of getOptions(i).controls; track opt; let j = $index) {
                                     <div [formGroupName]="j" class="group relative rounded-3xl border-2 p-4 transition-all"
                                          [class.border-emerald-500.bg-emerald-50.dark:bg-emerald-500]="q.get('correctOptionIndex')?.value === j"
-                                        [class.border-gray-50.dark:border-gray-800]="q.get('correctOptionIndex')?.value !== j">
+                                         [class.border-gray-50.dark:border-gray-800]="q.get('correctOptionIndex')?.value !== j">
 
-                                    <div class="flex items-start gap-3">
-                                        <div class="flex-1">
-                                            <div class="flex items-center gap-3">
-                                                <input type="radio" [value]="j" [formControl]="getCorrectOptionControl(i)" [name]="'correctOptionIndex_' + i" class="h-5 w-5 text-emerald-500 focus:ring-emerald-500 dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
-                                                <input formControlName="text" type="text" [placeholder]="'Variant ' + (j+1)" class="w-full border-none bg-transparent p-0 text-sm font-bold focus:ring-0 dark:text-white">
-                                            </div>
-
-                                            @if (opt.get('imagePreview')?.value) {
-                                                <div class="mt-2 relative h-16 w-16 rounded-xl overflow-hidden border dark:border-gray-700">
-                                                    <img [src]="opt.get('imagePreview')?.value" class="h-full w-full object-cover">
-                                                    <button type="button" (click)="opt.patchValue({image: null, imagePreview: null})" class="absolute top-0 right-0 bg-red-500 text-white p-0.5"><i class="fa-solid fa-xmark text-[8px]"></i></button>
+                                        <div class="flex items-start gap-3">
+                                            <div class="flex-1">
+                                                <div class="flex items-center gap-3">
+                                                    <input type="radio" [value]="j" [formControl]="getCorrectOptionControl(i)" [name]="'correctOptionIndex_' + i" class="h-5 w-5 text-emerald-500 focus:ring-emerald-500 dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
+                                                    <input formControlName="text" type="text" [placeholder]="'Variant ' + (j+1)" class="w-full border-none bg-transparent p-0 text-sm font-bold focus:ring-0 dark:text-white">
                                                 </div>
-                                            }
-                                        </div>
 
-                                        <div class="flex flex-col gap-2">
-                                            <div class="relative h-8 w-8 rounded-lg bg-gray-50 dark:bg-gray-800 flex items-center justify-center group/btn cursor-pointer">
-                                                <input type="file" (change)="onFileSelected($event, opt)" class="absolute inset-0 opacity-0 cursor-pointer z-10">
-                                                <i class="fa-solid fa-image text-[10px] text-gray-400 group-hover/btn:text-emerald-500"></i>
+                                                @if (opt.get('imagePreview')?.value) {
+                                                    <div class="mt-2 relative h-16 w-16 rounded-xl overflow-hidden border dark:border-gray-700">
+                                                        <img [src]="opt.get('imagePreview')?.value" class="h-full w-full object-cover">
+                                                        <button type="button" (click)="opt.patchValue({image: null, imagePreview: null})" class="absolute top-0 right-0 bg-red-500 text-white p-0.5"><i class="fa-solid fa-xmark text-[8px]"></i></button>
+                                                    </div>
+                                                }
                                             </div>
-                                            @if (getOptions(i).length > 2) {
-                                                <button type="button" (click)="deleteOption(i, j)" class="h-8 w-8 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
-                                                    <i class="fa-solid fa-xmark text-[10px]"></i>
-                                                </button>
-                                            }
+
+                                            <div class="flex flex-col gap-2">
+                                                <div class="relative h-8 w-8 rounded-lg bg-gray-50 dark:bg-gray-800 flex items-center justify-center group/btn cursor-pointer">
+                                                    <input type="file" (change)="onFileSelected($event, opt)" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+                                                    <i class="fa-solid fa-image text-[10px] text-gray-400 group-hover/btn:text-emerald-500"></i>
+                                                </div>
+                                                @if (getOptions(i).length > 2) {
+                                                    <button type="button" (click)="deleteOption(i, j)" class="h-8 w-8 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
+                                                        <i class="fa-solid fa-xmark text-[10px]"></i>
+                                                    </button>
+                                                }
+                                            </div>
                                         </div>
-                                    </div>
                                     </div>
                                 }
                             </div>
@@ -106,7 +106,7 @@
                     </button>
                 </div>
 
-                <div class="col-span-12 lg:col-span-4 space-y-6">
+                <div class="col-span-12 lg:col-span-4 sticky top-6 h-fit space-y-6">
                     <div class="rounded-[2.5rem] border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 shadow-2xl space-y-4">
                         <h3 class="text-[11px] font-black uppercase tracking-widest text-gray-400">Umumiy sozlamalar</h3>
 
@@ -134,7 +134,7 @@
                             <app-input type="select" label="Fan" [options]="scienceOptions()" formControlName="scienceId"></app-input>
                             <app-input type="select" label="Sinf" [options]="gradeOptions()" formControlName="gradeId"></app-input>
                         </div>
-                        <div class="grid  grid-cols-2 gap-4">
+                        <div class="grid grid-cols-2 gap-4">
                             <app-input type="select" label="Til" [options]="langOptions" formControlName="lang"></app-input>
                             <app-input type="amount" label="Savollar ko'rsatish soni" formControlName="count"></app-input>
                         </div>

@@ -46,6 +46,9 @@ export interface TestCreate {
   gradeId?: number;
   duration: number;
   isPublished: boolean;
+  count: number;
+  maxScore: number;
+  enabledViewCorrectAnswers: boolean;
   questions: QuestionCreate[];
 }
 
@@ -150,6 +153,8 @@ export interface TestGenerateRequestDto {
   lessonId?: number;
   duration: number;
   price: number;
+  maxScore: number;
+  enabledViewCorrectAnswers: boolean;
 }
 export interface TestSessionOption {
   id: number;

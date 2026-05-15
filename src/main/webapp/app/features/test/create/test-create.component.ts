@@ -60,6 +60,8 @@ export class TestCreateComponent implements OnInit {
     isPublished: [true],
     questions: this.fb.array<FormGroup>([]),
     count: [0, [Validators.required, Validators.min(1)]],
+    maxScore: [100, [Validators.required, Validators.min(1)]],
+    enabledViewCorrectAnswers: [false, [Validators.required]]
   });
 
   aiForm = this.fb.group({
@@ -75,6 +77,8 @@ export class TestCreateComponent implements OnInit {
     sourceFile: [null as File | null, Validators.required],
     duration: [30, [Validators.required]],
     price: [0, [Validators.required]],
+    maxScore: [100, [Validators.required, Validators.min(1)]],
+    enabledViewCorrectAnswers: [false, [Validators.required]]
   });
 
   ngOnInit() {
@@ -179,6 +183,9 @@ export class TestCreateComponent implements OnInit {
       gradeId: v.gradeId ?? undefined,
       courseId: v.courseId ?? undefined,
       lessonId: v.lessonId ?? undefined,
+      count: v.count ?? 10,
+      maxScore: v.maxScore ?? 5,
+      enabledViewCorrectAnswers: v.enabledViewCorrectAnswers ?? false,
       questions: (v.questions || []).map((q: any) => ({
         text: q.text ?? '',
         correctOptionIndex: q.correctOptionIndex ?? 0,
@@ -216,7 +223,9 @@ export class TestCreateComponent implements OnInit {
       courseId: v.courseId ?? undefined,
       lessonId: v.lessonId ?? undefined,
       duration: v.duration ?? 30,
-      price: v.price ?? 0
+      price: v.price ?? 0,
+      maxScore: v.maxScore ?? 5,
+      enabledViewCorrectAnswers: v.enabledViewCorrectAnswers ?? false
     };
 
     const file = v.sourceFile as File;
