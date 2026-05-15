@@ -3,7 +3,6 @@ package uz.asadbek.subcourse.auth;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,11 +11,13 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.asadbek.subcourse.auth.dto.AuthProviderEnum;
 import uz.asadbek.subcourse.auth.dto.AuthRequestDto;
 import uz.asadbek.subcourse.auth.dto.AuthResponseDto;
 import uz.asadbek.subcourse.auth.refresh.RefreshTokenEntity;
 import uz.asadbek.subcourse.auth.refresh.RefreshTokenRepository;
 import uz.asadbek.subcourse.balance.BalanceService;
+import uz.asadbek.subcourse.config.security.CustomUserDetails;
 import uz.asadbek.subcourse.exception.BadRequestException;
 import uz.asadbek.subcourse.exception.TokenExpiredException;
 import uz.asadbek.subcourse.user.EmailService;
@@ -73,7 +74,7 @@ public class AuthServiceImpl implements AuthService {
         user.setRole(UserRoles.ROLE_USER.name());
         user.setEnabled(false);
         user.setLanguage(language);
-
+        user.setProvider(AuthProviderEnum.LOCAL);
         String confirmToken = JwtUtil.generateConfirmationToken();
         user.setConfirmationToken(confirmToken);
 

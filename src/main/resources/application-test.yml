@@ -31,7 +31,15 @@ spring:
       name: "test_admin"
       password: "{noop}test_pass"
       roles: "ADMIN"
-
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
   mail:
     host: localhost
     port: 25
@@ -51,6 +59,11 @@ spring:
       max-request-size: 50MB
 
 app:
+  front:
+    google:
+      oauth2:
+        failure-url: http://localhost:4200/auth/login
+        success-url: http://localhost:4200/oauth2/success
   gemini:
     api-key: "AIzaSyB3KRESypOeRc4dUHpVlM8ZreBcTScL8wc"
   file:

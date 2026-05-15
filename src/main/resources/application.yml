@@ -1,3 +1,10 @@
+server:
+  forward-headers-strategy: native
+  port: 8080
+  tomcat:
+    remoteip:
+      protocol-header: x-forwarded-proto
+      remote-ip-header: x-forwarded-for
 spring:
   liquibase:
     change-log: classpath:db/changelog/master.xml
@@ -38,7 +45,15 @@ spring:
       name: ${SECURITY_USER_NAME}
       password: ${SECURITY_USER_PASSWORD}
       roles: ${SECURITY_USER_ROLES}
-
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}
@@ -66,6 +81,11 @@ springdoc:
     groups-order: asc
 
 app:
+  front:
+    google:
+      oauth2:
+        failure-url: http://localhost:4200/auth/login
+        success-url: http://localhost:4200/oauth2/success
   confirmation:
     url: https://localhost:8080/v1/api/auth/confirm?token=
   gemini:

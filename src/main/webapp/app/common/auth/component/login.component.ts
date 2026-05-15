@@ -4,6 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {AuthService} from "../auth.service";
 import {InputComponent} from "../../../shared/ui/forms/input.component";
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'app-login',
@@ -37,4 +38,11 @@ export class LoginComponent {
       }
     });
   }
+
+  loginWithGoogle() {
+    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    const encodedReturnUrl = window.btoa(returnUrl);
+    window.location.href = `${environment.oauth2GooglePath}?prompt=select_account&returnUrl=${encodedReturnUrl}`;
+  }
 }
+

@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 import uz.asadbek.base.dto.BaseResponseDto;
 import uz.asadbek.subcourse.auth.dto.AuthRequestDto;
 import uz.asadbek.subcourse.auth.dto.AuthResponseDto;
+import uz.asadbek.subcourse.user.UserEntity;
 import uz.asadbek.subcourse.user.dto.UserRequestDto;
+import uz.asadbek.subcourse.user.dto.UserResponseDto;
+import uz.asadbek.subcourse.util.JwtUtil;
 import uz.asadbek.subcourse.util.LangUtils;
 
 import java.io.IOException;
@@ -59,6 +62,24 @@ public class AuthController implements AuthApi {
     public BaseResponseDto<?> logout(HttpServletRequest request, HttpServletResponse response) {
         authService.logout(request, response);
         return BaseResponseDto.ok(true);
+    }
+
+    @Override
+    public BaseResponseDto<AuthResponseDto> me(HttpServletRequest request) {
+        var currentUser = JwtUtil.getCurrentUser().get().getUser();
+        return BaseResponseDto.ok(AuthResponseDto.builder().user(
+            new UserResponseDto(
+                currentUser.getId(),
+                currentUser.getEmail(),
+                currentUser.getRole(),
+                currentUser.getFirstName(),
+                currentUser.getLastName(),
+                currentUser.getPosition() != null ? currentUser.getPosition().getDisplayName() : null,
+                currentUser.getPhone(),
+                currentUser.getBirthDate(),
+                currentUser.getBio()
+            )
+        ).build());
     }
 
 }

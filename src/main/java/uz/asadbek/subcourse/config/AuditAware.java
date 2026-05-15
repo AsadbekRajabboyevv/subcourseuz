@@ -4,7 +4,7 @@ import java.util.Optional;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import uz.asadbek.subcourse.auth.CustomUserDetails;
+import uz.asadbek.subcourse.config.security.CustomUserDetails;
 
 @Component
 public class AuditAware implements AuditorAware<Long> {

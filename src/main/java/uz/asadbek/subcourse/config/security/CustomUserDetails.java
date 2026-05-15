@@ -1,4 +1,4 @@
-package uz.asadbek.subcourse.auth;
+package uz.asadbek.subcourse.config.security;
 
 import java.util.Collection;
 import java.util.HashSet;

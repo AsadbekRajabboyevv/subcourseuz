@@ -2,6 +2,7 @@ package uz.asadbek.subcourse.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -32,7 +33,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import uz.asadbek.subcourse.auth.CustomUserDetails;
+import uz.asadbek.subcourse.config.security.CustomUserDetails;
 import uz.asadbek.subcourse.exception.InvalidTokenException;
 import uz.asadbek.subcourse.exception.TokenExpiredException;
 
@@ -43,7 +44,8 @@ public class JwtUtil {
     public static final String CLAIM_ID = "id";
     public static final String CLAIM_ROLES = "roles";
     public static final String CLAIM_USERNAME = "username";
-    private static final String BEARER_PREFIX = "Bearer ";
+    public static final String CLAIM_PROVIDER = "provider";
+    public static final String BEARER_PREFIX = "Bearer ";
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
     private static final String REFRESH_TOKEN_COOKIE_PATH = "/v1/api/auth";
@@ -69,12 +71,11 @@ public class JwtUtil {
         Map<String, Object> claims = Map.of(
             CLAIM_ID, userDetails.getId(),
             CLAIM_ROLES, roles,
-            CLAIM_USERNAME, userDetails.getUsername()
+            CLAIM_USERNAME, userDetails.getUsername(),
+            CLAIM_PROVIDER, userDetails.getUser().getProvider()
         );
 
-        String token = buildJwt(claims, userDetails.getUsername());
-        log.debug("Access token generated for user '{}'", userDetails.getUsername());
-        return token;
+        return buildJwt(claims, userDetails.getUsername());
     }
 
     public static String generateRefreshToken() {
@@ -85,102 +86,24 @@ public class JwtUtil {
         return generateOpaqueToken(CONFIRMATION_TOKEN_PREFIX, CONFIRMATION_TOKEN_LENGTH);
     }
 
-    public static Claims parseToken(String token) {
-        Objects.requireNonNull(token, "token must not be null");
-        try {
-            return Jwts.parser()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-        } catch (ExpiredJwtException ex) {
-            log.warn("JWT expired: {}", ex.getMessage());
-            throw new TokenExpiredException("Access token has expired", ex);
-        } catch (SignatureException ex) {
-            log.warn("Invalid JWT signature: {}", ex.getMessage());
-            throw new InvalidTokenException("Token signature is invalid", ex);
-        } catch (MalformedJwtException ex) {
-            log.warn("Malformed JWT: {}", ex.getMessage());
-            throw new InvalidTokenException("Token is malformed", ex);
-        } catch (UnsupportedJwtException ex) {
-            log.warn("Unsupported JWT: {}", ex.getMessage());
-            throw new InvalidTokenException("Token type is not supported", ex);
-        } catch (JwtException ex) {
-            log.warn("JWT processing failed: {}", ex.getMessage());
-            throw new InvalidTokenException("Token processing failed", ex);
-        }
+    public Jws<Claims> parse(String token) {
+        return Jwts.parser().setSigningKey(key).build().parseClaimsJws(token);
     }
 
-    /**
-     * Checks whether a token string is a valid, non-expired JWT without throwing.
-     *
-     * @param token raw JWT string
-     * @return {@code true} if valid and not expired
-     */
-    public static boolean isTokenValid(String token) {
-        if (!StringUtils.hasText(token)) {
-            return false;
-        }
-        try {
-            parseToken(token);
-            return true;
-        } catch (Exception ex) {
-            return false;
-        }
-    }
 
-    /**
-     * Returns the expiration time of a token as an {@link Instant}.
-     *
-     * @param token raw JWT string
-     * @return expiration instant
-     */
-    public static Instant getTokenExpiry(String token) {
-        return parseToken(token).getExpiration().toInstant();
-    }
-
-    /**
-     * Extracts the subject (username) from a JWT without full validation. Useful for logging; do
-     * NOT use for authorization decisions.
-     *
-     * @param token raw JWT string
-     * @return subject claim value, or empty if unparseable
-     */
-    public static Optional<String> extractSubjectUnchecked(String token) {
-        try {
-            return Optional.ofNullable(parseToken(token).getSubject());
-        } catch (Exception ex) {
-            return Optional.empty();
-        }
-    }
-
-    /**
-     * Resolves the Bearer access token from the {@code Authorization} header.
-     *
-     * @param request incoming HTTP request
-     * @return token string, or empty if absent / malformed
-     */
     public static Optional<String> resolveAccessToken(HttpServletRequest request) {
-        String header = request.getHeader(AUTHORIZATION_HEADER);
+        var header = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(header) && header.startsWith(BEARER_PREFIX)) {
             return Optional.of(header.substring(BEARER_PREFIX.length()).trim());
         }
         return Optional.empty();
     }
 
-    /**
-     * Writes an HTTP-only, Secure refresh-token cookie to the response.
-     *
-     * <p>Uses {@link ResponseCookie} for full attribute control (SameSite=Strict).
-     *
-     * @param response HTTP response
-     * @param token    refresh token value
-     */
     public static void setRefreshTokenCookie(HttpServletResponse response, String token) {
         Objects.requireNonNull(response, "response must not be null");
         Objects.requireNonNull(token, "token must not be null");
 
-        ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE_NAME, token)
+        var cookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE_NAME, token)
             .httpOnly(true)
             .secure(true)
             .path(REFRESH_TOKEN_COOKIE_PATH)
@@ -189,18 +112,12 @@ public class JwtUtil {
             .build();
 
         response.addHeader("Set-Cookie", cookie.toString());
-        log.debug("Refresh token cookie set");
     }
 
-    /**
-     * Clears the refresh-token cookie (sets MaxAge=0).
-     *
-     * @param response HTTP response
-     */
     public static void clearRefreshTokenCookie(HttpServletResponse response) {
         Objects.requireNonNull(response, "response must not be null");
 
-        ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE_NAME, "")
+        var cookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE_NAME, "")
             .httpOnly(true)
             .secure(true)
             .path(REFRESH_TOKEN_COOKIE_PATH)
@@ -209,15 +126,8 @@ public class JwtUtil {
             .build();
 
         response.addHeader("Set-Cookie", cookie.toString());
-        log.debug("Refresh token cookie cleared");
     }
 
-    /**
-     * Extracts the refresh token value from the request cookies.
-     *
-     * @param request incoming HTTP request
-     * @return token string, or empty if cookie is absent
-     */
     public static Optional<String> extractRefreshTokenFromCookie(HttpServletRequest request) {
         if (request.getCookies() == null) {
             return Optional.empty();
@@ -230,11 +140,6 @@ public class JwtUtil {
             .findFirst();
     }
 
-    /**
-     * Returns the currently authenticated user from the Spring Security context.
-     *
-     * @return {@link CustomUserDetails}, or empty if unauthenticated / anonymous
-     */
     public static Optional<CustomUserDetails> getCurrentUser() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -251,52 +156,24 @@ public class JwtUtil {
         return Optional.empty();
     }
 
-    /**
-     * Returns the current user, or throws if unauthenticated.
-     *
-     * @return non-null {@link CustomUserDetails}
-     * @throws IllegalStateException if no authenticated user is present
-     */
     public static CustomUserDetails requireCurrentUser() {
         return getCurrentUser()
             .orElseThrow(
                 () -> new IllegalStateException("No authenticated user in security context"));
     }
 
-    /**
-     * @return {@code true} if a user is authenticated in the current request
-     */
     public static boolean isAuthenticated() {
         return getCurrentUser().isPresent();
     }
 
-    /**
-     * @return {@code true} if the current user has ROLE_ADMIN
-     */
     public static boolean isAdmin() {
         return hasRole("ROLE_ADMIN");
     }
 
-    /**
-     * @return {@code true} if the current user has ROLE_TEACHER
-     */
-    public static boolean isTeacher() {
-        return hasRole("ROLE_TEACHER");
-    }
-
-    /**
-     * @return {@code true} if the current user has ROLE_STUDENT
-     */
     public static boolean isStudent() {
         return hasRole("ROLE_STUDENT");
     }
 
-    /**
-     * Checks whether the current user has the given authority string.
-     *
-     * @param role full role name, e.g. {@code "ROLE_ADMIN"}
-     * @return {@code true} if the authority is present
-     */
     public static boolean hasRole(String role) {
         return getCurrentUser()
             .map(u -> u.getAuthorities().stream()
@@ -304,11 +181,6 @@ public class JwtUtil {
             .orElse(false);
     }
 
-    /**
-     * Returns all roles of the current user (without the {@code ROLE_} prefix).
-     *
-     * @return unmodifiable list of role names; empty if unauthenticated
-     */
     public static List<String> getCurrentUserRoles() {
         return getCurrentUser()
             .map(u -> u.getAuthorities().stream()
@@ -319,19 +191,12 @@ public class JwtUtil {
             .orElse(Collections.emptyList());
     }
 
-    /**
-     * Returns the ID of the currently authenticated user.
-     *
-     * @return user ID
-     * @throws IllegalStateException if unauthenticated
-     */
     public static Long getCurrentUserId() {
         return requireCurrentUser().getId();
     }
 
     private static String buildJwt(Map<String, Object> claims, String subject) {
-        Instant now = Instant.now();
-        log.info("JWT expiration in ms: {}", Date.from(now.plusMillis(ACCESS_TOKEN_EXPIRATION_MS)));
+        var now = Instant.now();
         return Jwts.builder()
             .setClaims(claims)
             .setSubject(subject)
@@ -342,36 +207,26 @@ public class JwtUtil {
     }
 
     private static String generateOpaqueToken(String prefix, int byteLength) {
-        byte[] bytes = new byte[byteLength];
+        var bytes = new byte[byteLength];
         SECURE_RANDOM.nextBytes(bytes);
         return prefix + Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 
-    /**
-     * Inner Spring {@link Component} that injects {@code @Value} properties into the enclosing
-     * {@link UtilityClass} static fields at startup.
-     *
-     * <p>This pattern is required because {@code @UtilityClass} prevents
-     * instantiation, so Spring cannot inject values directly.
-     */
     @Component
     public static class JwtUtilConfig {
 
         @Value("${spring.security.custom.jwt-expiration-in-ms}")
         public void setAccessTokenExpirationMs(long value) {
                 JwtUtil.ACCESS_TOKEN_EXPIRATION_MS = value;
-            log.info("JWT access token expiration set to {} ms", value);
         }
 
         @Value("${spring.security.custom.jwt-secret}")
         public void setSecret(String value) {
             if (!StringUtils.hasText(value) || value.length() < 32) {
-                throw new IllegalArgumentException(
-                    "JWT secret must be at least 32 characters long");
+                throw new IllegalArgumentException("JWT secret must be at least 32 characters long");
             }
             JwtUtil.secret = value;
             JwtUtil.key = Keys.hmacShaKeyFor(value.getBytes(StandardCharsets.UTF_8));
-            log.info("JWT signing key initialized");
         }
     }
 }

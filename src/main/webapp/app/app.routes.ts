@@ -3,6 +3,7 @@ import { HomeComponent } from './features/home/home.component';
 import { AuthLayoutComponent } from "./common/auth/auth.layout.component";
 import {PrivacyPolicyComponent} from "./common/user-terms/privacy-policy.component";
 import {TermsOfServiceComponent} from "./common/user-terms/terms-of-service.component";
+import {OAuth2SuccessComponent} from "./common/auth/component/oauth2-succes.component";
 
 export const routes: Routes = [
   {
@@ -32,6 +33,10 @@ export const routes: Routes = [
     ]
   },
 
+  {
+    path: 'oauth2/success',
+    component: OAuth2SuccessComponent
+  },
   {
     path: 'tests-create',
     loadComponent: () => import('./features/test/create/test-create.component').then(m => m.TestCreateComponent),
