@@ -1,10 +1,13 @@
 package uz.asadbek.subcourse.test.session;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RestController;
 import uz.asadbek.base.dto.BaseResponseDto;
 import uz.asadbek.subcourse.test.session.answer.dto.SubmitAnswerRequestDto;
 import uz.asadbek.subcourse.test.session.dto.TestSessionResponseDto;
+import uz.asadbek.subcourse.test.session.dto.UserTestSessionResponseDto;
 import uz.asadbek.subcourse.test.test.dto.TestResultDto;
 import uz.asadbek.subcourse.test.test.dto.TestReviewDto;
 
@@ -37,5 +40,10 @@ public class TestSessionController implements TestSessionApi {
     @Override
     public BaseResponseDto<TestSessionResponseDto> getSession(Long sessionId) {
         return BaseResponseDto.ok(service.getSession(sessionId));
+    }
+
+    @Override
+    public BaseResponseDto<Page<UserTestSessionResponseDto>> getSessions(Pageable pageable) {
+        return BaseResponseDto.ok(service.getSessions(pageable));
     }
 }

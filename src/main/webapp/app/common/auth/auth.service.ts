@@ -37,6 +37,14 @@ export class AuthService {
     return this.http.post<void>(`${this.PATH}/register`, request);
   }
 
+  me(token: string): Observable<Base<AuthResponse>> {
+    return this.http.get<Base<AuthResponse>>(`${this.PATH}/me`, {
+      withCredentials: true,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  }
   refreshToken(): Observable<void> {
     return this.http.post<Base<AuthResponse>>(`${this.PATH}/refresh`, {}, {
       withCredentials: true
@@ -63,7 +71,7 @@ export class AuthService {
     return this.accessToken();
   }
 
-  private setSession(res: AuthResponse) {
+  setSession(res: AuthResponse) {
     this.accessToken.set(res.bearerToken);
     this.currentUser.set(res.user);
 

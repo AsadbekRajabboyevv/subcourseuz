@@ -19,6 +19,7 @@ public class TestUpdateRequestDto {
     private Boolean isPublished;
     private Integer count;
     private MultipartFile image;
-
+    private Integer maxScore;
+    private Boolean enabledViewCorrectAnswers;
     private List<TestQuestionUpdateRequestDto> questions;
 }

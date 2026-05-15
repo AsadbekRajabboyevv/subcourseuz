@@ -1,4 +1,4 @@
-package uz.asadbek.subcourse.config;
+package uz.asadbek.subcourse.config.security;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;

@@ -31,10 +31,12 @@ export class TestCreateComponent implements OnInit {
   private scienceService = inject(ScienceService);
   private gradeService = inject(GradeService);
 
-  activeTab = signal<'manual' | 'ai'>('manual');
+  activeTab = signal<'manual' | 'ai' | 'json'>('manual');
   isLoading = signal(false);
   aiLoading = signal(false);
+  jsonLoading = signal(false);
   aiError = signal<string | null>(null);
+  jsonError = signal<string | null>(null);
 
   mainImage: File | null = null;
   mainImagePreview: string | null = null;
@@ -56,25 +58,33 @@ export class TestCreateComponent implements OnInit {
     gradeId: [null as number | null, Validators.required],
     courseId: [null as number | null],
     lessonId: [null as number | null],
-    duration: [30, [Validators.required, Validators.min(5)]],
+    duration: [60, [Validators.required, Validators.min(5)]],
     isPublished: [true],
     questions: this.fb.array<FormGroup>([]),
-    count: [0, [Validators.required, Validators.min(1)]],
+    count: [30, [Validators.required, Validators.min(1)]],
+    maxScore: [100, [Validators.required, Validators.min(1)]],
+    enabledViewCorrectAnswers: [false, [Validators.required]]
   });
 
   aiForm = this.fb.group({
     name: ['', Validators.required],
     description: [''],
     lang: ['uz'],
-    count: [10, [Validators.required, Validators.min(1)]],
+    count: [30, [Validators.required, Validators.min(1)]],
     isPublished: [true],
     scienceId: [null as number | null, Validators.required],
     gradeId: [null as number | null, Validators.required],
     courseId: [null as number | null],
     lessonId: [null as number | null],
     sourceFile: [null as File | null, Validators.required],
-    duration: [30, [Validators.required]],
+    duration: [60, [Validators.required]],
     price: [0, [Validators.required]],
+    maxScore: [100, [Validators.required, Validators.min(1)]],
+    enabledViewCorrectAnswers: [false, [Validators.required]]
+  });
+
+  jsonForm = this.fb.group({
+    json: [''],
   });
 
   ngOnInit() {
@@ -172,13 +182,16 @@ export class TestCreateComponent implements OnInit {
       name: v.name ?? '',
       price: v.price ?? 0,
       lang: v.lang ?? 'uz',
-      duration: v.duration ?? 30,
+      duration: v.duration ?? 60,
       isPublished: v.isPublished ?? false,
       description: v.description ?? undefined,
       scienceId: v.scienceId ?? undefined,
       gradeId: v.gradeId ?? undefined,
       courseId: v.courseId ?? undefined,
       lessonId: v.lessonId ?? undefined,
+      count: v.count ?? 30,
+      maxScore: v.maxScore ?? 100,
+      enabledViewCorrectAnswers: v.enabledViewCorrectAnswers ?? false,
       questions: (v.questions || []).map((q: any) => ({
         text: q.text ?? '',
         correctOptionIndex: q.correctOptionIndex ?? 0,
@@ -216,7 +229,9 @@ export class TestCreateComponent implements OnInit {
       courseId: v.courseId ?? undefined,
       lessonId: v.lessonId ?? undefined,
       duration: v.duration ?? 30,
-      price: v.price ?? 0
+      price: v.price ?? 0,
+      maxScore: v.maxScore ?? 100,
+      enabledViewCorrectAnswers: v.enabledViewCorrectAnswers ?? false
     };
 
     const file = v.sourceFile as File;
@@ -235,5 +250,40 @@ export class TestCreateComponent implements OnInit {
         console.error(err);
       }
     });
+  }
+
+  onJsonSubmit() {
+    if (this.jsonForm.invalid) {
+      this.jsonForm.markAllAsTouched();
+      return;
+    }
+
+    this.jsonLoading.set(true);
+    this.jsonError.set(null);
+
+    try {
+      const rawJson = this.jsonForm.get('json')?.value;
+      const jsonValue = typeof rawJson === 'string' ? JSON.parse(rawJson) : rawJson;
+
+      const payload = {
+        mainImage: this.mainImage,
+        jsonValue: jsonValue
+      };
+
+      this.testService.generateFromJson(payload).subscribe({
+        next: (res) => {
+          this.jsonLoading.set(false);
+          this.router.navigate(['/tests-list']);
+        },
+        error: (err) => {
+          this.jsonLoading.set(false);
+          this.jsonError.set(err.error?.message || "JSON generatsiya jarayonida xatolik yuz berdi!");
+          console.error(err);
+        }
+      });
+    } catch (e) {
+      this.jsonLoading.set(false);
+      this.jsonError.set("JSON formati noto'g'ri!");
+    }
   }
 }

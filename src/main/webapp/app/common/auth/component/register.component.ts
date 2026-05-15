@@ -1,10 +1,11 @@
 import {Component, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {Router, RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {AuthService} from "../auth.service";
 import {InputComponent} from "../../../shared/ui/forms/input.component";
 import {RegisterRequest} from "../auth.model";
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'app-register',
@@ -15,6 +16,8 @@ import {RegisterRequest} from "../auth.model";
 export class RegisterComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+  protected route = inject(ActivatedRoute);
+
   showSuccessModal = false;
   regData: RegisterRequest = {
     email: '',
@@ -26,6 +29,7 @@ export class RegisterComponent {
     phone: '',
     position: ''
   };
+
   onRegister() {
     this.authService.register(this.regData).subscribe({
       next: () => {
@@ -39,6 +43,12 @@ export class RegisterComponent {
 
   closeModalAndLogin() {
     this.showSuccessModal = false;
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
+  }
+
+  loginWithGoogle() {
+    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    const encodedReturnUrl = window.btoa(returnUrl);
+    window.location.href = `${environment.oauth2GooglePath}?prompt=select_account&returnUrl=${encodedReturnUrl}`;
   }
 }

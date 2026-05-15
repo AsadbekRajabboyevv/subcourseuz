@@ -8,7 +8,7 @@ import {
   SubmitAnswer,
   TestReview,
   TestResult,
-  TestSession
+  TestSession, UserTestSession
 } from "./test.model";
 import { environment } from "../../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
@@ -91,39 +91,37 @@ export class TestService {
 
   update(id: number, testData: TestUpdate, mainImage: File | null): Observable<Base<number>> {
     const formData = new FormData();
-
     const cleanRequest = {
       ...testData,
       questions: testData.questions?.map(q => ({
         ...q,
-        image: null,
-        options: q.options?.map(o => ({ ...o, image: null }))
+        image: undefined,
+        options: q.options?.map(o => ({ ...o, image: undefined }))
       }))
     };
 
     formData.append('request', new Blob([JSON.stringify(cleanRequest)], { type: 'application/json' }));
 
-    if (mainImage) {
+    if (mainImage instanceof File) {
       formData.append('image', mainImage, mainImage.name);
     }
 
     testData.questions?.forEach((question, qIdx) => {
       if (question.image instanceof File) {
-        const extension = question.image.name.split('.').pop();
-        formData.append('questionImages', question.image, `q_${qIdx}.${extension}`);
+        const qExt = question.image.name.split('.').pop();
+        formData.append('questionImages', question.image, `q_${qIdx}.${qExt}`);
       }
 
       question.options?.forEach((option, oIdx) => {
         if (option.image instanceof File) {
-          const extension = option.image.name.split('.').pop();
-          formData.append('optionImages', option.image, `q_${qIdx}_opt_${oIdx}.${extension}`);
+          const oExt = option.image.name.split('.').pop();
+          formData.append('optionImages', option.image, `q_${qIdx}_opt_${oIdx}.${oExt}`);
         }
       });
     });
 
     return this.http.patch<Base<number>>(`${this.PATH}/${id}`, formData);
   }
-
   getInfo(id: number): Observable<Base<Test>> {
     return this.http.get<Base<Test>>(`${this.PATH}/info/${id}`);
   }
@@ -140,6 +138,23 @@ export class TestService {
     }));
 
     return this.http.post<Base<number>>(`${this.AI_PATH}/test-generate`, form);
+  }
+
+  generateFromJson(payload: any): Observable<Base<number>> {
+    const form = new FormData();
+
+    if (payload.mainImage instanceof File) {
+      form.append('mainImage', payload.mainImage, payload.mainImage.name);
+    }
+
+    const dtoPart = payload.jsonValue;
+    const jsonBlob = new Blob([JSON.stringify(dtoPart)], {
+      type: 'application/json'
+    });
+
+    form.append('request', jsonBlob);
+
+    return this.http.post<Base<number>>(`${this.AI_PATH}/manual/test-generate`, form);
   }
 //===================Session=====================================
   submitAnswer(submitData: SubmitAnswer): Observable<Base<boolean>> {
@@ -160,5 +175,9 @@ export class TestService {
 
   getSession(sessionId: number): Observable<Base<TestSession>> {
     return this.http.get<Base<TestSession>>(`${this.SESSION_PATH}/${sessionId}`);
+  }
+
+  getUserSessions(page: number, size: number): Observable<Base<Page<UserTestSession>>> {
+    return this.http.get<Base<Page<UserTestSession>>>(`${this.SESSION_PATH}`);
   }
 }

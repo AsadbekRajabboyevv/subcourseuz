@@ -33,4 +33,7 @@ public interface AuthApi {
 
     @PostMapping("/logout")
     BaseResponseDto<?> logout(HttpServletRequest request, HttpServletResponse response);
+
+    @GetMapping("/me")
+    BaseResponseDto<AuthResponseDto> me(HttpServletRequest request);
 }

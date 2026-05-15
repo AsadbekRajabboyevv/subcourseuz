@@ -27,5 +27,6 @@ public class TestReviewDto {
     private String spentTime;
     private LocalDateTime startedAt;
     private LocalDateTime finishedAt;
+    private Boolean enabledViewCorrectAnswers;
     private List<TestReviewQuestionDto> questions;
 }

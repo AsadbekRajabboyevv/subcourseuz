@@ -20,4 +20,7 @@ public class TestGenerateRequestDto {
     private Long gradeId;
     @NotNull
     private Long scienceId;
+    private Integer maxScore;
+    private Boolean enableViewCorrectAnswers;
+    private GeminiTestGenerateResponseDto data;
 }

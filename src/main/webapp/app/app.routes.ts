@@ -3,6 +3,7 @@ import { HomeComponent } from './features/home/home.component';
 import { AuthLayoutComponent } from "./common/auth/auth.layout.component";
 import {PrivacyPolicyComponent} from "./common/user-terms/privacy-policy.component";
 import {TermsOfServiceComponent} from "./common/user-terms/terms-of-service.component";
+import {OAuth2SuccessComponent} from "./common/auth/component/oauth2-succes.component";
 
 export const routes: Routes = [
   {
@@ -33,6 +34,10 @@ export const routes: Routes = [
   },
 
   {
+    path: 'oauth2/success',
+    component: OAuth2SuccessComponent
+  },
+  {
     path: 'tests-create',
     loadComponent: () => import('./features/test/create/test-create.component').then(m => m.TestCreateComponent),
     title: $localize`:@@test.title:Testlar yaratish`
@@ -51,6 +56,11 @@ export const routes: Routes = [
     path: 'test-result/:sessionId',
     loadComponent: () => import('./features/test/result/test-result.component').then(m => m.TestResultComponent),
     title: $localize`:@@test.update.title:Test natijasi`
+  },
+  {
+    path: 'test-review-list',
+    loadComponent: () => import('./features/test/review/test-review-list.component').then(m => m.TestReviewListComponent),
+    title: $localize`:@@test.update.title:Testlar natijalari`
   },
   {
     path: 'test-review/:sessionId',

@@ -1,4 +1,4 @@
-package uz.asadbek.subcourse.config;
+package uz.asadbek.subcourse.config.security;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,7 +37,7 @@ public class SpaRedirectFilter implements Filter {
                 return;
             }
 
-            request.getRequestDispatcher("/" + lang + "/index.html")
+            request.getRequestDispatcher(STR."/\{lang}/index.html")
                 .forward(request, response);
             return;
         }
